@@ -1,7 +1,9 @@
 import React from "react";
 import Logo from "../../assets/images/logo.png";
+import "bootstrap/dist/css/bootstrap.css";
+import Styles from "./Login.module.scss";
+import classNames from "classnames";
 
-import "./Login.scss";
 const Login = () => {
   return (
     <div class="vh-100">
@@ -22,7 +24,7 @@ const Login = () => {
                 </h2>
 
                 <form>
-                  <div class="ipt-login mb-3">
+                  <div class="mb-3">
                     <input
                       type="email"
                       class="form-control"
@@ -30,7 +32,7 @@ const Login = () => {
                     />
                   </div>
 
-                  <div class="ipt-login mb-3">
+                  <div className={classNames(Styles.ipt_login)} class="mb-3">
                     <input
                       type="password"
                       class="form-control"
@@ -46,7 +48,8 @@ const Login = () => {
 
                   <div class="d-grid">
                     <button
-                      class="btn btn-login text-uppercase fw-bold"
+                      class="btn text-uppercase fw-bold"
+                      className={classNames(Styles.btn_login)}
                       type="submit"
                     >
                       Sign in
@@ -56,7 +59,11 @@ const Login = () => {
                   <hr class="my-4" />
                   <div class="d-grid mb-2">
                     <button
-                      class="btn btn-google btn-login text-uppercase fw-bold"
+                      class="btn text-uppercase fw-bold"
+                      className={classNames(
+                        Styles.btn_login,
+                        Styles.btn_google
+                      )}
                       type="submit"
                     >
                       Continue with Google

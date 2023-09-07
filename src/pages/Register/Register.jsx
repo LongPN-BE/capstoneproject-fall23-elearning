@@ -1,6 +1,8 @@
 import React from "react";
 import Logo from "../../assets/images/logo.png";
-import "./Register.scss";
+import "bootstrap/dist/css/bootstrap.css";
+import Styles from "./Register.module.scss";
+import classNames from "classnames";
 
 const Register = () => {
   return (
@@ -45,7 +47,7 @@ const Register = () => {
                     </div>
                   </div>
 
-                  <div class="ipt-register mb-3">
+                  <div className={classNames(Styles.ipt_custom)} class="mb-3">
                     <input
                       type="email"
                       class="form-control"
@@ -53,7 +55,7 @@ const Register = () => {
                     />
                   </div>
 
-                  <div class="ipt-register mb-3">
+                  <div className={classNames(Styles.ipt_custom)} class="mb-3">
                     <input
                       type="password"
                       class="form-control"
@@ -61,7 +63,7 @@ const Register = () => {
                     />
                   </div>
 
-                  <div class="ipt-login mb-5">
+                  <div className={classNames(Styles.ipt_custom)} class="mb-5">
                     <input
                       type="password"
                       class="form-control"
@@ -71,7 +73,8 @@ const Register = () => {
 
                   <div class="d-grid">
                     <button
-                      class="btn btn-login text-uppercase fw-bold"
+                      class="btn text-uppercase fw-bold"
+                      className={classNames(Styles.btn_custom)}
                       type="submit"
                     >
                       Sign up
@@ -82,7 +85,8 @@ const Register = () => {
 
                   <div class="d-grid mb-5">
                     <button
-                      class="btn btn-google btn-login text-uppercase fw-bold"
+                      class="btn btn-login text-uppercase fw-bold"
+                      className={classNames(Styles.btn_google)}
                       type="submit"
                     >
                       Continue with Google

@@ -1,7 +1,9 @@
 import React from "react";
 import Logo from "../../assets/images/logo.png";
+import Styles from "./ForgotPassword.module.scss";
+import "bootstrap/dist/css/bootstrap.css";
+import classNames from "classnames";
 
-import "./ForgotPassword.scss";
 const ForgotPassword = () => {
   return (
     <div class="vh-100">
@@ -35,7 +37,8 @@ const ForgotPassword = () => {
 
                   <div class="d-grid">
                     <button
-                      class="btn btn-forgot-password text-uppercase fw-bold"
+                      class="btn text-uppercase fw-bold"
+                      className={classNames(Styles.btn_forgot_password)}
                       type="submit"
                     >
                       Confirm
