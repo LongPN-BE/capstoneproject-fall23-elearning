@@ -3,29 +3,41 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6.4.2",
-    "@fortawesome/free-solid-svg-icons": "^6.4.2",
-    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.9",
+    "@mui/lab": "^5.0.0-alpha.146",
+    "@mui/material": "^5.14.10",
+    "@mui/system": "^5.14.11",
+    "@mui/x-data-grid": "^6.16.1",
+    "@react-pdf/renderer": "^3.1.12",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.27.2",
-    "bootstrap": "^5.1.0",
+    "bootstrap": "^5.0.0-beta1",
+    "boxicons": "^2.1.4",
     "classnames": "^2.3.1",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-countup": "^6.4.2",
     "react-dom": "^18.2.0",
+    "react-icons": "^4.11.0",
+    "react-pdf": "^7.4.0",
+    "react-pro-sidebar": "^1.1.0-alpha.1",
     "react-redux": "^8.0.2",
+    "react-router": "^6.16.0",
     "react-router-dom": "^6.4.1",
     "react-scripts": "5.0.1",
     "react-slick": "^0.29.0",
     "reactstrap": "^9.2.0",
+    "recharts": "^2.8.0",
     "redux": "^4.2.0",
     "redux-actions": "^2.6.5",
     "redux-devtools-extension": "^2.13.9",
     "redux-saga": "^1.2.1",
-    "sass": "^1.42.1",
+    "sass": "^1.68.0",
+    "sweetalert2": "^11.7.32",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -51,8 +63,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "font-awesome": "^4.7.0"
   }
 }

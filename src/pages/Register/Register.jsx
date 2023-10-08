@@ -1,99 +1,103 @@
 import React from "react";
 import Logo from "../../assets/images/logo.png";
 import "bootstrap/dist/css/bootstrap.css";
-import Styles from "./Register.module.scss";
 import classNames from "classnames";
+import Styles from "./Register.module.scss";
 
 const Register = () => {
   return (
-    <div class=" vh-100 ">
-      <nav class="navbar navbar-light px-5 mb-5 pt-4">
-        <div class="container-fluid p-0">
-          <a class="navbar-brand" href="/">
+    <div className=" vh-100 ">
+      <nav className="navbar navbar-light px-5 mb-5 pt-4">
+        <div className="container-fluid p-0">
+          <a className="navbar-brand" href="/">
             <img src={Logo} style={{ height: 30 }} alt="" />
           </a>
         </div>
       </nav>
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-            <div class="card border-0 shadow-lg rounded-3 my-5">
-              <div class="card-body p-4 p-sm-5 ">
-                <h2 class="card-title text-center text-uppercase mb-5 fw-bold fs-5">
+      <div className="container">
+        <div className="row">
+          <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div className="card border-0 shadow-lg rounded-3 my-5">
+              <div className="card-body p-4 p-sm-5 ">
+                <h2 className="card-title text-center text-uppercase mb-5 fw-bold fs-5">
                   Create an account
                 </h2>
                 <form>
-                  <div class="row">
-                    <div class="col-md-6 mb-3">
-                      <div class="form-outline">
+                  <div className="row">
+                    <div className="col-md-6 mb-3">
+                      <div className="form-outline">
                         <input
                           type="text"
                           id="firstName"
-                          class="form-control"
+                          className="form-control"
                           placeholder="First name"
                         />
                       </div>
                     </div>
 
-                    <div class="col-md-6 mb-3">
-                      <div class="form-outline">
+                    <div className="col-md-6 mb-3">
+                      <div className="form-outline">
                         <input
                           type="text"
                           id="lastName"
-                          class="form-control"
+                          className="form-control"
                           placeholder="Last name"
                         />
                       </div>
                     </div>
                   </div>
 
-                  <div className={classNames(Styles.ipt_custom)} class="mb-3">
+                  <div className={classNames(Styles.ipt_custom, "mb-3")}>
                     <input
                       type="email"
-                      class="form-control"
+                      className="form-control"
                       placeholder="Email"
                     />
                   </div>
 
-                  <div className={classNames(Styles.ipt_custom)} class="mb-3">
+                  <div className={classNames(Styles.ipt_custom, "mb-3")}>
                     <input
                       type="password"
-                      class="form-control"
+                      className="form-control"
                       placeholder="Password"
                     />
                   </div>
 
-                  <div className={classNames(Styles.ipt_custom)} class="mb-5">
+                  <div className={classNames(Styles.ipt_custom, "mb-5")}>
                     <input
                       type="password"
-                      class="form-control"
+                      className="form-control"
                       placeholder="Repeat Password"
                     />
                   </div>
 
-                  <div class="d-grid">
+                  <div className="d-grid">
                     <button
-                      class="btn text-uppercase fw-bold"
-                      className={classNames(Styles.btn_custom)}
+                      className={classNames(
+                        Styles.btn_custom,
+                        "btn text-uppercase fw-bold"
+                      )}
                       type="submit"
                     >
                       Sign up
                     </button>
                   </div>
 
-                  <hr class="my-4" />
+                  <hr className="my-4" />
 
-                  <div class="d-grid mb-5">
+                  <div className="d-grid mb-5">
                     <button
-                      class="btn btn-login text-uppercase fw-bold"
-                      className={classNames(Styles.btn_google)}
+                      className={classNames(
+                        Styles.btn_google,
+                        "btn btn-login text-uppercase fw-bold"
+                      )}
                       type="submit"
                     >
                       Continue with Google
                     </button>
                   </div>
-                  <div class="d-flex justify-content-center">
-                    <p class="form-check-label">
+                  <div className="d-flex justify-content-center">
+                    <p className="form-check-label">
                       Already have an account? <a href="/">Sign up now</a>
                     </p>
                   </div>

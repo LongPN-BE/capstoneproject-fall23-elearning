@@ -10,6 +10,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import rootSaga from "./redux/sagas/RootSaga";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
+import { ProSidebarProvider } from "react-pro-sidebar";
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
@@ -20,11 +21,13 @@ sagaMiddleware.run(rootSaga);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </BrowserRouter>
+    <ProSidebarProvider>
+      <BrowserRouter>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </BrowserRouter>
+    </ProSidebarProvider>
   </React.StrictMode>
 );
 

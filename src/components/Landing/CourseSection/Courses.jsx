@@ -3,8 +3,10 @@ import { Container, Row, Col } from "reactstrap";
 import courseImg1 from "../../../assets/images/web-design.png";
 import courseImg2 from "../../../assets/images/graphics-design.png";
 import courseImg3 from "../../../assets/images/ui-ux.png";
-import "./Courses.scss";
 import CourseCard from "./CourseCard";
+import Styles from "./Courses.module.scss";
+import classNames from "classnames";
+import "bootstrap/dist/css/bootstrap.css";
 
 const coursesData = [
   {
@@ -41,24 +43,28 @@ const Courses = () => {
       <Container className="pt-5 pb-5">
         <Row>
           <Col lg="12" className="mb-5">
-            <div className="course__top d-flex justify-content-between align-items-center">
-              <div className="course__top__left w-50">
-                <h2>Our Popular Courses</h2>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
-                  consequatur libero quod voluptatibus ullam quia quas, vitae
-                  voluptatem recusandae reprehenderit!
-                </p>
+            <div className="d-flex justify-content-between align-items-center">
+              <div className={classNames(Styles.course__top)}>
+                <div className={classNames(Styles.course__top__left, "w-70")}>
+                  <h2>Our Popular Courses</h2>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Quae consequatur libero quod voluptatibus ullam quia quas,
+                    vitae voluptatem recusandae reprehenderit!
+                  </p>
+                </div>
               </div>
 
-              <div className="course__btn w-50 text-end">
-                <button className="btn">See All</button>
+              <div className={classNames("w-50 text-end")}>
+                <button className={classNames("btn", Styles.course__btn)}>
+                  See All
+                </button>
               </div>
             </div>
           </Col>
           {coursesData.map((item) => (
-            <Col lg="4" md="6" sm="6">
-              <CourseCard key={item.id} item={item} />
+            <Col key={item.id} lg="4" md="6" sm="6">
+              <CourseCard item={item} />
             </Col>
           ))}
         </Row>

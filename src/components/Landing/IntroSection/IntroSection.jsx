@@ -1,7 +1,9 @@
 import React from "react";
 import { Container, Row, Col, Button } from "reactstrap";
 import introImg from "../../../assets/images/intro-img.png";
-import "./IntroSection.scss";
+import Styles from "./IntroSection.module.scss";
+import classNames from "classnames";
+import "bootstrap/dist/css/bootstrap.css";
 
 const IntroSection = () => {
   return (
@@ -9,8 +11,8 @@ const IntroSection = () => {
       <Container className="pt-5 pb-5">
         <Row>
           <Col lg="6" md="6">
-            <div className="intro__content">
-              <h2 className="mb-4 intro__title">
+            <div className={classNames(Styles.intro__content)}>
+              <h2 className={classNames(Styles.intro__title, "mb-4")}>
                 Anytime Anywhere <br /> Learn on your <br /> Suitable Schedule
               </h2>
               <p className="mb-5 w-75">
@@ -19,8 +21,11 @@ const IntroSection = () => {
                 universities and companies.
               </p>
             </div>
-            <div className="intro__button">
-              <a href="#" class="btn btn-lg">
+            <div className={classNames(Styles.intro__button)}>
+              <a
+                href="#"
+                className={classNames("btn btn-lg", Styles.btn__custom)}
+              >
                 JOIN FOR FREE
               </a>
             </div>
