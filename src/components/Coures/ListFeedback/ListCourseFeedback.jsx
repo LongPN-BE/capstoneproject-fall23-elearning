@@ -10,7 +10,7 @@ const ListCourseFeedback = () => {
 
     useEffect(() => {
         // Simulate fetching user data from local storage
-        const storedUser = JSON.parse(localStorage.getItem('user'));
+        const storedUser = JSON.parse(Cookies.get('user'));
         setUser(storedUser);
 
         // Simulate fetching feedback data (replace this with your actual data fetching logic)

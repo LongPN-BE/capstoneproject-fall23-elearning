@@ -1,9 +1,11 @@
 import React from "react";
 import { Container } from "reactstrap";
+import Styles from "./Footer.module.scss";
+import classNames from "classnames";
 
 const Footer = () => {
   return (
-    <footer className="footer mt-5 mb-5">
+    <footer className={`${classNames(Styles.footer)} mt-5 mb-5`}>
       <Container>
         <hr />
         <div className="footer__content">

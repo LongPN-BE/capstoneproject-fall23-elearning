@@ -56,7 +56,7 @@
 //             quiz_time: formData.quiz_time,
 //             price: formData.price,
 //             average_point: 0, // Initialize with 0
-//             account_id: JSON.parse(localStorage.getItem('user'))?.id, // Assuming the account ID is fixed for now
+//             account_id: JSON.parse(Cookies.get('user'))?.id, // Assuming the account ID is fixed for now
 //         };
 
 //         courseData.push(newCourse);
@@ -182,6 +182,7 @@ import { Button, Container, Grid, TextField, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import { courseData } from '../../../mock/mock-data';
+import Cookies from 'js-cookie';
 
 const InsertCourse = () => {
     const navigate = useNavigate();
@@ -233,7 +234,7 @@ const InsertCourse = () => {
             quiz_time: formData.quiz_time,
             price: formData.price,
             average_point: 0, // Initialize with 0
-            account_id: JSON.parse(localStorage.getItem('user'))?.id, // Assuming the account ID is fixed for now
+            account_id: JSON.parse(Cookies.get('user'))?.id, // Assuming the account ID is fixed for now
         };
 
         courseData.push(newCourse);

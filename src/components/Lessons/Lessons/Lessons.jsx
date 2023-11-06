@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import LessonModal from './LessonModal'; // Import the LessonModal component
+// import LessonModal from './LessonModal'; // Import the LessonModal component
 import { lessonsData } from '../../../mock/mock-data'; // Replace with your actual lesson data
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import ResourceModal from './ResourceModal'; // Import the ResourceModal component
@@ -133,13 +133,13 @@ const Lessons = () => {
             </TableContainer>
 
             {/* Lesson Modal */}
-            <LessonModal
+            {/* <LessonModal
                 isOpen={isModalOpen}
                 onClose={closeModal}
                 onSave={handleSave}
                 onUpdate={handleSave}
                 lesson={selectedLesson} // Pass the selected lesson for editing
-            />
+            /> */}
 
             {/* Resource Modal */}
             <ResourceModal

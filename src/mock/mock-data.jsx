@@ -36,17 +36,6 @@ export const account = [
         email: "manager@gmail.com",
         active: true,
     },
-    {
-        id: 4,
-        username: "admin",
-        password: "123",
-        created_at: "2023-09-24T00:00:00",
-        updated_at: "2023-09-24T00:00:00",
-        deleted_at: "2023-09-24T00:00:00",
-        role: "admin",
-        email: "admin@gmail.com",
-        active: true,
-    },
 ];
 
 export const courseAccount = [
@@ -74,7 +63,7 @@ export const courseData = [
     {
         id: 1,
         name: "Basic",
-        status: true,
+        status: 'active',
         image: "https://3.bp.blogspot.com/-V1gqKeeRVuc/W88-jU8qF0I/AAAAAAAAEVU/v9yN6L9rraASuHYTW0aezkFyNhYTLn0fwCLcBGAs/s1600/react-basics.jpg",
         description: "Basic",
         createDate: "2023-09-25T16:02:47.864Z",
@@ -83,12 +72,15 @@ export const courseData = [
         quizTime: 15,
         averagePoint: 10,
         teacherId: 1,
-        subjectId: 1
+        subject: {
+            id: 1,
+            name: 'Lập trình hướng đối tượng'
+        }
     },
     {
         id: 2,
         name: "Advance",
-        status: true,
+        status: 'deactive',
         image: "https://greensock.com/uploads/monthly_2021_08/header-2.png.29be1f7af433cbcaaa95eb36c1aa8100.png",
         description: "Advance",
         createDate: "2023-09-25T16:02:47.864Z",
@@ -97,19 +89,16 @@ export const courseData = [
         quizTime: 15,
         averagePoint: 10,
         teacherId: 1,
-        subjectId: 1,
-        syllabus: [
-            {
-                id: 1,
-                title: 'chương 1',
-                content: 'Tổng quan về java nâng cao',
-            }
-        ]
+        subject: {
+            id: 1,
+            name: 'Lập trình hướng đối tượng'
+        }
+
     },
     {
         id: 3,
         name: "Master",
-        status: true,
+        status: 'pending',
         image: "https://cdn.kobo.com/book-images/d1208771-29e2-41e6-aac3-c6bb7cf416ac/353/569/90/False/master-react-js-part-1.jpg",
         description: "Master",
         createDate: "2023-09-25T16:02:47.864Z",
@@ -118,7 +107,72 @@ export const courseData = [
         quizTime: 15,
         averagePoint: 10,
         teacherId: 1,
-        subjectId: 1
+        subject: {
+            id: 1,
+            name: 'Lập trình hướng đối tượng'
+        }
+    }, {
+        id: 4,
+        name: "Super Master",
+        status: 'draft',
+        image: "https://cdn.kobo.com/book-images/d1208771-29e2-41e6-aac3-c6bb7cf416ac/353/569/90/False/master-react-js-part-1.jpg",
+        description: "Super Master",
+        createDate: "2023-09-25T16:02:47.864Z",
+        price: 500,
+        limitTime: "2023-09-25T16:02:47.864Z",
+        quizTime: 15,
+        averagePoint: 10,
+        teacherId: 1,
+        subject: {
+            id: 1,
+            name: 'Lập trình hướng đối tượng'
+        }
+    }
+]
+
+export const syllabusData = [
+    {
+        id: 1,
+        name: 'JAVA cơ bản',
+        status: 'active',
+        courseId: 1,
+        createDate: '2023-10-10T10:00:00'
+    },
+    {
+        id: 2,
+        name: 'JAVA nâng cao',
+        status: 'deactive',
+        courseId: 1,
+        createDate: '2023-10-10T10:00:00'
+    },
+    {
+        id: 3,
+        name: 'JAVA thượng thừa',
+        status: 'deactive',
+        courseId: 1,
+        createDate: '2023-10-10T10:00:00'
+    },
+]
+
+export const lessonSyllabus = [
+    {
+        syllabusId: 1,
+        lessonId: 1
+    },
+    {
+        syllabusId: 1,
+        lessonId: 2
+    }, {
+        syllabusId: 2,
+        lessonId: 2
+    },
+    {
+        syllabusId: 3,
+        lessonId: 1
+    },
+    {
+        syllabusId: 3,
+        lessonId: 2
     }
 ]
 
@@ -132,7 +186,7 @@ export const lessonsData = [
         status: "created",
         asset: "Lesson asset data",
         date_time: "2023-09-25T12:00:00",
-        time: 60, // Lesson duration in minutes
+        estimate_time: 60, // Lesson duration in minutes
         course_id: 1, // This lesson belongs to course with ID 1,
         resources: [
             {
@@ -159,7 +213,7 @@ export const lessonsData = [
         status: "created",
         asset: "Lesson asset data",
         date_time: "2023-09-30T12:00:00",
-        time: 60, // Lesson duration in minutes
+        estimate_time: 60, // Lesson duration in minutes
         course_id: 1, // This lesson belongs to course with ID 1,
         resources: [
             {
@@ -698,14 +752,13 @@ export const quizLessons = [
     {
         id: 1,
         lessonId: 1,
-        type: '',
         title: "Bảo mật trong java",
-        timer: '00:30:00',
-        status: 'Available',
-        startQuiz: '2023-10-01T07:00:00',
-        processTime: 4,
+        duration: 30,
+        status: 'completed',
+        proportion: 5,
+        dateRange: 1,
         passScore: 4.0,
-        endQuiz: '2023-10-01T07:30:00',
+        allowAttempt: 2,
         questions: [
             {
                 id: 1,
@@ -847,17 +900,4 @@ export const resultQuizLessonData = [
         lastPoint: 9.5,
         failCount: 1
     }
-];
-
-
-export const Accounts = [
-    { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-    { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-    { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-    { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-    { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-    { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-    { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-    { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
 ];

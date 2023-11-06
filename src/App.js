@@ -1,101 +1,198 @@
-import { useDispatch, useSelector } from "react-redux";
-import "./App.css";
-import { loadingState$ } from "./redux/selectors/LoadingSelector";
-import { getAllAccountState$ } from "./redux/selectors/AccountSelector";
-import { useEffect } from "react";
-import * as accountActions from "./redux/actions/AccountAction";
-import Loading from "./components/Loading/Loading";
-import { Route, Routes, useLocation } from "react-router-dom";
-import PrivateRoute from "./util/PrivateRoute";
-import TeacherPage from "./pages/Teacher/TeacherPage";
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import 'boxicons/css/boxicons.min.css';
+import './App.css';
+import { useEffect } from 'react';
+import Loading from './components/Loading/Loading';
+import { Route, Routes, useLocation } from 'react-router-dom';
+import PrivateRoute from './util/PrivateRoute';
+import TeacherPage from './pages/Teacher/TeacherPage';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import "boxicons/css/boxicons.min.css";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import NavBar from "./components/Navigation/NavBar";
-import ListCourse from "./components/Coures/ListCourse/ListCourse";
-import InsertCourse from "./components/Coures/InsertCourse/InsertCourse";
 import { useState } from "react";
-import Lessons from "./components/Lessons/Lessons/Lessons";
 import LandingPage from "./pages/Landing/LandingPage";
-import ListSubject from "./components/Subjects/ListSubject/ListSubject";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import ListCourseQuestion from "./components/Coures/ListCourseQuestion/ListCourseQuestion";
-import ListQuiz from "./components/Lessons/Quizs/ListQuiz";
-import ListQuizQuestion from "./components/Lessons/QuestionQuiz/ListQuestionQuiz";
-import ListCourseFeedback from "./components/Coures/ListFeedback/ListCourseFeedback";
-import ListResultQuizLesson from "./components/Lessons/ResultQuiz/ListResultQuizLesson";
-import ListSyllabus from "./components/Coures/ListSyllabus/ListSyllabus";
-import Accounts from "./components/DataTable/Account";
+import Profile from "./components/Profile/Profile";
+import ManageCourse from "./components/ManageCourses/ManageCourse";
+import CourseDetail from "./components/ManageCourses/CourseDetail/CourseDetail";
+import Evaluate from "./components/ManageCourses/Evaluate/Evaluate";
+import SyllabusDetail from "./components/ManageCourses/Syllabus/SyllabusDetail/SyllabusDetail";
+import LessonDetail from "./components/ManageCourses/Lesson/LessonDetail";
+import { fetchData, postData } from "./services/AppService";
+import StudentLanding from "./pages/Landing/StudentLanding";
+import OverviewCourse from "./pages/OverviewCourse";
+import UserCourseDetail from "./pages/DetailCourse";
+import CourseInfo from "./pages/DetailCourse/Components/CourseInfo";
+import Grades from "./pages/DetailCourse/Components/Grades";
+import LessonInfo from "./pages/DetailCourse/Components/LessonInfo";
+import Resources from "./pages/DetailCourse/Components/Resources";
+import LearnCourse from "./pages/LearnCourse";
+import DetailLesson from "./pages/DetailLesson";
+import Quizz from "./pages/Quizz";
+import StudentProfile from "./pages/StudentProfile";
+import StudentPrivateRouter from "./util/StudentPrivateRouter";
+import ManageSubject from "./pages/Manager/ManageSubject/ManageSubject";
+import CourseBySubject from "./pages/Manager/CoursesBySubject/CoursesBySubject";
+import Cookies from "js-cookie";
+import ListQuestionBank from "./components/Questions/QuestionBanks/ListQuestionBank";
+import QuizDetail from "./components/Quizs/QuizDetail";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import 'boxicons/css/boxicons.min.css';
+import CreateQuiz from './components/ManageCourses/Quiz/ListQuiz';
+import ListQuizQuestion from './components/ManageCourses/Quiz/LitsQuizQuestion/ListQuizQuestion';
+import Notification from './util/Notification';
+
 
 const App = () => {
-  let isLoading = useSelector(loadingState$);
-  const [user, setUser] = useState({})
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
   const location = useLocation();
-  // const dispatch = useDispatch();
-  // let listAccount = useSelector(getAllAccountState$);
-  // const location = useLocation();
-  // console.log(location.state);
-  // useEffect(() => {
-  //   dispatch(accountActions.getAllAccount.getAllAccountRequest());
-
-  // }, [dispatch]);
 
   useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("user")))
-  }, [location])
+    let userTmp = Cookies.get("user");
+    const token = Cookies.get('token')
+    if ((userTmp === null || userTmp === undefined) && token !== null && token !== undefined) {
+      setLoading(true);
+      const fetchUserData = async () => {
+        try {
+          if (token) {
+            const userData = await fetchData("/auth/me", token);
+            if (userData) {
+              const deviceToken = Cookies.get('deviceToken');
+              const body = {
+                token: deviceToken,
+                accountId: userData.id
+              }
+              await postData(`/device/save`, body, token)
+            }
+            Cookies.set('user', JSON.stringify(userData), { expires: 1 })
+            setUser(userData);
+          }
 
-  // console.log("list-account: " + JSON.stringify(listAccount));
-
-  return (
-    isLoading ? <Loading /> :
-      <>
-        {
-          user !== null && user.role === 'teacher' ? (
-            <NavBar>
-              <Routes>
-                <Route element={<PrivateRoute />}>
-                  <Route path="/" element={<TeacherPage />} />
-                  <Route path="/subjects" element={<ListSubject />} />
-                  <Route path="/subjects/:subjectId/courses" element={<ListCourse />} />
-                  <Route path="/courses/:courseId/courseQuestions" element={<ListCourseQuestion />} />
-                  <Route path="/create-course" element={<InsertCourse />} />
-                  <Route path="/courses/:courseId/lessons" element={<Lessons />} />
-                  <Route path="/courses/:courseId/feedbacks" element={<ListCourseFeedback />} />
-                  <Route path="/lessons/:lessonId/quizs" element={<ListQuiz />} />
-                  <Route path="/quizs/:quizId/quizQuestion" element={<ListQuizQuestion />} />
-                  <Route path="/courses/:courseId/syllabus" element={<ListSyllabus />} />
-                  {/* <Route path="/lesson" element />
-                  <Route path="/create-lesson" element={<InsertLesson />} /> */}
-                </Route>
-
-              </Routes>
-            </NavBar >
-          ) : user?.role === 'manager' ? (
-            <NavBar>
-              <Routes>
-                <Route path="/" element={<Dashboard />} />
-              </Routes>
-            </NavBar>
-          ) : user?.role === 'admin' ? (
-            <NavBar>
-              <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/accounts" element={<Accounts />} />
-              </Routes>
-            </NavBar>
-          ) : (
-            <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/" element={<LandingPage />} />
-            </Routes>
-          )
+        } catch (error) {
+          console.error('Error fetching user data:', error.message);
+        } finally {
+          setLoading(false);
         }
-      </>
+      };
+      if (location.pathname === '/') {
+        // Only fetch user data if the user is on the homepage ("/")
+        fetchUserData();
+      }
+    } else if (userTmp) {
+      userTmp = JSON.parse(userTmp);
+      setUser(userTmp);
+    }
+  }, [location.pathname]);
+
+
+  if (!user) {
+    let userTmp = Cookies.get("user");
+    if (!userTmp && location.pathname !== '/' && location.pathname !== '/login' && location.pathname !== '/register') {
+      return window.location.href = '/'
+    }
+  }
+
+  return loading ? (
+    <Loading />
+  ) : (
+    <>
+      <Notification />
+      {user && user.role === "TEACHER" ? (
+        <NavBar>
+          <Routes>
+            <Route element={<PrivateRoute />}>
+              <Route path="/" element={<TeacherPage />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/manage-course" element={<ManageCourse />} />
+              <Route path="/courses/:courseId" element={<CourseDetail />} />
+              <Route
+                path="/courses/:courseId/syllabus/:syllabusId"
+                element={<SyllabusDetail />}
+              />
+              <Route
+                path="/courses/:courseId/syllabus/:syllabusId/lessons/:lessonId"
+                element={<LessonDetail />}
+              />
+              <Route
+                path="/courses/:courseId/syllabus/:syllabusId/lessons/:lessonId/quiz/:quizId"
+                element={<QuizDetail />}
+              />
+              <Route
+                path="/courses/:courseId/syllabus/:syllabusId/lessons/:lessonId/quiz/:quizId/questions"
+                element={<ListQuizQuestion />}
+              />
+              <Route
+                path="/courses/:courseId/syllabus/:syllabusId/lessons/:lessonId/create-quiz"
+                element={<CreateQuiz />}
+              />
+              <Route
+                path="/courses/:courseId/evaluate"
+                element={<Evaluate />}
+              />
+              <Route path="/question-banks" element={<ListQuestionBank />} />
+            </Route>
+          </Routes>
+        </NavBar>
+      ) : user?.role === 'STAFF' ? (
+        <Routes>
+          <Route
+            path="/dashboard"
+            element={
+              <NavBar>
+                <Dashboard />
+              </NavBar>
+            }
+          />
+          <Route
+            path="/subjects"
+            element={
+              <NavBar>
+                <ManageSubject />
+              </NavBar>
+            }
+          />
+          <Route
+            path="/subjects/courseBySubject"
+            element={
+              <NavBar>
+                <CourseBySubject />
+              </NavBar>
+            }
+          />
+        </Routes>
+      ) : user?.role === 'STUDENT' ? (
+        <Routes element={<StudentPrivateRouter />}>
+          <Route path="/student-home" element={<StudentLanding />} />
+          <Route path="/my-profile" element={<StudentProfile />} />
+          <Route path="/overview-course/:courseId" element={<OverviewCourse />} />
+          <Route path="/courses/:courseId/learn">
+            <Route path="" element={<LearnCourse />}>
+              <Route path=":lessonId" element={<DetailLesson />} />
+            </Route>
+            <Route path=":lessonId/quiz/:quizId" element={<Quizz />} />
+          </Route>
+          <Route path="/courses" element={<UserCourseDetail />}>
+            <Route path=":courseId" element={<LessonInfo />} />
+            <Route path=":courseId/grades" element={<Grades />} />
+            <Route path=":courseId/resources" element={<Resources />} />
+            <Route path=":courseId/info" element={<CourseInfo />} />
+          </Route>
+        </Routes>
+      ) : (
+        <></>
+      )}
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/" element={<LandingPage />} />
+      </Routes>
+    </>
   );
-}
+};
 
 export default App;
