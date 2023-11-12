@@ -188,8 +188,8 @@ export default function ListSubject() {
                   <TableCell>Giá thấp nhất</TableCell>
                   <TableCell>Ngày tạo</TableCell>
                   {/* <TableCell>Staff ID</TableCell> */}
-                  <TableCell>Status</TableCell>
-                  <TableCell>Action</TableCell>
+                  <TableCell>Trạng thái</TableCell>
+                  <TableCell>Hành động</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

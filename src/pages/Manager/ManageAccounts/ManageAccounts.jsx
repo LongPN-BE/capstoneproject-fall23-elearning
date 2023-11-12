@@ -118,7 +118,7 @@ export default function ListAccount() {
   const filterData = (searchInput) => {
     // Filter data based on both status and search input
     const filteredData = data.filter((item) => {
-      const searchMatch = searchInput === '' || item.name.toLowerCase().includes(searchInput.toLowerCase());
+      const searchMatch = searchInput === '' || item.profile.firstName.toLowerCase().includes(searchInput.toLowerCase());
       return searchMatch;
     });
 

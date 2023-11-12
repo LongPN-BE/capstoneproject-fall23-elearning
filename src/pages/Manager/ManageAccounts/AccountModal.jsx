@@ -15,11 +15,11 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
       // Populate the form fields if a account is provided for editing
       setEditedAccount({
         username: account.username,
-        firstName: account.firstName,
-        lastName: account.lastName,
-        email: account.email,
+        firstName: account.profile.firstName,
+        lastName: account.profile.lastName,
+        email: account.profile.email,
         role: account.role,
-        status: account.status,
+        status: account.profile.status,
       });
     } else {
       // Clear the form fields if adding a new account
@@ -78,11 +78,11 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
 
   return (
     <Dialog open={isOpen} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>{account ? 'Edit Account' : 'New Account'}</DialogTitle>
+      <DialogTitle>{account ? 'Cập nhật tài khoản' : 'Thêm mới tài khoản'}</DialogTitle>
       <DialogContent>
         <TextField
           fullWidth
-          label="Username"
+          label="Tài khoản"
           autoFocus
           margin="dense"
           name="username"
@@ -94,7 +94,7 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
           fullWidth
           multiline
           rows={4}
-          label="First name"
+          label="Tên"
           autoFocus
           margin="dense"
           name="firstName"
@@ -104,7 +104,7 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
         />
         <TextField
           fullWidth
-          label="Last name"
+          label="Họ"
           autoFocus
           margin="dense"
           name="lastName"
@@ -125,7 +125,7 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
         />
         <TextField
           fullWidth
-          label="Role"
+          label="Vai trò"
           autoFocus
           margin="dense"
           name="role"
@@ -137,7 +137,7 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
           fullWidth
           autoFocus
           margin="dense"
-          label="Status"
+          label="Trạng thái"
           name="status"
           value={editedAccount.status}
           onChange={(e) => handleInputChange(e, 'status')}
@@ -155,10 +155,10 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
-          Cancel
+          Hủy
         </Button>
         <Button onClick={handleSave} color="primary" variant="contained">
-          Save
+          Xác nhận
         </Button>
       </DialogActions>
     </Dialog>

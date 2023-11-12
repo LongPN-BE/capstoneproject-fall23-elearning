@@ -1,25 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from '@material-ui/core';
+import moment from 'moment';
+import Cookies from 'js-cookie';
+
 const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
-  const [editedSubject, setEditedSubject] = useState({
-    name: '',
-    description: '',
-    minPrice: '',
-    createDate: '',
-    staffId: '',
-    status: ''
-  });
+  const [user, setUser] = useState({});
 
   useEffect(() => {
+    setUser(JSON.parse(Cookies.get('user')));
     if (subject) {
       // Populate the form fields if a subject is provided for editing
       setEditedSubject({
         name: subject.name,
         description: subject.description,
-        minPrice: subject.min_price,
-        createDate: subject.created_date,
-        staffId: subject.staff_id,
-        status: subject.status,
+        minPrice: subject.minPrice,
+        createDate: subject.createDate,
+        staffId: 'Staff ' + subject.staff.id,
+        status: 'Đang hoạt động',
       });
     } else {
       // Clear the form fields if adding a new subject
@@ -27,12 +24,23 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
         name: '',
         description: '',
         minPrice: '',
-        createDate: '',
-        staffId: '',
-        status: '',
+        createDate: new Date(),
+        staffId: user.username,
+        status: 'Chưa kích hoạt',
       });
     }
   }, [subject]);
+
+  const [editedSubject, setEditedSubject] = useState({
+    name: '',
+    description: '',
+    minPrice: '',
+    createDate: new Date(),
+    staffId: user.username,
+    status: 'Chưa kích hoạt'
+  });
+
+
 
   const handleInputChange = (e, fieldName) => {
     const { value } = e.target;
@@ -69,9 +77,9 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
       name: '',
       description: '',
       minPrice: '',
-      createDate: '',
-      staffId: '',
-      status: '',
+      createDate: new Date(),
+      staffId: user.username,
+      status: 'Chưa kích hoạt',
     });
 
     onClose();
@@ -79,11 +87,11 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
 
   return (
     <Dialog open={isOpen} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>{subject ? 'Edit Subject' : 'New Subject'}</DialogTitle>
+      <DialogTitle>{subject ? 'Cập nhật môn học' : 'Tạo mới môn học'}</DialogTitle>
       <DialogContent>
         <TextField
           fullWidth
-          label="Subject Name"
+          label="Tên môn học"
           autoFocus
           margin="dense"
           name="name"
@@ -95,7 +103,7 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
           fullWidth
           multiline
           rows={4}
-          label="Description"
+          label="Chú thích"
           autoFocus
           margin="dense"
           name="description"
@@ -105,38 +113,38 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
         />
         <TextField
           fullWidth
-          label="Minimum price"
+          label="Giá thấp nhất"
           autoFocus
           margin="dense"
-          name="min_price"
-          value={editedSubject.min_price}
-          onChange={(e) => handleInputChange(e, 'min_price')}
+          name="minPrice"
+          value={editedSubject.minPrice}
+          onChange={(e) => handleInputChange(e, 'minPrice')}
         />
         <TextField
           fullWidth
-          label="Created date"
+          label="Ngày khởi tạo"
           autoFocus
           margin="dense"
-          name="created_date"
-          value={editedSubject.created_date}
-          onChange={(e) => handleInputChange(e, 'created_date')}
+          name="createDate"
+          value={moment(editedSubject.createDate).format("DD/MM/YYYY")}
+          onChange={(e) => handleInputChange(e, 'createDate')}
           disabled={true}
         />
         <TextField
           fullWidth
-          label="Staff ID"
+          label="Người khởi tạo"
           autoFocus
           margin="dense"
-          name="staff_id"
-          value={editedSubject.staff_id}
-          onChange={(e) => handleInputChange(e, 'staff_id')}
+          name="staffId"
+          value={editedSubject.staffId}
+          onChange={(e) => handleInputChange(e, 'staffId')}
           disabled={true}
         />
         <TextField
           fullWidth
           autoFocus
           margin="dense"
-          label="Status"
+          label="Trạng thái"
           name="asset"
           value={editedSubject.status}
           onChange={(e) => handleInputChange(e, 'status')}
@@ -144,20 +152,20 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
         />
         {subject?.status == 'enable' ? (
           <Button onClick={handleSave} color="danger">
-            Disable subject
+            Vô hiệu hóa môn học
           </Button>
         ) : (
           <Button onClick={handleSave} color="danger">
-            Enable subject
+            Kích hoạt môn học
           </Button>
         )}
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
-          Cancel
+          Hủy
         </Button>
         <Button onClick={handleSave} color="primary" variant="contained">
-          Save
+          Xác nhận
         </Button>
       </DialogActions>
     </Dialog>
