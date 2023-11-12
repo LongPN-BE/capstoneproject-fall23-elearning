@@ -200,12 +200,12 @@ export default function ListSubject() {
                       <TableCell>{s.name}</TableCell>
                       <TableCell>{s.description}</TableCell>
                       <TableCell>{s.minPrice}</TableCell>
-                      <TableCell>{s.createDate}</TableCell>
+                      <TableCell>{moment(s.createDate).format("DD/MM/YYYY")}</TableCell>
                       {/* <TableCell>{s.staff_id}</TableCell> */}
                       <TableCell>{s.status}</TableCell>
                       <TableCell>
                         {/* <Link className="btn btn-outline-secondary" to={`/subjects/courseBySubject`}> */}
-                        <Link className="btn btn-outline-secondary" to={`##`}>
+                        <Link className="btn btn-outline-secondary" to={`/subjects/courseBySubject`}>
                           Xem
                         </Link>
                         <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={() => handleEditSubject(s)}>

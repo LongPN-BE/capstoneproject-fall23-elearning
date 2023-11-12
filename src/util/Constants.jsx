@@ -3,6 +3,7 @@ import GridViewRoundedIcon from '@mui/icons-material/GridViewRounded';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import BookRoundedIcon from "@mui/icons-material/BookRounded";
 import AllLessonIcon from "@mui/icons-material/LibraryBooksOutlined";
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import CreateLessonIcon from "@mui/icons-material/ImportContactsRounded";
 import ListCourseIcon from "@mui/icons-material/CardTravelRounded";
 import CourseIcon from '@mui/icons-material/TabRounded';
@@ -88,6 +89,11 @@ export const navData = {
       path: '/dashboard',
     },
     {
+      label: 'Quản lý tài khoản',
+      icon: <PeopleAltIcon />,
+      path: '/accounts',
+    },
+    {
       label: 'Quản lý môn học',
       icon: <BookRoundedIcon />,
       subItems: [
@@ -96,40 +102,12 @@ export const navData = {
           icon: <GridViewRoundedIcon />,
           path: '/subjects',
         },
-        // Add more admin-specific items
-      ],
-      teacher: [
         {
-          label: 'Dashboard',
+          label: 'Khóa học theo môn',
           icon: <GridViewRoundedIcon />,
-          path: '/',
+          path: '/subjects/courseBySubject',
         },
-        {
-          label: 'Quản lý khóa học',
-          icon: <ListCourseIcon />,
-          path: '/manage-course',
-        },
-        {
-          label: 'Ngân hàng câu hỏi',
-          icon: <QuestionMarkIcon />,
-          path: '/question-bank',
-        },
-        {
-          label: 'Chính sách tài chính',
-          icon: <LocalPoliceOutlinedIcon />,
-          path: '/policies'
-
-        },
-        {
-          label: 'Danh sách môn học',
-          icon: <AllLessonIcon />,
-          path: '/subjects',
-        },
-        {
-          label: 'Danh sách khoá học',
-          icon: <CreateLessonIcon />,
-          path: '/all-courses',
-        },
+        // Add more admin-specific items
       ],
     },
     {

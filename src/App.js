@@ -36,6 +36,7 @@ import StudentProfile from "./pages/StudentProfile";
 import StudentPrivateRouter from "./util/StudentPrivateRouter";
 import ManageSubject from "./pages/Manager/ManageSubject/ManageSubject";
 import CourseBySubject from "./pages/Manager/CoursesBySubject/CoursesBySubject";
+import Accounts from "./pages/Manager/ManageAccounts/ManageAccounts";
 import Cookies from "js-cookie";
 import ListQuestionBank from "./components/Questions/QuestionBanks/ListQuestionBank";
 import QuizDetail from "./components/Quizs/QuizDetail";
@@ -161,6 +162,14 @@ const App = () => {
             element={
               <NavBar>
                 <CourseBySubject />
+              </NavBar>
+            }
+          />
+          <Route
+            path="/accounts"
+            element={
+              <NavBar>
+                <Accounts />
               </NavBar>
             }
           />
