@@ -46,6 +46,7 @@ import 'boxicons/css/boxicons.min.css';
 import CreateQuiz from './components/ManageCourses/Quiz/ListQuiz';
 import ListQuizQuestion from './components/ManageCourses/Quiz/LitsQuizQuestion/ListQuizQuestion';
 import Notification from './util/Notification';
+import ListConfig from './pages/Admin/ManageConfig/ManageConfig';
 
 
 const App = () => {
@@ -170,6 +171,14 @@ const App = () => {
             element={
               <NavBar>
                 <Accounts />
+              </NavBar>
+            }
+          />
+          <Route
+            path="/configs"
+            element={
+              <NavBar>
+                <ListConfig />
               </NavBar>
             }
           />
