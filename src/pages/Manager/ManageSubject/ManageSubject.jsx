@@ -18,12 +18,12 @@ import { Search } from '@material-ui/icons';
 import Cookies from 'js-cookie';
 import { fetchData, postData } from '../../../services/AppService';
 import moment from 'moment/moment';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 export default function ListSubject() {
   const [data, setData] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [isSubjectModalOpen, setIsSubjectModalOpen] = useState(false);
-  const [isSubjectCourseOpen, setIsSubjectCourseModalOpen] = useState(false);
   const [subjectToEdit, setSubjectToEdit] = useState(null);
 
 
@@ -45,15 +45,6 @@ export default function ListSubject() {
   const handleAddSubject = () => {
     setSubjectToEdit(null); // Clear any previous subject data (for editing)
     setIsSubjectModalOpen(true);
-  };
-
-  const handleViewDetail = (subjectData) => {
-    console.log(subjectData);
-    setSubjectToEdit(subjectData); // Set the subject data to view detail
-    setIsSubjectCourseModalOpen(true);
-  };
-  const handleSubjectCourseModalClose = () => {
-    setIsSubjectCourseModalOpen(false);
   };
 
   const handleEditSubject = (subjectData) => {
@@ -179,12 +170,15 @@ export default function ListSubject() {
                       <TableCell>{s.minPrice}</TableCell>
                       <TableCell>{moment(s.createDate).format("DD/MM/YYYY")}</TableCell>
                       {/* <TableCell>{s.staff_id}</TableCell> */}
-                      <TableCell>{s.status}</TableCell>
+                      <TableCell>{s.status ? "Đang hoạt động" : "Chưa kích hoạt"} </TableCell>
                       <TableCell>
                         {/* <Link className="btn btn-outline-secondary" to={`/subjects/courseBySubject`}> */}
-                        <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={() => handleViewDetail(s)}>
+                        <Link to={`/course/subject/${s.id}`} className='btn btn-outline-primary'>
+                          Chi tiết <VisibilityIcon />
+                        </Link>
+                        {/* <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={() => handleViewDetail(s)}>
                           Chi tiết
-                        </Button>
+                        </Button> */}
                         <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={() => handleEditSubject(s)}>
                           Chỉnh sửa
                         </Button>
@@ -196,11 +190,7 @@ export default function ListSubject() {
             </Table>
           </Paper>
         </div>
-        <SubjectCourseModal
-          isOpen={isSubjectCourseOpen}
-          onClose={handleSubjectCourseModalClose}
-          subject={subjectToEdit}
-        />
+
         <SubjectModal
           isOpen={isSubjectModalOpen}
           onSave={saveOrUpdateSubject}

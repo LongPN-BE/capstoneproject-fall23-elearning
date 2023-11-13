@@ -2,8 +2,17 @@ import React from 'react';
 import { Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 function CourseTableComponent({ courses }) {
+
+
+  const handleApproved = (course) => {
+    alert('Xác nhận duyệt ' + course.name)
+  };
+  const handleReject = (course) => {
+    alert('Xác nhận từ chối ' + course.name)
+  };
   return (
     <Table>
       <TableHead>
@@ -13,7 +22,8 @@ function CourseTableComponent({ courses }) {
           <TableCell align="center">Mô tả</TableCell>
           <TableCell align="center">Giá</TableCell>
           <TableCell align="center">Ngày tạo</TableCell>
-          <TableCell align="center">Action</TableCell>
+          <TableCell align="center">Xem</TableCell>
+          <TableCell align="center">Xét duyệt</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -25,10 +35,19 @@ function CourseTableComponent({ courses }) {
             <TableCell align="center">{course.price}</TableCell>
             <TableCell align="center">{moment(course.createDate).format("DD/MM/YYYY")}</TableCell>
             <TableCell align="center">
+              <VisibilityIcon />
               {/* <a href='' className='btn btn-outline-primary'>Chi tiết</a> */}
-              <Link to={`/courses/${course.id}`} className="btn btn-outline-primary">
+              {/* <Link to={`/courses/${course.id}`} className="btn btn-outline-primary">
                 Xem
-              </Link>
+              </Link> */}
+            </TableCell>
+            <TableCell align="center">
+              <button type="submit" className="btn btn-success" onClick={() => handleApproved(course)}>
+                Duyệt !!
+              </button>
+              <button type="submit" className="btn btn-danger" onClick={() => handleReject(course)}>
+                Từ chối
+              </button>
             </TableCell>
           </TableRow>
         ))}

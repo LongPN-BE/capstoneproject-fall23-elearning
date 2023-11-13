@@ -46,7 +46,7 @@ import 'boxicons/css/boxicons.min.css';
 import CreateQuiz from './components/ManageCourses/Quiz/ListQuiz';
 import ListQuizQuestion from './components/ManageCourses/Quiz/LitsQuizQuestion/ListQuizQuestion';
 import Notification from './util/Notification';
-import ListConfig from './pages/Admin/ManageConfig/ManageConfig';
+import ListConfig from './pages/Manager/ManageConfig/ManageConfig';
 
 
 const App = () => {
@@ -159,7 +159,7 @@ const App = () => {
             }
           />
           <Route
-            path="/subjects/courseBySubject"
+            path="/course/subject/:subjectId"
             element={
               <NavBar>
                 <CourseBySubject />
