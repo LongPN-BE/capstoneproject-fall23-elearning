@@ -13,6 +13,7 @@ import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import PaidIcon from '@mui/icons-material/Paid';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 export const DISPLAY_LOADING = 'DISPLAY_LOADING';
 export const HIDE_LOADING = 'HIDE_LOADING';
@@ -125,6 +126,11 @@ export const navData = {
           path: '/payment-history',
         },
       ],
+    },
+    {
+      label: 'Cấu hình hệ thống',
+      icon: <SettingsIcon />,
+      path: '/configs',
     },
     // Add more manager-specific items
   ],

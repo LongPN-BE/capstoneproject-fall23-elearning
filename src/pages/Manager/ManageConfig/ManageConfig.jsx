@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import {
   Button,
@@ -20,28 +20,25 @@ import moment from 'moment/moment';
 import ConfigModal from './ConfigModal';
 
 export default function ListConfig() {
-  const { configId } = useParams();
   const [data, setData] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
   const [configToEdit, setConfigToEdit] = useState(null);
-  const [config, setConfig] = useState(null);
 
-  //   useEffect(() => {
-  //     const token = Cookies.get('token');
-  //     if (token) {
-  //       try {
-  //         fetchData('/subject/subjects', token).then((resp) => {
-  //           if (resp) {
-  //             setSubject(resp.find((s) => s.id == subjectId));
-  //             setData(resp);
-  //           }
-  //         });
-  //       } catch (error) {
-  //         console.log(error);
-  //       }
-  //     }
-  //   }, []);
+  useEffect(() => {
+    const token = Cookies.get('token');
+    if (token) {
+      try {
+        fetchData('/system-config/configs', token).then((resp) => {
+          if (resp) {
+            setData(resp);
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, []);
 
   const handleAddConfig = () => {
     setConfigToEdit(null); // Clear any previous config data (for editing)
