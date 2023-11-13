@@ -18,38 +18,6 @@ import Cookies from 'js-cookie';
 import { fetchData, postData } from '../../../services/AppService';
 import moment from 'moment/moment';
 
-// export const subjectData = [
-//   {
-//     id: 1,
-//     name: 'Java',
-//     description: 'Subject for Java language',
-//     min_price: '300000',
-//     created_date: '01.02.2023',
-//     staff_id: 65431843554,
-//     status: 'enable',
-//   },
-//   {
-//     id: 2,
-//     name: 'Python',
-//     description: 'Subject for Python language',
-//     min_price: '250000',
-//     created_date: '02.02.2023',
-//     staff_id: 32654411723,
-//     status: 'enable',
-//   },
-//   {
-//     id: 3,
-//     name: 'Javascript',
-//     description: 'Subject for Javascript language',
-//     min_price: '500000',
-//     created_date: '05.02.2023',
-//     staff_id: 98765132142,
-//     status: 'disable',
-//   },
-// ];
-
-
-
 export default function ListSubject() {
   const { subjectId } = useParams();
   const [data, setData] = useState([]);
@@ -107,15 +75,15 @@ export default function ListSubject() {
         dateTime: moment(new Date())
       };
       console.log('Subject data to update:', await body)
-      // await postData('##', body, token)
-      //   .then(resp => {
-      //     if (resp) {
-      //       window.location.reload();
-      //     }
-      //   })
-      //   .catch(err => {
-      //     console.log(err);
-      //   });
+      await postData('/subject/save', body, token)
+        .then(resp => {
+          if (resp) {
+            window.location.reload();
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     } else {
       // Implement your create logic here for new subject.
 
@@ -125,15 +93,15 @@ export default function ListSubject() {
         dateTime: moment(new Date())
       };
       console.log('Subject data to update:', await body)
-      // await postData('##', body, token)
-      //   .then(resp => {
-      //     if (resp) {
-      //       window.location.reload();
-      //     }
-      //   })
-      //   .catch(err => {
-      //     console.log(err);
-      //   });
+      await postData('/subject/save', body, token)
+        .then(resp => {
+          if (resp) {
+            window.location.reload();
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
 
     setIsSubjectModalOpen(false); // Close the SubjectModal

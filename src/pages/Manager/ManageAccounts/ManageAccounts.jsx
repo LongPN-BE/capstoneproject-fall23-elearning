@@ -27,21 +27,21 @@ export default function ListAccount() {
   const [accountToEdit, setAccountToEdit] = useState(null);
   const [account, setAccount] = useState(null);
 
-    useEffect(() => {
-      const token = Cookies.get('token');
-      if (token) {
-        try {
-          fetchData('/auth/accounts', token).then((resp) => {
-            if (resp) {
-              setAccount(resp.find((s) => s.id == accountId));
-              setData(resp);
-            }
-          });
-        } catch (error) {
-          console.log(error);
-        }
+  useEffect(() => {
+    const token = Cookies.get('token');
+    if (token) {
+      try {
+        fetchData('/auth/accounts', token).then((resp) => {
+          if (resp) {
+            setAccount(resp.find((s) => s.id == accountId));
+            setData(resp);
+          }
+        });
+      } catch (error) {
+        console.log(error);
       }
-    }, []);
+    }
+  }, []);
 
   const handleAddAccount = () => {
     setAccountToEdit(null); // Clear any previous account data (for editing)
@@ -141,11 +141,11 @@ export default function ListAccount() {
                 startAdornment={<Search />}
                 onChange={handleSearchChange}
               />
-              <div className="text-end col-8">
+              {/* <div className="text-end col-8">
                 <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={handleAddAccount}>
                   Tạo mới
                 </Button>
-              </div>
+              </div> */}
             </div>
 
             <Table style={{ marginTop: '20px' }}>
@@ -173,11 +173,11 @@ export default function ListAccount() {
                       <TableCell>{a.role}</TableCell>
                       <TableCell>{moment(a.createdAt).format("DD/MM/YYYY")}</TableCell>
                       <TableCell>{a.profile.email}</TableCell>
-                      <TableCell>{a.profile.status}</TableCell>
+                      <TableCell>{a.enabled ? "Đang hoạt động" : "Chưa kích hoạt"} </TableCell>
                       <TableCell>
-                        <Link className="btn btn-outline-secondary" to={`##`}>
+                        {/* <Link className="btn btn-outline-secondary" to={`##`}>
                           Xem
-                        </Link>
+                        </Link> */}
                         <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={() => handleEditAccount(a)}>
                           Chỉnh sửa
                         </Button>

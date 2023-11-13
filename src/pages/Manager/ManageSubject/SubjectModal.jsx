@@ -150,7 +150,7 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
           onChange={(e) => handleInputChange(e, 'status')}
           disabled={true}
         />
-        {subject?.status == 'enable' ? (
+        {/* {subject?.status == 'enable' ? (
           <Button onClick={handleSave} color="danger">
             Vô hiệu hóa môn học
           </Button>
@@ -158,7 +158,7 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
           <Button onClick={handleSave} color="danger">
             Kích hoạt môn học
           </Button>
-        )}
+        )} */}
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">

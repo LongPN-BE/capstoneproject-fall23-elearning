@@ -19,7 +19,7 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
         lastName: account.profile.lastName,
         email: account.profile.email,
         role: account.role,
-        status: account.profile.status,
+        status: account.enabled,
       });
     } else {
       // Clear the form fields if adding a new account
@@ -139,17 +139,17 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
           margin="dense"
           label="Trạng thái"
           name="status"
-          value={editedAccount.status}
+          value={editedAccount.status ? "Đang hoạt động" : "Chưa kích hoạt"}
           onChange={(e) => handleInputChange(e, 'status')}
           disabled={true}
         />
-        {account?.status == 'enable' ? (
+        {account?.enabled ? (
           <Button onClick={handleSave} color="danger">
-            Disable account
+            Vô hiệu hóa
           </Button>
         ) : (
           <Button onClick={handleSave} color="danger">
-            Enable account
+            Kíck hoạt tài khoản
           </Button>
         )}
       </DialogContent>
