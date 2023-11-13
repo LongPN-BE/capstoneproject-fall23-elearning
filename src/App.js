@@ -29,6 +29,11 @@ import CourseInfo from "./pages/DetailCourse/Components/CourseInfo";
 import Grades from "./pages/DetailCourse/Components/Grades";
 import LessonInfo from "./pages/DetailCourse/Components/LessonInfo";
 import Resources from "./pages/DetailCourse/Components/Resources";
+import StaffCourseDetail from "./pages/Manager/DetailCourse";
+import StaffCourseInfo from "./pages/Manager/DetailCourse/Components/CourseInfo";
+import StaffGrades from "./pages/Manager/DetailCourse/Components/Grades";
+import StaffLessonInfo from "./pages/Manager/DetailCourse/Components/LessonInfo";
+import StaffResources from "./pages/Manager/DetailCourse/Components/Resources";
 import LearnCourse from "./pages/LearnCourse";
 import DetailLesson from "./pages/DetailLesson";
 import Quizz from "./pages/Quizz";
@@ -182,6 +187,12 @@ const App = () => {
               </NavBar>
             }
           />
+          <Route path="/courses" element={<StaffCourseDetail />}>
+            <Route path=":courseId" element={<StaffLessonInfo />} />
+            <Route path=":courseId/grades" element={<StaffGrades />} />
+            <Route path=":courseId/resources" element={<StaffResources />} />
+            <Route path=":courseId/info" element={<StaffCourseInfo />} />
+          </Route>
         </Routes>
       ) : user?.role === 'STUDENT' ? (
         <Routes element={<StudentPrivateRouter />}>
