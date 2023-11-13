@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 function CourseTableComponent({ courses }) {
   return (
@@ -22,7 +23,7 @@ function CourseTableComponent({ courses }) {
             <TableCell align="center">{course.name}</TableCell>
             <TableCell align="center">{course.description}</TableCell>
             <TableCell align="center">{course.price}</TableCell>
-            <TableCell align="center">{course.createDate}</TableCell>
+            <TableCell align="center">{moment(course.createDate).format("DD/MM/YYYY")}</TableCell>
             <TableCell align="center">
               {/* <a href='' className='btn btn-outline-primary'>Chi tiết</a> */}
               <Link to={`/courses/${course.id}`} className="btn btn-outline-primary">

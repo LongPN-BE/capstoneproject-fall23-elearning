@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import SubjectModal from './SubjectModal';
+import SubjectCourseModal from '../CoursesBySubject/CoursesBySubject';
 import {
   Button,
   Typography,
@@ -19,12 +20,12 @@ import { fetchData, postData } from '../../../services/AppService';
 import moment from 'moment/moment';
 
 export default function ListSubject() {
-  const { subjectId } = useParams();
   const [data, setData] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [isSubjectModalOpen, setIsSubjectModalOpen] = useState(false);
+  const [isSubjectCourseOpen, setIsSubjectCourseModalOpen] = useState(false);
   const [subjectToEdit, setSubjectToEdit] = useState(null);
-  const [subject, setSubject] = useState(null);
+
 
   useEffect(() => {
     const token = Cookies.get('token');
@@ -32,7 +33,6 @@ export default function ListSubject() {
       try {
         fetchData('/subject/subjects', token).then(resp => {
           if (resp) {
-            setSubject(resp.find((s) => s.id == subjectId));
             setData(resp);
           }
         })
@@ -45,6 +45,15 @@ export default function ListSubject() {
   const handleAddSubject = () => {
     setSubjectToEdit(null); // Clear any previous subject data (for editing)
     setIsSubjectModalOpen(true);
+  };
+
+  const handleViewDetail = (subjectData) => {
+    console.log(subjectData);
+    setSubjectToEdit(subjectData); // Set the subject data to view detail
+    setIsSubjectCourseModalOpen(true);
+  };
+  const handleSubjectCourseModalClose = () => {
+    setIsSubjectCourseModalOpen(false);
   };
 
   const handleEditSubject = (subjectData) => {
@@ -173,9 +182,9 @@ export default function ListSubject() {
                       <TableCell>{s.status}</TableCell>
                       <TableCell>
                         {/* <Link className="btn btn-outline-secondary" to={`/subjects/courseBySubject`}> */}
-                        <Link className="btn btn-outline-secondary" to={`/subjects/courseBySubject`}>
-                          Xem
-                        </Link>
+                        <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={() => handleViewDetail(s)}>
+                          Chi tiết
+                        </Button>
                         <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={() => handleEditSubject(s)}>
                           Chỉnh sửa
                         </Button>
@@ -187,6 +196,11 @@ export default function ListSubject() {
             </Table>
           </Paper>
         </div>
+        <SubjectCourseModal
+          isOpen={isSubjectCourseOpen}
+          onClose={handleSubjectCourseModalClose}
+          subject={subjectToEdit}
+        />
         <SubjectModal
           isOpen={isSubjectModalOpen}
           onSave={saveOrUpdateSubject}

@@ -98,15 +98,15 @@ export const navData = {
       icon: <BookRoundedIcon />,
       subItems: [
         {
-          label: 'Mon hoc',
+          label: 'Môn học',
           icon: <GridViewRoundedIcon />,
           path: '/subjects',
         },
-        {
-          label: 'Khóa học theo môn',
-          icon: <GridViewRoundedIcon />,
-          path: '/subjects/courseBySubject',
-        },
+        // {
+        //   label: 'Khóa học theo môn',
+        //   icon: <GridViewRoundedIcon />,
+        //   path: '/subjects/courseBySubject',
+        // },
         // Add more admin-specific items
       ],
     },
