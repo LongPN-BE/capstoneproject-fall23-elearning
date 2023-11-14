@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import ENV from '../config/env';
 import { ApiClient } from './generated/generate-api';
 const ApiClientSingleton = (function () {
@@ -8,7 +9,7 @@ const ApiClientSingleton = (function () {
     var object = new ApiClient(ENV.SERVER_URL);
     object.applyAuthToRequest = (request, authNames) => {
       if (!apiNoAuth.includes(subString(request.url))) {
-        request.set({ Authorization: 'Bearer ' + localStorage.getItem('token') });
+        request.set({ Authorization: 'Bearer ' + Cookies.get('token') });
       }
     };
     return object;

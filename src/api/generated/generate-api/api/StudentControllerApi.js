@@ -64,7 +64,7 @@ export default class StudentControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = Student;

@@ -13,6 +13,7 @@
 
 
 import ApiClient from "../ApiClient";
+import Account from '../model/Account';
 import AccountDetailResponse from '../model/AccountDetailResponse';
 import AuthenticationRequest from '../model/AuthenticationRequest';
 import AuthenticationResponse from '../model/AuthenticationResponse';
@@ -73,6 +74,82 @@ export default class AuthenticationControllerApi {
       let returnType = 'String';
       return this.apiClient.callApi(
         '/api/v1/auth/disable', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the getAccountByRoleId operation.
+     * @callback module:api/AuthenticationControllerApi~getAccountByRoleIdCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<module:model/Account>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {module:model/String} roleId 
+     * @param {module:api/AuthenticationControllerApi~getAccountByRoleIdCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<module:model/Account>}
+     */
+    getAccountByRoleId(roleId, callback) {
+      let postBody = null;
+      // verify the required parameter 'roleId' is set
+      if (roleId === undefined || roleId === null) {
+        throw new Error("Missing the required parameter 'roleId' when calling getAccountByRoleId");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'role_id': roleId
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = [Account];
+      return this.apiClient.callApi(
+        '/api/v1/auth/byRoleId', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the getAccounts operation.
+     * @callback module:api/AuthenticationControllerApi~getAccountsCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<module:model/Account>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {module:api/AuthenticationControllerApi~getAccountsCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<module:model/Account>}
+     */
+    getAccounts(callback) {
+      let postBody = null;
+
+      let pathParams = {
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = [Account];
+      return this.apiClient.callApi(
+        '/api/v1/auth/accounts', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );

@@ -12,9 +12,6 @@
  */
 
 import ApiClient from '../ApiClient';
-import CourseResultQuizView from './CourseResultQuizView';
-import StudentResultQuizView from './StudentResultQuizView';
-import SyllabusResultQuizView from './SyllabusResultQuizView';
 
 /**
  * The EnrollResultQuizView model module.
@@ -62,20 +59,14 @@ class EnrollResultQuizView {
             if (data.hasOwnProperty('paymentStatus')) {
                 obj['paymentStatus'] = ApiClient.convertToType(data['paymentStatus'], 'String');
             }
+            if (data.hasOwnProperty('commission')) {
+                obj['commission'] = ApiClient.convertToType(data['commission'], 'Number');
+            }
             if (data.hasOwnProperty('status')) {
                 obj['status'] = ApiClient.convertToType(data['status'], 'String');
             }
             if (data.hasOwnProperty('finishDate')) {
                 obj['finishDate'] = ApiClient.convertToType(data['finishDate'], 'Date');
-            }
-            if (data.hasOwnProperty('student')) {
-                obj['student'] = StudentResultQuizView.constructFromObject(data['student']);
-            }
-            if (data.hasOwnProperty('course')) {
-                obj['course'] = CourseResultQuizView.constructFromObject(data['course']);
-            }
-            if (data.hasOwnProperty('syllabus')) {
-                obj['syllabus'] = SyllabusResultQuizView.constructFromObject(data['syllabus']);
             }
         }
         return obj;
@@ -94,18 +85,6 @@ class EnrollResultQuizView {
         // ensure the json data is a string
         if (data['status'] && !(typeof data['status'] === 'string' || data['status'] instanceof String)) {
             throw new Error("Expected the field `status` to be a primitive type in the JSON string but got " + data['status']);
-        }
-        // validate the optional field `student`
-        if (data['student']) { // data not null
-          StudentResultQuizView.validateJSON(data['student']);
-        }
-        // validate the optional field `course`
-        if (data['course']) { // data not null
-          CourseResultQuizView.validateJSON(data['course']);
-        }
-        // validate the optional field `syllabus`
-        if (data['syllabus']) { // data not null
-          SyllabusResultQuizView.validateJSON(data['syllabus']);
         }
 
         return true;
@@ -137,6 +116,11 @@ EnrollResultQuizView.prototype['amount'] = undefined;
 EnrollResultQuizView.prototype['paymentStatus'] = undefined;
 
 /**
+ * @member {Number} commission
+ */
+EnrollResultQuizView.prototype['commission'] = undefined;
+
+/**
  * @member {module:model/EnrollResultQuizView.StatusEnum} status
  */
 EnrollResultQuizView.prototype['status'] = undefined;
@@ -145,21 +129,6 @@ EnrollResultQuizView.prototype['status'] = undefined;
  * @member {Date} finishDate
  */
 EnrollResultQuizView.prototype['finishDate'] = undefined;
-
-/**
- * @member {module:model/StudentResultQuizView} student
- */
-EnrollResultQuizView.prototype['student'] = undefined;
-
-/**
- * @member {module:model/CourseResultQuizView} course
- */
-EnrollResultQuizView.prototype['course'] = undefined;
-
-/**
- * @member {module:model/SyllabusResultQuizView} syllabus
- */
-EnrollResultQuizView.prototype['syllabus'] = undefined;
 
 
 
@@ -182,7 +151,19 @@ EnrollResultQuizView['StatusEnum'] = {
      * value: "DONE"
      * @const
      */
-    "DONE": "DONE"
+    "DONE": "DONE",
+
+    /**
+     * value: "PENDING"
+     * @const
+     */
+    "PENDING": "PENDING",
+
+    /**
+     * value: "REMOVED"
+     * @const
+     */
+    "REMOVED": "REMOVED"
 };
 
 

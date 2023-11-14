@@ -8,14 +8,27 @@ import {
     DialogTitle,
     TextField,
 } from '@material-ui/core';
+import { validateInputDigits, validateInputString } from '../../../util/Utilities';
+import Swal from 'sweetalert2';
+import { invalidInput } from '../../../util/Constants';
 
 export default function CourseEditModal({ open, onClose, onSave, course }) {
     const [newPrice, setNewPrice] = useState(course?.price);
     const [newDescription, setNewDescription] = useState(course?.description);
 
     const handleSave = () => {
-        onSave(newPrice, newDescription);
-        onClose();
+        if (validateInputString(newDescription) && validateInputDigits(newPrice)) {
+            onSave(newPrice, newDescription);
+            onClose();
+        }
+        else {
+            onClose();
+            Swal.fire({
+                title: "Warning",
+                text: invalidInput,
+                icon: "warning"
+            });
+        }
     };
 
     return (

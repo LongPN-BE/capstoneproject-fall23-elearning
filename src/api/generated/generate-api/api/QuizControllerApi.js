@@ -67,7 +67,7 @@ export default class QuizControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = Object;
@@ -107,7 +107,7 @@ export default class QuizControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
       let returnType = ResultQuizResultQuizView;
@@ -148,7 +148,7 @@ export default class QuizControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [QuizViewQuiz];
@@ -183,7 +183,7 @@ export default class QuizControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [QuizViewQuiz];
@@ -224,7 +224,7 @@ export default class QuizControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = QuizViewQuiz;
@@ -264,7 +264,7 @@ export default class QuizControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
       let returnType = QuizViewQuiz;

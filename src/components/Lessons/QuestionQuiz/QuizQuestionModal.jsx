@@ -105,14 +105,14 @@ const QuizQuestionModel = ({ isOpen, onClose, onSave, onUpdate, question }) => {
     };
 
     return (
-        <Modal open={isOpen} onClose={onClose}>
+        <Modal open={isOpen} onClose={onClose} >
             <Box
                 sx={{
                     position: 'absolute',
                     top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
-                    width: '400px',
+                    width: '500px',
                     bgcolor: 'background.paper',
                     boxShadow: 24,
                     p: 4,
@@ -132,6 +132,7 @@ const QuizQuestionModel = ({ isOpen, onClose, onSave, onUpdate, question }) => {
                     value={editedQuestion.content}
                     onChange={handleInputChange}
                     required
+
                 />
                 <Typography variant="subtitle1" gutterBottom>
                     Answers:

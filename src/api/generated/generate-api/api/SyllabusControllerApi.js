@@ -65,12 +65,53 @@ export default class SyllabusControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [SyllabusSyllabusView];
       return this.apiClient.callApi(
         '/api/v1/syllabus/byCourseId', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the findSyllabusByLessonId operation.
+     * @callback module:api/SyllabusControllerApi~findSyllabusByLessonIdCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<module:model/SyllabusSyllabusView>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Number} lessonId 
+     * @param {module:api/SyllabusControllerApi~findSyllabusByLessonIdCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<module:model/SyllabusSyllabusView>}
+     */
+    findSyllabusByLessonId(lessonId, callback) {
+      let postBody = null;
+      // verify the required parameter 'lessonId' is set
+      if (lessonId === undefined || lessonId === null) {
+        throw new Error("Missing the required parameter 'lessonId' when calling findSyllabusByLessonId");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'lesson_id': lessonId
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = [SyllabusSyllabusView];
+      return this.apiClient.callApi(
+        '/api/v1/syllabus/byLessonId', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );
@@ -100,7 +141,7 @@ export default class SyllabusControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [SyllabusSyllabusView];
@@ -141,7 +182,7 @@ export default class SyllabusControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = SyllabusSyllabusView;
@@ -181,7 +222,7 @@ export default class SyllabusControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
       let returnType = SyllabusSyllabusView;

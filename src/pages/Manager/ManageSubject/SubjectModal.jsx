@@ -37,10 +37,8 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
     minPrice: '',
     createDate: new Date(),
     staffId: user.username,
-    status: 'Chưa kích hoạt'
+    status: 'Chưa kích hoạt',
   });
-
-
 
   const handleInputChange = (e, fieldName) => {
     const { value } = e.target;
@@ -58,18 +56,17 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
       // If editing an existing subject, call the onUpdate function
       onUpdate({ ...subject, ...editedSubject });
       // add function api here
-      alert(editedSubject.name)
+      alert(editedSubject.name);
 
       //-- end function update
     } else {
       // If adding a new subject, call the onSave function
       onSave(editedSubject);
       // add function api here
-      alert(editedSubject.name)
+      alert(editedSubject.name);
       //-- end function add new
       clearModal();
     }
-
   };
 
   const clearModal = () => {
@@ -126,7 +123,7 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
           autoFocus
           margin="dense"
           name="createDate"
-          value={moment(editedSubject.createDate).format("DD/MM/YYYY")}
+          value={moment(editedSubject.createDate).format('DD/MM/YYYY')}
           onChange={(e) => handleInputChange(e, 'createDate')}
           disabled={true}
         />
@@ -150,7 +147,7 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
           onChange={(e) => handleInputChange(e, 'status')}
           disabled={true}
         />
-        {/* {subject?.status == 'enable' ? (
+        {subject?.status == 'enable' ? (
           <Button onClick={handleSave} color="danger">
             Vô hiệu hóa môn học
           </Button>
@@ -158,7 +155,7 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
           <Button onClick={handleSave} color="danger">
             Kích hoạt môn học
           </Button>
-        )} */}
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">

@@ -30,6 +30,8 @@ import {
 } from '../../api/generated/generate-api';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Cookies from 'js-cookie';
+import courseImg1 from '../../assets/images/web-design.png';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -63,7 +65,12 @@ const OverviewCourse = () => {
     });
   };
 
-  const userTmp = JSON.parse(localStorage.getItem('user'));
+  const notifyErorr = () => {
+    toast.error('Đăng ký không thành công !', {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
+  const userTmp = JSON.parse(Cookies.get('user'));
   const { courseId } = useParams();
   const [isOpenModal, setIsOpenModal] = useState(false);
 
@@ -82,22 +89,24 @@ const OverviewCourse = () => {
   };
 
   useEffect(() => {
-    courseApi.getCourseById(courseId, (err, res) => {
-      if (res) {
-        setCourse(res);
-        teacherApi.getTeacherById(res.teacher.id, (err, res) => {
-          if (res) {
-            console.log(res);
-            setTeacher(res);
-          }
-        });
-      }
-    });
-    lessonApi.findLessonByCourseId(courseId, (err, res) => {
-      if (res) {
-        setLessons(res);
-      }
-    });
+    if (courseId) {
+      courseApi.getCourseById(courseId, (err, res) => {
+        if (res) {
+          setCourse(res);
+          teacherApi.getTeacherById(res.teacher.id, (err, res) => {
+            if (res) {
+              console.log(res);
+              setTeacher(res);
+            }
+          });
+        }
+      });
+      lessonApi.findLessonByCourseId(courseId, (err, res) => {
+        if (res) {
+          setLessons(res);
+        }
+      });
+    }
   }, [courseId]);
 
   return (
@@ -111,6 +120,9 @@ const OverviewCourse = () => {
           <div className="py-48" style={{ padding: '48px 0' }}>
             <div className="row ">
               <div className="col-8">
+                <div className={`${classNames(Styles.course__img)} col-6`}>
+                  <img src={courseImg1} alt="" className="w-100" />
+                </div>
                 <Typography variant="h4" gutterBottom>
                   {course?.name}
                 </Typography>
@@ -122,7 +134,7 @@ const OverviewCourse = () => {
                   <div className="d-flex align-items-center gap-2">
                     <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
                     <Typography variant="subtitle1">
-                      Instructor:{' '}
+                      Giáo viên:{' '}
                       <Link to={'/student-home'}>
                         {teacher?.account?.profile?.firstName} {teacher?.account?.profile?.lastName}
                       </Link>
@@ -137,7 +149,7 @@ const OverviewCourse = () => {
                     onClick={() => setIsOpenModal(true)}
                   >
                     <Typography style={{ fontWeight: 600 }} variant="button">
-                      Enroll for Free
+                      Đăng ký ngay
                     </Typography>
                   </Button>
                 </div>
@@ -269,12 +281,14 @@ const OverviewCourse = () => {
               enrollApi.saveEnroll(
                 {
                   studentId: userTmp.studentId,
-                  courseId: courseId,
+                  courseId: Number(courseId),
                 },
                 (err, res) => {
                   if (res) {
                     setIsOpenModal(false);
                     notifySuccess();
+                  } else {
+                    notifyErorr();
                   }
                 },
               );

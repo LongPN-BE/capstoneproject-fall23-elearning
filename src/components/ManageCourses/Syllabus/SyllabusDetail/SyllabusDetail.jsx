@@ -22,6 +22,8 @@ import TextTruncate from '../../../../util/Text-Truncate/TextTruncate';
 import Loading from '../../../Loading/Loading';
 import Cookies from 'js-cookie';
 import moment from 'moment/moment';
+import ListLessonModal from '../../Lesson/ListLessonModal';
+import { sortByID } from '../../../../util/Utilities';
 
 export default function SyllabusDetail() {
     const { courseId, syllabusId } = useParams();
@@ -107,10 +109,15 @@ export default function SyllabusDetail() {
                 } else {
                     // Implement your create logic here for new lessons.
                     // console.log('Lesson data to save', lessonData);
+                    let arrSyllabus = new Array(syllabusId.toString())
+                    console.log(lessonData);
                     const body = {
                         ...lessonData,
+                        id: 0,
                         dateTime: moment(new Date()),
-                        courseId: parseInt(courseId) // Assuming courseId is defined
+                        type: lessonData?.content.includes('iframe') ? 'video' : 'reading',
+                        courseId: parseInt(courseId), // Assuming courseId is defined
+                        syllabusIds: arrSyllabus
                     };
 
                     await postData('/lesson/save', body, token)
@@ -150,7 +157,8 @@ export default function SyllabusDetail() {
             fetchData(`/syllabus/byId?id=${syllabusId}`, token).then(resp => {
                 if (resp) {
                     setSyllabus(resp);
-                    setData(resp.lessons)
+                    const lessonList = sortByID(resp?.lessons)
+                    setData(lessonList)
                     setLoading(false)
                 }
             }).catch(err => {
@@ -176,16 +184,44 @@ export default function SyllabusDetail() {
         });
 
         setSearchData(filteredData);
-    };
+    }
 
+    const [lessonListModal, setLessonListModal] = useState(false);
+    const handleOpenLessonList = () => {
+        setLessonListModal(true);
+    }
+
+    const handleAddLessonFromCourse = async (items) => {
+        const token = Cookies.get('token');
+        if (token) {
+            await fetchData(`/syllabus/byId?id=${syllabusId}`, token).then(resp => {
+                if (resp) {
+                    const lessonIdList = resp.lessons.map(l => l.id)
+                        .concat(items.map(i => i.id))
+                    const body = {
+                        id: resp.id,
+                        name: resp.name,
+                        status: resp.status,
+                        courseId: resp.course.id,
+                        lessonIds: lessonIdList
+                    }
+                    postData(`/syllabus/save`, body, token).then(resp => {
+                        if (resp) {
+                            window.location.reload()
+                        }
+                    })
+                }
+            })
+        }
+    }
     return (
         loading ? <Loading /> :
             syllabus && (
                 <div className="m-1">
                     <div style={{ margin: '20px' }}>
                         <Paper style={{ padding: '20px' }}>
-                            <Typography variant="body1">
-                                Trang chủ {'>'} Quản lý khóa học {'>'} Khóa học {courseId} {'>'} Khung chương trình {syllabusId}
+                            <Typography variant="body1" style={{ color: 'darkblue' }}>
+                                <Link to={'/'}>Trang chủ </Link>{'>'} <Link to={'/manage-course'}>Quản lý khóa học </Link>{'>'} <Link to={`/courses/${courseId}`}>Khóa học {courseId} </Link> {'>'} Khung chương trình {syllabusId}
                             </Typography>
 
                             <div style={{ marginTop: '20px' }}>
@@ -209,6 +245,9 @@ export default function SyllabusDetail() {
                                     onChange={handleSearchChange}
                                 />
                                 <div className="text-end col-8">
+                                    <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={handleOpenLessonList}>
+                                        Thêm bài học từ khóa học
+                                    </Button>
                                     <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={handleAddLesson}>
                                         Tạo mới
                                     </Button>
@@ -220,7 +259,7 @@ export default function SyllabusDetail() {
                                     <TableRow>
                                         <TableCell style={{ width: '5%' }}>STT</TableCell>
                                         <TableCell style={{ width: '15%' }}>Tên</TableCell>
-                                        <TableCell style={{ width: '15%' }}>URL</TableCell>
+                                        {/* <TableCell style={{ width: '15%' }}>URL</TableCell> */}
                                         <TableCell style={{ width: '10%' }}>Ngày tạo</TableCell>
                                         <TableCell style={{ width: '8%' }}>Trạng thái</TableCell>
                                         <TableCell style={{ width: '15%' }}>Mô tả</TableCell>
@@ -235,27 +274,35 @@ export default function SyllabusDetail() {
                                             <TableRow key={index}>
                                                 <TableCell>{index + 1}</TableCell>
                                                 <TableCell><TextTruncate text={l.name} /></TableCell>
-                                                <TableCell><Link to={l.url}><TextTruncate text={l.url} /></Link></TableCell>
+                                                {/* <TableCell>
+                                                    <a href={l.url} target="_blank" rel="noopener noreferrer">
+                                                        <TextTruncate text={l.url} />
+                                                    </a>
+                                                </TableCell> */}
+
                                                 <TableCell><TextTruncate text={l.createDate} /></TableCell>
                                                 <TableCell><TextTruncate text={l.status === 'true' ? 'Hoạt động' : 'Không hoạt động'} /></TableCell>
                                                 <TableCell><TextTruncate text={l.description} /></TableCell>
                                                 <TableCell><TextTruncate text={l.estimateTime} /></TableCell>
                                                 <TableCell>
                                                     <Link className="btn btn-outline-secondary" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}`}>
-                                                        Xem kết quả
+                                                        D.sách bài kiểm tra
                                                     </Link>
-                                                    <Link className="btn btn-outline-secondary mx-1" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}/create-quiz`}>
+                                                    {/* <Link className="btn btn-outline-secondary mx-1" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}/create-quiz`}>
                                                         Tạo
-                                                    </Link>
+                                                    </Link> */}
                                                 </TableCell>
                                                 <TableCell>
-                                                    <Button
+                                                    {/* <Button
                                                         variant="outlined"
                                                         style={{ marginLeft: '10px' }}
                                                         onClick={() => handleEditLesson(l)}
                                                     >
                                                         Chỉnh sửa
-                                                    </Button>
+                                                    </Button> */}
+                                                    <Link className="btn btn-outline-secondary" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}/resources`}>
+                                                        Tài nguyên
+                                                    </Link>
                                                 </TableCell>
                                             </TableRow>
                                         );
@@ -265,27 +312,30 @@ export default function SyllabusDetail() {
                                                 <TableRow key={index}>
                                                     <TableCell>{index + 1}</TableCell>
                                                     <TableCell><TextTruncate text={l.name} /></TableCell>
-                                                    <TableCell><Link to={l.url}><TextTruncate text={l.url} /></Link></TableCell>
+                                                    {/* <TableCell><Link to={l.url}><TextTruncate text={l.url} /></Link></TableCell> */}
                                                     <TableCell><TextTruncate text={l.dateTime} /></TableCell>
                                                     <TableCell><TextTruncate text={l.status === 'true' ? 'Hoạt động' : 'Không hoạt động'} /></TableCell>
                                                     <TableCell><TextTruncate text={l.description} /></TableCell>
                                                     <TableCell><TextTruncate text={l.estimateTime} /></TableCell>
                                                     <TableCell>
                                                         <Link className="btn btn-outline-secondary" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}`}>
-                                                            Xem kết quả
+                                                            D.sách bài kiểm tra
                                                         </Link>
-                                                        <Link className="btn btn-outline-secondary mx-1" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}/create-quiz`}>
+                                                        {/* <Link className="btn btn-outline-secondary mx-1" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}/create-quiz`}>
                                                             Tạo
-                                                        </Link>
+                                                        </Link> */}
                                                     </TableCell>
                                                     <TableCell>
-                                                        <Button
+                                                        {/* <Button
                                                             variant="outlined"
                                                             style={{ marginLeft: '10px' }}
                                                             onClick={() => handleEditLesson(l)}
                                                         >
                                                             Chỉnh sửa
-                                                        </Button>
+                                                        </Button> */}
+                                                        <Link className="btn btn-outline-secondary" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}/resources`}>
+                                                            Tài nguyên
+                                                        </Link>
                                                     </TableCell>
                                                 </TableRow>
                                             )
@@ -312,6 +362,7 @@ export default function SyllabusDetail() {
                         onClose={handleLessonModalClose}
                         lesson={lessonToEdit !== null ? lessonToEdit : null}
                     />
+                    <ListLessonModal isOpen={lessonListModal} onClose={() => setLessonListModal(false)} courseId={courseId} onSave={handleAddLessonFromCourse} />
                 </div>
             )
     );

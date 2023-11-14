@@ -39,7 +39,11 @@ function CreateQuizModal({ open, onClose, data, onSave }) {
     }, [])
 
     const handleClose = () => {
-        setSelectionRange(null)
+        setSelectionRange({
+            startDate: new Date(),
+            endDate: new Date(),
+            key: 'selection',
+        })
         onClose();
     };
 
@@ -66,12 +70,12 @@ function CreateQuizModal({ open, onClose, data, onSave }) {
 
     return (
         <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Edit Modal</DialogTitle>
+            <DialogTitle>Bài kiểm tra</DialogTitle>
             <DialogContent>
-                <DialogContentText>Please edit the form fields below:</DialogContentText>
+                <DialogContentText>Điền đày đủ thông tin phía dưới</DialogContentText>
                 <TextField
                     margin="dense"
-                    label="Title"
+                    label="Tên bài kiểm tra"
                     type="text"
                     fullWidth
                     name="title"
@@ -80,7 +84,7 @@ function CreateQuizModal({ open, onClose, data, onSave }) {
                 />
                 <TextField
                     margin="dense"
-                    label="Pass Score"
+                    label="Điểm qua môn"
                     type="number"
                     fullWidth
                     name="passScore"
@@ -88,22 +92,23 @@ function CreateQuizModal({ open, onClose, data, onSave }) {
                     onChange={handleChange}
                 />
                 <Select
-                    label="Status"
+                    label="Trạng thái"
                     fullWidth
                     name="status"
                     value={formData.status}
                     onChange={handleChange}
                 >
-                    <MenuItem value="Active">Active</MenuItem>
+                    {/* <MenuItem value="Active">Active</MenuItem> */}
                     <MenuItem value="Deactive">Deactive</MenuItem>
                 </Select>
+                <label className='my-2'>Ngày bắt đầu và kết thúc bài học</label><br />
                 <DateRangePicker
                     ranges={[selectionRange]}
                     onChange={handleDateRangeChange}
                 />
                 <TextField
                     margin="dense"
-                    label="Duration"
+                    label="Thời gian học"
                     type="number"
                     fullWidth
                     name="duration"
@@ -113,7 +118,7 @@ function CreateQuizModal({ open, onClose, data, onSave }) {
 
                 <TextField
                     margin="dense"
-                    label="Allow Attempt"
+                    label="Số lần thi lại cho phép"
                     type="number"
                     fullWidth
                     name="allowAttempt"
@@ -122,7 +127,7 @@ function CreateQuizModal({ open, onClose, data, onSave }) {
                 />
                 <TextField
                     margin="dense"
-                    label="Proportion"
+                    label="Tỉ trọng %"
                     type="number"
                     fullWidth
                     name="proportion"

@@ -1,58 +1,56 @@
 import './App.css';
 import { useEffect } from 'react';
 import Loading from './components/Loading/Loading';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import PrivateRoute from './util/PrivateRoute';
 import TeacherPage from './pages/Teacher/TeacherPage';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import "boxicons/css/boxicons.min.css";
-import Login from "./pages/Login/Login";
-import Register from "./pages/Register/Register";
-import NavBar from "./components/Navigation/NavBar";
-import { useState } from "react";
-import LandingPage from "./pages/Landing/LandingPage";
-import Dashboard from "./pages/Dashboard/Dashboard";
-import Profile from "./components/Profile/Profile";
-import ManageCourse from "./components/ManageCourses/ManageCourse";
-import CourseDetail from "./components/ManageCourses/CourseDetail/CourseDetail";
-import Evaluate from "./components/ManageCourses/Evaluate/Evaluate";
-import SyllabusDetail from "./components/ManageCourses/Syllabus/SyllabusDetail/SyllabusDetail";
-import LessonDetail from "./components/ManageCourses/Lesson/LessonDetail";
-import { fetchData, postData } from "./services/AppService";
-import StudentLanding from "./pages/Landing/StudentLanding";
-import OverviewCourse from "./pages/OverviewCourse";
-import UserCourseDetail from "./pages/DetailCourse";
-import CourseInfo from "./pages/DetailCourse/Components/CourseInfo";
-import Grades from "./pages/DetailCourse/Components/Grades";
-import LessonInfo from "./pages/DetailCourse/Components/LessonInfo";
-import Resources from "./pages/DetailCourse/Components/Resources";
-import StaffCourseDetail from "./pages/Manager/DetailCourse";
-import StaffCourseInfo from "./pages/Manager/DetailCourse/Components/CourseInfo";
-import StaffGrades from "./pages/Manager/DetailCourse/Components/Grades";
-import StaffLessonInfo from "./pages/Manager/DetailCourse/Components/LessonInfo";
-import StaffResources from "./pages/Manager/DetailCourse/Components/Resources";
-import LearnCourse from "./pages/LearnCourse";
-import DetailLesson from "./pages/DetailLesson";
-import Quizz from "./pages/Quizz";
-import StudentProfile from "./pages/StudentProfile";
-import StudentPrivateRouter from "./util/StudentPrivateRouter";
-import ManageSubject from "./pages/Manager/ManageSubject/ManageSubject";
-import CourseBySubject from "./pages/Manager/CoursesBySubject/CoursesBySubject";
-import Accounts from "./pages/Manager/ManageAccounts/ManageAccounts";
-import Cookies from "js-cookie";
-import ListQuestionBank from "./components/Questions/QuestionBanks/ListQuestionBank";
-import QuizDetail from "./components/Quizs/QuizDetail";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'boxicons/css/boxicons.min.css';
-import CreateQuiz from './components/ManageCourses/Quiz/ListQuiz';
+import CreateQuiz from './components/ManageCourses/Quiz/CreateQuiz';
+import Login from './pages/Login/Login';
+import Register from './pages/Register/Register';
+import NavBar from './components/Navigation/NavBar';
+import { useState } from 'react';
+import LandingPage from './pages/Landing/LandingPage';
+import Dashboard from './pages/Dashboard/Dashboard';
+import Profile from './components/Profile/Profile';
+import ManageCourse from './components/ManageCourses/ManageCourse';
+import CourseDetail from './components/ManageCourses/CourseDetail/CourseDetail';
+import Evaluate from './components/ManageCourses/Evaluate/Evaluate';
+import SyllabusDetail from './components/ManageCourses/Syllabus/SyllabusDetail/SyllabusDetail';
+import LessonDetail from './components/ManageCourses/Lesson/LessonDetail';
+import { fetchData, postData } from './services/AppService';
+import StudentLanding from './pages/Landing/StudentLanding';
+import OverviewCourse from './pages/OverviewCourse';
+import UserCourseDetail from './pages/DetailCourse';
+import CourseInfo from './pages/DetailCourse/Components/CourseInfo';
+import Grades from './pages/DetailCourse/Components/Grades';
+import LessonInfo from './pages/DetailCourse/Components/LessonInfo';
+import Resources from './pages/DetailCourse/Components/Resources';
+import LearnCourse from './pages/LearnCourse';
+import DetailLesson from './pages/DetailLesson';
+import Quizz from './pages/Quizz';
+import StudentProfile from './pages/StudentProfile';
+import StudentPrivateRouter from './util/StudentPrivateRouter';
+import ManageSubject from './pages/Manager/ManageSubject/ManageSubject';
+import CourseBySubject from './pages/Manager/CoursesBySubject/CoursesBySubject';
+import Cookies from 'js-cookie';
+import ListQuestionBank from './components/Questions/QuestionBanks/ListQuestionBank';
+import QuizDetail from './components/Quizs/QuizDetail';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import 'boxicons/css/boxicons.min.css';
+import StudentMyCourse from './pages/StudentMyCourse';
 import ListQuizQuestion from './components/ManageCourses/Quiz/LitsQuizQuestion/ListQuizQuestion';
 import Notification from './util/Notification';
+import ListResources from './components/ManageCourses/Resources/ListResources';
+import PayPalCapture from './pages/PayPalCapture';
+import StaffLanding from './pages/Landing/StaffLanding';
+import Accounts from "./pages/Manager/ManageAccounts/ManageAccounts";
 import ListConfig from './pages/Manager/ManageConfig/ManageConfig';
-
 
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -60,26 +58,25 @@ const App = () => {
   const location = useLocation();
 
   useEffect(() => {
-    let userTmp = Cookies.get("user");
-    const token = Cookies.get('token')
+    let userTmp = Cookies.get('user');
+    const token = Cookies.get('token');
     if ((userTmp === null || userTmp === undefined) && token !== null && token !== undefined) {
       setLoading(true);
       const fetchUserData = async () => {
         try {
           if (token) {
-            const userData = await fetchData("/auth/me", token);
+            const userData = await fetchData('/auth/me', token);
             if (userData) {
               const deviceToken = Cookies.get('deviceToken');
               const body = {
                 token: deviceToken,
-                accountId: userData.id
-              }
-              await postData(`/device/save`, body, token)
+                accountId: userData.id,
+              };
+              await postData(`/device/save`, body, token);
             }
-            Cookies.set('user', JSON.stringify(userData), { expires: 1 })
+            Cookies.set('user', JSON.stringify(userData), { expires: 1 });
             setUser(userData);
           }
-
         } catch (error) {
           console.error('Error fetching user data:', error.message);
         } finally {
@@ -96,11 +93,10 @@ const App = () => {
     }
   }, [location.pathname]);
 
-
   if (!user) {
-    let userTmp = Cookies.get("user");
+    let userTmp = Cookies.get('user');
     if (!userTmp && location.pathname !== '/' && location.pathname !== '/login' && location.pathname !== '/register') {
-      return window.location.href = '/'
+      return (window.location.href = '/');
     }
   }
 
@@ -108,27 +104,25 @@ const App = () => {
     <Loading />
   ) : (
     <>
-      <Notification />
-      {user && user.role === "TEACHER" ? (
+      {user && user.role === 'TEACHER' ? (
         <NavBar>
           <Routes>
             <Route element={<PrivateRoute />}>
               <Route path="/" element={<TeacherPage />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route path="/my-profile" element={<Profile />} />
               <Route path="/manage-course" element={<ManageCourse />} />
               <Route path="/courses/:courseId" element={<CourseDetail />} />
+              <Route path="/courses/:courseId/syllabus/:syllabusId" element={<SyllabusDetail />} />
+              <Route path="/courses/:courseId/syllabus/:syllabusId/lessons/:lessonId" element={<LessonDetail />} />
               <Route
-                path="/courses/:courseId/syllabus/:syllabusId"
-                element={<SyllabusDetail />}
-              />
-              <Route
-                path="/courses/:courseId/syllabus/:syllabusId/lessons/:lessonId"
-                element={<LessonDetail />}
+                path="/courses/:courseId/syllabus/:syllabusId/lessons/:lessonId/resources"
+                element={<ListResources />}
               />
               <Route
                 path="/courses/:courseId/syllabus/:syllabusId/lessons/:lessonId/quiz/:quizId"
                 element={<QuizDetail />}
               />
+              <Route path="/paypal/capture" element={<PayPalCapture />} />
               <Route
                 path="/courses/:courseId/syllabus/:syllabusId/lessons/:lessonId/quiz/:quizId/questions"
                 element={<ListQuizQuestion />}
@@ -137,73 +131,34 @@ const App = () => {
                 path="/courses/:courseId/syllabus/:syllabusId/lessons/:lessonId/create-quiz"
                 element={<CreateQuiz />}
               />
-              <Route
-                path="/courses/:courseId/evaluate"
-                element={<Evaluate />}
-              />
+              <Route path="/courses/:courseId/evaluate" element={<Evaluate />} />
               <Route path="/question-banks" element={<ListQuestionBank />} />
             </Route>
           </Routes>
         </NavBar>
       ) : user?.role === 'STAFF' ? (
         <Routes>
-          <Route
-            path="/dashboard"
-            element={
-              <NavBar>
-                <Dashboard />
-              </NavBar>
-            }
-          />
-          <Route
-            path="/subjects"
-            element={
-              <NavBar>
-                <ManageSubject />
-              </NavBar>
-            }
-          />
-          <Route
-            path="/course/subject/:subjectId"
-            element={
-              <NavBar>
-                <CourseBySubject />
-              </NavBar>
-            }
-          />
-          <Route
-            path="/accounts"
-            element={
-              <NavBar>
-                <Accounts />
-              </NavBar>
-            }
-          />
-          <Route
-            path="/configs"
-            element={
-              <NavBar>
-                <ListConfig />
-              </NavBar>
-            }
-          />
-          <Route path="/courses" element={<StaffCourseDetail />}>
-            <Route path=":courseId" element={<StaffLessonInfo />} />
-            <Route path=":courseId/grades" element={<StaffGrades />} />
-            <Route path=":courseId/resources" element={<StaffResources />} />
-            <Route path=":courseId/info" element={<StaffCourseInfo />} />
-          </Route>
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/dashboard" element={ <NavBar> <Dashboard /> </NavBar> }/>
+          <Route path="/subjects"element={ <NavBar> <ManageSubject /> </NavBar> }/>
+          <Route path="/course/subject/:subjectId"element={<NavBar><CourseBySubject /></NavBar> }/>
+          <Route path="/accounts" element={<NavBar><Accounts /></NavBar> }/>
+          <Route path="/configs"element={ <NavBar> <ListConfig /> </NavBar> }/>
         </Routes>
       ) : user?.role === 'STUDENT' ? (
         <Routes element={<StudentPrivateRouter />}>
+          <Route path="/" element={<Navigate to="/student-home" replace />} />
           <Route path="/student-home" element={<StudentLanding />} />
           <Route path="/my-profile" element={<StudentProfile />} />
+          <Route path="/my-course" element={<StudentMyCourse />} />
           <Route path="/overview-course/:courseId" element={<OverviewCourse />} />
+          <Route path="/paypal/capture" element={<PayPalCapture />} />
           <Route path="/courses/:courseId/learn">
             <Route path="" element={<LearnCourse />}>
-              <Route path=":lessonId" element={<DetailLesson />} />
+              <Route path=":lessonId/:type/:id" element={<DetailLesson />} />
+              <Route path=":lessonId/:type" element={<DetailLesson />} />
             </Route>
-            <Route path=":lessonId/quiz/:quizId" element={<Quizz />} />
+            <Route path=":lessonId/quiz/:id/start" element={<Quizz />} />
           </Route>
           <Route path="/courses" element={<UserCourseDetail />}>
             <Route path=":courseId" element={<LessonInfo />} />
@@ -213,13 +168,12 @@ const App = () => {
           </Route>
         </Routes>
       ) : (
-        <></>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/" element={<LandingPage />} />
+        </Routes>
       )}
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/" element={<LandingPage />} />
-      </Routes>
     </>
   );
 };

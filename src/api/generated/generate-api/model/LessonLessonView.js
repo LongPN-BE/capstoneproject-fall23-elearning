@@ -71,6 +71,12 @@ class LessonLessonView {
             if (data.hasOwnProperty('estimateTime')) {
                 obj['estimateTime'] = ApiClient.convertToType(data['estimateTime'], 'Number');
             }
+            if (data.hasOwnProperty('content')) {
+                obj['content'] = ApiClient.convertToType(data['content'], 'String');
+            }
+            if (data.hasOwnProperty('type')) {
+                obj['type'] = ApiClient.convertToType(data['type'], 'String');
+            }
             if (data.hasOwnProperty('course')) {
                 obj['course'] = CourseLessonView.constructFromObject(data['course']);
             }
@@ -105,6 +111,14 @@ class LessonLessonView {
         // ensure the json data is a string
         if (data['url'] && !(typeof data['url'] === 'string' || data['url'] instanceof String)) {
             throw new Error("Expected the field `url` to be a primitive type in the JSON string but got " + data['url']);
+        }
+        // ensure the json data is a string
+        if (data['content'] && !(typeof data['content'] === 'string' || data['content'] instanceof String)) {
+            throw new Error("Expected the field `content` to be a primitive type in the JSON string but got " + data['content']);
+        }
+        // ensure the json data is a string
+        if (data['type'] && !(typeof data['type'] === 'string' || data['type'] instanceof String)) {
+            throw new Error("Expected the field `type` to be a primitive type in the JSON string but got " + data['type']);
         }
         // validate the optional field `course`
         if (data['course']) { // data not null
@@ -175,6 +189,16 @@ LessonLessonView.prototype['dateTime'] = undefined;
 LessonLessonView.prototype['estimateTime'] = undefined;
 
 /**
+ * @member {String} content
+ */
+LessonLessonView.prototype['content'] = undefined;
+
+/**
+ * @member {module:model/LessonLessonView.TypeEnum} type
+ */
+LessonLessonView.prototype['type'] = undefined;
+
+/**
  * @member {module:model/CourseLessonView} course
  */
 LessonLessonView.prototype['course'] = undefined;
@@ -191,6 +215,27 @@ LessonLessonView.prototype['syllabuses'] = undefined;
 
 
 
+
+
+/**
+ * Allowed values for the <code>type</code> property.
+ * @enum {String}
+ * @readonly
+ */
+LessonLessonView['TypeEnum'] = {
+
+    /**
+     * value: "VIDEO"
+     * @const
+     */
+    "VIDEO": "VIDEO",
+
+    /**
+     * value: "READING"
+     * @const
+     */
+    "READING": "READING"
+};
 
 
 

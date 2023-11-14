@@ -71,6 +71,15 @@ class LessonRequestLessonView {
             if (data.hasOwnProperty('courseId')) {
                 obj['courseId'] = ApiClient.convertToType(data['courseId'], 'Number');
             }
+            if (data.hasOwnProperty('content')) {
+                obj['content'] = ApiClient.convertToType(data['content'], 'String');
+            }
+            if (data.hasOwnProperty('type')) {
+                obj['type'] = ApiClient.convertToType(data['type'], 'String');
+            }
+            if (data.hasOwnProperty('syllabusIds')) {
+                obj['syllabusIds'] = ApiClient.convertToType(data['syllabusIds'], ['String']);
+            }
         }
         return obj;
     }
@@ -96,6 +105,18 @@ class LessonRequestLessonView {
         // ensure the json data is a string
         if (data['url'] && !(typeof data['url'] === 'string' || data['url'] instanceof String)) {
             throw new Error("Expected the field `url` to be a primitive type in the JSON string but got " + data['url']);
+        }
+        // ensure the json data is a string
+        if (data['content'] && !(typeof data['content'] === 'string' || data['content'] instanceof String)) {
+            throw new Error("Expected the field `content` to be a primitive type in the JSON string but got " + data['content']);
+        }
+        // ensure the json data is a string
+        if (data['type'] && !(typeof data['type'] === 'string' || data['type'] instanceof String)) {
+            throw new Error("Expected the field `type` to be a primitive type in the JSON string but got " + data['type']);
+        }
+        // ensure the json data is an array
+        if (!Array.isArray(data['syllabusIds'])) {
+            throw new Error("Expected the field `syllabusIds` to be an array in the JSON data but got " + data['syllabusIds']);
         }
 
         return true;
@@ -145,6 +166,22 @@ LessonRequestLessonView.prototype['estimateTime'] = undefined;
  * @member {Number} courseId
  */
 LessonRequestLessonView.prototype['courseId'] = undefined;
+
+/**
+ * @member {String} content
+ */
+LessonRequestLessonView.prototype['content'] = undefined;
+
+/**
+ * Type is VIDEO or READING
+ * @member {String} type
+ */
+LessonRequestLessonView.prototype['type'] = undefined;
+
+/**
+ * @member {Array.<String>} syllabusIds
+ */
+LessonRequestLessonView.prototype['syllabusIds'] = undefined;
 
 
 

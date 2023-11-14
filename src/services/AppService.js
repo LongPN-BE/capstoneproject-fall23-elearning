@@ -1,5 +1,7 @@
 // apiService.js
 
+import Cookies from "js-cookie";
+
 const BASE_URL = 'https://api.fpt-ec.click/onlearn/api/v1';
 // const BASE_URL = 'http://localhost:8080/api/v1';
 
@@ -23,7 +25,8 @@ export const fetchData = async (endpoint, token) => {
             if (response.status === 400) {
                 throw new Error(`Bad Request! Status: ${response.status}`);
             } else if (response.status === 401) {
-                throw new Error(`Unauthorized! Status: ${response.status}`);
+                Cookies.remove('token')
+                Cookies.remove('user')
             } else if (response.status === 403) {
                 throw new Error(`Forbidden! Status: ${response.status}`);
             } else if (response.status === 500) {

@@ -62,6 +62,9 @@ class EnrollFeedbackView {
             if (data.hasOwnProperty('paymentStatus')) {
                 obj['paymentStatus'] = ApiClient.convertToType(data['paymentStatus'], 'String');
             }
+            if (data.hasOwnProperty('commission')) {
+                obj['commission'] = ApiClient.convertToType(data['commission'], 'Number');
+            }
             if (data.hasOwnProperty('status')) {
                 obj['status'] = ApiClient.convertToType(data['status'], 'String');
             }
@@ -137,6 +140,11 @@ EnrollFeedbackView.prototype['amount'] = undefined;
 EnrollFeedbackView.prototype['paymentStatus'] = undefined;
 
 /**
+ * @member {Number} commission
+ */
+EnrollFeedbackView.prototype['commission'] = undefined;
+
+/**
  * @member {module:model/EnrollFeedbackView.StatusEnum} status
  */
 EnrollFeedbackView.prototype['status'] = undefined;
@@ -182,7 +190,19 @@ EnrollFeedbackView['StatusEnum'] = {
      * value: "DONE"
      * @const
      */
-    "DONE": "DONE"
+    "DONE": "DONE",
+
+    /**
+     * value: "PENDING"
+     * @const
+     */
+    "PENDING": "PENDING",
+
+    /**
+     * value: "REMOVED"
+     * @const
+     */
+    "REMOVED": "REMOVED"
 };
 
 

@@ -53,6 +53,9 @@ class FeedContentFeedbackView {
             if (data.hasOwnProperty('content')) {
                 obj['content'] = ApiClient.convertToType(data['content'], 'String');
             }
+            if (data.hasOwnProperty('proportion')) {
+                obj['proportion'] = ApiClient.convertToType(data['proportion'], 'Number');
+            }
         }
         return obj;
     }
@@ -85,6 +88,11 @@ FeedContentFeedbackView.prototype['id'] = undefined;
  * @member {String} content
  */
 FeedContentFeedbackView.prototype['content'] = undefined;
+
+/**
+ * @member {Number} proportion
+ */
+FeedContentFeedbackView.prototype['proportion'] = undefined;
 
 
 

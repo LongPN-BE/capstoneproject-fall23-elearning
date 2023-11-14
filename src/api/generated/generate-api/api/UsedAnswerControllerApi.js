@@ -65,7 +65,7 @@ export default class UsedAnswerControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [UsedAnswer];
@@ -105,12 +105,52 @@ export default class UsedAnswerControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
       let returnType = UsedAnswer;
       return this.apiClient.callApi(
         '/api/v1/used-answer/save', 'POST',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the saveUsedAnswer1 operation.
+     * @callback module:api/UsedAnswerControllerApi~saveUsedAnswer1Callback
+     * @param {String} error Error message, if any.
+     * @param {Array.<module:model/UsedAnswer>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Array.<module:model/UsedAnswerRequest>} usedAnswerRequest 
+     * @param {module:api/UsedAnswerControllerApi~saveUsedAnswer1Callback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<module:model/UsedAnswer>}
+     */
+    saveUsedAnswer1(usedAnswerRequest, callback) {
+      let postBody = usedAnswerRequest;
+      // verify the required parameter 'usedAnswerRequest' is set
+      if (usedAnswerRequest === undefined || usedAnswerRequest === null) {
+        throw new Error("Missing the required parameter 'usedAnswerRequest' when calling saveUsedAnswer1");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = ['application/json'];
+      let accepts = ['*/*'];
+      let returnType = [UsedAnswer];
+      return this.apiClient.callApi(
+        '/api/v1/used-answer/saveAll', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );

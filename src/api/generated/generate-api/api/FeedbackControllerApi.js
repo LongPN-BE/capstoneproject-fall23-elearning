@@ -65,7 +65,7 @@ export default class FeedbackControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
       let returnType = FeedbackFeedbackView;
@@ -106,7 +106,7 @@ export default class FeedbackControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [FeedbackFeedbackView];
@@ -141,7 +141,7 @@ export default class FeedbackControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [FeedContent];
@@ -176,7 +176,7 @@ export default class FeedbackControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [FeedbackFeedbackView];
@@ -216,7 +216,7 @@ export default class FeedbackControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
       let returnType = FeedContent;

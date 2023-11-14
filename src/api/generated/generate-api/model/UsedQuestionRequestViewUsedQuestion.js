@@ -57,7 +57,7 @@ class UsedQuestionRequestViewUsedQuestion {
                 obj['quizId'] = ApiClient.convertToType(data['quizId'], 'Number');
             }
             if (data.hasOwnProperty('usedAnswers')) {
-                obj['usedAnswers'] = ApiClient.convertToType(data['usedAnswers'], ['String']);
+                obj['usedAnswers'] = ApiClient.convertToType(data['usedAnswers'], ['Number']);
             }
         }
         return obj;
@@ -102,7 +102,7 @@ UsedQuestionRequestViewUsedQuestion.prototype['content'] = undefined;
 UsedQuestionRequestViewUsedQuestion.prototype['quizId'] = undefined;
 
 /**
- * @member {Array.<String>} usedAnswers
+ * @member {Array.<Number>} usedAnswers
  */
 UsedQuestionRequestViewUsedQuestion.prototype['usedAnswers'] = undefined;
 

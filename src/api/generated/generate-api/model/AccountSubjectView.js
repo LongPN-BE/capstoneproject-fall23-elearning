@@ -58,12 +58,6 @@ class AccountSubjectView {
             if (data.hasOwnProperty('deletedAt')) {
                 obj['deletedAt'] = ApiClient.convertToType(data['deletedAt'], 'Date');
             }
-            if (data.hasOwnProperty('id')) {
-                obj['id'] = ApiClient.convertToType(data['id'], 'Number');
-            }
-            if (data.hasOwnProperty('username')) {
-                obj['username'] = ApiClient.convertToType(data['username'], 'String');
-            }
             if (data.hasOwnProperty('password')) {
                 obj['password'] = ApiClient.convertToType(data['password'], 'String');
             }
@@ -76,14 +70,14 @@ class AccountSubjectView {
             if (data.hasOwnProperty('profile')) {
                 obj['profile'] = ProfileSubjectView.constructFromObject(data['profile']);
             }
-            if (data.hasOwnProperty('accountNonLocked')) {
-                obj['accountNonLocked'] = ApiClient.convertToType(data['accountNonLocked'], 'Boolean');
-            }
             if (data.hasOwnProperty('accountNonExpired')) {
                 obj['accountNonExpired'] = ApiClient.convertToType(data['accountNonExpired'], 'Boolean');
             }
             if (data.hasOwnProperty('credentialsNonExpired')) {
                 obj['credentialsNonExpired'] = ApiClient.convertToType(data['credentialsNonExpired'], 'Boolean');
+            }
+            if (data.hasOwnProperty('accountNonLocked')) {
+                obj['accountNonLocked'] = ApiClient.convertToType(data['accountNonLocked'], 'Boolean');
             }
             if (data.hasOwnProperty('authorities')) {
                 obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthoritySubjectView]);
@@ -101,10 +95,6 @@ class AccountSubjectView {
      * @return {boolean} to indicate whether the JSON data is valid with respect to <code>AccountSubjectView</code>.
      */
     static validateJSON(data) {
-        // ensure the json data is a string
-        if (data['username'] && !(typeof data['username'] === 'string' || data['username'] instanceof String)) {
-            throw new Error("Expected the field `username` to be a primitive type in the JSON string but got " + data['username']);
-        }
         // ensure the json data is a string
         if (data['password'] && !(typeof data['password'] === 'string' || data['password'] instanceof String)) {
             throw new Error("Expected the field `password` to be a primitive type in the JSON string but got " + data['password']);
@@ -152,16 +142,6 @@ AccountSubjectView.prototype['updatedAt'] = undefined;
 AccountSubjectView.prototype['deletedAt'] = undefined;
 
 /**
- * @member {Number} id
- */
-AccountSubjectView.prototype['id'] = undefined;
-
-/**
- * @member {String} username
- */
-AccountSubjectView.prototype['username'] = undefined;
-
-/**
  * @member {String} password
  */
 AccountSubjectView.prototype['password'] = undefined;
@@ -182,11 +162,6 @@ AccountSubjectView.prototype['active'] = undefined;
 AccountSubjectView.prototype['profile'] = undefined;
 
 /**
- * @member {Boolean} accountNonLocked
- */
-AccountSubjectView.prototype['accountNonLocked'] = undefined;
-
-/**
  * @member {Boolean} accountNonExpired
  */
 AccountSubjectView.prototype['accountNonExpired'] = undefined;
@@ -195,6 +170,11 @@ AccountSubjectView.prototype['accountNonExpired'] = undefined;
  * @member {Boolean} credentialsNonExpired
  */
 AccountSubjectView.prototype['credentialsNonExpired'] = undefined;
+
+/**
+ * @member {Boolean} accountNonLocked
+ */
+AccountSubjectView.prototype['accountNonLocked'] = undefined;
 
 /**
  * @member {Array.<module:model/GrantedAuthoritySubjectView>} authorities

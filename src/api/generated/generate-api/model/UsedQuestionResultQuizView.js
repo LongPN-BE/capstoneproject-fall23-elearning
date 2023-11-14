@@ -13,7 +13,6 @@
 
 import ApiClient from '../ApiClient';
 import QuizResultQuizView from './QuizResultQuizView';
-import UsedAnswerResultQuizView from './UsedAnswerResultQuizView';
 
 /**
  * The UsedQuestionResultQuizView model module.
@@ -53,7 +52,7 @@ class UsedQuestionResultQuizView {
                 obj['quiz'] = QuizResultQuizView.constructFromObject(data['quiz']);
             }
             if (data.hasOwnProperty('usedAnswers')) {
-                obj['usedAnswers'] = ApiClient.convertToType(data['usedAnswers'], [UsedAnswerResultQuizView]);
+                obj['usedAnswers'] = ApiClient.convertToType(data['usedAnswers'], [Object]);
             }
         }
         return obj;
@@ -69,15 +68,9 @@ class UsedQuestionResultQuizView {
         if (data['quiz']) { // data not null
           QuizResultQuizView.validateJSON(data['quiz']);
         }
-        if (data['usedAnswers']) { // data not null
-            // ensure the json data is an array
-            if (!Array.isArray(data['usedAnswers'])) {
-                throw new Error("Expected the field `usedAnswers` to be an array in the JSON data but got " + data['usedAnswers']);
-            }
-            // validate the optional field `usedAnswers` (array)
-            for (const item of data['usedAnswers']) {
-                UsedAnswerResultQuizView.validateJsonObject(item);
-            };
+        // ensure the json data is an array
+        if (!Array.isArray(data['usedAnswers'])) {
+            throw new Error("Expected the field `usedAnswers` to be an array in the JSON data but got " + data['usedAnswers']);
         }
 
         return true;
@@ -94,7 +87,7 @@ class UsedQuestionResultQuizView {
 UsedQuestionResultQuizView.prototype['quiz'] = undefined;
 
 /**
- * @member {Array.<module:model/UsedAnswerResultQuizView>} usedAnswers
+ * @member {Array.<Object>} usedAnswers
  */
 UsedQuestionResultQuizView.prototype['usedAnswers'] = undefined;
 

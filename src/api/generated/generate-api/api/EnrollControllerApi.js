@@ -16,6 +16,8 @@ import ApiClient from "../ApiClient";
 import EnrollEnrollView from '../model/EnrollEnrollView';
 import EnrollRequestEnrollView from '../model/EnrollRequestEnrollView';
 import PaginateCourse from '../model/PaginateCourse';
+import RefundRequestEnrollView from '../model/RefundRequestEnrollView';
+import TransactionEnrollView from '../model/TransactionEnrollView';
 
 /**
 * EnrollController service.
@@ -60,7 +62,7 @@ export default class EnrollControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [EnrollEnrollView];
@@ -101,7 +103,7 @@ export default class EnrollControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [EnrollEnrollView];
@@ -142,7 +144,7 @@ export default class EnrollControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = EnrollEnrollView;
@@ -183,7 +185,7 @@ export default class EnrollControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [EnrollEnrollView];
@@ -228,7 +230,7 @@ export default class EnrollControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = PaginateCourse;
@@ -240,17 +242,98 @@ export default class EnrollControllerApi {
     }
 
     /**
+     * Callback function to receive the result of the refundEnroll operation.
+     * @callback module:api/EnrollControllerApi~refundEnrollCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/TransactionEnrollView} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {module:model/RefundRequestEnrollView} refundRequestEnrollView 
+     * @param {module:api/EnrollControllerApi~refundEnrollCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/TransactionEnrollView}
+     */
+    refundEnroll(refundRequestEnrollView, callback) {
+      let postBody = refundRequestEnrollView;
+      // verify the required parameter 'refundRequestEnrollView' is set
+      if (refundRequestEnrollView === undefined || refundRequestEnrollView === null) {
+        throw new Error("Missing the required parameter 'refundRequestEnrollView' when calling refundEnroll");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = ['application/json'];
+      let accepts = ['*/*'];
+      let returnType = TransactionEnrollView;
+      return this.apiClient.callApi(
+        '/api/v1/enroll/refund', 'POST',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the removeEnroll operation.
+     * @callback module:api/EnrollControllerApi~removeEnrollCallback
+     * @param {String} error Error message, if any.
+     * @param {String} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Number} enrollId 
+     * @param {module:api/EnrollControllerApi~removeEnrollCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link String}
+     */
+    removeEnroll(enrollId, callback) {
+      let postBody = null;
+      // verify the required parameter 'enrollId' is set
+      if (enrollId === undefined || enrollId === null) {
+        throw new Error("Missing the required parameter 'enrollId' when calling removeEnroll");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'enroll_id': enrollId
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = 'String';
+      return this.apiClient.callApi(
+        '/api/v1/enroll/remove', 'DELETE',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
      * Callback function to receive the result of the saveEnroll operation.
      * @callback module:api/EnrollControllerApi~saveEnrollCallback
      * @param {String} error Error message, if any.
-     * @param {module:model/EnrollEnrollView} data The data returned by the service call.
+     * @param {Object} data The data returned by the service call.
      * @param {String} response The complete HTTP response.
      */
 
     /**
      * @param {module:model/EnrollRequestEnrollView} enrollRequestEnrollView 
      * @param {module:api/EnrollControllerApi~saveEnrollCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/EnrollEnrollView}
+     * data is of type: {@link Object}
      */
     saveEnroll(enrollRequestEnrollView, callback) {
       let postBody = enrollRequestEnrollView;
@@ -268,10 +351,10 @@ export default class EnrollControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
-      let returnType = EnrollEnrollView;
+      let returnType = Object;
       return this.apiClient.callApi(
         '/api/v1/enroll/enroll', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,

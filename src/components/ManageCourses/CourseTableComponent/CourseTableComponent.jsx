@@ -7,7 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { Link } from 'react-router-dom';
 
-function CourseTableComponent({ courses, onApprove }) {
+function CourseTableComponent({ courses, onApprove, onShowReason }) {
     return (
         <Table>
             <TableHead>
@@ -29,6 +29,9 @@ function CourseTableComponent({ courses, onApprove }) {
                             <Link to={`/courses/${course.id}`} className='btn btn-outline-primary'>
                                 Chi tiết
                             </Link>
+                            {course.status === 'REJECT' && <button className='btn btn-outline-danger mx-2' onClick={onShowReason}>
+                                Xem lý do
+                            </button>}
                             {course.status === 'DRAFT' && <button className='btn btn-outline-info mx-2' onClick={() => onApprove(course)}>
                                 Kiến nghị môn học
                             </button>}

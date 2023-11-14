@@ -1,34 +1,36 @@
-import { useEffect, useState } from "react";
-import { Outlet, useParams } from "react-router-dom";
-import { courseData } from "../../mock/mock-data";
-import Footer from "../../components/Landing/Footer/Footer";
-import Header from "../../components/Landing/Header/Header";
-import { Container } from "reactstrap";
-import { Divider } from "@mui/material";
-import NavBarLesson from "./components/NavBarLesson";
-import CustomBreadcrumbs from "../../components/Breadcrumbs";
+import { useEffect, useState } from 'react';
+import { Outlet, useParams } from 'react-router-dom';
+import { courseData } from '../../mock/mock-data';
+import Footer from '../../components/Landing/Footer/Footer';
+import Header from '../../components/Landing/Header/Header';
+import { Container } from 'reactstrap';
+import { Divider } from '@mui/material';
+import NavBarLesson from './components/NavBarLesson';
+import CustomBreadcrumbs from '../../components/Breadcrumbs';
+import { CourseControllerApi } from '../../api/generated/generate-api';
+import ApiClientSingleton from '../../api/apiClientImpl';
+
+const courseApi = new CourseControllerApi(ApiClientSingleton.getInstance());
 function LearnCourse() {
   const [course, setCourse] = useState();
   const { courseId } = useParams();
   const breadcrumbItems = [
     {
-      url: "/student-home",
-      label: "Home",
+      url: '/student-home',
+      label: 'Home',
     },
     {
       url: `/course/${courseId}`,
-      label: "Learn Course",
+      label: `Learn Course: ${course?.name}`,
     },
   ];
 
   const getCourseById = () => {
-    const response = courseData.filter((data) => data.id === Number(courseId));
-    console.log(courseData);
-    console.log(response);
-    console.log(courseId);
-    if (response.length > 0) {
-      setCourse(response[0]);
-    }
+    courseApi.getCourseById(courseId, (err, res) => {
+      if (res) {
+        setCourse(res);
+      }
+    });
   };
   useEffect(() => {
     getCourseById();

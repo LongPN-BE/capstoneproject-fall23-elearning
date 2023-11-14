@@ -21,6 +21,7 @@ import SyllabusCreateModal from '../Syllabus/SyllabusCreateModal';
 import { fetchData, postData } from '../../../services/AppService';
 import Loading from '../../Loading/Loading';
 import Cookies from 'js-cookie';
+import { sortByID } from '../../../util/Utilities';
 
 export default function CourseDetail() {
     const { courseId } = useParams();
@@ -81,7 +82,8 @@ export default function CourseDetail() {
                     setCourse(resp);
                     fetchData(`/syllabus/byCourseId?course_id=${courseId}`, token).then(resp => {
                         if (resp) {
-                            setData(resp);
+                            const courseList = sortByID(resp);
+                            setData(courseList);
                             setLoading(false)
                         }
                     })
@@ -189,8 +191,8 @@ export default function CourseDetail() {
                 <div className="m-5">
                     <div style={{ margin: '20px' }}>
                         <Paper style={{ padding: '20px' }}>
-                            <Typography variant="body1">
-                                Trang chủ {'>'} Quản lý khóa học {'>'} Khóa học {courseId}
+                            <Typography variant="body1" style={{ color: 'darkblue' }}>
+                                <Link to={'/'}>Trang chủ </Link>{'>'} <Link to={'/manage-course'}>Quản lý khóa học </Link>{'>'} Khóa học {courseId}
                             </Typography>
 
                             <div style={{ marginTop: '20px' }}>
@@ -252,7 +254,7 @@ export default function CourseDetail() {
                                             <TableRow key={index}>
                                                 <TableCell>{index + 1}</TableCell>
                                                 <TableCell>{s.name}</TableCell>
-                                                <TableCell>{s.status}</TableCell>
+                                                <TableCell>{s.status ? 'Hoạt động' : 'Không hoạt động'}</TableCell>
                                                 <TableCell>
                                                     <Button
                                                         variant="outlined"
@@ -271,7 +273,7 @@ export default function CourseDetail() {
                                                 <TableRow key={index}>
                                                     <TableCell>{index + 1}</TableCell>
                                                     <TableCell>{s.name}</TableCell>
-                                                    <TableCell>{s.status}</TableCell>
+                                                    <TableCell>{s.status ? 'Hoạt động' : 'Không hoạt động'}</TableCell>
                                                     <TableCell>
                                                         <Button
                                                             variant="outlined"

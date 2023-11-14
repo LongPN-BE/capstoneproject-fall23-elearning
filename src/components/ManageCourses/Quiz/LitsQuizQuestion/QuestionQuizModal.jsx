@@ -47,7 +47,7 @@ const QuestionQuizModal = ({ isOpen, onClose, onSave, question, onUpdate }) => {
             setEditedQuestion({ ...editedQuestion, content: value });
         } else {
             // Update answer content
-            const updatedAnswers = editedQuestion.usedAnswers.map((answer) => {
+            const updatedAnswers = editedQuestion?.usedAnswers.map((answer) => {
                 if (answer.id === answerId) {
                     return { ...answer, content: value };
                 }
@@ -63,18 +63,6 @@ const QuestionQuizModal = ({ isOpen, onClose, onSave, question, onUpdate }) => {
             alert("Please fill in all required fields.");
             return;
         }
-        // const updatedAnswers = editedQuestion.usedAnswers.map((answer) => {
-        //     if (answer.id === editedQuestion.correctAnswerId) {
-        //         return { ...answer, isCorrect: true };
-        //     }
-        //     return answer;
-        // });
-
-        // const body = {
-        //     ...editedQuestion,
-        //     usedAnswers: updatedAnswers,
-        // }
-        // onSave(body)
 
         if (question) {
             // If editing an existing question, call the onUpdate function
@@ -82,7 +70,7 @@ const QuestionQuizModal = ({ isOpen, onClose, onSave, question, onUpdate }) => {
         } else {
             // If adding a new question, call the onSave function
             // Set isCorrect: true for the correct answer
-            const updatedAnswers = editedQuestion.answers.map((answer) => {
+            const updatedAnswers = editedQuestion.usedAnswers.map((answer) => {
                 if (answer.id === editedQuestion.correctAnswerId) {
                     return { ...answer, isCorrect: true };
                 }

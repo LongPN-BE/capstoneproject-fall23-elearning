@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import SubjectModal from './SubjectModal';
+import EditIcon from '@mui/icons-material/Edit';
 import SubjectCourseModal from '../CoursesBySubject/CoursesBySubject';
 import {
   Button,
@@ -26,18 +27,17 @@ export default function ListSubject() {
   const [isSubjectModalOpen, setIsSubjectModalOpen] = useState(false);
   const [subjectToEdit, setSubjectToEdit] = useState(null);
 
-
   useEffect(() => {
     const token = Cookies.get('token');
     if (token) {
       try {
-        fetchData('/subject/subjects', token).then(resp => {
+        fetchData('/subject/subjects', token).then((resp) => {
           if (resp) {
             setData(resp);
           }
-        })
+        });
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     }
   }, []);
@@ -72,16 +72,16 @@ export default function ListSubject() {
 
       const body = {
         ...subjectData,
-        dateTime: moment(new Date())
+        dateTime: moment(new Date()),
       };
-      console.log('Subject data to update:', await body)
+      console.log('Subject data to update:', await body);
       await postData('/subject/save', body, token)
-        .then(resp => {
+        .then((resp) => {
           if (resp) {
             window.location.reload();
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     } else {
@@ -90,16 +90,16 @@ export default function ListSubject() {
       console.log('Subject data to create:', subjectData);
       const body = {
         ...subjectData,
-        dateTime: moment(new Date())
+        dateTime: moment(new Date()),
       };
-      console.log('Subject data to update:', await body)
+      console.log('Subject data to update:', await body);
       await postData('/subject/save', body, token)
-        .then(resp => {
+        .then((resp) => {
           if (resp) {
             window.location.reload();
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     }
@@ -166,22 +166,28 @@ export default function ListSubject() {
                     <TableRow hover={true} key={index}>
                       <TableCell>{index + 1}</TableCell>
                       <TableCell>{s.name}</TableCell>
-                      <TableCell>{s.description}</TableCell>
+                      <TableCell width="30%">{s.description}</TableCell>
                       <TableCell>{s.minPrice}</TableCell>
-                      <TableCell>{moment(s.createDate).format("DD/MM/YYYY")}</TableCell>
+                      <TableCell>{moment(s.createDate).format('DD/MM/YYYY')}</TableCell>
                       {/* <TableCell>{s.staff_id}</TableCell> */}
-                      <TableCell>{s.status ? "Đang hoạt động" : "Chưa kích hoạt"} </TableCell>
-                      <TableCell>
+                      <TableCell>{s.status ? 'Đang hoạt động' : 'Chưa kích hoạt'} </TableCell>
+                      <TableCell width="10%">
                         {/* <Link className="btn btn-outline-secondary" to={`/subjects/courseBySubject`}> */}
-                        <Link to={`/course/subject/${s.id}`} className='btn btn-outline-primary'>
-                          Chi tiết <VisibilityIcon />
-                        </Link>
-                        {/* <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={() => handleViewDetail(s)}>
-                          Chi tiết
-                        </Button> */}
-                        <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={() => handleEditSubject(s)}>
-                          Chỉnh sửa
-                        </Button>
+                        <div className="d-flex justify-content-center">
+                          <Link to={`/course/subject/${s.id}`} title="Xem" className="btn btn-secondary m-1">
+                            <VisibilityIcon />
+                          </Link>
+
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            title="Chỉnh sửa"
+                            onClick={() => handleEditSubject(s)}
+                            className="m-1 p-0"
+                          >
+                            <EditIcon />
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   );

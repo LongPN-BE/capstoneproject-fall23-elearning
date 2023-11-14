@@ -63,6 +63,9 @@ class QuizViewUsedQuestion {
             if (data.hasOwnProperty('duration')) {
                 obj['duration'] = ApiClient.convertToType(data['duration'], 'Number');
             }
+            if (data.hasOwnProperty('dateCreate')) {
+                obj['dateCreate'] = ApiClient.convertToType(data['dateCreate'], 'Date');
+            }
             if (data.hasOwnProperty('dateRange')) {
                 obj['dateRange'] = ApiClient.convertToType(data['dateRange'], 'Number');
             }
@@ -130,6 +133,11 @@ QuizViewUsedQuestion.prototype['status'] = undefined;
  * @member {Number} duration
  */
 QuizViewUsedQuestion.prototype['duration'] = undefined;
+
+/**
+ * @member {Date} dateCreate
+ */
+QuizViewUsedQuestion.prototype['dateCreate'] = undefined;
 
 /**
  * @member {Number} dateRange

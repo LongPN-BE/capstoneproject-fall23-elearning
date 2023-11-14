@@ -33,11 +33,11 @@ class ApiClient {
      * Overrides the default value set in spec file if present
      * @param {String} basePath
      */
-    constructor(basePath = 'http://localhost:8080') {
+    constructor(basePath = 'https://api.fpt-ec.click/onlearn') {
         /**
          * The base URL against which to resolve every API call's (relative) path.
          * @type {String}
-         * @default http://localhost:8080
+         * @default https://api.fpt-ec.click/onlearn
          */
         this.basePath = basePath.replace(/\/+$/, '');
 
@@ -593,7 +593,7 @@ class ApiClient {
     hostSettings() {
         return [
             {
-              'url': "http://localhost:8080",
+              'url': "https://api.fpt-ec.click/onlearn",
               'description': "No description provided",
             }
       ];

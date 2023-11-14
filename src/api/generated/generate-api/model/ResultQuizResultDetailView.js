@@ -15,7 +15,6 @@ import ApiClient from '../ApiClient';
 import EnrollResultDetailView from './EnrollResultDetailView';
 import QuizResultDetailView from './QuizResultDetailView';
 import ResultDetailResultDetailView from './ResultDetailResultDetailView';
-import StudentResultDetailView from './StudentResultDetailView';
 
 /**
  * The ResultQuizResultDetailView model module.
@@ -63,14 +62,14 @@ class ResultQuizResultDetailView {
             if (data.hasOwnProperty('resultStatus')) {
                 obj['resultStatus'] = ApiClient.convertToType(data['resultStatus'], 'String');
             }
-            if (data.hasOwnProperty('failCount')) {
-                obj['failCount'] = ApiClient.convertToType(data['failCount'], 'Number');
-            }
             if (data.hasOwnProperty('lastPoint')) {
                 obj['lastPoint'] = ApiClient.convertToType(data['lastPoint'], 'Number');
             }
+            if (data.hasOwnProperty('processTime')) {
+                obj['processTime'] = ApiClient.convertToType(data['processTime'], 'Number');
+            }
             if (data.hasOwnProperty('student')) {
-                obj['student'] = StudentResultDetailView.constructFromObject(data['student']);
+                obj['student'] = ApiClient.convertToType(data['student'], Object);
             }
             if (data.hasOwnProperty('enroll')) {
                 obj['enroll'] = EnrollResultDetailView.constructFromObject(data['enroll']);
@@ -94,10 +93,6 @@ class ResultQuizResultDetailView {
         // ensure the json data is a string
         if (data['resultStatus'] && !(typeof data['resultStatus'] === 'string' || data['resultStatus'] instanceof String)) {
             throw new Error("Expected the field `resultStatus` to be a primitive type in the JSON string but got " + data['resultStatus']);
-        }
-        // validate the optional field `student`
-        if (data['student']) { // data not null
-          StudentResultDetailView.validateJSON(data['student']);
         }
         // validate the optional field `enroll`
         if (data['enroll']) { // data not null
@@ -147,17 +142,17 @@ ResultQuizResultDetailView.prototype['submitTime'] = undefined;
 ResultQuizResultDetailView.prototype['resultStatus'] = undefined;
 
 /**
- * @member {Number} failCount
- */
-ResultQuizResultDetailView.prototype['failCount'] = undefined;
-
-/**
  * @member {Number} lastPoint
  */
 ResultQuizResultDetailView.prototype['lastPoint'] = undefined;
 
 /**
- * @member {module:model/StudentResultDetailView} student
+ * @member {Number} processTime
+ */
+ResultQuizResultDetailView.prototype['processTime'] = undefined;
+
+/**
+ * @member {Object} student
  */
 ResultQuizResultDetailView.prototype['student'] = undefined;
 

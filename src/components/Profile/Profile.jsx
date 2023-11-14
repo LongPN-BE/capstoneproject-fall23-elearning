@@ -7,11 +7,14 @@ import BalanceInfo from '../../pages/StudentProfile/components/BalanceInfo';
 import WalletCard from '../../pages/StudentProfile/components/WalletCard';
 import TableTransactions from '../../pages/StudentProfile/components/TableTransactions';
 import { fetchData, postData } from '../../services/AppService';
+import { PaymentHistoryControllerApi } from '../../api/generated/generate-api';
+import ApiClientSingleton from '../../api/apiClientImpl';
 
+const paymentHisApi = new PaymentHistoryControllerApi(ApiClientSingleton.getInstance());
 function Profile() {
     const [user, setUser] = useState();
     const [wallet, setWallet] = useState();
-
+    const [transactions, setTransactions] = useState([]);
     useEffect(() => {
         const user = Cookies.get('user');
         if (user) {
@@ -24,6 +27,11 @@ function Profile() {
                         setWallet(resp)
                     }
                 })
+                paymentHisApi.getPaymentHistoryByTeacher(JSON.parse(user).teacherId, (err, res) => {
+                    if (res) {
+                        setTransactions(res);
+                    }
+                });
             }
         }
     }, [])
@@ -61,7 +69,7 @@ function Profile() {
                     </div>
                 </div>
                 <div className="row">
-                    <TableTransactions />
+                    <TableTransactions transactions={transactions} />
                 </div>
             </div>
         </Container>

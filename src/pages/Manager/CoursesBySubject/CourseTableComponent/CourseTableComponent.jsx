@@ -2,6 +2,8 @@ import React from 'react';
 import { Table, TableHead, TableBody, TableRow, TableCell, Paper } from '@material-ui/core';
 import moment from 'moment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
 import { useState } from 'react';
 import { Button } from 'reactstrap';
 import CourseModal from '../../DetailCourse';
@@ -10,15 +12,15 @@ function CourseTableComponent({ courses }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [course, setCourse] = useState(null);
   const handleApproved = (course) => {
-    alert('Xác nhận duyệt ' + course.name)
+    alert('Xác nhận duyệt ' + course.name);
   };
   const handleReject = (course) => {
-    alert('Xác nhận từ chối ' + course.name)
+    alert('Xác nhận từ chối ' + course.name);
   };
   const handleViewCourse = (course) => {
-    console.log(course)
-    setCourse(course)
-    setIsModalOpen(true)
+    console.log(course);
+    setCourse(course);
+    setIsModalOpen(true);
   };
   const handleModalClose = () => {
     setIsModalOpen(false);
@@ -36,7 +38,7 @@ function CourseTableComponent({ courses }) {
                 <TableCell align="center">Giá</TableCell>
                 <TableCell align="center">Ngày tạo</TableCell>
                 <TableCell align="center">Xem</TableCell>
-                <TableCell align="center">Xét duyệt</TableCell>
+                <TableCell align="center"></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -46,31 +48,46 @@ function CourseTableComponent({ courses }) {
                   <TableCell align="center">{course.name}</TableCell>
                   <TableCell align="center">{course.description}</TableCell>
                   <TableCell align="center">{course.price}</TableCell>
-                  <TableCell align="center">{moment(course.createDate).format("DD/MM/YYYY")}</TableCell>
+                  <TableCell align="center">{moment(course.createDate).format('DD/MM/YYYY')}</TableCell>
                   <TableCell align="center">
                     <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={() => handleViewCourse(course)}>
                       <VisibilityIcon />
                     </Button>
                   </TableCell>
-                  <TableCell align="center">
-                    <button type="submit" className="btn btn-success" onClick={() => handleApproved(course)}>
-                      Duyệt !!
-                    </button>
-                    <button type="submit" className="btn btn-danger" onClick={() => handleReject(course)}>
-                      Từ chối
-                    </button>
-                  </TableCell>
+                  {course?.status === 'PENDING' ? (
+                    <>
+                      <TableCell align="center">
+                        <div className="d-flex justify-content-center">
+                          <button
+                            type="submit"
+                            title="Approve"
+                            className="btn btn-success m-1"
+                            onClick={() => handleApproved(course)}
+                          >
+                            <CheckCircleOutlineIcon />
+                          </button>
+                          <button
+                            button
+                            type="submit"
+                            title="Deny"
+                            className="btn btn-danger m-1"
+                            onClick={() => handleReject(course)}
+                          >
+                            <DoNotDisturbAltIcon />
+                          </button>
+                        </div>
+                      </TableCell>
+                    </>
+                  ) : (
+                    <></>
+                  )}
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </Paper>
       </div>
-      <CourseModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        course={course}
-      />
+      <CourseModal isOpen={isModalOpen} onClose={handleModalClose} course={course} />
     </div>
   );
 }

@@ -9,14 +9,20 @@ import {
     Select,
     MenuItem
 } from '@material-ui/core';
+import { useRef } from 'react';
+import ReactQuill from 'react-quill';
+import './LessonModal.css'
+
 
 const LessonModal = ({ isOpen, onClose, onSave, onUpdate, lesson }) => {
+    const reactQuillRef = useRef();
     const [editedLesson, setEditedLesson] = useState({
         name: '',
         description: '',
         url: '',
         status: '',
         estimateTime: '',
+        content: ''
     });
 
     useEffect(() => {
@@ -28,6 +34,7 @@ const LessonModal = ({ isOpen, onClose, onSave, onUpdate, lesson }) => {
                 url: lesson.url,
                 status: lesson.status,
                 estimateTime: lesson.estimateTime,
+                content: lesson.content
             });
         } else {
             // Clear the form fields if adding a new lesson
@@ -35,15 +42,16 @@ const LessonModal = ({ isOpen, onClose, onSave, onUpdate, lesson }) => {
                 name: '',
                 description: '',
                 url: '',
-                status: 'false',
+                status: 'true',
                 estimateTime: '',
+                content: ''
             });
         }
     }, [lesson]);
 
     const handleInputChange = (e, fieldName) => {
-        const { value } = e.target;
-        setEditedLesson({ ...editedLesson, [fieldName]: value });
+        let values = fieldName === 'content' ? String(e) : e.target.value
+        setEditedLesson({ ...editedLesson, [fieldName]: values });
     };
 
     const handleSave = () => {
@@ -71,20 +79,43 @@ const LessonModal = ({ isOpen, onClose, onSave, onUpdate, lesson }) => {
             url: '',
             status: '',
             estimateTime: '',
+            content: ''
         });
 
         onClose();
     };
 
+    const modules = {
+        toolbar: {
+            container: [
+                [{ header: "1" }, { header: "2" }, { font: [] }],
+                [{ size: [] }],
+                ["bold", "italic", "underline", "strike", "blockquote"],
+                [
+                    { list: "ordered" },
+                    { list: "bullet" },
+                    { indent: "-1" },
+                    { indent: "+1" },
+                ],
+                ['video'],
+                ["code-block"],
+                ["clean"],
+            ],
+        },
+        clipboard: {
+            matchVisual: false,
+        },
+    }
+
     return (
         <Dialog open={isOpen} onClose={onClose} maxWidth="sm" fullWidth>
             <DialogTitle>
-                {lesson ? 'Edit Lesson' : 'Add New Lesson'}
+                {lesson ? 'Edit Lesson' : 'Thêm khóa học'}
             </DialogTitle>
             <DialogContent>
                 <TextField
                     fullWidth
-                    label="Lesson Name"
+                    label="Tên khóa học"
                     autoFocus
                     margin="dense"
                     name="name"
@@ -92,11 +123,12 @@ const LessonModal = ({ isOpen, onClose, onSave, onUpdate, lesson }) => {
                     onChange={(e) => handleInputChange(e, 'name')}
                     required
                 />
+
                 <TextField
                     fullWidth
                     multiline
                     rows={4}
-                    label="Description"
+                    label="Mô tả"
                     autoFocus
                     margin="dense"
                     name="description"
@@ -104,7 +136,17 @@ const LessonModal = ({ isOpen, onClose, onSave, onUpdate, lesson }) => {
                     onChange={(e) => handleInputChange(e, 'description')}
                     required
                 />
-                <TextField
+                <label className='my-2'>Nội dung bài học</label><br />
+                <ReactQuill
+                    name="Nội dung"
+                    // style={{ height: '300px' }}
+                    ref={reactQuillRef}
+                    value={editedLesson.content}
+                    onChange={(e) => handleInputChange(e, "content")}
+                    modules={modules}
+                />
+
+                {/* <TextField
                     fullWidth
                     label="URL"
                     autoFocus
@@ -112,30 +154,22 @@ const LessonModal = ({ isOpen, onClose, onSave, onUpdate, lesson }) => {
                     name="url"
                     value={editedLesson.url}
                     onChange={(e) => handleInputChange(e, 'url')}
-                />
-                {/* <TextField
-                    fullWidth
-                    label="Status"
-                    autoFocus
-                    margin="dense"
-                    name="status"
-                    value={editedLesson.status}
-                    onChange={(e) => handleInputChange(e, 'status')}
                 /> */}
                 <Select
+                    className='my-4'
                     fullWidth
-                    label="Status"
+                    label="Trạng thái"
                     autoFocus
                     margin="dense"
                     value={editedLesson.status}
                     onChange={(e) => handleInputChange(e, 'status')}
                 >
                     <MenuItem value="true">Hoạt động</MenuItem>
-                    <MenuItem value="false">Ngưng hoạt động</MenuItem>
+                    {/* <MenuItem value="false">Ngưng hoạt động</MenuItem> */}
                 </Select>
                 <TextField
                     fullWidth
-                    label="Duration (minutes)"
+                    label="Thời gian học ( phút )"
                     autoFocus
                     margin="dense"
                     name="estimateTime"

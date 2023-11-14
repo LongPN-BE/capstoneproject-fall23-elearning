@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { vapidKey } from "./Constants";
 import Cookies from "js-cookie";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBdNnOg_OjNkKsxd3QEAvqDjvgeYWtQUIg",
@@ -64,3 +65,27 @@ export const onMessageListener = () =>
             resolve(payload);
         });
     });
+
+// export const handleImageUpload = (file) => {
+//     const storageRef = app.storage().ref();
+//     const imageRef = storageRef.child(`elearning/video/${Date.now()}`);
+//     const uploadTask = imageRef.put(file);
+
+//     return new Promise((resolve, reject) => {
+//         uploadTask.on(
+//             'state_changed',
+//             () => { },
+//             (error) => {
+//                 reject(error);
+//             },
+//             () => {
+//                 uploadTask.snapshot.ref.getDownloadURL().then((url) => {
+//                     resolve(url);
+//                 });
+//             }
+//         );
+//     });
+// };
+
+const storage = getStorage(app);
+export default storage;

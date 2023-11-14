@@ -65,7 +65,7 @@ export default class CourseControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = 'String';
@@ -106,7 +106,7 @@ export default class CourseControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [CourseCourseView];
@@ -147,7 +147,7 @@ export default class CourseControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [CourseCourseView];
@@ -182,7 +182,7 @@ export default class CourseControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [CourseCourseView];
@@ -223,7 +223,7 @@ export default class CourseControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = CourseCourseView;
@@ -263,12 +263,55 @@ export default class CourseControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
       let returnType = CourseCourseView;
       return this.apiClient.callApi(
         '/api/v1/course/save', 'POST',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the searchCourse operation.
+     * @callback module:api/CourseControllerApi~searchCourseCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<module:model/CourseCourseView>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Object} opts Optional parameters
+     * @param {String} opts.value  (default to '')
+     * @param {Number} opts.minPrice 
+     * @param {Number} opts.maxPrice 
+     * @param {module:api/CourseControllerApi~searchCourseCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<module:model/CourseCourseView>}
+     */
+    searchCourse(opts, callback) {
+      opts = opts || {};
+      let postBody = null;
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'value': opts['value'],
+        'minPrice': opts['minPrice'],
+        'maxPrice': opts['maxPrice']
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = [CourseCourseView];
+      return this.apiClient.callApi(
+        '/api/v1/course/search', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );

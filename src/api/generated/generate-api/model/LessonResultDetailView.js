@@ -50,24 +50,6 @@ class LessonResultDetailView {
         if (data) {
             obj = obj || new LessonResultDetailView();
 
-            if (data.hasOwnProperty('name')) {
-                obj['name'] = ApiClient.convertToType(data['name'], 'String');
-            }
-            if (data.hasOwnProperty('status')) {
-                obj['status'] = ApiClient.convertToType(data['status'], 'String');
-            }
-            if (data.hasOwnProperty('description')) {
-                obj['description'] = ApiClient.convertToType(data['description'], 'String');
-            }
-            if (data.hasOwnProperty('url')) {
-                obj['url'] = ApiClient.convertToType(data['url'], 'String');
-            }
-            if (data.hasOwnProperty('dateTime')) {
-                obj['dateTime'] = ApiClient.convertToType(data['dateTime'], 'Date');
-            }
-            if (data.hasOwnProperty('estimateTime')) {
-                obj['estimateTime'] = ApiClient.convertToType(data['estimateTime'], 'Number');
-            }
             if (data.hasOwnProperty('course')) {
                 obj['course'] = CourseResultDetailView.constructFromObject(data['course']);
             }
@@ -87,22 +69,6 @@ class LessonResultDetailView {
      * @return {boolean} to indicate whether the JSON data is valid with respect to <code>LessonResultDetailView</code>.
      */
     static validateJSON(data) {
-        // ensure the json data is a string
-        if (data['name'] && !(typeof data['name'] === 'string' || data['name'] instanceof String)) {
-            throw new Error("Expected the field `name` to be a primitive type in the JSON string but got " + data['name']);
-        }
-        // ensure the json data is a string
-        if (data['status'] && !(typeof data['status'] === 'string' || data['status'] instanceof String)) {
-            throw new Error("Expected the field `status` to be a primitive type in the JSON string but got " + data['status']);
-        }
-        // ensure the json data is a string
-        if (data['description'] && !(typeof data['description'] === 'string' || data['description'] instanceof String)) {
-            throw new Error("Expected the field `description` to be a primitive type in the JSON string but got " + data['description']);
-        }
-        // ensure the json data is a string
-        if (data['url'] && !(typeof data['url'] === 'string' || data['url'] instanceof String)) {
-            throw new Error("Expected the field `url` to be a primitive type in the JSON string but got " + data['url']);
-        }
         // validate the optional field `course`
         if (data['course']) { // data not null
           CourseResultDetailView.validateJSON(data['course']);
@@ -135,36 +101,6 @@ class LessonResultDetailView {
 }
 
 
-
-/**
- * @member {String} name
- */
-LessonResultDetailView.prototype['name'] = undefined;
-
-/**
- * @member {String} status
- */
-LessonResultDetailView.prototype['status'] = undefined;
-
-/**
- * @member {String} description
- */
-LessonResultDetailView.prototype['description'] = undefined;
-
-/**
- * @member {String} url
- */
-LessonResultDetailView.prototype['url'] = undefined;
-
-/**
- * @member {Date} dateTime
- */
-LessonResultDetailView.prototype['dateTime'] = undefined;
-
-/**
- * @member {Number} estimateTime
- */
-LessonResultDetailView.prototype['estimateTime'] = undefined;
 
 /**
  * @member {module:model/CourseResultDetailView} course

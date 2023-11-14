@@ -63,6 +63,9 @@ class QuizViewQuiz {
             if (data.hasOwnProperty('duration')) {
                 obj['duration'] = ApiClient.convertToType(data['duration'], 'Number');
             }
+            if (data.hasOwnProperty('dateCreate')) {
+                obj['dateCreate'] = ApiClient.convertToType(data['dateCreate'], 'Date');
+            }
             if (data.hasOwnProperty('dateRange')) {
                 obj['dateRange'] = ApiClient.convertToType(data['dateRange'], 'Number');
             }
@@ -130,6 +133,11 @@ QuizViewQuiz.prototype['status'] = undefined;
  * @member {Number} duration
  */
 QuizViewQuiz.prototype['duration'] = undefined;
+
+/**
+ * @member {Date} dateCreate
+ */
+QuizViewQuiz.prototype['dateCreate'] = undefined;
 
 /**
  * @member {Number} dateRange

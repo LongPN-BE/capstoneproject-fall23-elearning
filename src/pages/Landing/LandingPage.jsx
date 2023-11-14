@@ -7,17 +7,22 @@ import StaffLanding from './StaffLanding';
 import Cookies from 'js-cookie';
 
 const LandingPage = () => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState();
 
   useEffect(() => {
-    const user = Cookies.get('user')
+    const user = Cookies.get('user');
     if (user) {
       setUser(JSON.parse(user));
     }
-
   }, []);
 
-  return user !== null ? user.role === 'STAFF' ? <StaffLanding /> : <StudentLanding /> : <GuessLanding />;
+  return user && user.role === 'STAFF' ? (
+    <StaffLanding />
+  ) : user && user.role === 'STUDENT' ? (
+    <StudentLanding />
+  ) : (
+    <GuessLanding />
+  );
 };
 
 export default LandingPage;

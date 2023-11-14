@@ -35,7 +35,7 @@ const QuestionBankModal = ({ isOpen, onSave, onClose, data }) => {
         const token = Cookies.get('token');
         if (token) {
             if (data) {
-                fetchData(`/question/byLessonId?lesson_id=${data[0].id}`).then(resp => {
+                fetchData(`/question/byLessonId?lesson_id=${data[0].id}`, token).then(resp => {
                     if (resp) {
                         setQuestions(resp)
                         setLessonItem(data[0].id)
@@ -79,7 +79,7 @@ const QuestionBankModal = ({ isOpen, onSave, onClose, data }) => {
         const token = Cookies.get('token');
         setLessonItem(id)
         if (token) {
-            fetchData(`/question/byLessonId?lesson_id=${id}`).then(resp => {
+            fetchData(`/question/byLessonId?lesson_id=${id}`, token).then(resp => {
                 if (resp) {
                     setQuestions(resp);
                 }
@@ -88,7 +88,7 @@ const QuestionBankModal = ({ isOpen, onSave, onClose, data }) => {
             })
         }
     }
-
+    console.log(questions);
     return (
         questions &&
         <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="md">

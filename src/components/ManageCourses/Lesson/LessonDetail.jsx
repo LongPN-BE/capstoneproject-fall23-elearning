@@ -19,6 +19,7 @@ import QuizModal from '../Quiz/QuizModal';
 import Cookies from 'js-cookie';
 import { fetchData, postData } from '../../../services/AppService';
 import CreateQuizModal from '../Quiz/CreateQuizModal';
+import { sortByID } from '../../../util/Utilities';
 
 export default function LessonDetail() {
     const { courseId, syllabusId, lessonId } = useParams();
@@ -34,7 +35,8 @@ export default function LessonDetail() {
         if (token) {
             fetchData(`/quiz/byLesson?lesson_id=${lessonId}`, token).then(resp => {
                 if (resp) {
-                    setData(resp)
+                    const quizList = sortByID(resp)
+                    setData(quizList)
                     setTotalQuiz(resp.length)
                 }
             }).catch(err => console.log(err))
@@ -76,7 +78,6 @@ export default function LessonDetail() {
     };
 
     const handleSaveQuiz = async (formData) => {
-        console.log(formData);
         const token = Cookies.get('token')
         if (token) {
             const body = {
@@ -102,8 +103,9 @@ export default function LessonDetail() {
             <div className="m-5">
                 <div style={{ margin: '20px' }}>
                     <Paper style={{ padding: '20px' }}>
-                        <Typography variant="body1">
-                            Trang chủ {'>'} Quản lý khóa học {'>'} Khóa học {courseId} {'>'} Khung chương trình {syllabusId} {'>'} Bài học {lessonId} {'>'} Danh sách bài kiểm tra
+                        <Typography variant="body1" style={{ color: 'darkblue' }}>
+                            <Link to={'/'}>Trang chủ </Link>{'>'} <Link to={'/manage-course'}>Quản lý khóa học </Link>{'>'} <Link to={`/courses/${courseId}`}>Khóa học {courseId} </Link>
+                            {'>'} <Link to={`/courses/${courseId}/syllabus/${syllabusId}`}>Khung chương trình {syllabusId} </Link>{'>'} Bài học {lessonId} {'>'} Danh sách bài kiểm tra
                         </Typography>
                         <div style={{ marginTop: '20px' }} className='d-flex align-items-center'>
                             <TextField
@@ -117,7 +119,7 @@ export default function LessonDetail() {
 
                         <div style={{ marginTop: '20px' }}>
                             <Button variant="outlined" onClick={() => setOpenQuiz(true)}>
-                                Tạo mới quiz
+                                Tạo bài kiểm tra
                             </Button>
                             {/* <Button variant="outlined" className='mx-3' onClick={openBankModal}>
                                 Thêm từ ngân hàng câu hỏi

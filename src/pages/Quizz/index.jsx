@@ -1,119 +1,120 @@
-import moment from "moment/moment";
-import HeaderQuiz from "./components/Header";
-import {
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Radio,
-  RadioGroup,
-} from "@mui/material";
-import { Container } from "reactstrap";
+import moment from 'moment/moment';
+import HeaderQuiz from './components/Header';
+import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
+import { Container } from 'reactstrap';
+import { useNavigate, useParams } from 'react-router';
+import { useEffect, useState } from 'react';
+import { EnrollControllerApi, QuizControllerApi, UsedQuestionControllerApi } from '../../api/generated/generate-api';
+import ApiClientSingleton from '../../api/apiClientImpl';
+import { useForm } from 'react-hook-form';
 
-const QuizzInfo = {
-  id: 1,
-  name: "Module 1 Challenge",
-  timeMinute: 50,
-  point: 10,
-  due: moment(new Date()).format("DD/MM/YYYY HH:MM:SS"),
-  questions: [
-    {
-      id: 1,
-      questionName:
-        "Which of the following best describes why there is increasing demand for project management roles in today’s job market?",
-      options: [
-        {
-          id: 1,
-          optionName:
-            "There’s significant turnover in the project management field.",
-        },
-        {
-          id: 2,
-          optionName:
-            "Project management roles are designed to adapt to changes and handle new processes as they come up.",
-        },
-        {
-          id: 3,
-          optionName: "Project management is a relatively new job title.",
-        },
-        {
-          id: 4,
-          optionName:
-            "Project management isn’t adequately compensated when compared to similar roles.",
-        },
-      ],
-    },
-    {
-      id: 2,
-      questionName:
-        "Which of the following best describes why there is increasing demand for project management roles in today’s job market?",
-      options: [
-        {
-          id: 1,
-          optionName:
-            "There’s significant turnover in the project management field.",
-        },
-        {
-          id: 2,
-          optionName:
-            "Project management roles are designed to adapt to changes and handle new processes as they come up.",
-        },
-        {
-          id: 3,
-          optionName: "Project management is a relatively new job title.",
-        },
-        {
-          id: 4,
-          optionName:
-            "Project management isn’t adequately compensated when compared to similar roles.",
-        },
-      ],
-    },
-  ],
-};
-
+const questionApi = new UsedQuestionControllerApi(ApiClientSingleton.getInstance());
+const quizApi = new QuizControllerApi(ApiClientSingleton.getInstance());
+const enrollApi = new EnrollControllerApi(ApiClientSingleton.getInstance());
 function Quizz() {
+  const { courseId, lessonId, id } = useParams();
+  const [questions, setQuestions] = useState([]);
+  const [quiz, setQuiz] = useState();
+  const { register, handleSubmit } = useForm();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    quizApi.findQuizById(id, (err, res) => {
+      if (res) {
+        setQuiz(res);
+      }
+      console.log(res);
+    });
+    questionApi.findAllUsedQuestionByDoQuizId(id, (err, res) => {
+      setQuestions(res);
+    });
+  }, [id]);
+  const onSubmitQuiz = (data) => {
+    console.log(data);
+    enrollApi.findEnrollByCourseId(courseId, (err, res) => {
+      if (res) {
+        const enrollId = res[0]?.id;
+        // đán án thực hiện
+        const params = {
+          quizId: id,
+          enrollId: enrollId,
+          doQuizDetailRequests: questions
+            ?.map((item) => {
+              if (data[`${item.id}`])
+                return {
+                  questionId: item.id,
+                  answerIds: [Number(data[`${item.id}`])],
+                };
+            })
+            ?.filter((item) => item),
+        };
+        quizApi.doQuiz(params, (err, res) => {
+          if (res) {
+            navigate(`/courses/${courseId}/learn/${lessonId}/Quiz/${id}`);
+          }
+        });
+      }
+    });
+  };
+  console.log(moment(quiz?.dateCreate).add(quiz?.dateRange, 'days').format('DD/MM/YYYY'));
   return (
     <>
       <HeaderQuiz
-        name={QuizzInfo.name}
-        timeMinute={QuizzInfo.timeMinute}
-        point={QuizzInfo.point}
-        due={QuizzInfo.due}
+        name={quiz?.title}
+        timeMinute={quiz?.duration}
+        point={quiz?.passScore}
+        due={quiz ? moment(quiz?.dateCreate).add(quiz?.dateRange, 'days').format('DD/MM/YYYY') : undefined}
+        onAutoSubmit={handleSubmit(onSubmitQuiz)}
       />
       <Container className="my-4">
-        <div className="d-flex align-items-center justify-content-center gap-4 flex-column">
-          {QuizzInfo?.questions?.map((question, index) => {
-            return (
+        <form onSubmit={handleSubmit(onSubmitQuiz)}>
+          <div className="d-flex align-items-start justify-content-center">
+            <div className="d-flex align-items-start justify-content-center gap-4 flex-column" style={{ width: '70%' }}>
               <FormControl>
-                <FormLabel
-                  style={{ color: "#1f1f1f" }}
-                  id="demo-radio-buttons-group-label"
-                >
-                  <strong>{index + 1}: </strong>
-                  {question.questionName}
-                </FormLabel>
-                <Container>
-                  <RadioGroup
-                    aria-labelledby="demo-radio-buttons-group-label"
-                    name="radio-buttons-group"
-                  >
-                    {question?.options?.map((option) => {
-                      return (
-                        <>
-                          <FormControlLabel
-                            value={option.id}
-                            control={<Radio />}
-                            label={option.optionName}
-                          />
-                        </>
-                      );
-                    })}
-                  </RadioGroup>
-                </Container>
+                {questions?.map((question, index) => {
+                  return (
+                    <>
+                      <FormLabel style={{ color: '#1f1f1f' }} id="demo-radio-buttons-group-label">
+                        <strong>{index + 1}: </strong>
+                        {question.content}
+                      </FormLabel>
+                      <Container>
+                        <RadioGroup aria-labelledby="demo-radio-buttons-group-label" name="radio-buttons-group">
+                          {question?.usedAnswers?.map((option) => {
+                            return (
+                              <>
+                                <FormControlLabel
+                                  {...register(`${question.id}`)}
+                                  value={option.id}
+                                  control={<Radio />}
+                                  label={option.content}
+                                />
+                              </>
+                            );
+                          })}
+                        </RadioGroup>
+                      </Container>
+                    </>
+                  );
+                })}
               </FormControl>
-            );
-          })}
-        </div>
+              <button
+                type="submit"
+                style={{
+                  padding: '8px 20px',
+                  backgroundColor: '#00419e',
+                  color: '#fff',
+                  borderRadius: '6px',
+                }}
+                onClick={() => {
+                  console.log(useForm);
+                }}
+              >
+                Nộp bài
+              </button>
+            </div>
+          </div>
+        </form>
       </Container>
     </>
   );

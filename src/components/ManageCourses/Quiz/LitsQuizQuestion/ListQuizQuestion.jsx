@@ -3,7 +3,7 @@ import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { fetchData, postData } from '../../../../services/AppService'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Button, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
 import QuestionModel from '../ListCourseQuestion/QuestionModel'
 import QuestionQuizModal from './QuestionQuizModal'
@@ -29,7 +29,7 @@ const ListQuizQuestion = () => {
     useEffect(() => {
         const token = Cookies.get('token')
         if (token) {
-            fetchData(`/quiz/byId?quiz_id=${quizId}`).then(resp => {
+            fetchData(`/quiz/byId?quiz_id=${quizId}`, token).then(resp => {
                 if (resp && resp.status === "Active") {
                     navigate(-1)
                 } else {
@@ -119,7 +119,7 @@ const ListQuizQuestion = () => {
                     }
                 })
             } else {
-                const newAnswers = newQuestion?.usedAnswers.map(({ id, ...rest }) => rest);
+                const newAnswers = newQuestion?.answers.map(({ id, ...rest }) => rest);
                 postData(`/used-answer/saveAll`, newAnswers, token).then(resp => {
                     if (resp) {
                         const idList = resp.map(item => item.id);
@@ -207,7 +207,9 @@ const ListQuizQuestion = () => {
                 <div style={{ margin: '20px' }}>
                     <Paper style={{ padding: '20px' }}>
                         <Typography variant="body1">
-                            Trang chủ {'>'} Quản lý khóa học {'>'} Khóa học {courseId} {'>'} Khung chương trình {syllabusId} {'>'} Bài học {lessonId} {'>'} Thêm câu hỏi
+                            <Link to={'/'}>Trang chủ </Link>{'>'} <Link to={'/manage-course'}>Quản lý khóa học </Link>{'>'} <Link to={`/courses/${courseId}`}>Khóa học {courseId} </Link>
+                            {'>'} <Link to={`/courses/${courseId}/syllabus/${syllabusId}`}>Khung chương trình {syllabusId} </Link>{'>'}
+                            <Link to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${lessonId}`}>Bài học {lessonId}</Link> {'>'} Thêm câu hỏi
                         </Typography>
                         <div style={{ marginTop: '20px' }}>
                             <Button variant="outlined" onClick={() => openModal(null)}>
@@ -238,12 +240,12 @@ const ListQuizQuestion = () => {
                                 ))}
                             </TableBody>
                         </Table>
-                        <div className='text-end '>
+                        {questions && questions.length > 0 && <div className='text-end '>
                             <button style={{ marginTop: '20px' }} className='btn btn-outline-primary' onClick={showConfirmationDialog}>
                                 Hoàn thành
                             </button>
 
-                        </div>
+                        </div>}
                     </Paper>
                 </div>
 

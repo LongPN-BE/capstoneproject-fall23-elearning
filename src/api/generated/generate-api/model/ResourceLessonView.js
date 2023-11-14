@@ -56,6 +56,9 @@ class ResourceLessonView {
             if (data.hasOwnProperty('resourceType')) {
                 obj['resourceType'] = ApiClient.convertToType(data['resourceType'], 'String');
             }
+            if (data.hasOwnProperty('name')) {
+                obj['name'] = ApiClient.convertToType(data['name'], 'String');
+            }
         }
         return obj;
     }
@@ -73,6 +76,10 @@ class ResourceLessonView {
         // ensure the json data is a string
         if (data['resourceType'] && !(typeof data['resourceType'] === 'string' || data['resourceType'] instanceof String)) {
             throw new Error("Expected the field `resourceType` to be a primitive type in the JSON string but got " + data['resourceType']);
+        }
+        // ensure the json data is a string
+        if (data['name'] && !(typeof data['name'] === 'string' || data['name'] instanceof String)) {
+            throw new Error("Expected the field `name` to be a primitive type in the JSON string but got " + data['name']);
         }
 
         return true;
@@ -97,6 +104,11 @@ ResourceLessonView.prototype['content'] = undefined;
  * @member {String} resourceType
  */
 ResourceLessonView.prototype['resourceType'] = undefined;
+
+/**
+ * @member {String} name
+ */
+ResourceLessonView.prototype['name'] = undefined;
 
 
 

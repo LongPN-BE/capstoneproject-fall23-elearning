@@ -14,7 +14,7 @@ const CourseCard = (props) => {
       <div
         className={classNames(Styles.course__img)}
         onClick={() => {
-          navigate('/overview-course');
+          navigate(`/overview-course/${id}`);
         }}
       >
         <img src={courseImg1} alt="" className="w-100" />

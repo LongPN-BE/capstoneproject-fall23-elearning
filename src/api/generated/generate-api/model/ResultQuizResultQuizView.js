@@ -63,11 +63,11 @@ class ResultQuizResultQuizView {
             if (data.hasOwnProperty('resultStatus')) {
                 obj['resultStatus'] = ApiClient.convertToType(data['resultStatus'], 'String');
             }
-            if (data.hasOwnProperty('failCount')) {
-                obj['failCount'] = ApiClient.convertToType(data['failCount'], 'Number');
-            }
             if (data.hasOwnProperty('lastPoint')) {
                 obj['lastPoint'] = ApiClient.convertToType(data['lastPoint'], 'Number');
+            }
+            if (data.hasOwnProperty('processTime')) {
+                obj['processTime'] = ApiClient.convertToType(data['processTime'], 'Number');
             }
             if (data.hasOwnProperty('student')) {
                 obj['student'] = StudentResultQuizView.constructFromObject(data['student']);
@@ -147,14 +147,14 @@ ResultQuizResultQuizView.prototype['submitTime'] = undefined;
 ResultQuizResultQuizView.prototype['resultStatus'] = undefined;
 
 /**
- * @member {Number} failCount
- */
-ResultQuizResultQuizView.prototype['failCount'] = undefined;
-
-/**
  * @member {Number} lastPoint
  */
 ResultQuizResultQuizView.prototype['lastPoint'] = undefined;
+
+/**
+ * @member {Number} processTime
+ */
+ResultQuizResultQuizView.prototype['processTime'] = undefined;
 
 /**
  * @member {module:model/StudentResultQuizView} student

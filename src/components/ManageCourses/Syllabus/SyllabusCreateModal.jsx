@@ -7,13 +7,27 @@ import {
     DialogTitle,
     TextField,
 } from '@material-ui/core';
+import { validateInputString } from '../../../util/Utilities';
+import Swal from 'sweetalert2';
+import { invalidInput } from '../../../util/Constants';
 
 export default function SyllabusCreateModal({ open, onClose, onCreate, isCopied, onCopy }) {
     const [syllabusName, setSyllabusName] = useState('');
 
     const handleCreate = () => {
-        onCreate(syllabusName);
-        onClose();
+        if (validateInputString(syllabusName)) {
+            onCreate(syllabusName);
+            onClose();
+        }
+        else {
+            onClose();
+            Swal.fire({
+                title: "Warning",
+                text: invalidInput,
+                icon: "warning"
+            });
+        }
+
     };
 
     const handleCopy = () => {

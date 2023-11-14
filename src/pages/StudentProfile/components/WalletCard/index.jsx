@@ -1,50 +1,49 @@
-import React, { useState } from "react";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import Avatar from "@mui/material/Avatar";
-import { Box, Divider, Modal, Radio } from "@mui/material";
-import Button from "@mui/material/Button";
-import LinkIcon from "@mui/icons-material/Link";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import MomoIcon from "../../../../assets/images/Logo MoMo.svg";
-import { BsPlusCircle } from "react-icons/bs";
-import PaypalIcon from './../../../../assets/images/PayPal.webp'
+import React, { useState } from 'react';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import Avatar from '@mui/material/Avatar';
+import { Box, Divider, Modal, Radio } from '@mui/material';
+import Button from '@mui/material/Button';
+import LinkIcon from '@mui/icons-material/Link';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import MomoIcon from '../../../../assets/images/Logo MoMo.svg';
+import { BsPlusCircle } from 'react-icons/bs';
+import PaypalIcon from './../../../../assets/images/PayPal.webp';
+import { WalletControllerApi } from '../../../../api/generated/generate-api';
+import ApiClientSingleton from '../../../../api/apiClientImpl';
 
+const walletApi = new WalletControllerApi(ApiClientSingleton.getInstance());
 function WalletCard({ wallet, onAddWallet, user }) {
   const [isOpenModal, setOpenModal] = useState(false);
   const [radioSelected, setRadioSelected] = useState(false);
 
   const handleOpenModal = () => {
     setOpenModal(true);
-  }
+  };
 
   const handleCloseModal = () => {
     setOpenModal(false);
-  }
+  };
 
   return (
     <>
       <Card
         variant="outlined"
         style={{
-          width: "100%",
-          borderRadius: "16px",
-          backgroundColor: wallet ? "#cecece" : "",
+          width: '100%',
+          height: '100%',
+          borderRadius: '16px',
+          backgroundColor: wallet ? '#cecece' : '',
         }}
       >
-        <CardContent
-          className={wallet ? "py-5" : ""}
-          style={{ position: "relative" }}
-        >
+        <CardContent className={wallet ? 'py-5' : ''} style={{ position: 'relative', height: '100%' }}>
           {!wallet?.id ? (
-            <div onClick={handleOpenModal}>
-              <div className="row px-4 justify-content-center align-items-center">
-                <BsPlusCircle style={{ fontSize: 80, cursor: "pointer" }} />
+            <div style={{ height: '100%' }} onClick={handleOpenModal}>
+              <div className="row px-4 justify-content-center align-items-center" style={{ height: '100%' }}>
+                <BsPlusCircle style={{ fontSize: 80, cursor: 'pointer' }} />
               </div>
-              <div style={{ position: "absolute", top: 16 }}>
-                Tài khoản liên kết
-              </div>
+              <div style={{ position: 'absolute', top: 16 }}>Tài khoản liên kết</div>
             </div>
           ) : (
             <div className="row px-4">
@@ -65,13 +64,13 @@ function WalletCard({ wallet, onAddWallet, user }) {
               </div>
               <div className="col-4">
                 <div className="d-flex flex-column align-items-center gap-1">
-                  <img src={PaypalIcon} style={{ height: "100%", width: "100%" }} />
+                  <img src={PaypalIcon} style={{ height: '100%', width: '100%' }} />
                   <Button
                     variant="contained"
                     style={{
-                      width: "80%",
-                      backgroundColor: "rgb(244, 67, 54)",
-                      borderRadius: "24px",
+                      width: '80%',
+                      backgroundColor: 'rgb(244, 67, 54)',
+                      borderRadius: '24px',
                     }}
                   >
                     Remove
@@ -82,9 +81,21 @@ function WalletCard({ wallet, onAddWallet, user }) {
           )}
         </CardContent>
         <Modal open={isOpenModal} onClose={handleCloseModal}>
-          <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '400px', bgcolor: 'background.paper', boxShadow: 24, p: 4 }}>
-            <Typography variant="h5" gutterBottom>
-              Select wallet
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '400px',
+              bgcolor: 'background.paper',
+              boxShadow: 24,
+              p: 4,
+              borderRadius: '8px',
+            }}
+          >
+            <Typography style={{ marginBottom: '16px' }} variant="h5" gutterBottom>
+              Chọn ví liên kết
             </Typography>
             <div className="d-flex">
               <Radio
@@ -93,10 +104,19 @@ function WalletCard({ wallet, onAddWallet, user }) {
                 value={radioSelected}
                 name="radio-buttons"
               />
-              <img src={PaypalIcon} alt='paypal logo' className="mx-2" style={{ width: '18rem', height: '5rem' }} />
+              <img src={PaypalIcon} alt="paypal logo" className="mx-2" style={{ width: '18rem', height: '5rem' }} />
             </div>
             <div className="text-end">
-              <button className="btn btn-outline-primary mt-5" onClick={onAddWallet}>Submit</button>
+              <button
+                className="btn btn-outline-primary mt-3"
+                onClick={() => {
+                  if (onAddWallet !== undefined) {
+                    onAddWallet();
+                  }
+                }}
+              >
+                Liên kết
+              </button>
             </div>
           </Box>
         </Modal>

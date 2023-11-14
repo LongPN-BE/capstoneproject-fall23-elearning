@@ -16,8 +16,8 @@ const TabPanel = (props) => {
   );
 };
 
-const StudentTabComponent = () => {
-  const [value, setValue] = useState(0);
+const StudentTabComponent = ({ tabId }) => {
+  const [value, setValue] = useState(tabId ? tabId : 0);
   const [courses, setCourses] = useState([]);
   const enrollApi = new EnrollControllerApi(ApiClientSingleton.getInstance());
 

@@ -99,7 +99,9 @@ export default function QuizDetail() {
                 <div style={{ margin: '20px' }}>
                     <Paper style={{ padding: '20px' }}>
                         <Typography variant="body1">
-                            Trang chủ {'>'} Quản lý khóa học {'>'} Khóa học {courseId} {'>'} Khung chương trình {syllabusId} {'>'} Bài học {lessonId} {'>'} Bài kiểm tra {quizId}
+                            <Link to={'/'}>Trang chủ </Link>{'>'} <Link to={'/manage-course'}>Quản lý khóa học </Link>{'>'} <Link to={`/courses/${courseId}`}>Khóa học {courseId} </Link>
+                            {'>'} <Link to={`/courses/${courseId}/syllabus/${syllabusId}`}>Khung chương trình {syllabusId} </Link>{'>'} <Link to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${lessonId}`}> Bài học {lessonId} </Link>{'>'}
+                            Bài kiểm tra {quizId}
                         </Typography>
 
                         <div style={{ marginTop: '20px' }} className='d-flex align-items-center'>

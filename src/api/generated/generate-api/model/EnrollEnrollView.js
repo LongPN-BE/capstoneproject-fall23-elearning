@@ -62,6 +62,9 @@ class EnrollEnrollView {
             if (data.hasOwnProperty('paymentStatus')) {
                 obj['paymentStatus'] = ApiClient.convertToType(data['paymentStatus'], 'String');
             }
+            if (data.hasOwnProperty('commission')) {
+                obj['commission'] = ApiClient.convertToType(data['commission'], 'Number');
+            }
             if (data.hasOwnProperty('status')) {
                 obj['status'] = ApiClient.convertToType(data['status'], 'String');
             }
@@ -137,6 +140,11 @@ EnrollEnrollView.prototype['amount'] = undefined;
 EnrollEnrollView.prototype['paymentStatus'] = undefined;
 
 /**
+ * @member {Number} commission
+ */
+EnrollEnrollView.prototype['commission'] = undefined;
+
+/**
  * @member {module:model/EnrollEnrollView.StatusEnum} status
  */
 EnrollEnrollView.prototype['status'] = undefined;
@@ -182,7 +190,19 @@ EnrollEnrollView['StatusEnum'] = {
      * value: "DONE"
      * @const
      */
-    "DONE": "DONE"
+    "DONE": "DONE",
+
+    /**
+     * value: "PENDING"
+     * @const
+     */
+    "PENDING": "PENDING",
+
+    /**
+     * value: "REMOVED"
+     * @const
+     */
+    "REMOVED": "REMOVED"
 };
 
 

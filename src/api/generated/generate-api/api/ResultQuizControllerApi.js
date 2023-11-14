@@ -35,6 +35,53 @@ export default class ResultQuizControllerApi {
 
 
     /**
+     * Callback function to receive the result of the findAllByStudentId operation.
+     * @callback module:api/ResultQuizControllerApi~findAllByStudentIdCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<module:model/ResultQuizResultQuizView>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Number} studentId 
+     * @param {Number} quizId 
+     * @param {module:api/ResultQuizControllerApi~findAllByStudentIdCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<module:model/ResultQuizResultQuizView>}
+     */
+    findAllByStudentId(studentId, quizId, callback) {
+      let postBody = null;
+      // verify the required parameter 'studentId' is set
+      if (studentId === undefined || studentId === null) {
+        throw new Error("Missing the required parameter 'studentId' when calling findAllByStudentId");
+      }
+      // verify the required parameter 'quizId' is set
+      if (quizId === undefined || quizId === null) {
+        throw new Error("Missing the required parameter 'quizId' when calling findAllByStudentId");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'student_id': studentId,
+        'quiz_id': quizId
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = [ResultQuizResultQuizView];
+      return this.apiClient.callApi(
+        '/api/v1/result-quiz/by-student-id', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
      * Callback function to receive the result of the findResultQuizById operation.
      * @callback module:api/ResultQuizControllerApi~findResultQuizByIdCallback
      * @param {String} error Error message, if any.
@@ -64,7 +111,7 @@ export default class ResultQuizControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = ResultQuizResultQuizView;
