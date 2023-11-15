@@ -50,7 +50,7 @@ import ListResources from './components/ManageCourses/Resources/ListResources';
 import PayPalCapture from './pages/PayPalCapture';
 import StaffLanding from './pages/Landing/StaffLanding';
 import Accounts from "./pages/Manager/ManageAccounts/ManageAccounts";
-import ListConfig from './pages/Manager/ManageConfig/ManageConfig';
+import ListConfig from './pages/Admin/ManageConfig/ManageConfig';
 
 const App = () => {
   const [loading, setLoading] = useState(false);

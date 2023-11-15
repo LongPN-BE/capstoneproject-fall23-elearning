@@ -91,15 +91,15 @@ export default function ListConfig() {
         dateTime: moment(new Date()),
       };
       console.log('Config data to update:', await body);
-      // await postData('##', body, token)
-      //   .then(resp => {
-      //     if (resp) {
-      //       window.location.reload();
-      //     }
-      //   })
-      //   .catch(err => {
-      //     console.log(err);
-      //   });
+      await postData('/system-config/save', body, token)
+        .then((resp) => {
+          if (resp) {
+            window.location.reload();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
 
     setIsConfigModalOpen(false); // Close the ConfigModal
