@@ -31,7 +31,7 @@ export default function ListAccount() {
     const token = Cookies.get('token');
     if (token) {
       try {
-        fetchData('/auth/accounts', token).then((resp) => {
+        fetchData('/account/accounts', token).then((resp) => {
           if (resp) {
             setAccount(resp.find((s) => s.id == accountId));
             setData(resp);
@@ -93,16 +93,15 @@ export default function ListAccount() {
         ...accountData,
         dateTime: moment(new Date()),
       };
-      console.log('Account data to update:', await body);
-      // await postData('##', body, token)
-      //   .then(resp => {
-      //     if (resp) {
-      //       window.location.reload();
-      //     }
-      //   })
-      //   .catch(err => {
-      //     console.log(err);
-      //   });
+      await postData('/account/teacher-account', body, token)
+        .then(resp => {
+          if (resp) {
+            window.location.reload();
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
 
     setIsAccountModalOpen(false); // Close the AccountModal
@@ -141,11 +140,11 @@ export default function ListAccount() {
                 startAdornment={<Search />}
                 onChange={handleSearchChange}
               />
-              {/* <div className="text-end col-8">
+              <div className="text-end col-8">
                 <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={handleAddAccount}>
-                  Tạo mới
+                  Tạo mới tài khoản giáo viên
                 </Button>
-              </div> */}
+              </div>
             </div>
 
             <Table style={{ marginTop: '20px' }}>
