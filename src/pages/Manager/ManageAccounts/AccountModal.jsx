@@ -30,7 +30,6 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
         email: account.profile.email,
         password: account.password,
         role: account.role,
-        status: account.enabled,
       });
     } else {
       // Clear the form fields if adding a new account
@@ -41,7 +40,6 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
         password: '',
         email: '',
         role: '',
-        status: '',
       });
     }
   }, [account]);
@@ -50,10 +48,13 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
     const { value } = e.target;
     let max = 70; // ký tự tối đa
     setEditedAccount({ ...editedAccount, [fieldName]: value });
-    if (value == "" || value.length >= max) {
-      setEditedAccountError({ ...editedAccountError, [fieldName]: "Không được để trống hoặc quá dài quá " + max + " ký tự!" });
+    if (value == '' || value.length >= max) {
+      setEditedAccountError({
+        ...editedAccountError,
+        [fieldName]: 'Không được để trống hoặc quá dài quá ' + max + ' ký tự!',
+      });
     } else {
-      setEditedAccountError({ ...editedAccountError, [fieldName]: "" });
+      setEditedAccountError({ ...editedAccountError, [fieldName]: '' });
     }
   };
 
@@ -89,7 +90,6 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
       password: '',
       email: '',
       role: '',
-      status: '',
     });
 
     onClose();
@@ -99,136 +99,182 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
     <Dialog open={isOpen} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>{account ? 'Cập nhật tài khoản' : 'Thêm mới tài khoản giáo viên'}</DialogTitle>
       <DialogContent>
-        {editedAccountError.username == "" ? <>       <TextField
-          fullWidth
-          label="Tài khoản"
-          autoFocus
-          margin="dense"
-          value={editedAccount.username}
-          onChange={(e) => handleInputChange(e, 'username')}
-          required
-        /></> : <>       <TextField
-          error
-          fullWidth
-          label="Tài khoản"
-          autoFocus
-          margin="dense"
-          value={editedAccount.username}
-          onChange={(e) => handleInputChange(e, 'username')}
-          helperText={editedAccountError.username}
-          required
-        /></>}
+        {editedAccountError.username == '' ? (
+          <>
+            {' '}
+            <TextField
+              fullWidth
+              label="Tài khoản"
+              autoFocus
+              margin="dense"
+              value={editedAccount.username}
+              onChange={(e) => handleInputChange(e, 'username')}
+              required
+            />
+          </>
+        ) : (
+          <>
+            {' '}
+            <TextField
+              error
+              fullWidth
+              label="Tài khoản"
+              autoFocus
+              margin="dense"
+              value={editedAccount.username}
+              onChange={(e) => handleInputChange(e, 'username')}
+              helperText={editedAccountError.username}
+              required
+            />
+          </>
+        )}
 
-        {editedAccountError.password == "" ? <>       <TextField
-          fullWidth
-          label="Mật khẩu"
-          autoFocus
-          margin="dense"
-          value={editedAccount.password}
-          onChange={(e) => handleInputChange(e, 'password')}
-          required
-        /></> : <>       <TextField
-          error
-          fullWidth
-          label="Mật khẩu"
-          autoFocus
-          margin="dense"
-          value={editedAccount.password}
-          onChange={(e) => handleInputChange(e, 'password')}
-          helperText={editedAccountError.password}
-          required
-        /></>}
+        {editedAccountError.password == '' ? (
+          <>
+            {' '}
+            <TextField
+              fullWidth
+              label="Mật khẩu"
+              type="password"
+              autoFocus
+              margin="dense"
+              value={editedAccount.password}
+              onChange={(e) => handleInputChange(e, 'password')}
+              required
+            />
+          </>
+        ) : (
+          <>
+            {' '}
+            <TextField
+              error
+              fullWidth
+              label="Mật khẩu"
+              autoFocus
+              type="password"
+              margin="dense"
+              value={editedAccount.password}
+              onChange={(e) => handleInputChange(e, 'password')}
+              helperText={editedAccountError.password}
+              required
+            />
+          </>
+        )}
 
-        {editedAccountError.firstName == "" ? <>
-          <TextField
-            fullWidth
-            multiline
-            rows={4}
-            label="Tên"
-            autoFocus
-            margin="dense"
-            value={editedAccount.firstName}
-            onChange={(e) => handleInputChange(e, 'firstName')}
-            required
-          /></> : <>   <TextField
-            error
-            fullWidth
-            multiline
-            rows={4}
-            label="Tên"
-            autoFocus
-            margin="dense"
-            value={editedAccount.firstName}
-            onChange={(e) => handleInputChange(e, 'firstName')}
-            helperText={editedAccountError.firstName}
-            required
-          />   </>}
+        {editedAccountError.firstName == '' ? (
+          <>
+            <TextField
+              fullWidth
+              multiline
+              rows={4}
+              label="Tên"
+              autoFocus
+              margin="dense"
+              value={editedAccount.firstName}
+              onChange={(e) => handleInputChange(e, 'firstName')}
+              required
+            />
+          </>
+        ) : (
+          <>
+            {' '}
+            <TextField
+              error
+              fullWidth
+              multiline
+              rows={4}
+              label="Tên"
+              autoFocus
+              margin="dense"
+              value={editedAccount.firstName}
+              onChange={(e) => handleInputChange(e, 'firstName')}
+              helperText={editedAccountError.firstName}
+              required
+            />{' '}
+          </>
+        )}
 
-        {editedAccountError.lastName == "" ? <>
-          <TextField
-            fullWidth
-            label="Họ"
-            autoFocus
-            margin="dense"
-            value={editedAccount.lastName}
-            onChange={(e) => handleInputChange(e, 'lastName')}
-            required
-          /></> : <>   <TextField
-            error
-            fullWidth
-            label="Họ"
-            autoFocus
-            margin="dense"
-            value={editedAccount.lastName}
-            onChange={(e) => handleInputChange(e, 'lastName')}
-            helperText={editedAccountError.lastName}
-            required
-          /></>}
+        {editedAccountError.lastName == '' ? (
+          <>
+            <TextField
+              fullWidth
+              label="Họ"
+              autoFocus
+              margin="dense"
+              value={editedAccount.lastName}
+              onChange={(e) => handleInputChange(e, 'lastName')}
+              required
+            />
+          </>
+        ) : (
+          <>
+            {' '}
+            <TextField
+              error
+              fullWidth
+              label="Họ"
+              autoFocus
+              margin="dense"
+              value={editedAccount.lastName}
+              onChange={(e) => handleInputChange(e, 'lastName')}
+              helperText={editedAccountError.lastName}
+              required
+            />
+          </>
+        )}
 
-        {editedAccountError.email == "" ? <>
-          <TextField
-            fullWidth
-            label="Email"
-            autoFocus
-            type="email"
-            margin="dense"
-            value={editedAccount.email}
-            onChange={(e) => handleInputChange(e, 'email')}
-            disabled={false}
-            required
-          /></> : <>   <TextField
-            error
-            fullWidth
-            label="Email"
-            autoFocus
-            type="email"
-            margin="dense"
-            value={editedAccount.email}
-            onChange={(e) => handleInputChange(e, 'email')}
-            helperText={editedAccountError.lastName}
-            disabled={false}
-            required
-          /></>}
+        {editedAccountError.email == '' ? (
+          <>
+            <TextField
+              fullWidth
+              label="Email"
+              autoFocus
+              type="email"
+              margin="dense"
+              value={editedAccount.email}
+              onChange={(e) => handleInputChange(e, 'email')}
+              disabled={false}
+              required
+            />
+          </>
+        ) : (
+          <>
+            {' '}
+            <TextField
+              error
+              fullWidth
+              label="Email"
+              autoFocus
+              type="email"
+              margin="dense"
+              value={editedAccount.email}
+              onChange={(e) => handleInputChange(e, 'email')}
+              helperText={editedAccountError.lastName}
+              disabled={false}
+              required
+            />
+          </>
+        )}
 
         <TextField
           fullWidth
           label="Vai trò"
           autoFocus
           margin="dense"
-          value={account ? editedAccount.role : "Giáo viên"}
+          value={account ? editedAccount.role : 'Giáo viên'}
           onChange={(e) => handleInputChange(e, 'role')}
           disabled={true}
         />
-        <TextField
+        {/* <TextField
           fullWidth
           autoFocus
           margin="dense"
           label="Trạng thái"
           name="status"
-          value={editedAccount.status ? "Đang hoạt động" : "Chưa kích hoạt"}
+          value={editedAccount.status ? 'Đang hoạt động' : 'Chưa kích hoạt'}
           onChange={(e) => handleInputChange(e, 'status')}
           disabled={true}
-        />
+        /> */}
         {/* {account?.enabled ? (
           <Button onClick={handleSave} color="danger">
             Vô hiệu hóa
@@ -247,7 +293,7 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
           Xác nhận
         </Button>
       </DialogActions>
-    </Dialog >
+    </Dialog>
   );
 };
 

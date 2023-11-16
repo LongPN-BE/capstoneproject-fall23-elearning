@@ -1,5 +1,18 @@
 import React from 'react';
-import { Table, TableHead, TableBody, TableRow, TableCell, Paper, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions } from '@material-ui/core';
+import {
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Paper,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  TextField,
+  DialogActions,
+} from '@material-ui/core';
 import { Link, useParams } from 'react-router-dom';
 import moment from 'moment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -14,7 +27,7 @@ function CourseTableComponent({ courses }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [course, setCourse] = useState(null);
   const [open, setOpen] = useState(false);
-  const [resson, setResson] = useState(null);
+  const [reason, setReason] = useState(null);
 
   const handleClickOpen = (course) => {
     setCourse(course);
@@ -27,10 +40,21 @@ function CourseTableComponent({ courses }) {
 
   function showSuccess(course) {
     Swal.fire({
-      title: "Duyệt thành công!",
-      text: "Khóa học : " + course.name + " đã được duyệt.",
-      icon: "success",
-      confirmButtonText: "OK",
+      title: 'Duyệt thành công!',
+      text: 'Khóa học : ' + course.name + ' đã được duyệt.',
+      icon: 'success',
+      confirmButtonText: 'OK',
+    }).then(function () {
+      window.location.reload();
+    });
+  }
+
+  function showDenySuccess(course) {
+    Swal.fire({
+      title: 'Đã từ chối khoá học!',
+      text: 'Khóa học : ' + course.name + ' đã bị từ chối.',
+      icon: 'success',
+      confirmButtonText: 'OK',
     }).then(function () {
       window.location.reload();
     });
@@ -38,44 +62,51 @@ function CourseTableComponent({ courses }) {
 
   function showError(text) {
     Swal.fire({
-      title: "Oops...",
+      title: 'Oops...',
       text: text,
-      icon: "error",
-      confirmButtonText: "OK",
-    })
+      icon: 'error',
+      confirmButtonText: 'OK',
+    });
   }
 
   const handleApproved = (course) => {
     // alert('Xác nhận duyệt ' + course.name + " - ID : " + course.id);
     const token = Cookies.get('token');
     if (token) {
-      fetchData('/course/approve?course_id=' + course.id, token).then((resp) => {
-        if (resp) {
-          showSuccess(resp)
-        }
-      }).catch(err => {
-        console.log(err);
-        showError(err)
-      });
-      showSuccess(course)
+      fetchData('/course/approve?course_id=' + course.id, token)
+        .then((resp) => {
+          if (resp) {
+            showSuccess(resp);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          showError(err);
+        });
+      showSuccess(course);
     }
-  }
+  };
 
   const handleReject = (course) => {
-    alert('Xác nhận từ chối ' + course.name + " - ID : " + course.id + " - resson : " + resson);
+    alert('Xác nhận từ chối ' + course.name + ' - ID : ' + course.id + ' - reason : ' + reason);
     const token = Cookies.get('token');
     if (token) {
-      postData('/course/reject', {
-        "courseId": course.id,
-        "reason": resson
-      }, token).then(resp => {
-        if (resp) {
-          showSuccess(resp)
-        }
-      })
-        .catch(err => {
+      postData(
+        '/course/reject',
+        {
+          courseId: course.id,
+          reason: reason,
+        },
+        token,
+      )
+        .then((resp) => {
+          if (resp) {
+            showDenySuccess(resp);
+          }
+        })
+        .catch((err) => {
           console.log(err);
-          showError(err)
+          showError(err);
         });
       handleClose();
     }
@@ -89,6 +120,7 @@ function CourseTableComponent({ courses }) {
   const handleModalClose = () => {
     setIsModalOpen(false);
   };
+
   return (
     <div className="m-5">
       <div style={{ margin: '20px' }}>
@@ -96,18 +128,18 @@ function CourseTableComponent({ courses }) {
           <DialogTitle>Từ chối</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Sau khi từ chối, khóa học này sẽ không thể hoạt động và giáo viên cần cập nhật hoặc tạo mới để có thể được yêu cầu xét duyệt lại.
+              Sau khi từ chối, khóa học này sẽ không thể hoạt động và giáo viên cần cập nhật hoặc tạo mới để có thể được
+              yêu cầu xét duyệt lại.
             </DialogContentText>
             <TextField
               autoFocus
               margin="dense"
               label="Lý do từ chối"
-              placeholder="Khóa học này chưa đảm bảo nội dung phù hợp với tiêu chuẩn cộng đồng."
-              onChange={e => setResson(e.target.value)}
+              placeholder="VD: Khóa học này chưa đảm bảo nội dung phù hợp với tiêu chuẩn cộng đồng."
+              onChange={(e) => setReason(e.target.value)}
               fullWidth
               variant="standard"
               required
-
             />
           </DialogContent>
           <DialogActions>
@@ -115,8 +147,8 @@ function CourseTableComponent({ courses }) {
               type="submit"
               title="Approve"
               className="btn btn-success m-1"
-              onClick={handleClose}
-            // onClick={() => handleApproved(course)}
+              onClick={() => handleClose}
+              // onClick={() => handleApproved(course)}
             >
               Hủy
             </button>
@@ -129,8 +161,6 @@ function CourseTableComponent({ courses }) {
             >
               Xác nhận từ chối
             </button>
-            {/* <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleClose}>Subscribe</Button> */}
           </DialogActions>
         </Dialog>
         <Paper style={{ padding: '20px' }}>
@@ -172,12 +202,11 @@ function CourseTableComponent({ courses }) {
                             <CheckCircleOutlineIcon />
                           </button>
                           <button
-                            button
                             type="submit"
                             title="Deny"
                             className="btn btn-danger m-1"
                             onClick={() => handleClickOpen(course)}
-                          // onClick={() => handleReject(course)}
+                            //onClick={() => handleReject(course)}
                           >
                             <DoNotDisturbAltIcon />
                           </button>

@@ -56,7 +56,7 @@ function CourseTabComponent({ activeCourses, pendingCourses }) {
       <div className="search-box d-flex justify-content-between">
         <div className="d-flex">
           <InputBase
-            placeholder="Search..."
+            placeholder="Tìm kiếm..."
             className="search-input"
             value={searchText}
             onChange={handleSearchChange}
