@@ -52,6 +52,8 @@ import StaffLanding from './pages/Landing/StaffLanding';
 import Accounts from "./pages/Manager/ManageAccounts/ManageAccounts";
 import ListConfig from './pages/Admin/ManageConfig/ManageConfig';
 import SyllabusByCourse from './pages/Manager/DetailCourse/SyllabusByCourse';
+import PreviewCourse from './pages/Manager/PreviewCourse';
+import PreviewLesson from './pages/Manager/DetailCourse/DetailLesson';
 
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -138,15 +140,24 @@ const App = () => {
           </Routes>
         </NavBar>
       ) : user?.role === 'STAFF' ? (
+        <NavBar>
         <Routes>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="/dashboard" element={ <NavBar> <Dashboard /> </NavBar> }/>
-          <Route path="/subjects"element={ <NavBar> <ManageSubject /> </NavBar> }/>
-          <Route path="/course/subject/:subjectId"element={<NavBar><CourseBySubject /></NavBar> }/>
-          <Route path="/subject/course/syllabus/:courseId"element={<NavBar><SyllabusByCourse /></NavBar> }/>
+          <Route path="/dashboard" element={  <Dashboard />  }/>
+          <Route path="/subjects"element={  <ManageSubject />  }/>
+          <Route path="/course/subject/:subjectId"element={<CourseBySubject /> }/>
+          <Route path="/subject/course/syllabus/:courseId"element={<SyllabusByCourse /> }/>
+          <Route path="/subject/course/syllabus/courses/:courseId/preview">
+            <Route path="" element={<PreviewCourse />}>
+              <Route path=":lessonId/:type/:id" element={<PreviewLesson />} />
+              <Route path=":lessonId/:type" element={<PreviewLesson />} />
+            </Route>
+            {/* <Route path=":lessonId/quiz/:id/start" element={<Quizz />} /> */}
+          </Route>
           <Route path="/accounts" element={<NavBar><Accounts /></NavBar> }/>
           <Route path="/configs"element={ <NavBar> <ListConfig /> </NavBar> }/>
         </Routes>
+        </NavBar>
       ) : user?.role === 'STUDENT' ? (
         <Routes element={<StudentPrivateRouter />}>
           <Route path="/" element={<Navigate to="/student-home" replace />} />

@@ -124,16 +124,24 @@ export default function SyllabusByCourse() {
                       <TableCell>{index + 1}</TableCell>
                       <TableCell>{s.name}</TableCell>
                       <TableCell>{s.status}</TableCell>
-                      <TableCell>{s.dateCreate}</TableCell>
+                      <TableCell>{moment(s.createDate).format('DD/MM/YYYY')}</TableCell>
                       <TableCell>
-                        <Button
+                        {/* <Button
                           variant="contained"
                           color="primary"
                           onClick={() => handleViewSyllabus(s.id)}
                           className="btn btn-secondary m-1"
                         >
                           <VisibilityIcon />
-                        </Button>
+                        </Button> */}
+
+                        <Link
+                          to={`/subject/course/syllabus/courses/${courseId}/preview`}
+                          title="Xem"
+                          className="btn btn-secondary m-1"
+                        >
+                          <VisibilityIcon />
+                        </Link>
                       </TableCell>
                     </TableRow>
                   );

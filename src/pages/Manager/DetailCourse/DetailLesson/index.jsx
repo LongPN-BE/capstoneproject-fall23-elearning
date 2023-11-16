@@ -6,8 +6,8 @@ import {
   QuizResultQuizView,
   ResourceControllerApi,
   ResultQuizControllerApi,
-} from '../../api/generated/generate-api';
-import ApiClientSingleton from '../../api/apiClientImpl';
+} from '../../../../api/generated/generate-api';
+import ApiClientSingleton from '../../../../api/apiClientImpl';
 import LearnReading from './components/LearnReading';
 import LearnVideo from './components/LearnVideo';
 import ReactPlayer from 'react-player';
@@ -23,7 +23,7 @@ const resourceApi = new ResourceControllerApi(ApiClientSingleton.getInstance());
 const lessonApi = new LessonControllerApi(ApiClientSingleton.getInstance());
 const quizApi = new QuizControllerApi(ApiClientSingleton.getInstance());
 const quizResultApi = new ResultQuizControllerApi(ApiClientSingleton.getInstance());
-function DetailLesson() {
+function PreviewLesson() {
   const { lessonId, type, id } = useParams();
   const [resources, setResources] = useState([]);
   const [quiz, setQuiz] = useState([]);
@@ -92,9 +92,7 @@ function DetailLesson() {
           )}
         </div>
       ) : type === 'READING' ? (
-        <div className="d-flex justify-content-center">
-          <LearnReading content={lesson?.content} />
-        </div>
+        <LearnReading content={lesson?.content} />
       ) : type === 'Quiz' ? (
         <>
           <Typography variant="subtitle1" gutterBottom>
@@ -159,4 +157,4 @@ function DetailLesson() {
   );
 }
 
-export default DetailLesson;
+export default PreviewLesson;
