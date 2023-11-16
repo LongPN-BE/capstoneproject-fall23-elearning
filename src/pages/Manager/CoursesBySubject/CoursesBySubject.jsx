@@ -10,24 +10,22 @@ import moment from 'moment';
 import { fetchData, postData } from '../../../services/AppService';
 import { useParams } from 'react-router-dom';
 
-
-
 const CourseBySubject = () => {
   const { subjectId } = useParams();
-  const [courseData, setcourseData] = useState([]);
-  const [subjectData, setsubjectData] = useState([]);
+  const [courseData, setCourseData] = useState([]);
+  const [subjectData, setSubjectData] = useState([]);
   const [activeCourses, setActiveCourses] = useState([]);
   const [pendingCourses, setPendingCourses] = useState([]);
 
   useEffect(() => {
     const token = Cookies.get('token');
     if (token) {
-      fetchData('/subject/byId?subject-id=' + subjectId, token).then(resp => {
+      fetchData('/subject/byId?subject-id=' + subjectId, token).then((resp) => {
         if (resp) {
-          setsubjectData(resp);
-          fetchData('/course/bySubjectId?subject-id=' + resp.id, token).then(resp1 => {
+          setSubjectData(resp);
+          fetchData('/course/bySubjectId?subject-id=' + resp.id, token).then((resp1) => {
             if (resp1) {
-              setcourseData(resp1);
+              setCourseData(resp1);
               // Filter courses based on their status
               const active = resp1.filter((course) => course.status === 'ACTIVE');
               const pending = resp1.filter((course) => course.status === 'PENDING');
@@ -35,9 +33,9 @@ const CourseBySubject = () => {
               setActiveCourses(active);
               setPendingCourses(pending);
             }
-          })
+          });
         }
-      })
+      });
     }
   }, []);
 
@@ -56,7 +54,8 @@ const CourseBySubject = () => {
               {subjectData.description}
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="textPrimary">
-              Giá thấp nhất : {subjectData.minPrice} <br />Tạo ngày: {moment(subjectData.createDate).format("DD/MM/YYYY")}
+              Giá thấp nhất : {subjectData.minPrice} <br />
+              Tạo ngày: {moment(subjectData.createDate).format('DD/MM/YYYY')}
             </Typography>
           </CardContent>
         </Card>
@@ -66,6 +65,6 @@ const CourseBySubject = () => {
       </Box>
     </Container>
   );
-}
+};
 
 export default CourseBySubject;

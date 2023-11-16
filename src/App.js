@@ -51,6 +51,7 @@ import PayPalCapture from './pages/PayPalCapture';
 import StaffLanding from './pages/Landing/StaffLanding';
 import Accounts from "./pages/Manager/ManageAccounts/ManageAccounts";
 import ListConfig from './pages/Admin/ManageConfig/ManageConfig';
+import SyllabusByCourse from './pages/Manager/DetailCourse/SyllabusByCourse';
 
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -142,6 +143,7 @@ const App = () => {
           <Route path="/dashboard" element={ <NavBar> <Dashboard /> </NavBar> }/>
           <Route path="/subjects"element={ <NavBar> <ManageSubject /> </NavBar> }/>
           <Route path="/course/subject/:subjectId"element={<NavBar><CourseBySubject /></NavBar> }/>
+          <Route path="/subject/course/syllabus/:courseId"element={<NavBar><SyllabusByCourse /></NavBar> }/>
           <Route path="/accounts" element={<NavBar><Accounts /></NavBar> }/>
           <Route path="/configs"element={ <NavBar> <ListConfig /> </NavBar> }/>
         </Routes>

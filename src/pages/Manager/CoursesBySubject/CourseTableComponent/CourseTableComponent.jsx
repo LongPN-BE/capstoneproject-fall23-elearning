@@ -1,12 +1,12 @@
 import React from 'react';
 import { Table, TableHead, TableBody, TableRow, TableCell, Paper } from '@material-ui/core';
+import { Link, useParams } from 'react-router-dom';
 import moment from 'moment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
 import { useState } from 'react';
 import { Button } from 'reactstrap';
-import CourseModal from '../../DetailCourse';
 
 function CourseTableComponent({ courses }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -50,9 +50,9 @@ function CourseTableComponent({ courses }) {
                   <TableCell align="center">{course.price}</TableCell>
                   <TableCell align="center">{moment(course.createDate).format('DD/MM/YYYY')}</TableCell>
                   <TableCell align="center">
-                    <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={() => handleViewCourse(course)}>
+                    <Link to={`/subject/course/syllabus/${course.id}`} title="Xem" className="btn btn-secondary m-1">
                       <VisibilityIcon />
-                    </Button>
+                    </Link>
                   </TableCell>
                   {course?.status === 'PENDING' ? (
                     <>
@@ -87,7 +87,6 @@ function CourseTableComponent({ courses }) {
           </Table>
         </Paper>
       </div>
-      <CourseModal isOpen={isModalOpen} onClose={handleModalClose} course={course} />
     </div>
   );
 }
