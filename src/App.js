@@ -154,8 +154,8 @@ const App = () => {
             </Route>
             {/* <Route path=":lessonId/quiz/:id/start" element={<Quizz />} /> */}
           </Route>
-          <Route path="/accounts" element={<NavBar><Accounts /></NavBar> }/>
-          <Route path="/configs"element={ <NavBar> <ListConfig /> </NavBar> }/>
+          <Route path="/accounts" element={<Accounts /> }/>
+          <Route path="/configs"element={<ListConfig /> }/>
         </Routes>
         </NavBar>
       ) : user?.role === 'STUDENT' ? (
