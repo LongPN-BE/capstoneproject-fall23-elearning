@@ -21,7 +21,6 @@ import AccountModal from './AccountModal';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
 
-
 export default function ListAccount() {
   const [data, setData] = useState([]);
   const [searchValue, setSearchValue] = useState('');
@@ -93,12 +92,12 @@ export default function ListAccount() {
         dateTime: moment(new Date()),
       };
       await postData('/account/teacher-account', body, token)
-        .then(resp => {
+        .then((resp) => {
           if (resp) {
             window.location.reload();
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     }
@@ -110,7 +109,7 @@ export default function ListAccount() {
   const handleEnable = (account) => {
     const token = Cookies.get('token');
     if (token) {
-      alert(account.id)
+      alert(account.id);
       try {
         fetchData('/account/enable?account_id=' + account.id, token).then((resp) => {
           if (resp) {
@@ -125,7 +124,7 @@ export default function ListAccount() {
   const handleDisable = (account) => {
     const token = Cookies.get('token');
     if (token) {
-      alert(account.id)
+      alert(account.id);
       try {
         fetchData('/account/disable?account_id=' + account.id, token).then((resp) => {
           if (resp) {
@@ -145,7 +144,6 @@ export default function ListAccount() {
   const filterData = data.filter((account) =>
     account.profile.firstName.toLowerCase().includes(searchValue.toLowerCase()),
   );
-
 
   // State to keep track of the current page and the number of rows per page
   const [page, setPage] = useState(0);
@@ -199,7 +197,7 @@ export default function ListAccount() {
                 <TableCell>Email</TableCell>
                 <TableCell>Trạng thái</TableCell>
                 <TableCell></TableCell>
-                <TableCell>Hành động</TableCell>
+                {/* <TableCell>Hành động</TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -212,9 +210,9 @@ export default function ListAccount() {
                       {a.profile.lastName} {a.profile.firstName}
                     </TableCell>
                     <TableCell>{a.role}</TableCell>
-                    <TableCell>{moment(a.createdAt).format("DD/MM/YYYY")}</TableCell>
+                    <TableCell>{moment(a.createdAt).format('DD/MM/YYYY')}</TableCell>
                     <TableCell>{a.profile.email}</TableCell>
-                    <TableCell>{a.active ? "Đang hoạt động" : "Chưa kích hoạt"} </TableCell>
+                    <TableCell>{a.active ? 'Đang hoạt động' : 'Chưa kích hoạt'} </TableCell>
                     <TableCell>
                       {/* {!a.active ? <>
                         <button
@@ -240,9 +238,9 @@ export default function ListAccount() {
                       {/* <Link className="btn btn-outline-secondary" to={`##`}>
                           Xem
                         </Link> */}
-                      <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={() => handleEditAccount(a)} disabled>
+                      {/* <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={() => handleEditAccount(a)} disabled>
                         Chỉnh sửa
-                      </Button>
+                      </Button> */}
                     </TableCell>
                   </TableRow>
                 );
