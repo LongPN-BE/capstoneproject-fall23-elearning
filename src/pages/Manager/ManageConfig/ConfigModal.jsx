@@ -133,7 +133,6 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
           name="asset"
           value={editedConfig.defaultQuizTime}
           onChange={(e) => handleInputChange(e, 'defaultQuizTime')}
-
         />
         <TextField
           fullWidth
@@ -142,8 +141,7 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
           margin="dense"
           name="created_date"
           value={editedConfig.retryTestTime}
-          onChange={(e) => handleInputChange(e, 'role')}
-
+          onChange={(e) => handleInputChange(e, 'retryTestTime')}
         />
         <TextField
           fullWidth
@@ -153,7 +151,6 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
           name="asset"
           value={editedConfig.defaultImage}
           onChange={(e) => handleInputChange(e, 'defaultImage')}
-
         />
       </DialogContent>
       <DialogActions>

@@ -83,7 +83,7 @@ const ViewConfig = ({ isOpen, onClose, onSave, onUpdate, config }) => {
         <Typography sx={{ mt: 2 }}>Mô tả cập nhật: {editedConfig.projectName} </Typography>
         <Typography sx={{ mt: 2 }}>Ngày tạo: {editedConfig.dateCreate} </Typography>
         <Typography sx={{ mt: 2 }}>Thời gian học mặc định: {editedConfig.studyingTime} </Typography>
-        <Typography sx={{ mt: 2 }}>Số lần làm quiz mặc định: {editedConfig.retryTestTime} </Typography>
+        <Typography sx={{ mt: 2 }}>Số lần làm quiz mặc định: {editedConfig.defaultQuizTime} </Typography>
         <Typography sx={{ mt: 2 }}>Ảnh bìa mặc định: {editedConfig.defaultImage} </Typography>
       </DialogContent>
       <DialogActions>
