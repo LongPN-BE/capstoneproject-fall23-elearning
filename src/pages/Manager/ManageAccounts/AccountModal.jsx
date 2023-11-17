@@ -208,7 +208,6 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
           </>
         ) : (
           <>
-            {' '}
             <TextField
               error
               fullWidth
@@ -249,7 +248,7 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
               margin="dense"
               value={editedAccount.email}
               onChange={(e) => handleInputChange(e, 'email')}
-              helperText={editedAccountError.lastName}
+              helperText={editedAccountError.email}
               disabled={false}
               required
             />
