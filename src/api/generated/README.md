@@ -105,7 +105,8 @@ var defaultClient = FptSeOnLearnManagementApi.ApiClient.instance;
 var Bearer = defaultClient.authentications['Bearer'];
 Bearer.accessToken = "YOUR ACCESS TOKEN"
 
-var api = new FptSeOnLearnManagementApi.AnswerControllerApi()
+var api = new FptSeOnLearnManagementApi.AccountControllerApi()
+var accountId = 789; // {Number} 
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -113,7 +114,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.findAllAnswers(callback);
+api.disableAccount(accountId, callback);
 
 ```
 
@@ -123,13 +124,14 @@ All URIs are relative to *https://api.fpt-ec.click/onlearn*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*FptSeOnLearnManagementApi.AccountControllerApi* | [**disableAccount**](docs/AccountControllerApi.md#disableAccount) | **GET** /api/v1/account/disable | 
+*FptSeOnLearnManagementApi.AccountControllerApi* | [**getAccounts**](docs/AccountControllerApi.md#getAccounts) | **GET** /api/v1/account/accounts | 
+*FptSeOnLearnManagementApi.AccountControllerApi* | [**registerAccount**](docs/AccountControllerApi.md#registerAccount) | **POST** /api/v1/account/register | 
 *FptSeOnLearnManagementApi.AnswerControllerApi* | [**findAllAnswers**](docs/AnswerControllerApi.md#findAllAnswers) | **GET** /api/v1/answer/answers | 
 *FptSeOnLearnManagementApi.AnswerControllerApi* | [**findAllByQuestion**](docs/AnswerControllerApi.md#findAllByQuestion) | **GET** /api/v1/answer/by-question | 
 *FptSeOnLearnManagementApi.AnswerControllerApi* | [**getById1**](docs/AnswerControllerApi.md#getById1) | **GET** /api/v1/answer/by-id | 
 *FptSeOnLearnManagementApi.AnswerControllerApi* | [**saveAnswer**](docs/AnswerControllerApi.md#saveAnswer) | **POST** /api/v1/answer/save | 
-*FptSeOnLearnManagementApi.AuthenticationControllerApi* | [**disableAccount**](docs/AuthenticationControllerApi.md#disableAccount) | **GET** /api/v1/auth/disable | 
 *FptSeOnLearnManagementApi.AuthenticationControllerApi* | [**getAccountByRoleId**](docs/AuthenticationControllerApi.md#getAccountByRoleId) | **GET** /api/v1/auth/byRoleId | 
-*FptSeOnLearnManagementApi.AuthenticationControllerApi* | [**getAccounts**](docs/AuthenticationControllerApi.md#getAccounts) | **GET** /api/v1/auth/accounts | 
 *FptSeOnLearnManagementApi.AuthenticationControllerApi* | [**getProfile**](docs/AuthenticationControllerApi.md#getProfile) | **GET** /api/v1/auth/me | 
 *FptSeOnLearnManagementApi.AuthenticationControllerApi* | [**login**](docs/AuthenticationControllerApi.md#login) | **POST** /api/v1/auth/login | 
 *FptSeOnLearnManagementApi.AuthenticationControllerApi* | [**loginGoogle**](docs/AuthenticationControllerApi.md#loginGoogle) | **POST** /api/v1/auth/login/google | 
@@ -137,6 +139,7 @@ Class | Method | HTTP request | Description
 *FptSeOnLearnManagementApi.CourseControllerApi* | [**deleteCourse**](docs/CourseControllerApi.md#deleteCourse) | **DELETE** /api/v1/course/delete | 
 *FptSeOnLearnManagementApi.CourseControllerApi* | [**findAllCourseBySubjectId**](docs/CourseControllerApi.md#findAllCourseBySubjectId) | **GET** /api/v1/course/bySubjectId | 
 *FptSeOnLearnManagementApi.CourseControllerApi* | [**findAllCourseByTeacherId**](docs/CourseControllerApi.md#findAllCourseByTeacherId) | **GET** /api/v1/course/byTeacherId | 
+*FptSeOnLearnManagementApi.CourseControllerApi* | [**findAllCourseUnEnrolledByStudent**](docs/CourseControllerApi.md#findAllCourseUnEnrolledByStudent) | **GET** /api/v1/course/un-enrolled-by-student | 
 *FptSeOnLearnManagementApi.CourseControllerApi* | [**getAllCourses**](docs/CourseControllerApi.md#getAllCourses) | **GET** /api/v1/course/courses | 
 *FptSeOnLearnManagementApi.CourseControllerApi* | [**getCourseById**](docs/CourseControllerApi.md#getCourseById) | **GET** /api/v1/course/byId | 
 *FptSeOnLearnManagementApi.CourseControllerApi* | [**saveCourse**](docs/CourseControllerApi.md#saveCourse) | **POST** /api/v1/course/save | 
@@ -195,6 +198,7 @@ Class | Method | HTTP request | Description
 *FptSeOnLearnManagementApi.ResourceControllerApi* | [**getResources**](docs/ResourceControllerApi.md#getResources) | **GET** /api/v1/resource/resources | 
 *FptSeOnLearnManagementApi.ResourceControllerApi* | [**saveResource**](docs/ResourceControllerApi.md#saveResource) | **POST** /api/v1/resource/save | 
 *FptSeOnLearnManagementApi.ResultDetailControllerApi* | [**findAllByResultQuiz**](docs/ResultDetailControllerApi.md#findAllByResultQuiz) | **GET** /api/v1/result-detail/by-result-quiz | 
+*FptSeOnLearnManagementApi.ResultQuizControllerApi* | [**findAllByStudentAndCourse**](docs/ResultQuizControllerApi.md#findAllByStudentAndCourse) | **GET** /api/v1/result-quiz/by-student-course | 
 *FptSeOnLearnManagementApi.ResultQuizControllerApi* | [**findAllByStudentId**](docs/ResultQuizControllerApi.md#findAllByStudentId) | **GET** /api/v1/result-quiz/by-student-id | 
 *FptSeOnLearnManagementApi.ResultQuizControllerApi* | [**findResultQuizById**](docs/ResultQuizControllerApi.md#findResultQuizById) | **GET** /api/v1/result-quiz/by-id | 
 *FptSeOnLearnManagementApi.ResultQuizControllerApi* | [**findResultQuizByQuizId**](docs/ResultQuizControllerApi.md#findResultQuizByQuizId) | **GET** /api/v1/result-quiz/by-quiz | 

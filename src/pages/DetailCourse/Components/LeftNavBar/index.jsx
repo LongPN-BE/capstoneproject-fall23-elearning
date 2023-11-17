@@ -1,30 +1,25 @@
-import { ListItemButton, ListItemText } from "@mui/material";
-import { Link, useLocation } from "react-router-dom";
-import classNames from "classnames";
-import Styles from "./LeftNavBar.module.scss";
+import { ListItemButton, ListItemText } from '@mui/material';
+import { Link, useLocation } from 'react-router-dom';
+import classNames from 'classnames';
+import Styles from './LeftNavBar.module.scss';
 
 function LeftNavBar(props) {
   const { courseId } = props;
   const links = [
     {
-      id: "lessons",
+      id: 'lessons',
       url: `/courses/${courseId}`,
-      label: "Lessons",
+      label: 'Bài giảng',
     },
     {
-      id: "grades",
-      url: `/courses/${courseId}/grades`,
-      label: "Grades",
-    },
-    {
-      id: "resources",
-      url: `/courses/${courseId}/resources`,
-      label: "Resources",
-    },
-    {
-      id: "course-info",
+      id: 'course-info',
       url: `/courses/${courseId}/info`,
-      label: "Course Info",
+      label: 'Thông tin khóa học',
+    },
+    {
+      id: 'grades',
+      url: `/courses/${courseId}/grades`,
+      label: 'Điểm bài kiểm tra',
     },
   ];
   const localtion = useLocation();
@@ -34,13 +29,7 @@ function LeftNavBar(props) {
       <ul className={classNames(Styles.navbar)}>
         {links.map((item) => {
           return (
-            <li
-              className={
-                localtion.pathname === item.url
-                  ? classNames(Styles.navbar__active)
-                  : ""
-              }
-            >
+            <li className={localtion.pathname === item.url ? classNames(Styles.navbar__active) : ''}>
               <Link to={item.url}>{item.label}</Link>
             </li>
           );

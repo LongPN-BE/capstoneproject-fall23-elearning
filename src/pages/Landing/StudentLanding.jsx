@@ -9,15 +9,16 @@ import ContactUs from '../../components/Landing/ContactUs/ContactUs';
 import Footer from '../../components/Landing/Footer/Footer';
 import { CourseControllerApi } from '../../api/generated/generate-api';
 import ApiClientSingleton from '../../api/apiClientImpl';
+import Cookies from 'js-cookie';
 
 const courseApi = new CourseControllerApi(ApiClientSingleton.getInstance());
 const StudentLanding = () => {
+  const user = JSON.parse(Cookies.get('user'));
   const [courses, setCourses] = useState([]);
   const [searchValue, setSearchValue] = useState('');
 
   const getCourses = () => {
-    console.log(searchValue);
-    courseApi.searchCourse({ value: searchValue }, (err, res) => {
+    courseApi.findAllCourseUnEnrolledByStudent(user?.studentId, 'ACTIVE', { value: searchValue }, (err, res) => {
       if (res) {
         setCourses(res);
       }

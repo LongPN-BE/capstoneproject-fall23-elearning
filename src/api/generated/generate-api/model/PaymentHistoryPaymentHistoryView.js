@@ -66,6 +66,9 @@ class PaymentHistoryPaymentHistoryView {
             if (data.hasOwnProperty('paymentHistoryStatus')) {
                 obj['paymentHistoryStatus'] = ApiClient.convertToType(data['paymentHistoryStatus'], 'String');
             }
+            if (data.hasOwnProperty('paymentHistoryType')) {
+                obj['paymentHistoryType'] = ApiClient.convertToType(data['paymentHistoryType'], 'String');
+            }
             if (data.hasOwnProperty('cardDetails')) {
                 obj['cardDetails'] = ApiClient.convertToType(data['cardDetails'], 'String');
             }
@@ -113,6 +116,10 @@ class PaymentHistoryPaymentHistoryView {
         // ensure the json data is a string
         if (data['paymentHistoryStatus'] && !(typeof data['paymentHistoryStatus'] === 'string' || data['paymentHistoryStatus'] instanceof String)) {
             throw new Error("Expected the field `paymentHistoryStatus` to be a primitive type in the JSON string but got " + data['paymentHistoryStatus']);
+        }
+        // ensure the json data is a string
+        if (data['paymentHistoryType'] && !(typeof data['paymentHistoryType'] === 'string' || data['paymentHistoryType'] instanceof String)) {
+            throw new Error("Expected the field `paymentHistoryType` to be a primitive type in the JSON string but got " + data['paymentHistoryType']);
         }
         // ensure the json data is a string
         if (data['cardDetails'] && !(typeof data['cardDetails'] === 'string' || data['cardDetails'] instanceof String)) {
@@ -187,6 +194,11 @@ PaymentHistoryPaymentHistoryView.prototype['amount'] = undefined;
  * @member {module:model/PaymentHistoryPaymentHistoryView.PaymentHistoryStatusEnum} paymentHistoryStatus
  */
 PaymentHistoryPaymentHistoryView.prototype['paymentHistoryStatus'] = undefined;
+
+/**
+ * @member {module:model/PaymentHistoryPaymentHistoryView.PaymentHistoryTypeEnum} paymentHistoryType
+ */
+PaymentHistoryPaymentHistoryView.prototype['paymentHistoryType'] = undefined;
 
 /**
  * @member {String} cardDetails
@@ -296,6 +308,27 @@ PaymentHistoryPaymentHistoryView['PaymentHistoryStatusEnum'] = {
      * @const
      */
     "CANCEL": "CANCEL"
+};
+
+
+/**
+ * Allowed values for the <code>paymentHistoryType</code> property.
+ * @enum {String}
+ * @readonly
+ */
+PaymentHistoryPaymentHistoryView['PaymentHistoryTypeEnum'] = {
+
+    /**
+     * value: "DEPOSIT"
+     * @const
+     */
+    "DEPOSIT": "DEPOSIT",
+
+    /**
+     * value: "WITHDRAW"
+     * @const
+     */
+    "WITHDRAW": "WITHDRAW"
 };
 
 

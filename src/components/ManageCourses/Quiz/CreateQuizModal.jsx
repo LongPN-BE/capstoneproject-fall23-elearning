@@ -12,6 +12,8 @@ import Cookies from 'js-cookie';
 import { Calendar, DateRangePicker } from 'react-date-range';
 import moment from 'moment';
 import { useEffect } from 'react';
+import { validateInputDigits, validateInputString } from '../../../util/Utilities';
+import Swal from 'sweetalert2';
 
 function CreateQuizModal({ open, onClose, data, onSave }) {
     const [formData, setFormData] = useState({ ...data });
@@ -38,7 +40,15 @@ function CreateQuizModal({ open, onClose, data, onSave }) {
         }
     }, [])
 
+
+    var currentDate = new Date();
+
+    // Set the date to tomorrow
+    currentDate.setDate(currentDate.getDate() + 1);
+    var tomorrowDay = currentDate.getDate();
     const handleClose = () => {
+        // Get the current date
+
         setSelectionRange({
             startDate: new Date(),
             endDate: new Date(),
@@ -58,12 +68,24 @@ function CreateQuizModal({ open, onClose, data, onSave }) {
     };
 
     const handleSave = () => {
-        console.log(selectionRange);
-        const formattedStartDate = moment(selectionRange.startDate).format('YYYY-MM-DD HH:mm:ss');
-        const formattedEndDate = moment(selectionRange.endDate).format('YYYY-MM-DD HH:mm:ss');
+        const validString = validateInputString(formData.title, formData.dateRange)
+        const validDigit = validateInputDigits(formData.passScore, formData.duration, formData.allowAttempt, formData.proportion)
+
+        if (!validString && !validDigit) {
+            onClose();
+            Swal.fire({
+                title: "Warning",
+                text: "All field is required",
+                icon: "warning"
+            });
+            return
+        }
+
+        const formattedStartDate = moment(selectionRange.startDate);
+        const formattedEndDate = moment(selectionRange.endDate);
         const body = {
             ...formData,
-            dateRange: formattedStartDate + "---" + formattedEndDate
+            dateRange: formattedEndDate.diff(formattedStartDate, 'days')
         }
         onSave(body)
     }

@@ -1,4 +1,4 @@
-import { Button, InputBase, Paper, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from '@material-ui/core';
+import { Button, InputBase, Paper, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, TextField, Typography } from '@material-ui/core';
 import React from 'react'
 import { Link, useParams } from 'react-router-dom';
 import TextTruncate from '../../../util/Text-Truncate/TextTruncate';
@@ -59,6 +59,23 @@ const ListResources = () => {
         }
     }
 
+    // State to keep track of the current page and the number of rows per page
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+
+    // Change page
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    // Change the number of rows per page
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const emptyRows = searchData ? page > 0 ? Math.max(0, (1 + page) * rowsPerPage - searchData.length) : 0 : page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
+
     return (
         <div className="m-1">
             <div style={{ margin: '20px' }}>
@@ -106,22 +123,9 @@ const ListResources = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {searchData ? searchData.map((l, index) => {
+                            {searchData ? searchData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((l, index) => {
                                 return (
-                                    <TableRow key={index}>
-                                        <TableCell>{index + 1}</TableCell>
-                                        <TableCell>{l.content.startsWith('https') ?
-                                            <a href={l.content} target="_blank" rel="noopener noreferrer">
-                                                <TextTruncate text={l.name} />
-                                            </a> : <TextTruncate text={l.name} />
-                                        }</TableCell>
-
-                                        <TableCell><TextTruncate text={l.resourceType} /></TableCell>
-                                    </TableRow>
-                                );
-                            }) :
-                                data && data.length > 0 && data.map((l, index) => {
-                                    return (
+                                    <>
                                         <TableRow key={index}>
                                             <TableCell>{index + 1}</TableCell>
                                             <TableCell>{l.content.startsWith('https') ?
@@ -132,11 +136,49 @@ const ListResources = () => {
 
                                             <TableCell><TextTruncate text={l.resourceType} /></TableCell>
                                         </TableRow>
+                                        {emptyRows > 0 && (
+                                            <TableRow style={{ height: 53 * emptyRows }}>
+                                                <TableCell colSpan={6} />
+                                            </TableRow>
+                                        )}
+                                    </>
+
+                                );
+                            }) :
+                                data && data.length > 0 && data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((l, index) => {
+                                    return (
+                                        <>
+                                            <TableRow key={index}>
+                                                <TableCell>{index + 1}</TableCell>
+                                                <TableCell>{l.content.startsWith('https') ?
+                                                    <a href={l.content} target="_blank" rel="noopener noreferrer">
+                                                        <TextTruncate text={l.name} />
+                                                    </a> : <TextTruncate text={l.name} />
+                                                }</TableCell>
+
+                                                <TableCell><TextTruncate text={l.resourceType} /></TableCell>
+                                            </TableRow>
+
+                                            {emptyRows > 0 && (
+                                                <TableRow style={{ height: 53 * emptyRows }}>
+                                                    <TableCell colSpan={6} />
+                                                </TableRow>
+                                            )}
+                                        </>
 
                                     )
                                 })}
                         </TableBody>
                     </Table>
+                    {data && searchData && <TablePagination
+                        rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                        component="div"
+                        count={searchData ? searchData.length : data.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />}
                     <ResourceModal isOpen={isResourceModalOpen} onClose={() => setIsResourceModalOpen(false)} onSave={handleAddResource} />
                 </Paper>
             </div>

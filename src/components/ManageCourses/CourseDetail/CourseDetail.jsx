@@ -12,6 +12,7 @@ import {
     Select,
     MenuItem,
     TextField,
+    TablePagination,
 } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
 import { Link, useParams } from 'react-router-dom';
@@ -21,7 +22,9 @@ import SyllabusCreateModal from '../Syllabus/SyllabusCreateModal';
 import { fetchData, postData } from '../../../services/AppService';
 import Loading from '../../Loading/Loading';
 import Cookies from 'js-cookie';
-import { sortByID } from '../../../util/Utilities';
+import { sortByID, validateInputString } from '../../../util/Utilities';
+import Swal from 'sweetalert2';
+import { invalidInput } from '../../../util/Constants';
 
 export default function CourseDetail() {
     const { courseId } = useParams();
@@ -163,7 +166,8 @@ export default function CourseDetail() {
     const handleCreateSyllabusCopy = (syllabusName) => {
         const token = Cookies.get('token')
         setLoading(true);
-        if (token) {
+        const isValidString = validateInputString(syllabusName);
+        if (token && isValidString) {
             const lessonIds = syllabusCopy?.lessons.map(item => item.id);
             const body = {
                 name: syllabusName,
@@ -182,8 +186,31 @@ export default function CourseDetail() {
 
             // Close the modal
             handleSyllabusModalClose();
+        } else {
+            Swal.fire({
+                title: "Warning",
+                text: invalidInput,
+                icon: "warning"
+            });
         }
     }
+
+    // State to keep track of the current page and the number of rows per page
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+
+    // Change page
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    // Change the number of rows per page
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const emptyRows = filterDataInfo ? page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filterDataInfo.length) : 0 : page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
     return (
         loading ? <Loading /> :
@@ -249,31 +276,13 @@ export default function CourseDetail() {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {filterDataInfo ? filterDataInfo.map((s, index) => {
+                                    {filterDataInfo ? filterDataInfo.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((s, index) => {
                                         return (
-                                            <TableRow key={index}>
-                                                <TableCell>{index + 1}</TableCell>
-                                                <TableCell>{s.name}</TableCell>
-                                                <TableCell>{s.status ? 'Hoạt động' : 'Không hoạt động'}</TableCell>
-                                                <TableCell>
-                                                    <Button
-                                                        variant="outlined"
-                                                        style={{ marginRight: '10px' }}
-                                                        onClick={() => handleOpenSyllabusCopy(s.id)}
-                                                    >
-                                                        Tạo bản sao
-                                                    </Button>
-                                                    <Link className='btn btn-outline-secondary' to={`/courses/${courseId}/syllabus/${s.id}`}>Chi tiết</Link>
-                                                </TableCell>
-                                            </TableRow>
-                                        );
-                                    })
-                                        : data.map((s, index) => {
-                                            return (
+                                            <>
                                                 <TableRow key={index}>
                                                     <TableCell>{index + 1}</TableCell>
                                                     <TableCell>{s.name}</TableCell>
-                                                    <TableCell>{s.status ? 'Hoạt động' : 'Không hoạt động'}</TableCell>
+                                                    <TableCell>{s.status === 'Active' ? 'Hoạt động' : 'Không hoạt động'}</TableCell>
                                                     <TableCell>
                                                         <Button
                                                             variant="outlined"
@@ -285,13 +294,53 @@ export default function CourseDetail() {
                                                         <Link className='btn btn-outline-secondary' to={`/courses/${courseId}/syllabus/${s.id}`}>Chi tiết</Link>
                                                     </TableCell>
                                                 </TableRow>
+                                                {emptyRows > 0 && (
+                                                    <TableRow style={{ height: 53 * emptyRows }}>
+                                                        <TableCell colSpan={6} />
+                                                    </TableRow>
+                                                )}
+                                            </>
+
+                                        );
+                                    })
+                                        : data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((s, index) => {
+                                            return (
+                                                <>
+                                                    <TableRow key={index}>
+                                                        <TableCell>{index + 1}</TableCell>
+                                                        <TableCell>{s.name}</TableCell>
+                                                        <TableCell>{s.status === 'Active' ? 'Hoạt động' : 'Không hoạt động'}</TableCell>
+                                                        <TableCell>
+                                                            <Button
+                                                                variant="outlined"
+                                                                style={{ marginRight: '10px' }}
+                                                                onClick={() => handleOpenSyllabusCopy(s.id)}
+                                                            >
+                                                                Tạo bản sao
+                                                            </Button>
+                                                            <Link className='btn btn-outline-secondary' to={`/courses/${courseId}/syllabus/${s.id}`}>Chi tiết</Link>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                    {emptyRows > 0 && (
+                                                        <TableRow style={{ height: 53 * emptyRows }}>
+                                                            <TableCell colSpan={6} />
+                                                        </TableRow>
+                                                    )}
+                                                </>
+
                                             );
                                         })}
                                 </TableBody>
                             </Table>
-                            {/* <Button variant="outlined" style={{ marginTop: '20px' }}>
-                                Đăng kí khóa học
-                            </Button> */}
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                component="div"
+                                count={filterDataInfo ? filterDataInfo.length : data.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                            />
                         </Paper>
                     </div>
                     <CourseEditModal

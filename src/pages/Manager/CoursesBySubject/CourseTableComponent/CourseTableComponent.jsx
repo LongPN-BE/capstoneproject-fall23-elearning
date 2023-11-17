@@ -76,14 +76,14 @@ function CourseTableComponent({ courses }) {
       fetchData('/course/approve?course_id=' + course.id, token)
         .then((resp) => {
           if (resp) {
-            showSuccess(resp);
+            showSuccess(course.name);
           }
         })
         .catch((err) => {
           console.log(err);
           showError(err);
         });
-      showSuccess(course);
+      // showSuccess(course);
     }
   };
 

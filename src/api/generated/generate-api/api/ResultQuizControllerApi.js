@@ -35,6 +35,53 @@ export default class ResultQuizControllerApi {
 
 
     /**
+     * Callback function to receive the result of the findAllByStudentAndCourse operation.
+     * @callback module:api/ResultQuizControllerApi~findAllByStudentAndCourseCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<module:model/ResultQuizResultQuizView>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Number} studentId 
+     * @param {Number} courseId 
+     * @param {module:api/ResultQuizControllerApi~findAllByStudentAndCourseCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<module:model/ResultQuizResultQuizView>}
+     */
+    findAllByStudentAndCourse(studentId, courseId, callback) {
+      let postBody = null;
+      // verify the required parameter 'studentId' is set
+      if (studentId === undefined || studentId === null) {
+        throw new Error("Missing the required parameter 'studentId' when calling findAllByStudentAndCourse");
+      }
+      // verify the required parameter 'courseId' is set
+      if (courseId === undefined || courseId === null) {
+        throw new Error("Missing the required parameter 'courseId' when calling findAllByStudentAndCourse");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'student_id': studentId,
+        'course_id': courseId
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = [ResultQuizResultQuizView];
+      return this.apiClient.callApi(
+        '/api/v1/result-quiz/by-student-course', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
      * Callback function to receive the result of the findAllByStudentId operation.
      * @callback module:api/ResultQuizControllerApi~findAllByStudentIdCallback
      * @param {String} error Error message, if any.

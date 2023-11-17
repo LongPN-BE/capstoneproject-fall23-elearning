@@ -12,6 +12,7 @@ import {
     Select,
     MenuItem,
     TextField,
+    TablePagination,
 } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
 import { Link, useParams } from 'react-router-dom';
@@ -19,7 +20,9 @@ import QuizModal from '../Quiz/QuizModal';
 import Cookies from 'js-cookie';
 import { fetchData, postData } from '../../../services/AppService';
 import CreateQuizModal from '../Quiz/CreateQuizModal';
-import { sortByID } from '../../../util/Utilities';
+import { sortByID, validateInputDigits, validateInputString } from '../../../util/Utilities';
+import Swal from 'sweetalert2';
+import { invalidInput } from '../../../util/Constants';
 
 export default function LessonDetail() {
     const { courseId, syllabusId, lessonId } = useParams();
@@ -80,23 +83,52 @@ export default function LessonDetail() {
     const handleSaveQuiz = async (formData) => {
         const token = Cookies.get('token')
         if (token) {
-            const body = {
-                title: formData.title,
-                passScore: parseInt(formData.passScore),
-                status: formData.status,
-                duration: parseInt(formData.duration),
-                dateRange: 0,
-                allowAttempt: parseInt(formData.allowAttempt),
-                proportion: parseInt(formData.proportion),
-                lessonId: parseInt(lessonId)
-            }
-            await postData('/quiz/save', body, token).then(resp => {
-                if (resp) {
-                    window.location.reload()
+            const validString = validateInputString(formData.title);
+            const validDigit = validateInputDigits(formData.passScore, formData.duration, formData.allowAttempt, formData.proportion)
+            if (validDigit && validString) {
+                const body = {
+                    title: formData.title,
+                    passScore: parseInt(formData.passScore),
+                    status: formData.status,
+                    duration: parseInt(formData.duration),
+                    dateRange: 0,
+                    allowAttempt: parseInt(formData.allowAttempt),
+                    proportion: parseInt(formData.proportion),
+                    lessonId: parseInt(lessonId)
                 }
-            })
+                await postData('/quiz/save', body, token).then(resp => {
+                    if (resp) {
+                        window.location.reload()
+                    }
+                })
+            } else {
+                handleCloseQuiz()
+                Swal.fire({
+                    title: "Warning",
+                    text: invalidInput,
+                    icon: "warning"
+                });
+            }
         }
     }
+
+    // State to keep track of the current page and the number of rows per page
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+
+    // Change page
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    // Change the number of rows per page
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filterData.length) : 0
+
 
     return (
         data && (
@@ -165,30 +197,45 @@ export default function LessonDetail() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {filteredData && filteredData.length > 0 && filteredData.map((s, index) => {
+                                {filteredData && filteredData.length > 0 && filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((s, index) => {
                                     return (
-                                        <TableRow key={index}>
-                                            <TableCell>{index + 1}</TableCell>
-                                            <TableCell>{s.title}</TableCell>
-                                            <TableCell>{s.passScore}</TableCell>
-                                            <TableCell>{s.duration}</TableCell>
-                                            <TableCell>{s.dateRange}</TableCell>
-                                            <TableCell>{s.allowAttempt}</TableCell>
-                                            <TableCell>{s.status}</TableCell>
-                                            <TableCell>
-                                                <Link className="btn btn-outline-secondary" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${lessonId}/quiz/${s.id}`}>
-                                                    Chi tiết
-                                                </Link>
-                                                {'Deactive' === s.status && <Link className="btn btn-outline-secondary mx-2" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${lessonId}/quiz/${s.id}/questions`}>
-                                                    Thêm câu hỏi
-                                                </Link>}
-                                            </TableCell>
-                                        </TableRow>
+                                        <>
+                                            <TableRow key={index}>
+                                                <TableCell>{index + 1}</TableCell>
+                                                <TableCell>{s.title}</TableCell>
+                                                <TableCell>{s.passScore}</TableCell>
+                                                <TableCell>{s.duration}</TableCell>
+                                                <TableCell>{s.dateRange}</TableCell>
+                                                <TableCell>{s.allowAttempt}</TableCell>
+                                                <TableCell>{s.status}</TableCell>
+                                                <TableCell>
+                                                    <Link className="btn btn-outline-secondary" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${lessonId}/quiz/${s.id}`}>
+                                                        Chi tiết
+                                                    </Link>
+                                                    {'Deactive' === s.status && <Link className="btn btn-outline-secondary mx-2" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${lessonId}/quiz/${s.id}/questions`}>
+                                                        Thêm câu hỏi
+                                                    </Link>}
+                                                </TableCell>
+                                            </TableRow>
+                                            {emptyRows > 0 && (
+                                                <TableRow style={{ height: 53 * emptyRows }}>
+                                                    <TableCell colSpan={6} />
+                                                </TableRow>
+                                            )}
+                                        </>
                                     );
                                 })}
                             </TableBody>
                         </Table>
-
+                        <TablePagination
+                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                            component="div"
+                            count={filteredData?.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
                     </Paper>
                 </div>
                 <QuizModal isOpen={open} onClose={handleClose} />

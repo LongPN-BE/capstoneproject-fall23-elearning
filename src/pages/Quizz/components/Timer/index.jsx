@@ -28,7 +28,7 @@ const Timer = ({ timeMinute, onAutoSubmit }) => {
   };
   return (
     <div className="d-flex align-items-center" style={{ color: '#1d7c50' }}>
-      <Typography variant="caption">
+      <Typography variant="subtitle1">
         <TimerIcon />
         {formatTime(seconds)} Còn lại
       </Typography>

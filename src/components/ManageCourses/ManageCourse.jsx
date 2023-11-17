@@ -24,18 +24,45 @@ function ManageCourse() {
             try {
                 const courseData = fetchData(`/course/byTeacherId?teacher-id=${userTmp?.teacherId}`, token).then(resp => {
                     if (resp) {
-                        const active = resp.filter((course) => course.status === 'ACTIVE');
-                        const inactive = resp.filter((course) => course.status === 'DEACTIVE');
-                        const pending = resp.filter((course) => course.status === 'PENDING');
-                        const draft = resp.filter((course) => course.status === 'DRAFT');
-                        const reject = resp.filter((course) => course.status === 'REJECT');
+                        const dataPromises = resp.map(async c => {
+                            try {
+                                const enroll = await fetchData(`/enroll/byCourseId?course_id=${c.id}`, token);
 
-                        setActiveCourses(active);
-                        setInactiveCourses(inactive);
-                        setPendingCourses(pending);
-                        setDraftCourses(draft);
-                        setRejectCourses(reject);
-                        setLoading(false);
+                                // Count the number of elements with status "PROCESSING"
+                                const count = enroll.reduce((accumulator, e) => {
+                                    if (e.status === "PROCESSING") {
+                                        return accumulator + 1;
+                                    }
+                                    return accumulator;
+                                }, 0);
+
+                                return { ...c, enrolling: count };
+                            } catch (error) {
+                                console.error(error);
+                                throw error; // rethrow the error to be caught by the caller
+                            }
+                        });
+
+                        Promise.all(dataPromises)
+                            .then(data => {
+                                console.log(data);
+                                const active = data.filter((course) => course.status === 'ACTIVE');
+                                const inactive = data.filter((course) => course.status === 'DEACTIVE');
+                                const pending = data.filter((course) => course.status === 'PENDING');
+                                const draft = data.filter((course) => course.status === 'DRAFT');
+                                const reject = data.filter((course) => course.status === 'REJECT');
+
+                                setActiveCourses(active);
+                                setInactiveCourses(inactive);
+                                setPendingCourses(pending);
+                                setDraftCourses(draft);
+                                setRejectCourses(reject);
+                                setLoading(false);
+                            })
+                            .catch(error => {
+                                console.error(error);
+                            });
+
                     } else {
                         // Handle the case when courseData is not an array (e.g., an error occurred)
                         console.error('courseData is not an array:', courseData);

@@ -4,6 +4,7 @@
 README.md
 docs/AcceptWithdrawRequestWithdrawRequestView.md
 docs/Account.md
+docs/AccountControllerApi.md
 docs/AccountCourseView.md
 docs/AccountDetailResponse.md
 docs/AccountDeviceView.md
@@ -271,6 +272,7 @@ docs/WithdrawalRequestEnrollView.md
 docs/WithdrawalRequestTransactionView.md
 docs/WithdrawalRequestWithdrawRequestView.md
 generate-api/ApiClient.js
+generate-api/api/AccountControllerApi.js
 generate-api/api/AnswerControllerApi.js
 generate-api/api/AuthenticationControllerApi.js
 generate-api/api/CourseControllerApi.js
@@ -543,3 +545,4 @@ generate-api/model/WithdrawalRequestWithdrawRequestView.js
 git_push.sh
 mocha.opts
 package.json
+test/api/AccountControllerApi.spec.js

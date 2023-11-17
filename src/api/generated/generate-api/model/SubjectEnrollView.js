@@ -54,9 +54,6 @@ class SubjectEnrollView {
             if (data.hasOwnProperty('createDate')) {
                 obj['createDate'] = ApiClient.convertToType(data['createDate'], 'Date');
             }
-            if (data.hasOwnProperty('minPrice')) {
-                obj['minPrice'] = ApiClient.convertToType(data['minPrice'], 'Number');
-            }
             if (data.hasOwnProperty('status')) {
                 obj['status'] = ApiClient.convertToType(data['status'], 'Boolean');
             }
@@ -99,11 +96,6 @@ SubjectEnrollView.prototype['description'] = undefined;
  * @member {Date} createDate
  */
 SubjectEnrollView.prototype['createDate'] = undefined;
-
-/**
- * @member {Number} minPrice
- */
-SubjectEnrollView.prototype['minPrice'] = undefined;
 
 /**
  * @member {Boolean} status

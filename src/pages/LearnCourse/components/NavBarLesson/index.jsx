@@ -49,8 +49,7 @@ const resourceApi = new ResourceControllerApi(ApiClientSingleton.getInstance());
 const syllabusApi = new SyllabusControllerApi(ApiClientSingleton.getInstance());
 const quizApi = new QuizControllerApi(ApiClientSingleton.getInstance());
 
-function NavBarLesson(props) {
-  const { courseId } = props;
+function NavBarLesson({ courseId }) {
   const [lessons, setLessons] = useState([]);
   const localtion = useLocation();
   const [expanded, setExpanded] = useState();
@@ -102,7 +101,7 @@ function NavBarLesson(props) {
                       ) : (
                         ''
                       )}
-                      <Link to={`/courses/2/learn/${data?.id}/${data?.type}`}>
+                      <Link to={`/courses/${courseId}/learn/${data?.id}/${data?.type}`}>
                         <strong>{data?.type}</strong>: {data.name}
                       </Link>
                     </div>

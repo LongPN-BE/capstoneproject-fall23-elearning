@@ -159,6 +159,57 @@ export default class CourseControllerApi {
     }
 
     /**
+     * Callback function to receive the result of the findAllCourseUnEnrolledByStudent operation.
+     * @callback module:api/CourseControllerApi~findAllCourseUnEnrolledByStudentCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<module:model/CourseCourseView>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Number} studentId 
+     * @param {String} status 
+     * @param {Object} opts Optional parameters
+     * @param {String} opts.value  (default to '')
+     * @param {module:api/CourseControllerApi~findAllCourseUnEnrolledByStudentCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<module:model/CourseCourseView>}
+     */
+    findAllCourseUnEnrolledByStudent(studentId, status, opts, callback) {
+      opts = opts || {};
+      let postBody = null;
+      // verify the required parameter 'studentId' is set
+      if (studentId === undefined || studentId === null) {
+        throw new Error("Missing the required parameter 'studentId' when calling findAllCourseUnEnrolledByStudent");
+      }
+      // verify the required parameter 'status' is set
+      if (status === undefined || status === null) {
+        throw new Error("Missing the required parameter 'status' when calling findAllCourseUnEnrolledByStudent");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'student_id': studentId,
+        'status': status,
+        'value': opts['value']
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = [CourseCourseView];
+      return this.apiClient.callApi(
+        '/api/v1/course/un-enrolled-by-student', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
      * Callback function to receive the result of the getAllCourses operation.
      * @callback module:api/CourseControllerApi~getAllCoursesCallback
      * @param {String} error Error message, if any.

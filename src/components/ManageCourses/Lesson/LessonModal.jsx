@@ -12,6 +12,9 @@ import {
 import { useRef } from 'react';
 import ReactQuill from 'react-quill';
 import './LessonModal.css'
+import { validateInputDigits, validateInputString } from '../../../util/Utilities';
+import Swal from 'sweetalert2';
+import { invalidInput } from '../../../util/Constants';
 
 
 const LessonModal = ({ isOpen, onClose, onSave, onUpdate, lesson }) => {
@@ -55,21 +58,29 @@ const LessonModal = ({ isOpen, onClose, onSave, onUpdate, lesson }) => {
     };
 
     const handleSave = () => {
-        if (!editedLesson.name || !editedLesson.description) {
+        const validString = validateInputString(editedLesson.name, editedLesson.description, editedLesson.content);
+        const validDigits = validateInputDigits(editedLesson.estimateTime)
+        if (!validString || !validDigits) {
             // Show an error message or handle the validation as needed
-            alert('Please fill in all required fields.');
+            clearModal();
+            Swal.fire({
+                title: "Warning",
+                text: invalidInput,
+                icon: "warning"
+            });
             return;
-        }
-
-        if (lesson) {
-            // If editing an existing lesson, call the onUpdate function
-            onUpdate({ ...lesson, ...editedLesson });
         } else {
-            // If adding a new lesson, call the onSave function
-            onSave(editedLesson);
+            if (lesson) {
+                // If editing an existing lesson, call the onUpdate function
+                onUpdate({ ...lesson, ...editedLesson });
+            } else {
+                // If adding a new lesson, call the onSave function
+                onSave(editedLesson);
+            }
+            clearModal();
         }
 
-        clearModal();
+
     };
 
     const clearModal = () => {
@@ -110,12 +121,12 @@ const LessonModal = ({ isOpen, onClose, onSave, onUpdate, lesson }) => {
     return (
         <Dialog open={isOpen} onClose={onClose} maxWidth="sm" fullWidth>
             <DialogTitle>
-                {lesson ? 'Edit Lesson' : 'Thêm khóa học'}
+                {lesson ? 'Edit Lesson' : 'Thêm bài học'}
             </DialogTitle>
             <DialogContent>
                 <TextField
                     fullWidth
-                    label="Tên khóa học"
+                    label="Tên bài học"
                     autoFocus
                     margin="dense"
                     name="name"
@@ -145,16 +156,6 @@ const LessonModal = ({ isOpen, onClose, onSave, onUpdate, lesson }) => {
                     onChange={(e) => handleInputChange(e, "content")}
                     modules={modules}
                 />
-
-                {/* <TextField
-                    fullWidth
-                    label="URL"
-                    autoFocus
-                    margin="dense"
-                    name="url"
-                    value={editedLesson.url}
-                    onChange={(e) => handleInputChange(e, 'url')}
-                /> */}
                 <Select
                     className='my-4'
                     fullWidth

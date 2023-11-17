@@ -4,17 +4,24 @@ import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mu
 import { Container } from 'reactstrap';
 import { useNavigate, useParams } from 'react-router';
 import { useEffect, useState } from 'react';
-import { EnrollControllerApi, QuizControllerApi, UsedQuestionControllerApi } from '../../api/generated/generate-api';
+import {
+  EnrollControllerApi,
+  LessonControllerApi,
+  QuizControllerApi,
+  UsedQuestionControllerApi,
+} from '../../api/generated/generate-api';
 import ApiClientSingleton from '../../api/apiClientImpl';
 import { useForm } from 'react-hook-form';
 
 const questionApi = new UsedQuestionControllerApi(ApiClientSingleton.getInstance());
 const quizApi = new QuizControllerApi(ApiClientSingleton.getInstance());
 const enrollApi = new EnrollControllerApi(ApiClientSingleton.getInstance());
+const lessonApi = new LessonControllerApi(ApiClientSingleton.getInstance());
 function Quizz() {
   const { courseId, lessonId, id } = useParams();
   const [questions, setQuestions] = useState([]);
   const [quiz, setQuiz] = useState();
+  const [lesson, setLesson] = useState();
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
 
@@ -23,14 +30,17 @@ function Quizz() {
       if (res) {
         setQuiz(res);
       }
-      console.log(res);
     });
     questionApi.findAllUsedQuestionByDoQuizId(id, (err, res) => {
       setQuestions(res);
     });
+    lessonApi.getLessonById(lessonId, (err, res) => {
+      if (res) {
+        setLesson(res);
+      }
+    });
   }, [id]);
   const onSubmitQuiz = (data) => {
-    console.log(data);
     enrollApi.findEnrollByCourseId(courseId, (err, res) => {
       if (res) {
         const enrollId = res[0]?.id;
@@ -65,6 +75,7 @@ function Quizz() {
         point={quiz?.passScore}
         due={quiz ? moment(quiz?.dateCreate).add(quiz?.dateRange, 'days').format('DD/MM/YYYY') : undefined}
         onAutoSubmit={handleSubmit(onSubmitQuiz)}
+        lesson={lesson}
       />
       <Container className="my-4">
         <form onSubmit={handleSubmit(onSubmitQuiz)}>

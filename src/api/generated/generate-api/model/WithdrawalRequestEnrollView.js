@@ -55,8 +55,8 @@ class WithdrawalRequestEnrollView {
             if (data.hasOwnProperty('requestDate')) {
                 obj['requestDate'] = ApiClient.convertToType(data['requestDate'], 'Date');
             }
-            if (data.hasOwnProperty('requestStatus')) {
-                obj['requestStatus'] = ApiClient.convertToType(data['requestStatus'], 'String');
+            if (data.hasOwnProperty('withdrawalRequestStatus')) {
+                obj['withdrawalRequestStatus'] = ApiClient.convertToType(data['withdrawalRequestStatus'], 'String');
             }
             if (data.hasOwnProperty('requestComments')) {
                 obj['requestComments'] = ApiClient.convertToType(data['requestComments'], 'String');
@@ -78,8 +78,8 @@ class WithdrawalRequestEnrollView {
      */
     static validateJSON(data) {
         // ensure the json data is a string
-        if (data['requestStatus'] && !(typeof data['requestStatus'] === 'string' || data['requestStatus'] instanceof String)) {
-            throw new Error("Expected the field `requestStatus` to be a primitive type in the JSON string but got " + data['requestStatus']);
+        if (data['withdrawalRequestStatus'] && !(typeof data['withdrawalRequestStatus'] === 'string' || data['withdrawalRequestStatus'] instanceof String)) {
+            throw new Error("Expected the field `withdrawalRequestStatus` to be a primitive type in the JSON string but got " + data['withdrawalRequestStatus']);
         }
         // ensure the json data is a string
         if (data['requestComments'] && !(typeof data['requestComments'] === 'string' || data['requestComments'] instanceof String)) {
@@ -119,9 +119,9 @@ WithdrawalRequestEnrollView.prototype['withdrawalAmount'] = undefined;
 WithdrawalRequestEnrollView.prototype['requestDate'] = undefined;
 
 /**
- * @member {module:model/WithdrawalRequestEnrollView.RequestStatusEnum} requestStatus
+ * @member {module:model/WithdrawalRequestEnrollView.WithdrawalRequestStatusEnum} withdrawalRequestStatus
  */
-WithdrawalRequestEnrollView.prototype['requestStatus'] = undefined;
+WithdrawalRequestEnrollView.prototype['withdrawalRequestStatus'] = undefined;
 
 /**
  * @member {String} requestComments
@@ -143,11 +143,11 @@ WithdrawalRequestEnrollView.prototype['transactions'] = undefined;
 
 
 /**
- * Allowed values for the <code>requestStatus</code> property.
+ * Allowed values for the <code>withdrawalRequestStatus</code> property.
  * @enum {String}
  * @readonly
  */
-WithdrawalRequestEnrollView['RequestStatusEnum'] = {
+WithdrawalRequestEnrollView['WithdrawalRequestStatusEnum'] = {
 
     /**
      * value: "PENDING"

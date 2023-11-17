@@ -92,9 +92,7 @@ function DetailLesson() {
           )}
         </div>
       ) : type === 'READING' ? (
-        <div className="d-flex justify-content-center">
-          <LearnReading content={lesson?.content} />
-        </div>
+        <LearnReading content={lesson?.content} />
       ) : type === 'Quiz' ? (
         <>
           <Typography variant="subtitle1" gutterBottom>

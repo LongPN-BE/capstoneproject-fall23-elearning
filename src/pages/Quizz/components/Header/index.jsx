@@ -5,9 +5,11 @@ import Timer from '../Timer';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Button, Typography } from '@mui/material';
 import { Link, useParams } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
-function HeaderQuiz({ name, timeMinute, point, due, onAutoSubmit }) {
+function HeaderQuiz({ name, timeMinute, point, due, onAutoSubmit, lesson }) {
   const { courseId, lessonId, id } = useParams();
+  const user = JSON.parse(Cookies.get('user'));
   return (
     <>
       <div className={`d-flex ${classNames(Styles.header__quiz)} align-items-center`}>
@@ -20,17 +22,25 @@ function HeaderQuiz({ name, timeMinute, point, due, onAutoSubmit }) {
             </Button>
           </Link>
         </div>
-        <div className="d-flex flex-grow-1 align-items-start" style={{ margin: '0 1rem', height: '90%' }}>
-          <div className="flex-grow-1">
-            <Typography variant="subtitle2" style={{ fontWeight: 700 }}>
-              {name}
+        <div
+          className="d-flex flex-grow-1 align-items-center justify-content-between"
+          style={{ margin: '0 1rem', height: '90%' }}
+        >
+          <div className="">
+            <Typography variant="subtitle1" style={{ fontWeight: 700 }}>
+              {lesson?.name} - {name}
             </Typography>
-            <Typography variant="caption">
+            <Typography variant="subtitle2">
               Graded Quiz.• {timeMinute}m • Pass Score {point}/10 total point
             </Typography>
           </div>
           <div>
-            <Typography variant="subtitle2">
+            <Typography variant="subtitle1">
+              <strong>Họ Tên: </strong> {user?.name}
+            </Typography>
+          </div>
+          <div>
+            <Typography variant="subtitle1">
               <strong>Due</strong> {due}
             </Typography>
             <Timer timeMinute={timeMinute} onAutoSubmit={onAutoSubmit} />

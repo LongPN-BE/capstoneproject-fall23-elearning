@@ -39,7 +39,7 @@ export default function SyllabusUpdateModal({ open, onClose, onUpdate, syllabus 
                         value={syllabusStatus}
                         onChange={(e) => setSyllabusStatus(e.target.value)}
                     >
-                        <MenuItem value="New">Mới</MenuItem>
+                        {/* <MenuItem value="New">Mới</MenuItem> */}
                         <MenuItem value="Active">Hoạt động</MenuItem>
                         <MenuItem value="Deactive">Ngưng hoạt động</MenuItem>
                     </Select>

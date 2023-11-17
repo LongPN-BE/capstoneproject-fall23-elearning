@@ -23,6 +23,7 @@ import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { CourseControllerApi, SyllabusControllerApi } from '../../../../api/generated/generate-api';
 import ApiClientSingleton from '../../../../api/apiClientImpl';
+import LessonInfo from '../LessonInfo';
 
 const courseApi = new CourseControllerApi(ApiClientSingleton.getInstance());
 const syllabusApi = new SyllabusControllerApi(ApiClientSingleton.getInstance());
@@ -56,28 +57,26 @@ function CourseInfo() {
                 </TableCell>
                 <TableCell>{course?.description}</TableCell>
               </TableRow>
-              <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+              {/* <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell component="th" scope="row">
                   <CheckCircleIcon />
                   Level
                 </TableCell>
                 <TableCell>Beginner</TableCell>
-              </TableRow>
+              </TableRow> */}
               <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell component="th" scope="row">
                   <SmsIcon />
-                  Language
+                  Ngôn ngữ
                 </TableCell>
-                <TableCell>
-                  English, Subtitles: Romanian, Russian Volunteer to translate subtitles for this course
-                </TableCell>
+                <TableCell>Tiếng việt</TableCell>
               </TableRow>
               <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell component="th" scope="row">
                   <WorkspacePremiumIcon />
-                  How To Pass
+                  Cách hoàn thành
                 </TableCell>
-                <TableCell>Pass all graded assignments to complete the course.</TableCell>
+                <TableCell>Vượt qua tất cả các bài tập đã được chấm điểm để hoàn thành khóa học.</TableCell>
               </TableRow>
             </TableBody>
           </Table>
@@ -87,21 +86,24 @@ function CourseInfo() {
         <Divider />
         <div>
           {syllabus?.map((data) => {
-            return (
-              <>
-                <Accordion>
-                  <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
-                    <Typography>{data?.name}</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Typography>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet
-                      blandit leo lobortis eget.
-                    </Typography>
-                  </AccordionDetails>
-                </Accordion>
-              </>
-            );
+            if (data?.status === 'Active') {
+              return (
+                <>
+                  <Accordion>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
+                    >
+                      <Typography>{data?.name}</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <LessonInfo lessonsBySyllabus={data?.lessons} />
+                    </AccordionDetails>
+                  </Accordion>
+                </>
+              );
+            }
           })}
         </div>
       </div>

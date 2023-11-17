@@ -10,6 +10,7 @@ import {
     TableHead,
     TableRow,
     TextField,
+    TablePagination,
 } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
 import { Link, useParams } from 'react-router-dom';
@@ -24,6 +25,7 @@ import Cookies from 'js-cookie';
 import moment from 'moment/moment';
 import ListLessonModal from '../../Lesson/ListLessonModal';
 import { sortByID } from '../../../../util/Utilities';
+import Swal from 'sweetalert2';
 
 export default function SyllabusDetail() {
     const { courseId, syllabusId } = useParams();
@@ -39,19 +41,33 @@ export default function SyllabusDetail() {
     const handleUpdateSyllabus = async (id, status) => {
         const token = Cookies.get('token')
         if (token) {
-            // Close the syllabus edit modal
-            const lessons = syllabus?.lessons
-            const body = {
-                ...syllabus,
-                status: status,
-                courseId: courseId,
-                lessonIds: lessons
-            }
-            await postData('/syllabus/save', body, token).then(resp => {
+            await fetchData(`/syllabus/byCourseId?course_id=${courseId}`, token).then(resp => {
                 if (resp) {
-                    window.location.reload()
+                    const isExist = resp.find(r => r.status === 'Active')
+                    if (isExist === undefined && status == 'Active' || status == 'Deactive') {
+                        // Close the syllabus edit modal
+                        const lessons = syllabus?.lessons.map(s => s.id)
+                        const body = {
+                            ...syllabus,
+                            status: status,
+                            courseId: courseId,
+                            lessonIds: lessons
+                        }
+                        postData('/syllabus/save', body, token).then(resp => {
+                            if (resp) {
+                                window.location.reload()
+                            }
+                        })
+                    } else {
+                        Swal.fire({
+                            title: "Warning",
+                            text: "There is only one syllabus active at the moment",
+                            icon: "warning"
+                        });
+                    }
                 }
             })
+
         }
         setIsSyllabusEditModalOpen(false);
     };
@@ -214,6 +230,25 @@ export default function SyllabusDetail() {
             })
         }
     }
+
+    // State to keep track of the current page and the number of rows per page
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+
+    // Change page
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    // Change the number of rows per page
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const emptyRows = searchData ? page > 0 ? Math.max(0, (1 + page) * rowsPerPage - searchData.length) : 0 : page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
+
+
     return (
         loading ? <Loading /> :
             syllabus && (
@@ -269,51 +304,19 @@ export default function SyllabusDetail() {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {searchData ? searchData.map((l, index) => {
+                                    {searchData ? searchData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((l, index) => {
                                         return (
-                                            <TableRow key={index}>
-                                                <TableCell>{index + 1}</TableCell>
-                                                <TableCell><TextTruncate text={l.name} /></TableCell>
-                                                {/* <TableCell>
+                                            <>
+                                                <TableRow key={index}>
+                                                    <TableCell>{index + 1}</TableCell>
+                                                    <TableCell><TextTruncate text={l.name} /></TableCell>
+                                                    {/* <TableCell>
                                                     <a href={l.url} target="_blank" rel="noopener noreferrer">
                                                         <TextTruncate text={l.url} />
                                                     </a>
                                                 </TableCell> */}
 
-                                                <TableCell><TextTruncate text={l.createDate} /></TableCell>
-                                                <TableCell><TextTruncate text={l.status === 'true' ? 'Hoạt động' : 'Không hoạt động'} /></TableCell>
-                                                <TableCell><TextTruncate text={l.description} /></TableCell>
-                                                <TableCell><TextTruncate text={l.estimateTime} /></TableCell>
-                                                <TableCell>
-                                                    <Link className="btn btn-outline-secondary" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}`}>
-                                                        D.sách bài kiểm tra
-                                                    </Link>
-                                                    {/* <Link className="btn btn-outline-secondary mx-1" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}/create-quiz`}>
-                                                        Tạo
-                                                    </Link> */}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {/* <Button
-                                                        variant="outlined"
-                                                        style={{ marginLeft: '10px' }}
-                                                        onClick={() => handleEditLesson(l)}
-                                                    >
-                                                        Chỉnh sửa
-                                                    </Button> */}
-                                                    <Link className="btn btn-outline-secondary" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}/resources`}>
-                                                        Tài nguyên
-                                                    </Link>
-                                                </TableCell>
-                                            </TableRow>
-                                        );
-                                    }) :
-                                        data && data.length > 0 && data.map((l, index) => {
-                                            return (
-                                                <TableRow key={index}>
-                                                    <TableCell>{index + 1}</TableCell>
-                                                    <TableCell><TextTruncate text={l.name} /></TableCell>
-                                                    {/* <TableCell><Link to={l.url}><TextTruncate text={l.url} /></Link></TableCell> */}
-                                                    <TableCell><TextTruncate text={l.dateTime} /></TableCell>
+                                                    <TableCell><TextTruncate text={l.createDate} /></TableCell>
                                                     <TableCell><TextTruncate text={l.status === 'true' ? 'Hoạt động' : 'Không hoạt động'} /></TableCell>
                                                     <TableCell><TextTruncate text={l.description} /></TableCell>
                                                     <TableCell><TextTruncate text={l.estimateTime} /></TableCell>
@@ -322,31 +325,81 @@ export default function SyllabusDetail() {
                                                             D.sách bài kiểm tra
                                                         </Link>
                                                         {/* <Link className="btn btn-outline-secondary mx-1" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}/create-quiz`}>
-                                                            Tạo
-                                                        </Link> */}
+                                                        Tạo
+                                                    </Link> */}
                                                     </TableCell>
                                                     <TableCell>
                                                         {/* <Button
+                                                        variant="outlined"
+                                                        style={{ marginLeft: '10px' }}
+                                                        onClick={() => handleEditLesson(l)}
+                                                    >
+                                                        Chỉnh sửa
+                                                    </Button> */}
+                                                        <Link className="btn btn-outline-secondary" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}/resources`}>
+                                                            Tài nguyên
+                                                        </Link>
+                                                    </TableCell>
+                                                </TableRow>
+                                                {emptyRows > 0 && (
+                                                    <TableRow style={{ height: 53 * emptyRows }}>
+                                                        <TableCell colSpan={6} />
+                                                    </TableRow>
+                                                )}
+                                            </>
+                                        );
+                                    }) :
+                                        data && data.length > 0 && data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((l, index) => {
+                                            return (
+                                                <>
+                                                    <TableRow key={index}>
+                                                        <TableCell>{index + 1}</TableCell>
+                                                        <TableCell><TextTruncate text={l.name} /></TableCell>
+                                                        {/* <TableCell><Link to={l.url}><TextTruncate text={l.url} /></Link></TableCell> */}
+                                                        <TableCell><TextTruncate text={l.dateTime} /></TableCell>
+                                                        <TableCell><TextTruncate text={l.status === 'true' ? 'Hoạt động' : 'Không hoạt động'} /></TableCell>
+                                                        <TableCell><TextTruncate text={l.description} /></TableCell>
+                                                        <TableCell><TextTruncate text={l.estimateTime} /></TableCell>
+                                                        <TableCell>
+                                                            <Link className="btn btn-outline-secondary" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}`}>
+                                                                D.sách bài kiểm tra
+                                                            </Link>
+                                                            {/* <Link className="btn btn-outline-secondary mx-1" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}/create-quiz`}>
+                                                            Tạo
+                                                        </Link> */}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {/* <Button
                                                             variant="outlined"
                                                             style={{ marginLeft: '10px' }}
                                                             onClick={() => handleEditLesson(l)}
                                                         >
                                                             Chỉnh sửa
                                                         </Button> */}
-                                                        <Link className="btn btn-outline-secondary" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}/resources`}>
-                                                            Tài nguyên
-                                                        </Link>
-                                                    </TableCell>
-                                                </TableRow>
+                                                            <Link className="btn btn-outline-secondary" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}/resources`}>
+                                                                Tài nguyên
+                                                            </Link>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                    {emptyRows > 0 && (
+                                                        <TableRow style={{ height: 53 * emptyRows }}>
+                                                            <TableCell colSpan={6} />
+                                                        </TableRow>
+                                                    )}
+                                                </>
                                             )
                                         })}
                                 </TableBody>
                             </Table>
-                            {/* <div className="text-end">
-                            <Button variant="outlined" style={{ marginTop: '20px' }}>
-                                Hoàn thành
-                            </Button>
-                        </div> */}
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                component="div"
+                                count={searchData ? searchData.length : data.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                            />
                         </Paper>
                     </div>
                     <SyllabusUpdateModal

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
+
 import CourseTableComponent from '../CourseTableComponent/CourseTableComponent';
 import { InputBase, Modal, FormControl, InputLabel, Select, MenuItem, Button, TextField, Typography, Box, Divider } from '@mui/material';
 import { fetchData, postData } from '../../../services/AppService';
@@ -10,6 +9,11 @@ import Loading from '../../Loading/Loading';
 import { validateInputDigits, validateInputString } from '../../../util/Utilities';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import storage from '../../../util/firebase';
+import Swal from 'sweetalert2';
+import emailjs from 'emailjs-com';
+import { YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, YOUR_USER_ID } from '../../../util/Constants';
+import { Tab, Tabs } from '@material-ui/core';
+
 // import firebase from 'firebase/compat/app';
 
 function CourseTabsComponent({ activeCourses, inactiveCourses, pendingCourses, draftCourses, rejectCourses, size }) {
@@ -57,7 +61,39 @@ function CourseTabsComponent({ activeCourses, inactiveCourses, pendingCourses, d
         setNewSubjectName(''); // Reset the subject name input
     };
 
-    const handleCreateNewSubject = () => {
+    const handleCreateNewSubject = async (e) => {
+        e.preventDefault();
+
+        const token = Cookies.get('token')
+        if (token) {
+            fetchData(`/account/byRoleId?role_id=STAFF`, token).then(resp => {
+                if (resp) {
+                    const user = JSON.parse(Cookies.get('user'));
+                    resp.forEach(p => {
+                        // The object passed here should match your EmailJS template parameters
+                        const templateParams = {
+                            from_email: user.email,
+                            to_email: p.profile.email,
+                            user_name: user.username,
+                            message: newSubjectName
+                        };
+
+                        emailjs.send(YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, templateParams, YOUR_USER_ID)
+                            .then((result) => {
+                                Swal.fire({
+                                    title: "Chúc mừng",
+                                    text: "Đề nghị của bạn đã được gửi đến Manager",
+                                    icon: "success"
+                                });
+                            }, (error) => {
+                                console.log('Failed to send email.', error.text);
+                            });
+                    });
+                }
+            });
+        }
+
+
         setNewSubjectModalOpen(false);
         setNewSubjectName('');
     };
@@ -79,31 +115,32 @@ function CourseTabsComponent({ activeCourses, inactiveCourses, pendingCourses, d
         setModalOpen(false);
     };
 
-    // const handleOnSave = (file) => {
-    //     // setLoading(true);
-
-
-    // };
-
     const handleCreateCourse = async () => {
         const user = JSON.parse(Cookies.get('user'))
         const token = Cookies.get('token');
+
         if (token && user) {
             try {
                 const isValidString = validateInputString(courseName, status, description);
                 const isValidDigit = validateInputDigits(price, duration, passingScore);
+                const findSubject = subjectList.find(s => s.id == subject)
+                if (findSubject !== -1) {
+                    if (parseInt(findSubject.minPrice) > parseInt(price)) {
+                        alert(`pls price should be > ${findSubject.minPrice}`);
+                        return
+                    }
+                }
                 if (!isValidString || !isValidDigit) {
                     alert('pls fill all fields and digit should be positive');
                     return
                 }
-
                 // handleOnSave(coverImage);
                 if (!coverImage) {
                     alert("Please choose a file first!");
                     setLoading(false);
                     return;
                 }
-
+                setLoading(true)
                 // Creating a reference to the file in Firebase Storage
                 const storageRef = ref(storage, `/elearning/text/${coverImage.name}`);
 
@@ -139,7 +176,6 @@ function CourseTabsComponent({ activeCourses, inactiveCourses, pendingCourses, d
                                 teacherId: user.teacherId,
                                 subjectId: parseInt(subject)
                             }
-                            console.log(body);
                             postData('/course/save', body, token).then(resp => {
 
                                 if (resp) {
@@ -149,8 +185,13 @@ function CourseTabsComponent({ activeCourses, inactiveCourses, pendingCourses, d
                                             courseId: resp.id,
                                             lessonIds: []
                                         }
-                                        postData('/syllabus/save', syllabusBody, token)
+                                        postData('/syllabus/save', syllabusBody, token).then(resp => {
+                                            if (resp) {
+                                                window.location.reload()
+                                            }
+                                        })
                                     }
+                                    window.location.reload()
                                 }
                             })
                         });
@@ -174,7 +215,7 @@ function CourseTabsComponent({ activeCourses, inactiveCourses, pendingCourses, d
         setCoverImage(null);
         setframeProgram('')
 
-        window.location.reload()
+
     };
 
     // Determine the course array based on the selected tab
@@ -255,6 +296,44 @@ function CourseTabsComponent({ activeCourses, inactiveCourses, pendingCourses, d
         }
     };
 
+    const handleDisableCourse = async (course) => {
+        const token = Cookies.get('token');
+        if (token) {
+            Swal.fire({
+                title: 'Bạn có chắc chắn?',
+                text: 'Bạn sẽ không thể thay đổi nếu bạn đồng ý',
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Hủy',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Tôi đồng ý',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // If the user clicks "Yes, complete it!"
+                    setLoading(true);
+                    try {
+                        const body = {
+                            ...course,
+                            teacherId: course.teacher.id,
+                            subjectId: course.subject.id,
+                            status: 'DEACTIVE',
+                        };
+
+                        const resp = postData('/course/save', body, token);
+
+                        if (resp) {
+                            window.location.reload();
+                        }
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
+            });
+
+        }
+    };
+
 
     // Filter courses based on the search text
     const filteredCourses = selectedCourses.filter((course) =>
@@ -280,9 +359,12 @@ function CourseTabsComponent({ activeCourses, inactiveCourses, pendingCourses, d
                         />
 
                     </div>
-                    <button className='btn btn-outline-info' onClick={handleModalOpen}>Tạo mới</button>
+                    <div className='d-flex'>
+                        <button color="primary" sx={{ my: 1 }} className='btn btn-outline-primary mx-2' onClick={handleNewSubjectModalOpen}>Kiến nghị môn học mới</button>
+                        <button className='btn btn-outline-info' onClick={handleModalOpen}>Tạo mới</button>
+                    </div>
                 </div>
-                <CourseTableComponent courses={filteredCourses} onApprove={handleApproveCourse} />
+                <CourseTableComponent courses={filteredCourses} onApprove={handleApproveCourse} onDisable={handleDisableCourse} />
 
                 {/* Modal for creating a new course */}
                 <Modal open={isModalOpen} onClose={handleModalClose}>
@@ -296,7 +378,7 @@ function CourseTabsComponent({ activeCourses, inactiveCourses, pendingCourses, d
                                         return <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>
                                     })}
                                 </Select>
-                                <Button variant="outlined" color="primary" sx={{ my: 1 }} className='col-3 mx-1' onClick={handleNewSubjectModalOpen}>Tạo môn học mới</Button>
+
                             </div>
                         </FormControl>
                         <div className='d-flex justify-content-between'>
@@ -335,8 +417,12 @@ function CourseTabsComponent({ activeCourses, inactiveCourses, pendingCourses, d
                 </Modal>
                 <Modal open={isNewSubjectModalOpen} onClose={handleNewSubjectModalClose}>
                     <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, bgcolor: 'background.paper', boxShadow: 24, p: 4 }}>
-                        <Typography variant="h5">Tạo môn học mới</Typography>
-                        <TextField fullWidth label="Tên môn học" value={newSubjectName} onChange={(e) => setNewSubjectName(e.target.value)} sx={{ my: 1 }} />
+                        <Typography variant="h5">Kiến nghị môn học</Typography>
+                        <form onSubmit={handleCreateNewSubject}>
+                            <label className='my-1'>Nội dung</label>
+                            <textarea className='my-1 p-2' rows={5} cols={40} fullWidth label="Nội dung" value={newSubjectName} onChange={(e) => setNewSubjectName(e.target.value)} sx={{ my: 1 }} />
+                        </form>
+
                         <div className='d-flex justify-content-end'>
                             <Button variant="contained" color="primary" onClick={handleCreateNewSubject} className='mx-2'>Tạo</Button>
                             <Button variant="outlined" color="secondary" onClick={handleNewSubjectModalClose}>Hủy</Button>

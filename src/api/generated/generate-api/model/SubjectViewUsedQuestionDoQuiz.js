@@ -54,9 +54,6 @@ class SubjectViewUsedQuestionDoQuiz {
             if (data.hasOwnProperty('createDate')) {
                 obj['createDate'] = ApiClient.convertToType(data['createDate'], 'Date');
             }
-            if (data.hasOwnProperty('minPrice')) {
-                obj['minPrice'] = ApiClient.convertToType(data['minPrice'], 'Number');
-            }
             if (data.hasOwnProperty('status')) {
                 obj['status'] = ApiClient.convertToType(data['status'], 'Boolean');
             }
@@ -99,11 +96,6 @@ SubjectViewUsedQuestionDoQuiz.prototype['description'] = undefined;
  * @member {Date} createDate
  */
 SubjectViewUsedQuestionDoQuiz.prototype['createDate'] = undefined;
-
-/**
- * @member {Number} minPrice
- */
-SubjectViewUsedQuestionDoQuiz.prototype['minPrice'] = undefined;
 
 /**
  * @member {Boolean} status

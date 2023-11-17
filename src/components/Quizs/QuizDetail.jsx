@@ -12,6 +12,7 @@ import {
     Select,
     MenuItem,
     TextField,
+    TablePagination,
 } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
 import { Link, useParams } from 'react-router-dom';
@@ -93,6 +94,23 @@ export default function QuizDetail() {
         setOpen(false);
     };
 
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+
+    // Change page
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    // Change the number of rows per page
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredData?.length) : 0;
+
+
     return (
         data && (
             <div className="m-5">
@@ -162,23 +180,40 @@ export default function QuizDetail() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {filteredData && filteredData.length > 0 && filteredData.map((s, index) => {
+                                {filteredData && filteredData.length > 0 && filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((s, index) => {
                                     return (
-                                        <TableRow key={index}>
-                                            <TableCell>{index + 1}</TableCell>
-                                            <TableCell>{s?.student?.account?.username}</TableCell>
-                                            <TableCell>{s?.lastPoint}</TableCell>
-                                            <TableCell>{s?.resultStatus}</TableCell>
-                                            <TableCell>{s?.startTime}</TableCell>
-                                            <TableCell>
-                                                <button className='btn btn-outline-secondary' onClick={() => handleOpen(s)}>Chi tiết</button>
-                                            </TableCell>
-                                        </TableRow>
+                                        <>
+                                            <TableRow key={index}>
+                                                <TableCell>{index + 1}</TableCell>
+                                                <TableCell>{s?.student?.account?.username}</TableCell>
+                                                <TableCell>{s?.lastPoint}</TableCell>
+                                                <TableCell>{s?.resultStatus}</TableCell>
+                                                <TableCell>{s?.startTime}</TableCell>
+                                                <TableCell>
+                                                    <button className='btn btn-outline-secondary' onClick={() => handleOpen(s)}>Chi tiết</button>
+                                                </TableCell>
+                                            </TableRow>
+                                            {emptyRows > 0 && (
+                                                <TableRow style={{ height: 53 * emptyRows }}>
+                                                    <TableCell colSpan={6} />
+                                                </TableRow>
+                                            )}
+                                        </>
                                     );
                                 })}
                             </TableBody>
                         </Table>
-
+                        {
+                            filteredData && <TablePagination
+                                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                component="div"
+                                count={filteredData.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                            />
+                        }
 
                     </Paper>
                 </div>

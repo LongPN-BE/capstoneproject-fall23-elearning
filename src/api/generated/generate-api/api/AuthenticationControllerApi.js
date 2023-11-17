@@ -39,47 +39,6 @@ export default class AuthenticationControllerApi {
 
 
     /**
-     * Callback function to receive the result of the disableAccount operation.
-     * @callback module:api/AuthenticationControllerApi~disableAccountCallback
-     * @param {String} error Error message, if any.
-     * @param {String} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
-     */
-
-    /**
-     * @param {Number} accountId 
-     * @param {module:api/AuthenticationControllerApi~disableAccountCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link String}
-     */
-    disableAccount(accountId, callback) {
-      let postBody = null;
-      // verify the required parameter 'accountId' is set
-      if (accountId === undefined || accountId === null) {
-        throw new Error("Missing the required parameter 'accountId' when calling disableAccount");
-      }
-
-      let pathParams = {
-      };
-      let queryParams = {
-        'account_id': accountId
-      };
-      let headerParams = {
-      };
-      let formParams = {
-      };
-
-      let authNames = ['Bearer'];
-      let contentTypes = [];
-      let accepts = ['*/*'];
-      let returnType = 'String';
-      return this.apiClient.callApi(
-        '/api/v1/auth/disable', 'GET',
-        pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
-      );
-    }
-
-    /**
      * Callback function to receive the result of the getAccountByRoleId operation.
      * @callback module:api/AuthenticationControllerApi~getAccountByRoleIdCallback
      * @param {String} error Error message, if any.
@@ -115,41 +74,6 @@ export default class AuthenticationControllerApi {
       let returnType = [Account];
       return this.apiClient.callApi(
         '/api/v1/auth/byRoleId', 'GET',
-        pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
-      );
-    }
-
-    /**
-     * Callback function to receive the result of the getAccounts operation.
-     * @callback module:api/AuthenticationControllerApi~getAccountsCallback
-     * @param {String} error Error message, if any.
-     * @param {Array.<module:model/Account>} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
-     */
-
-    /**
-     * @param {module:api/AuthenticationControllerApi~getAccountsCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link Array.<module:model/Account>}
-     */
-    getAccounts(callback) {
-      let postBody = null;
-
-      let pathParams = {
-      };
-      let queryParams = {
-      };
-      let headerParams = {
-      };
-      let formParams = {
-      };
-
-      let authNames = ['Bearer'];
-      let contentTypes = [];
-      let accepts = ['*/*'];
-      let returnType = [Account];
-      return this.apiClient.callApi(
-        '/api/v1/auth/accounts', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );

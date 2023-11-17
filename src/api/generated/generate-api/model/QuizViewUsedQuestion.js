@@ -51,9 +51,6 @@ class QuizViewUsedQuestion {
             if (data.hasOwnProperty('id')) {
                 obj['id'] = ApiClient.convertToType(data['id'], 'Number');
             }
-            if (data.hasOwnProperty('title')) {
-                obj['title'] = ApiClient.convertToType(data['title'], 'String');
-            }
             if (data.hasOwnProperty('passScore')) {
                 obj['passScore'] = ApiClient.convertToType(data['passScore'], 'Number');
             }
@@ -89,10 +86,6 @@ class QuizViewUsedQuestion {
      */
     static validateJSON(data) {
         // ensure the json data is a string
-        if (data['title'] && !(typeof data['title'] === 'string' || data['title'] instanceof String)) {
-            throw new Error("Expected the field `title` to be a primitive type in the JSON string but got " + data['title']);
-        }
-        // ensure the json data is a string
         if (data['status'] && !(typeof data['status'] === 'string' || data['status'] instanceof String)) {
             throw new Error("Expected the field `status` to be a primitive type in the JSON string but got " + data['status']);
         }
@@ -113,11 +106,6 @@ class QuizViewUsedQuestion {
  * @member {Number} id
  */
 QuizViewUsedQuestion.prototype['id'] = undefined;
-
-/**
- * @member {String} title
- */
-QuizViewUsedQuestion.prototype['title'] = undefined;
 
 /**
  * @member {Number} passScore

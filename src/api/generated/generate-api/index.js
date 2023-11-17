@@ -252,6 +252,7 @@ import WalletWithdrawRequestView from './model/WalletWithdrawRequestView';
 import WithdrawalRequestEnrollView from './model/WithdrawalRequestEnrollView';
 import WithdrawalRequestTransactionView from './model/WithdrawalRequestTransactionView';
 import WithdrawalRequestWithdrawRequestView from './model/WithdrawalRequestWithdrawRequestView';
+import AccountControllerApi from './api/AccountControllerApi';
 import AnswerControllerApi from './api/AnswerControllerApi';
 import AuthenticationControllerApi from './api/AuthenticationControllerApi';
 import CourseControllerApi from './api/CourseControllerApi';
@@ -1754,6 +1755,12 @@ export {
      * @property {module:model/WithdrawalRequestWithdrawRequestView}
      */
     WithdrawalRequestWithdrawRequestView,
+
+    /**
+    * The AccountControllerApi service constructor.
+    * @property {module:api/AccountControllerApi}
+    */
+    AccountControllerApi,
 
     /**
     * The AnswerControllerApi service constructor.

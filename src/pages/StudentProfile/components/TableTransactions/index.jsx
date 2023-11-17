@@ -70,6 +70,12 @@ const headCells = [
     label: 'Trạng thái',
   },
   {
+    id: 'type',
+    numeric: false,
+    disablePadding: false,
+    label: 'Loại giao dịch',
+  },
+  {
     id: 'transactionDate',
     numeric: false,
     disablePadding: false,
@@ -151,7 +157,8 @@ export default function TableTransactions({ transactions }) {
                       <TableCell align="center">{row?.cardDetails}</TableCell>
                       <TableCell align="center">{row?.amount.toLocaleString()} VNĐ</TableCell>
                       <TableCell align="center">{row?.paymentMethod}</TableCell>
-                      <TableCell align="center">{row?.status}</TableCell>
+                      <TableCell align="center">{row?.paymentHistoryStatus}</TableCell>
+                      <TableCell align="center">{row?.paymentHistoryType}</TableCell>
                       <TableCell align="center">{moment(row?.transactionDate).format('HH:MM:SS DD/MM/YYYY')}</TableCell>
                     </TableRow>
                   );

@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { fetchData, postData } from '../../../../services/AppService'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Button, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
+import { Button, Paper, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, Typography } from '@material-ui/core'
 import QuestionModel from '../ListCourseQuestion/QuestionModel'
 import QuestionQuizModal from './QuestionQuizModal'
 import QuestionBankModal from '../ListCourseQuestion/QuestionBankModal'
@@ -200,6 +200,21 @@ const ListQuizQuestion = () => {
         });
     };
 
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+
+    // Change page
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    // Change the number of rows per page
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - questions.length) : 0;
 
     return (
         questions && (
@@ -229,23 +244,42 @@ const ListQuizQuestion = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {questions.map((question, index) => (
-                                    <TableRow key={question.id}>
-                                        <TableCell>{++index}</TableCell>
-                                        <TableCell>{question.content}</TableCell>
-                                        <TableCell>
-                                            <Button variant="outlined" onClick={() => openModal(question)}>Chi tiết</Button>
-                                        </TableCell>
-                                    </TableRow>
+                                {questions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((question, index) => (
+                                    <>
+                                        <TableRow key={question.id}>
+                                            <TableCell>{++index}</TableCell>
+                                            <TableCell>{question.content}</TableCell>
+                                            <TableCell>
+                                                <Button variant="outlined" onClick={() => openModal(question)}>Chi tiết</Button>
+                                            </TableCell>
+                                        </TableRow>
+                                        {emptyRows > 0 && (
+                                            <TableRow style={{ height: 53 * emptyRows }}>
+                                                <TableCell colSpan={6} />
+                                            </TableRow>
+                                        )}
+                                    </>
                                 ))}
                             </TableBody>
                         </Table>
+                        {
+                            questions && questions.length > 0 && <TablePagination
+                                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                component="div"
+                                count={questions.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                            />
+                        }
                         {questions && questions.length > 0 && <div className='text-end '>
                             <button style={{ marginTop: '20px' }} className='btn btn-outline-primary' onClick={showConfirmationDialog}>
                                 Hoàn thành
                             </button>
 
                         </div>}
+
                     </Paper>
                 </div>
 

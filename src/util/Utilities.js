@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const sortByID = (array) => {
     console.log(array);
     // Check if the array is not empty
@@ -36,10 +38,24 @@ export const validateInputDigits = (...inputs) => {
         // Additional validation logic for strings can be added here
 
         // Example: Check if the string has a minimum length of 3 characters
-        if (parseInt(input) < 0 || !validateInputString(...inputs)) {
+        if (parseInt(input) <= 0 || !validateInputString(...inputs)) {
             return false;
         }
     }
 
     return true; // All inputs are valid strings
 };
+
+export const calDateRange = (dateRange) => {
+    const arr = dateRange.split('---')
+    // Your two date strings
+    const startDateString = arr[0];
+    const endDateString = arr[1];
+
+    // Creating moment objects from the date strings
+    const startDate = moment(startDateString);
+    const endDate = moment(endDateString);
+
+    // Calculating the duration between the two dates
+    return moment.duration(endDate.diff(startDate));
+}

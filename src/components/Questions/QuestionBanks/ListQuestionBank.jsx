@@ -13,6 +13,7 @@ import {
     Select,
     MenuItem,
     InputLabel,
+    TablePagination,
 } from '@material-ui/core';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 // import LessonModal from '../../Lesson/LessonModal'; // Import the LessonModal component
@@ -220,6 +221,22 @@ export default function ListQuestionBank() {
         }
     }, [subjectItem])
 
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+
+    // Change page
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    // Change the number of rows per page
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - questions.length) : 0;
+
     return (
         subjectItem && (
             <div className="m-5">
@@ -306,20 +323,35 @@ export default function ListQuestionBank() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {questions.map((question, index) => (
-                                    <TableRow key={question.id}>
-                                        <TableCell>{++index}</TableCell>
-                                        <TableCell>{question.content}</TableCell>
-                                        <TableCell>
-                                            <Button variant="outlined" onClick={() => openModal(question)}>
-                                                Chỉnh sửa
-                                            </Button>
-                                        </TableCell>
-                                    </TableRow>
+                                {questions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((question, index) => (
+                                    <>
+                                        <TableRow key={question.id}>
+                                            <TableCell>{++index}</TableCell>
+                                            <TableCell>{question.content}</TableCell>
+                                            <TableCell>
+                                                <Button variant="outlined" onClick={() => openModal(question)}>
+                                                    Chỉnh sửa
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                        {emptyRows > 0 && (
+                                            <TableRow style={{ height: 53 * emptyRows }}>
+                                                <TableCell colSpan={6} />
+                                            </TableRow>
+                                        )}
+                                    </>
                                 ))}
                             </TableBody>
                         </Table> : <div className='text-center mt-5'><h3>Không có bài kiểm tra cho bài học này</h3></div>}
-
+                        {questions && questions.length > 0 && <TablePagination
+                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                            component="div"
+                            count={questions.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                        />}
                     </Paper>
                 </div>
 

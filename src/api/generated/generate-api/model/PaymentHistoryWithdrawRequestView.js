@@ -65,6 +65,9 @@ class PaymentHistoryWithdrawRequestView {
             if (data.hasOwnProperty('paymentHistoryStatus')) {
                 obj['paymentHistoryStatus'] = ApiClient.convertToType(data['paymentHistoryStatus'], 'String');
             }
+            if (data.hasOwnProperty('paymentHistoryType')) {
+                obj['paymentHistoryType'] = ApiClient.convertToType(data['paymentHistoryType'], 'String');
+            }
             if (data.hasOwnProperty('cardDetails')) {
                 obj['cardDetails'] = ApiClient.convertToType(data['cardDetails'], 'String');
             }
@@ -112,6 +115,10 @@ class PaymentHistoryWithdrawRequestView {
         // ensure the json data is a string
         if (data['paymentHistoryStatus'] && !(typeof data['paymentHistoryStatus'] === 'string' || data['paymentHistoryStatus'] instanceof String)) {
             throw new Error("Expected the field `paymentHistoryStatus` to be a primitive type in the JSON string but got " + data['paymentHistoryStatus']);
+        }
+        // ensure the json data is a string
+        if (data['paymentHistoryType'] && !(typeof data['paymentHistoryType'] === 'string' || data['paymentHistoryType'] instanceof String)) {
+            throw new Error("Expected the field `paymentHistoryType` to be a primitive type in the JSON string but got " + data['paymentHistoryType']);
         }
         // ensure the json data is a string
         if (data['cardDetails'] && !(typeof data['cardDetails'] === 'string' || data['cardDetails'] instanceof String)) {
@@ -182,6 +189,11 @@ PaymentHistoryWithdrawRequestView.prototype['amount'] = undefined;
  * @member {module:model/PaymentHistoryWithdrawRequestView.PaymentHistoryStatusEnum} paymentHistoryStatus
  */
 PaymentHistoryWithdrawRequestView.prototype['paymentHistoryStatus'] = undefined;
+
+/**
+ * @member {module:model/PaymentHistoryWithdrawRequestView.PaymentHistoryTypeEnum} paymentHistoryType
+ */
+PaymentHistoryWithdrawRequestView.prototype['paymentHistoryType'] = undefined;
 
 /**
  * @member {String} cardDetails
@@ -291,6 +303,27 @@ PaymentHistoryWithdrawRequestView['PaymentHistoryStatusEnum'] = {
      * @const
      */
     "CANCEL": "CANCEL"
+};
+
+
+/**
+ * Allowed values for the <code>paymentHistoryType</code> property.
+ * @enum {String}
+ * @readonly
+ */
+PaymentHistoryWithdrawRequestView['PaymentHistoryTypeEnum'] = {
+
+    /**
+     * value: "DEPOSIT"
+     * @const
+     */
+    "DEPOSIT": "DEPOSIT",
+
+    /**
+     * value: "WITHDRAW"
+     * @const
+     */
+    "WITHDRAW": "WITHDRAW"
 };
 
 

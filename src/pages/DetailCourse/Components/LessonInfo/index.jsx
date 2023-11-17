@@ -40,16 +40,17 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 const lessonApi = new LessonControllerApi(ApiClientSingleton.getInstance());
 
-function LessonInfo() {
+function LessonInfo({ lessonsBySyllabus }) {
   const navigate = useNavigate();
-  const [lessons, setLessons] = useState([]);
+  const [lessons, setLessons] = useState(lessonsBySyllabus);
 
   const { courseId } = useParams();
   useEffect(() => {
-    lessonApi.findLessonByCourseId(courseId, (error, res) => {
-      console.log(res);
-      setLessons(res);
-    });
+    if (!lessonsBySyllabus) {
+      lessonApi.findLessonByCourseId(courseId, (error, res) => {
+        setLessons(res);
+      });
+    }
   }, [courseId]);
 
   return (
