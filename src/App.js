@@ -36,6 +36,8 @@ import Quizz from './pages/Quizz';
 import StudentProfile from './pages/StudentProfile';
 import StudentPrivateRouter from './util/StudentPrivateRouter';
 import ManageSubject from './pages/Manager/ManageSubject/ManageSubject';
+import ManagePayment from './pages/Manager/ManageFiancial/ManageHistoryPayment';
+import ManageTransaction from './pages/Manager/ManageFiancial/ManageHistoryTransaction';
 import CourseBySubject from './pages/Manager/CoursesBySubject/CoursesBySubject';
 import Cookies from 'js-cookie';
 import ListQuestionBank from './components/Questions/QuestionBanks/ListQuestionBank';
@@ -141,22 +143,24 @@ const App = () => {
         </NavBar>
       ) : user?.role === 'STAFF' ? (
         <NavBar>
-        <Routes>
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="/dashboard" element={  <Dashboard />  }/>
-          <Route path="/subjects"element={  <ManageSubject />  }/>
-          <Route path="/course/subject/:subjectId"element={<CourseBySubject /> }/>
-          <Route path="/subject/course/syllabus/:courseId"element={<SyllabusByCourse /> }/>
-          <Route path="/subject/course/syllabus/courses/:courseId/preview">
-            <Route path="" element={<PreviewCourse />}>
-              <Route path=":lessonId/:type/:id" element={<PreviewLesson />} />
-              <Route path=":lessonId/:type" element={<PreviewLesson />} />
+          <Routes>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/subjects" element={<ManageSubject />} />
+            <Route path="/course/subject/:subjectId" element={<CourseBySubject />} />
+            <Route path="/subject/course/syllabus/:courseId" element={<SyllabusByCourse />} />
+            <Route path="/subject/course/syllabus/courses/:courseId/preview">
+              <Route path="" element={<PreviewCourse />}>
+                <Route path=":lessonId/:type/:id" element={<PreviewLesson />} />
+                <Route path=":lessonId/:type" element={<PreviewLesson />} />
+              </Route>
+              {/* <Route path=":lessonId/quiz/:id/start" element={<Quizz />} /> */}
             </Route>
-            {/* <Route path=":lessonId/quiz/:id/start" element={<Quizz />} /> */}
-          </Route>
-          <Route path="/accounts" element={<Accounts /> }/>
-          <Route path="/configs"element={<ListConfig /> }/>
-        </Routes>
+            <Route path="/payments" element={<ManagePayment />} />
+            <Route path="/transactions" element={<ManageTransaction />} />
+            <Route path="/accounts" element={<Accounts />} />
+            <Route path="/configs" element={<ListConfig />} />
+          </Routes>
         </NavBar>
       ) : user?.role === 'STUDENT' ? (
         <Routes element={<StudentPrivateRouter />}>

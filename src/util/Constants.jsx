@@ -118,12 +118,12 @@ export const navData = {
         {
           label: 'Lịch sử giao dịch',
           icon: <ReceiptIcon />,
-          path: '##',
+          path: '/transactions',
         },
         {
-          label: 'Lịch sử chi trả',
+          label: 'Lịch sử thanh toán',
           icon: <PaidIcon />,
-          path: '##',
+          path: '/payments',
         },
       ],
     },

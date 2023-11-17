@@ -260,6 +260,15 @@ export default function ListAccount() {
             count={filterData.length}
             rowsPerPage={rowsPerPage}
             page={page}
+            slotProps={{
+              select: {
+                'aria-label': 'rows per pageaa',
+              },
+              actions: {
+                showFirstButton: true,
+                showLastButton: true,
+              },
+            }}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
