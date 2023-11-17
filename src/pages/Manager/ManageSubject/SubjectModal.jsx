@@ -51,9 +51,28 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
     status: 'Chưa kích hoạt',
   });
 
+  const [editedSubjectError, setEditedSubjectError,] = useState({
+    name: '',
+    description: '',
+    minPrice: '',
+    createDate: new Date(),
+    staffId: user.id,
+    status: 'Chưa kích hoạt',
+  });
+
+
   const handleInputChange = (e, fieldName) => {
     const { value } = e.target;
+    let max = 70; // ký tự tối đa
     setEditedSubject({ ...editedSubject, [fieldName]: value });
+    if (value == '' || value.length >= max) {
+      setEditedSubjectError({
+        ...editedSubjectError,
+        [fieldName]: 'Không được để trống hoặc quá dài quá ' + max + ' ký tự!',
+      });
+    } else {
+      setEditedSubjectError({ ...editedSubjectError, [fieldName]: '' });
+    }
   };
 
   const handleSave = () => {
@@ -97,37 +116,95 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
     <Dialog open={isOpen} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>{subject ? 'Cập nhật môn học' : 'Tạo mới môn học'}</DialogTitle>
       <DialogContent>
-        <TextField
-          fullWidth
-          label="Tên môn học"
-          autoFocus
-          margin="dense"
-          name="name"
-          value={editedSubject.name}
-          onChange={(e) => handleInputChange(e, 'name')}
-          required
-        />
-        <TextField
-          fullWidth
-          multiline
-          rows={4}
-          label="Chú thích"
-          autoFocus
-          margin="dense"
-          name="description"
-          value={editedSubject.description}
-          onChange={(e) => handleInputChange(e, 'description')}
-          required
-        />
-        <TextField
-          fullWidth
-          label="Giá thấp nhất"
-          autoFocus
-          margin="dense"
-          name="minPrice"
-          value={editedSubject.minPrice}
-          onChange={(e) => handleInputChange(e, 'minPrice')}
-        />
+        {editedSubjectError.name == '' ? (
+          <>
+            <TextField
+              fullWidth
+              label="Tên môn học"
+              autoFocus
+              margin="dense"
+              name="name"
+              value={editedSubject.name}
+              onChange={(e) => handleInputChange(e, 'name')}
+              required
+            />
+          </>
+        ) : (
+          <>
+            <TextField
+              error
+              fullWidth
+              label="Tên môn học"
+              autoFocus
+              margin="dense"
+              name="name"
+              value={editedSubject.name}
+              onChange={(e) => handleInputChange(e, 'name')}
+              helperText={editedSubjectError.name}
+              required
+            />
+          </>)}
+
+        {editedSubjectError.description == '' ? (
+          <>
+            <TextField
+              fullWidth
+              multiline
+              rows={4}
+              label="Chú thích"
+              autoFocus
+              margin="dense"
+              name="description"
+              value={editedSubject.description}
+              onChange={(e) => handleInputChange(e, 'description')}
+              required
+            />
+          </>
+        ) : (
+          <>
+            <TextField
+              error
+              fullWidth
+              multiline
+              rows={4}
+              label="Chú thích"
+              autoFocus
+              margin="dense"
+              name="description"
+              value={editedSubject.description}
+              onChange={(e) => handleInputChange(e, 'description')}
+              helperText={editedSubjectError.description}
+              required
+            />
+          </>)}
+
+        {editedSubjectError.minPrice == '' ? (
+          <>
+            <TextField
+              fullWidth
+              label="Giá thấp nhất"
+              autoFocus
+              margin="dense"
+              name="minPrice"
+              value={editedSubject.minPrice}
+              onChange={(e) => handleInputChange(e, 'minPrice')}
+            />
+          </>
+        ) : (
+          <>
+            <TextField
+              error
+              fullWidth
+              label="Giá thấp nhất"
+              autoFocus
+              margin="dense"
+              name="minPrice"
+              value={editedSubject.minPrice}
+              onChange={(e) => handleInputChange(e, 'minPrice')}
+              helperText={editedSubjectError.minPrice}
+            />
+          </>)}
+
         <TextField
           fullWidth
           label="Ngày khởi tạo"
@@ -138,7 +215,9 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
           onChange={(e) => handleInputChange(e, 'createDate')}
           disabled={true}
         />
-        <TextField fullWidth label="ID" autoFocus margin="dense" name="staffId" value={user.id} disabled={true} />
+
+
+        {/* <TextField fullWidth label="ID" autoFocus margin="dense" name="staffId" value={user.id} disabled={true} /> */}
         {/* <TextField
           fullWidth
           autoFocus

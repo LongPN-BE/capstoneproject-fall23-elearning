@@ -76,7 +76,7 @@ function CourseTableComponent({ courses }) {
       fetchData('/course/approve?course_id=' + course.id, token)
         .then((resp) => {
           if (resp) {
-            showSuccess(course.name);
+            showSuccess(course);
           }
         })
         .catch((err) => {

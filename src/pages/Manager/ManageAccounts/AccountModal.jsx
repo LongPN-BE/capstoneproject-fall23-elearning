@@ -101,7 +101,6 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
       <DialogContent>
         {editedAccountError.username == '' ? (
           <>
-            {' '}
             <TextField
               fullWidth
               label="Tài khoản"
@@ -114,7 +113,6 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
           </>
         ) : (
           <>
-            {' '}
             <TextField
               error
               fullWidth
@@ -145,7 +143,6 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
           </>
         ) : (
           <>
-            {' '}
             <TextField
               error
               fullWidth
@@ -166,7 +163,6 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
             <TextField
               fullWidth
               multiline
-              rows={4}
               label="Tên"
               autoFocus
               margin="dense"
@@ -177,12 +173,10 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
           </>
         ) : (
           <>
-            {' '}
             <TextField
               error
               fullWidth
               multiline
-              rows={4}
               label="Tên"
               autoFocus
               margin="dense"
@@ -238,7 +232,6 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
           </>
         ) : (
           <>
-            {' '}
             <TextField
               error
               fullWidth
