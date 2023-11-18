@@ -214,7 +214,7 @@ export default function ListAccount() {
                     <TableCell>{a.profile.email}</TableCell>
                     <TableCell>{a.active ? 'Đang hoạt động' : 'Chưa kích hoạt'} </TableCell>
                     <TableCell>
-                      {/* {!a.active ? <>
+                      {!a.active ? <>
                         <button
                           type="submit"
                           title="Approve"
@@ -232,7 +232,7 @@ export default function ListAccount() {
                         >
                           <DoNotDisturbAltIcon />
                         </button>
-                      </>} */}
+                      </>}
                     </TableCell>
                     <TableCell>
                       {/* <Link className="btn btn-outline-secondary" to={`##`}>
