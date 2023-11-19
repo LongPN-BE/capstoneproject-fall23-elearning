@@ -9,17 +9,28 @@ import {
     TableCell,
     TableHead,
     TableRow,
-    TextField,
     TablePagination,
+    Select,
+    MenuItem,
 } from '@material-ui/core';
 import Cookies from 'js-cookie';
-import { fetchData, postData } from '../../../services/AppService';
+import { fetchData } from '../../../services/AppService';
 import moment from 'moment/moment';
-
+import CustomBreadcrumbs from '../../../components/Breadcrumbs';
 
 export default function ListTransactionHistory() {
     const [data, setData] = useState([]);
-    const [searchValue, setSearchValue] = useState('');
+    const [dataFilter, setDataFilter] = useState([]);
+    const breadcrumbItems = [
+        {
+            url: '/',
+            label: 'Trang chủ',
+        },
+        {
+            url: `/transactions`,
+            label: `Danh sách lịch sử giao dịch`,
+        },
+    ];
 
 
     useEffect(() => {
@@ -29,6 +40,7 @@ export default function ListTransactionHistory() {
                 fetchData('/transaction/transactions', token).then((resp) => {
                     if (resp) {
                         setData(resp);
+                        setDataFilter(resp);
                     }
                 });
             } catch (error) {
@@ -52,38 +64,138 @@ export default function ListTransactionHistory() {
     };
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
+
+    // date function
+    const [monthS, setMonthS] = useState([]);
+    const [dayS, setDayS] = useState();
+    let [monthA, setMonthA] = useState(new Date());
+    let fullYearCalendar = {};
+
+    function getMonthName(monthNumber) {
+        const date = new Date();
+        date.setMonth(monthNumber);
+        return date.toLocaleString('en-US', { month: 'long' });
+    }
+
+    const handleChangeMonth = (event) => {
+        setMonthA(new Date(event.target.value));
+        let date = new Date(monthA.getFullYear(), 0, 1);
+        let dayLength = 1000 * 60 * 60 * 24;
+        let year = date.getFullYear();
+        let yearLength = ((year % 4) || (!(year % 100) && (year % 400))) ? 365 : 366;
+        for (let i = 0; i < yearLength; i++) {
+            let month = date.toLocaleDateString('en-US', { month: 'long' });
+            let weekday = date.toLocaleDateString('vi-VN', { weekday: 'short' });
+            if (!fullYearCalendar[month])
+                fullYearCalendar[month] = [];
+            fullYearCalendar[month].push({
+                date: date.getDate(),
+                day: weekday
+            });
+            date = new Date(date.getTime() + dayLength);
+        }
+        setMonthS(fullYearCalendar[getMonthName(new Date(event.target.value).getMonth())]);
+    };
+
+    const handleFilterPayment = () => {
+        if (monthS.length > 31) {
+            setDataFilter(data);
+        } else {
+            if (!dayS) {
+                const filteredDates = data.filter(d =>
+                    new Date(moment(d.dateProcess).format("YYYY"), moment(d.dateProcess).format("MM"), 0) -
+                    new Date(monthA.getFullYear(), monthA.getMonth() + 1, 0)
+                    === 0);
+                setDataFilter(filteredDates);
+            } else {
+                const filteredDates = data.filter(d =>
+                    new Date(moment(d.dateProcess).format("YYYY"), moment(d.dateProcess).format("MM"), moment(d.dateProcess).format("DD")) -
+                    new Date(monthA.getFullYear(), monthA.getMonth() + 1, dayS)
+                    === 0);
+                setDataFilter(filteredDates);
+            }
+        }
+    }
+
     return (
         data && (
             <div className="m-5">
                 <div style={{ margin: '20px' }}>
                     <Paper style={{ padding: '20px' }}>
-                        <Typography variant="body1">Trang chủ {'>'} Quản lý giao dịch</Typography>
+                        <CustomBreadcrumbs items={breadcrumbItems} />
 
                         <div className="d-flex align-items-center" style={{ marginTop: '20px' }}>
-                            <Typography variant="subtitle1">Danh sách Lịch sử giao dịch</Typography>
+                            <Typography variant="h5">Danh sách Lịch sử giao dịch</Typography>
+                        </div>
+                        <div className="d-flex align-items-center" style={{ marginTop: '20px' }}>
+                            Ngày :
+                            <Select style={{ marginLeft: '10px', marginRight: '20px', width: '10%' }}
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={dayS}
+                                onChange={(e) => setDayS(e.target.value)}
+                            >
+                                <MenuItem value={""}>--</MenuItem>
+                                {monthS.map((s, index) => {
+                                    return (
+                                        <MenuItem key={index} value={s.date}>{s.date + ", " + s.day}</MenuItem>
+                                    )
+                                })}
+                            </Select>
+                            Tháng :
+                            <InputBase
+                                type="month"
+                                min="2023-01"
+                                max={new Date()}
+                                onChange={(e) => handleChangeMonth(e)}
+                                style={{
+                                    borderRadius: '15px',
+                                    marginLeft: '10px'
+                                }} />
+
+                            <Button style={{
+                                marginLeft: '10px',
+                                borderRadius: '10px',
+                                backgroundColor: '#DDDDDD'
+                            }}
+                                onClick={() => handleFilterPayment()}>
+                                Tìm kiếm
+                            </Button>
                         </div>
 
                         <Table style={{ marginTop: '20px' }}>
                             <TableHead>
                                 <TableRow>
                                     <TableCell>STT</TableCell>
-                                    <TableCell>Ngày</TableCell>
+                                    <TableCell>Thời gian <br />(Ngày/Tháng/Năm)</TableCell>
                                     <TableCell>Lý do</TableCell>
-                                    <TableCell>Số tiền</TableCell>
+                                    <TableCell>Số tiền <br /> (vnd)</TableCell>
                                     <TableCell>Tài khoản thực hiện</TableCell>
                                     <TableCell>Trạng thái</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((s, index) => {
+                                {dataFilter.sort((a, b) => {
+                                    return new Date(b.dateProcess) - new Date(a.dateProcess)
+                                }).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((s, index) => {
                                     return (
                                         <TableRow hover={true} key={index}>
-                                            <TableCell>{index + 1}</TableCell>
-                                            <TableCell>{moment(s.dateProcess).format('DD/MM/YYYY')}</TableCell>
+                                            <TableCell>{index + (page * rowsPerPage, page * rowsPerPage) + 1}</TableCell>
+                                            <TableCell>
+                                                <Typography variant='body1' color='primary'>
+                                                    {moment(s.dateProcess).format('DD/MM/YYYY')}
+                                                </Typography>
+
+                                            </TableCell>
                                             <TableCell>{s.description}</TableCell>
-                                            <TableCell>{s.amount}</TableCell>
+                                            <TableCell>
+                                                <Typography variant='subtitle2' color='primary'>{s.amount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</Typography>
+                                            </TableCell>
                                             <TableCell>{s.accountName}</TableCell>
-                                            <TableCell>{s.transactionStatus}</TableCell>
+                                            <TableCell width={'15%'}>{s.transactionStatus === "COMPLETED" ?
+                                                (<Typography variant='body2' style={{ color: 'green', fontWeight: 'bold' }}>ĐÃ THANH TOÁN</Typography>) :
+                                                (<Typography variant='body2' style={{ color: 'green', fontWeight: 'bold' }}>Chưa thanh toán</Typography>)}
+                                            </TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -97,18 +209,10 @@ export default function ListTransactionHistory() {
                         <TablePagination
                             rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                             component="div"
-                            count={data.length}
+                            count={dataFilter.length}
                             rowsPerPage={rowsPerPage}
                             page={page}
-                            slotProps={{
-                                select: {
-                                    'aria-label': 'rows per pageaa',
-                                },
-                                actions: {
-                                    showFirstButton: true,
-                                    showLastButton: true,
-                                },
-                            }}
+                            labelRowsPerPage="Số hàng trên trang :"
                             onPageChange={handleChangePage}
                             onRowsPerPageChange={handleChangeRowsPerPage}
                         />

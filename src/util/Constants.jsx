@@ -14,6 +14,7 @@ import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import PaidIcon from '@mui/icons-material/Paid';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import SettingsIcon from '@mui/icons-material/Settings';
+import ReportIcon from '@mui/icons-material/Report';
 
 export const DISPLAY_LOADING = 'DISPLAY_LOADING';
 export const HIDE_LOADING = 'HIDE_LOADING';
@@ -103,12 +104,11 @@ export const navData = {
           icon: <GridViewRoundedIcon />,
           path: '/subjects',
         },
-        // {
-        //   label: 'Khóa học theo môn',
-        //   icon: <GridViewRoundedIcon />,
-        //   path: '/subjects/courseBySubject',
-        // },
-        // Add more admin-specific items
+        {
+          label: 'Báo cáo',
+          icon: <ReportIcon />,
+          path: '##',
+        },
       ],
     },
     {

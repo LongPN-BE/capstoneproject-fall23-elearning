@@ -20,12 +20,23 @@ import moment from 'moment/moment';
 import AccountModal from './AccountModal';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
+import CustomBreadcrumbs from '../../../components/Breadcrumbs';
 
 export default function ListAccount() {
   const [data, setData] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
   const [accountToEdit, setAccountToEdit] = useState(null);
+  const breadcrumbItems = [
+    {
+      url: '/',
+      label: 'Trang chủ',
+    },
+    {
+      url: `/accounts`,
+      label: `Danh sách tài khoản`,
+    },
+  ];
 
   useEffect(() => {
     const token = Cookies.get('token');
@@ -167,30 +178,31 @@ export default function ListAccount() {
       <div className="m-5">
         {/* <div style={{ margin: '20px' }}> */}
         <Paper style={{ padding: '20px' }}>
-          <Typography variant="body1">Trang chủ {'>'} Quản lý tài khoản</Typography>
+          <CustomBreadcrumbs items={breadcrumbItems} />
 
           <div className="d-flex align-items-center" style={{ marginTop: '20px' }}>
-            <Typography variant="subtitle1">Danh sách tài khoản</Typography>
+            <Typography variant="h5">Danh sách tài khoản</Typography>
 
-            <InputBase
-              placeholder="Tìm kiếm"
-              style={{ marginLeft: '20px' }}
-              startAdornment={<Search />}
-              value={searchValue}
-              onChange={handleSearchChange}
-            />
-            <div className="text-end col-8">
+            <div className="text-end col-9">
               <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={handleAddAccount}>
                 Tạo mới tài khoản giáo viên
               </Button>
             </div>
+          </div>
+          <div className="d-flex" style={{ marginTop: '20px' }}>
+            <InputBase
+              placeholder="Tìm kiếm"
+              style={{ marginLeft: '20px' }}
+              startAdornment={<Search />}
+              onChange={handleSearchChange}
+            />
           </div>
 
           <Table style={{ marginTop: '20px' }}>
             <TableHead>
               <TableRow>
                 <TableCell>STT</TableCell>
-                <TableCell>Tên tài khoản</TableCell>
+                <TableCell width={'120px'}>Tên tài khoản</TableCell>
                 <TableCell>Họ và Tên</TableCell>
                 <TableCell>Vai trò</TableCell>
                 <TableCell>Ngày tạo</TableCell>
@@ -204,7 +216,7 @@ export default function ListAccount() {
               {filterData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((a, index) => {
                 return (
                   <TableRow hover={true} key={index}>
-                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{index + (page * rowsPerPage, page * rowsPerPage) + 1}</TableCell>
                     <TableCell>{a.username}</TableCell>
                     <TableCell>
                       {a.profile.lastName} {a.profile.firstName}
@@ -238,9 +250,9 @@ export default function ListAccount() {
                       {/* <Link className="btn btn-outline-secondary" to={`##`}>
                           Xem
                         </Link> */}
-                      {/* <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={() => handleEditAccount(a)} disabled>
-                        Chỉnh sửa
-                      </Button> */}
+                      <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={() => handleEditAccount(a)} disabled>
+                        <Typography variant='body2'>Xem</Typography>
+                      </Button>
                     </TableCell>
                   </TableRow>
                 );
@@ -258,15 +270,7 @@ export default function ListAccount() {
             count={filterData.length}
             rowsPerPage={rowsPerPage}
             page={page}
-            slotProps={{
-              select: {
-                'aria-label': 'rows per pageaa',
-              },
-              actions: {
-                showFirstButton: true,
-                showLastButton: true,
-              },
-            }}
+            labelRowsPerPage="Số hàng trên trang :"
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />

@@ -14,18 +14,30 @@ import {
   TableHead,
   TableRow,
   TextField,
+  TablePagination,
 } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
 import Cookies from 'js-cookie';
 import { fetchData, postData } from '../../../services/AppService';
 import moment from 'moment/moment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import CustomBreadcrumbs from '../../../components/Breadcrumbs';
 
 export default function ListSubject() {
   const [data, setData] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [isSubjectModalOpen, setIsSubjectModalOpen] = useState(false);
   const [subjectToEdit, setSubjectToEdit] = useState(null);
+  const breadcrumbItems = [
+    {
+      url: '/',
+      label: 'Trang chủ',
+    },
+    {
+      url: `/subjects`,
+      label: `Danh sách sách môn học`,
+    },
+  ];
 
   useEffect(() => {
     const token = Cookies.get('token');
@@ -108,94 +120,119 @@ export default function ListSubject() {
   };
 
   const handleSearchChange = (event) => {
-    const searchInput = event.target.value;
-    setSearchValue(searchInput);
-    // Refilter the data when search input changes
-    filterData(searchInput);
+    setSearchValue(event.target.value);
   };
 
-  const filterData = (searchInput) => {
-    // Filter data based on both status and search input
-    const filteredData = data.filter((item) => {
-      const searchMatch = searchInput === '' || item.name.toLowerCase().includes(searchInput.toLowerCase());
-      return searchMatch;
-    });
+  const filterData = data.filter((subject) =>
+    subject.name.toLowerCase().includes(searchValue.toLowerCase()),
+  );
 
-    setData(filteredData);
+  // State to keep track of the current page and the number of rows per page
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(3);
+
+  // Change page
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
+
+  // Change the number of rows per page
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
   return (
     data && (
       <div className="m-5">
-        <div style={{ margin: '20px' }}>
-          <Paper style={{ padding: '20px' }}>
-            <Typography variant="body1">Trang chủ {'>'} Quản lý môn học</Typography>
+        {/* <div style={{ margin: '20px' }}> */}
+        <Paper style={{ padding: '20px' }}>
+          <CustomBreadcrumbs items={breadcrumbItems} />
 
-            <div className="d-flex align-items-center" style={{ marginTop: '20px' }}>
-              <Typography variant="subtitle1">Danh sách môn học</Typography>
+          <div className="d-flex align-items-center" style={{ marginTop: '20px' }}>
+            <Typography variant="h5">Danh sách môn học</Typography>
 
-              <InputBase
-                placeholder="Search name"
-                style={{ marginLeft: '20px' }}
-                startAdornment={<Search />}
-                onChange={handleSearchChange}
-              />
-              <div className="text-end col-8">
-                <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={handleAddSubject}>
-                  Tạo mới
-                </Button>
-              </div>
+            <div className="text-end col-8">
+              <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={handleAddSubject}>
+                Tạo mới môn học
+              </Button>
             </div>
+          </div>
+          <div className="d-flex" style={{ marginTop: '20px' }}>
+            <InputBase
+              placeholder="Tìm kiếm"
+              style={{ marginLeft: '20px' }}
+              startAdornment={<Search />}
+              onChange={handleSearchChange}
+            />
+          </div>
+          <Table style={{ marginTop: '20px' }}>
+            <TableHead>
+              <TableRow>
+                <TableCell>STT</TableCell>
+                <TableCell>Tên</TableCell>
+                <TableCell>Mô tả</TableCell>
+                <TableCell>Giá thấp nhất</TableCell>
+                <TableCell>Ngày tạo</TableCell>
+                {/* <TableCell>Staff ID</TableCell> */}
+                <TableCell>Trạng thái</TableCell>
+                <TableCell>Hành động</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filterData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((s, index) => {
+                return (
+                  <TableRow hover={true} key={index}>
+                    <TableCell>{index + (page * rowsPerPage, page * rowsPerPage) + 1}</TableCell>
+                    <TableCell>{s.name}</TableCell>
+                    <TableCell width="30%">{s.description}</TableCell>
+                    <TableCell>{s.minPrice}</TableCell>
+                    <TableCell>{moment(s.createDate).format('DD/MM/YYYY')}</TableCell>
+                    {/* <TableCell>{s.staff_id}</TableCell> */}
+                    <TableCell>{s.status ? 'Đang hoạt động' : 'Chưa kích hoạt'} </TableCell>
+                    <TableCell width="10%">
+                      {/* <Link className="btn btn-outline-secondary" to={`/subjects/courseBySubject`}> */}
+                      <div className="d-flex justify-content-center">
+                        <Link to={`/course/subject/${s.id}`} title="Xem" className="btn btn-secondary m-1">
+                          <VisibilityIcon />
+                        </Link>
 
-            <Table style={{ marginTop: '20px' }}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>STT</TableCell>
-                  <TableCell>Tên</TableCell>
-                  <TableCell>Mô tả</TableCell>
-                  <TableCell>Giá thấp nhất</TableCell>
-                  <TableCell>Ngày tạo</TableCell>
-                  {/* <TableCell>Staff ID</TableCell> */}
-                  <TableCell>Trạng thái</TableCell>
-                  <TableCell>Hành động</TableCell>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          title="Chỉnh sửa"
+                          onClick={() => handleEditSubject(s)}
+                          className="m-1 p-0"
+                        >
+                          <EditIcon />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 53 * emptyRows }}>
+                  <TableCell colSpan={6} />
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {data.map((s, index) => {
-                  return (
-                    <TableRow hover={true} key={index}>
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell>{s.name}</TableCell>
-                      <TableCell width="30%">{s.description}</TableCell>
-                      <TableCell>{s.minPrice}</TableCell>
-                      <TableCell>{moment(s.createDate).format('DD/MM/YYYY')}</TableCell>
-                      {/* <TableCell>{s.staff_id}</TableCell> */}
-                      <TableCell>{s.status ? 'Đang hoạt động' : 'Chưa kích hoạt'} </TableCell>
-                      <TableCell width="10%">
-                        {/* <Link className="btn btn-outline-secondary" to={`/subjects/courseBySubject`}> */}
-                        <div className="d-flex justify-content-center">
-                          <Link to={`/course/subject/${s.id}`} title="Xem" className="btn btn-secondary m-1">
-                            <VisibilityIcon />
-                          </Link>
+              )}
+            </TableBody>
+          </Table>
 
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            title="Chỉnh sửa"
-                            onClick={() => handleEditSubject(s)}
-                            className="m-1 p-0"
-                          >
-                            <EditIcon />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </Paper>
-        </div>
+          <TablePagination
+            rowsPerPageOptions={[3, 6, 12, { label: 'All', value: -1 }]}
+            component="div"
+            count={filterData.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            labelRowsPerPage="Số hàng trên trang :"
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+        {/* </div> */}
 
         <SubjectModal
           isOpen={isSubjectModalOpen}
