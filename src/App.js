@@ -56,6 +56,7 @@ import ListConfig from './pages/Admin/ManageConfig/ManageConfig';
 import SyllabusByCourse from './pages/Manager/DetailCourse/SyllabusByCourse';
 import PreviewCourse from './pages/Manager/PreviewCourse';
 import PreviewLesson from './pages/Manager/DetailCourse/DetailLesson';
+import PreviewQuizz from './pages/Manager/DetailCourse/DetailLesson/Quizz';
 
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -154,7 +155,7 @@ const App = () => {
                 <Route path=":lessonId/:type/:id" element={<PreviewLesson />} />
                 <Route path=":lessonId/:type" element={<PreviewLesson />} />
               </Route>
-              {/* <Route path=":lessonId/quiz/:id/start" element={<Quizz />} /> */}
+              <Route path=":lessonId/quiz/:id" element={<PreviewQuizz />} />
             </Route>
             <Route path="/payments" element={<ManagePayment />} />
             <Route path="/transactions" element={<ManageTransaction />} />

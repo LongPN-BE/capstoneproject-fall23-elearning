@@ -51,7 +51,7 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
     status: 'Chưa kích hoạt',
   });
 
-  const [editedSubjectError, setEditedSubjectError,] = useState({
+  const [editedSubjectError, setEditedSubjectError] = useState({
     name: '',
     description: '',
     minPrice: '',
@@ -59,7 +59,6 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
     staffId: user.id,
     status: 'Chưa kích hoạt',
   });
-
 
   const handleInputChange = (e, fieldName) => {
     const { value } = e.target;
@@ -143,7 +142,8 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
               helperText={editedSubjectError.name}
               required
             />
-          </>)}
+          </>
+        )}
 
         {editedSubjectError.description == '' ? (
           <>
@@ -176,7 +176,8 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
               helperText={editedSubjectError.description}
               required
             />
-          </>)}
+          </>
+        )}
 
         {editedSubjectError.minPrice == '' ? (
           <>
@@ -203,7 +204,8 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
               onChange={(e) => handleInputChange(e, 'minPrice')}
               helperText={editedSubjectError.minPrice}
             />
-          </>)}
+          </>
+        )}
 
         <TextField
           fullWidth
@@ -215,7 +217,6 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
           onChange={(e) => handleInputChange(e, 'createDate')}
           disabled={true}
         />
-
 
         {/* <TextField fullWidth label="ID" autoFocus margin="dense" name="staffId" value={user.id} disabled={true} /> */}
         {/* <TextField
@@ -236,9 +237,10 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
             value={editedSubject.status}
             label="Trạng  thái"
             onChange={(e) => handleInputChange(e, 'status')}
+            disabled
           >
-            <MenuItem value={false}>Chưa kích hoạt</MenuItem>
-            <MenuItem value={true}>Kích hoạt</MenuItem>
+            <MenuItem value={false}>Dừng hoạt động</MenuItem>
+            <MenuItem value={true}>Đang hoạt động</MenuItem>
           </Select>
         </FormControl>
       </DialogContent>

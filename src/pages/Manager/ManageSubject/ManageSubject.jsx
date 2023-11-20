@@ -123,13 +123,11 @@ export default function ListSubject() {
     setSearchValue(event.target.value);
   };
 
-  const filterData = data.filter((subject) =>
-    subject.name.toLowerCase().includes(searchValue.toLowerCase()),
-  );
+  const filterData = data.filter((subject) => subject.name.toLowerCase().includes(searchValue.toLowerCase()));
 
   // State to keep track of the current page and the number of rows per page
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(3);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   // Change page
   const handleChangePage = (event, newPage) => {
@@ -222,7 +220,7 @@ export default function ListSubject() {
           </Table>
 
           <TablePagination
-            rowsPerPageOptions={[3, 6, 12, { label: 'All', value: -1 }]}
+            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
             component="div"
             count={filterData.length}
             rowsPerPage={rowsPerPage}
