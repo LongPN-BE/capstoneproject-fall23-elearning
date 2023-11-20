@@ -95,7 +95,7 @@ export default function ListPaymenHistory() {
     };
 
     const handleFilterPayment = () => {
-        if (monthS.length > 31) {
+        if (!monthS) {
             setDataFilter(data);
         } else {
             if (!dayS) {
@@ -133,7 +133,7 @@ export default function ListPaymenHistory() {
                                 onChange={(e) => setDayS(e.target.value)}
                             >
                                 <MenuItem value={""}>--</MenuItem>
-                                {monthS.map((s, index) => {
+                                {monthS && monthS.map((s, index) => {
                                     return (
                                         <MenuItem key={index} value={s.date}>{s.date + ", " + s.day}</MenuItem>
                                     )

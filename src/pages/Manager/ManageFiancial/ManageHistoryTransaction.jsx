@@ -12,6 +12,7 @@ import {
     TablePagination,
     Select,
     MenuItem,
+    Input,
 } from '@material-ui/core';
 import Cookies from 'js-cookie';
 import { fetchData } from '../../../services/AppService';
@@ -69,6 +70,7 @@ export default function ListTransactionHistory() {
     const [monthS, setMonthS] = useState([]);
     const [dayS, setDayS] = useState();
     let [monthA, setMonthA] = useState(new Date());
+    let [monthErro, setMonthErro] = useState("");
     let fullYearCalendar = {};
 
     function getMonthName(monthNumber) {
@@ -98,7 +100,7 @@ export default function ListTransactionHistory() {
     };
 
     const handleFilterPayment = () => {
-        if (monthS.length > 31) {
+        if (!monthS) {
             setDataFilter(data);
         } else {
             if (!dayS) {
@@ -136,14 +138,14 @@ export default function ListTransactionHistory() {
                                 onChange={(e) => setDayS(e.target.value)}
                             >
                                 <MenuItem value={""}>--</MenuItem>
-                                {monthS.map((s, index) => {
+                                {monthS && monthS.map((s, index) => {
                                     return (
                                         <MenuItem key={index} value={s.date}>{s.date + ", " + s.day}</MenuItem>
                                     )
                                 })}
                             </Select>
                             Tháng :
-                            <InputBase
+                            <Input
                                 type="month"
                                 min="2023-01"
                                 max={new Date()}
