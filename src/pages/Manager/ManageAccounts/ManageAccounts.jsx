@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
 import {
   Button,
   Typography,
@@ -10,7 +9,6 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  TextField,
   TablePagination,
 } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
@@ -18,6 +16,7 @@ import Cookies from 'js-cookie';
 import { fetchData, postData } from '../../../services/AppService';
 import moment from 'moment/moment';
 import AccountModal from './AccountModal';
+import AccountDetailModal from './AccountDetail';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
 import CustomBreadcrumbs from '../../../components/Breadcrumbs';
@@ -26,6 +25,7 @@ export default function ListAccount() {
   const [data, setData] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
+  const [isAccountDetailModalOpen, setIsAccountDetailModalOpen] = useState(false);
   const [accountToEdit, setAccountToEdit] = useState(null);
   const breadcrumbItems = [
     {
@@ -66,6 +66,16 @@ export default function ListAccount() {
 
   const handleAccountModalClose = () => {
     setIsAccountModalOpen(false);
+  };
+
+  const handleViewDetail = (accountData) => {
+    console.log(accountData);
+    setAccountToEdit(accountData);
+    setIsAccountDetailModalOpen(true);
+  };
+
+  const handleAccountDetailModalClose = () => {
+    setIsAccountDetailModalOpen(false);
   };
 
   const saveOrUpdateAccount = async (accountData) => {
@@ -229,7 +239,7 @@ export default function ListAccount() {
                       {!a.active ? <>
                         <button
                           type="submit"
-                          title="Approve"
+                          title="Kích hoạt"
                           className="btn btn-success m-1"
                           onClick={() => handleEnable(a)}
                         >
@@ -238,7 +248,7 @@ export default function ListAccount() {
                       </> : <>
                         <button
                           type="submit"
-                          title="Approve"
+                          title="Vô hiệu hóa"
                           className="btn btn-danger m-1"
                           onClick={() => handleDisable(a)}
                         >
@@ -250,7 +260,10 @@ export default function ListAccount() {
                       {/* <Link className="btn btn-outline-secondary" to={`##`}>
                           Xem
                         </Link> */}
-                      <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={() => handleEditAccount(a)} disabled>
+                      {/* <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={() => handleEditAccount(a)} disabled>
+                        <Typography variant='body2'>Cập nhật</Typography>
+                      </Button> */}
+                      <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={() => handleViewDetail(a)}>
                         <Typography variant='body2'>Xem</Typography>
                       </Button>
                     </TableCell>
@@ -281,6 +294,11 @@ export default function ListAccount() {
           onSave={saveOrUpdateAccount}
           onUpdate={saveOrUpdateAccount}
           onClose={handleAccountModalClose}
+          account={accountToEdit !== null ? accountToEdit : null}
+        />
+        <AccountDetailModal
+          isOpen={isAccountDetailModalOpen}
+          onClose={handleAccountDetailModalClose}
           account={accountToEdit !== null ? accountToEdit : null}
         />
       </div>
