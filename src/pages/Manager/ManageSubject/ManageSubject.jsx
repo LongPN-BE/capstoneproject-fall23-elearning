@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import SubjectModal from './SubjectModal';
 import EditIcon from '@mui/icons-material/Edit';
-import SubjectCourseModal from '../CoursesBySubject/CoursesBySubject';
 import {
   Button,
   Typography,
@@ -13,7 +12,6 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  TextField,
   TablePagination,
 } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
@@ -145,7 +143,6 @@ export default function ListSubject() {
   return (
     data && (
       <div className="m-5">
-        {/* <div style={{ margin: '20px' }}> */}
         <Paper style={{ padding: '20px' }}>
           <CustomBreadcrumbs items={breadcrumbItems} />
 
@@ -230,7 +227,6 @@ export default function ListSubject() {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Paper>
-        {/* </div> */}
 
         <SubjectModal
           isOpen={isSubjectModalOpen}

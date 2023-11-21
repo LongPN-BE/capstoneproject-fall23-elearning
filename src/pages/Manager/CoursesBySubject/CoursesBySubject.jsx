@@ -2,20 +2,36 @@ import React from 'react';
 import CourseTabComponent from './CourseTabComponent/CourseTabComponent';
 import { Container } from 'reactstrap';
 import { Box } from '@mui/system';
-import { Card, CardContent, Typography } from '@material-ui/core';
+import { Card, CardContent, Divider, Typography } from '@material-ui/core';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import Cookies from 'js-cookie';
 import moment from 'moment';
-import { fetchData, postData } from '../../../services/AppService';
+import { fetchData } from '../../../services/AppService';
 import { useParams } from 'react-router-dom';
+import CustomBreadcrumbs from '../../../components/Breadcrumbs';
 
 const CourseBySubject = () => {
   const { subjectId } = useParams();
-  const [courseData, setCourseData] = useState([]);
   const [subjectData, setSubjectData] = useState([]);
   const [activeCourses, setActiveCourses] = useState([]);
+  const [deActiveCourses, setDeActiveCourses] = useState([]);
   const [pendingCourses, setPendingCourses] = useState([]);
+  const breadcrumbItems = [
+    {
+      url: '/',
+      label: 'Trang chủ',
+    },
+    {
+      url: `/subjects`,
+      label: `Danh sách sách môn học`,
+    },
+    {
+      url: `/course/subject/` + subjectId,
+      label: `Chi tiết môn ` + subjectData.name,
+    },
+  ];
+
 
   useEffect(() => {
     const token = Cookies.get('token');
@@ -25,45 +41,52 @@ const CourseBySubject = () => {
           setSubjectData(resp);
           fetchData('/course/bySubjectId?subject-id=' + resp.id, token).then((resp1) => {
             if (resp1) {
-              setCourseData(resp1);
               // Filter courses based on their status
               const active = resp1.filter((course) => course.status === 'ACTIVE');
+              const deactive = resp1.filter((course) => course.status === 'DEACTIVE');
               const pending = resp1.filter((course) => course.status === 'PENDING');
 
               setActiveCourses(active);
+              setDeActiveCourses(deactive);
               setPendingCourses(pending);
             }
           });
         }
       });
     }
-  }, []);
+  }, [subjectId]);
+
 
   return (
-    <Container>
-      <Box textAlign="center" mt={2}>
-        <Card sx={{ minWidth: 275 }}>
-          <CardContent>
-            <Typography sx={{ fontSize: 14 }} color="textSecondary" gutterBottom>
-              Chi tiết môn {subjectId} - {subjectData.name}.
-            </Typography>
-            <Typography variant="h5" component="div">
-              {subjectData.name}
-            </Typography>
-            <Typography sx={{ mb: 1.5 }} color="textPrimary">
-              {subjectData.description}
-            </Typography>
-            <Typography sx={{ mb: 1.5 }} color="textPrimary">
-              Giá thấp nhất : {subjectData.minPrice} <br />
-              Tạo ngày: {moment(subjectData.createDate).format('DD/MM/YYYY')}
-            </Typography>
-          </CardContent>
-        </Card>
-      </Box>
-      <Box textAlign="center" mt={2}>
-        <CourseTabComponent activeCourses={activeCourses} pendingCourses={pendingCourses} />
-      </Box>
-    </Container>
+    subjectData && (
+      <div className="m-5">
+        <Container>
+          <Box>
+            <CustomBreadcrumbs items={breadcrumbItems} />
+            <Card sx={{ minWidth: 275 }}>
+              <CardContent>
+                <Typography variant="h3" component="div" style={{ fontWeight: 'bold' }}>
+                  {subjectData.name}
+                </Typography>
+                <Typography style={{ marginTop: 5, marginBottom: 10 }} color="textPrimary">
+                  {subjectData.description}
+                </Typography>
+                <Divider style={{ color: 'black', height: 2 }} />
+                <div className='d-flex'>
+                  <Typography sx={{ mb: 1.5 }} color="textPrimary" variant='caption'>
+                    Giá thấp nhất : {subjectData.minPrice}<br />
+                    Tạo ngày: {moment(subjectData.createDate).format('DD/MM/YYYY')}
+                  </Typography>
+                </div>
+              </CardContent>
+            </Card>
+          </Box>
+          <Box textAlign="center" mt={2}>
+            <CourseTabComponent activeCourses={activeCourses} pendingCourses={pendingCourses} deActiveCourses={deActiveCourses} />
+          </Box>
+        </Container>
+      </div >
+    )
   );
 };
 

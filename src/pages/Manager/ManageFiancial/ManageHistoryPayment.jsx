@@ -117,109 +117,107 @@ export default function ListPaymenHistory() {
     return (
         data && (
             <div className="m-5">
-                <div style={{ margin: '20px' }}>
-                    <Paper style={{ padding: '20px' }}>
-                        <CustomBreadcrumbs items={breadcrumbItems} />
+                <Paper style={{ padding: '20px' }}>
+                    <CustomBreadcrumbs items={breadcrumbItems} />
 
-                        <div className="d-flex align-items-center" style={{ marginTop: '20px' }}>
-                            <Typography variant="h5">Danh sách lịch sử thanh toán</Typography>
-                        </div>
-                        <div className="d-flex align-items-center" style={{ marginTop: '20px' }}>
-                            Ngày :
-                            <Select style={{ marginLeft: '10px', marginRight: '20px', width: '10%' }}
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={dayS}
-                                onChange={(e) => setDayS(e.target.value)}
-                            >
-                                <MenuItem value={""}>--</MenuItem>
-                                {monthS && monthS.map((s, index) => {
-                                    return (
-                                        <MenuItem key={index} value={s.date}>{s.date + ", " + s.day}</MenuItem>
-                                    )
-                                })}
-                            </Select>
-                            Tháng :
-                            <InputBase
-                                type="month"
-                                min="2023-01"
-                                max={new Date()}
-                                onChange={(e) => handleChangeMonth(e)}
-                                style={{
-                                    borderRadius: '15px',
-                                    marginLeft: '10px'
-                                }} />
+                    <div className="d-flex align-items-center" style={{ marginTop: '20px' }}>
+                        <Typography variant="h5">Danh sách lịch sử thanh toán</Typography>
+                    </div>
+                    <div className="d-flex align-items-center" style={{ marginTop: '20px' }}>
+                        Ngày :
+                        <Select style={{ marginLeft: '10px', marginRight: '20px', width: '10%' }}
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={dayS}
+                            onChange={(e) => setDayS(e.target.value)}
+                        >
+                            <MenuItem value={""}>--</MenuItem>
+                            {monthS && monthS.map((s, index) => {
+                                return (
+                                    <MenuItem key={index} value={s.date}>{s.date + ", " + s.day}</MenuItem>
+                                )
+                            })}
+                        </Select>
+                        Tháng :
+                        <InputBase
+                            type="month"
+                            min="2023-01"
+                            max={new Date()}
+                            onChange={(e) => handleChangeMonth(e)}
+                            style={{
+                                borderRadius: '15px',
+                                marginLeft: '10px'
+                            }} />
 
-                            <Button style={{
-                                marginLeft: '10px',
-                                borderRadius: '10px',
-                                backgroundColor: '#DDDDDD'
-                            }}
-                                onClick={() => handleFilterPayment()}>
-                                Tìm kiếm
-                            </Button>
-                        </div>
+                        <Button style={{
+                            marginLeft: '10px',
+                            borderRadius: '10px',
+                            backgroundColor: '#DDDDDD'
+                        }}
+                            onClick={() => handleFilterPayment()}>
+                            Tìm kiếm
+                        </Button>
+                    </div>
 
-                        <Table style={{ marginTop: '20px' }}>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>STT</TableCell>
-                                    <TableCell>Thời gian <br />(Ngày/Tháng/Năm)</TableCell>
-                                    <TableCell>Phương thức</TableCell>
-                                    <TableCell>Số tiền <br />(vnd)</TableCell>
-                                    <TableCell>Loại</TableCell>
-                                    <TableCell>Tài khoản thực hiện</TableCell>
-                                    <TableCell>Trạng thái</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {dataFilter.sort((a, b) => {
-                                    return new Date(b.transactionDate) - new Date(a.transactionDate)
-                                }).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((s, index) => {
-                                    return (
-                                        <TableRow hover={true} key={index}>
-                                            <TableCell>{index + (page * rowsPerPage, page * rowsPerPage) + 1}</TableCell>
-                                            <TableCell>
-                                                <Typography variant='body1' color='primary'>
-                                                    {moment(s.transactionDate).format('DD/MM/YYYY')}
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>{s.paymentMethod}</TableCell>
-                                            <TableCell> {s.paymentHistoryType === "WITHDRAW" ? (<>
-                                                <Typography variant="subtitle1" color='secondary'>- {s.amount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</Typography> </>) :
-                                                (<> <Typography variant="subtitle1" color='primary'>+ {s.amount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</Typography> </>)}</TableCell>
-                                            <TableCell>
-                                                {s.paymentHistoryType === "WITHDRAW" ? (<>
-                                                    <Typography variant="subtitle1" color='secondary'>RÚT TIỀN</Typography> </>) :
-                                                    (<> <Typography variant="subtitle1" color='primary'>NẠP TIỀN</Typography> </>)}
-                                            </TableCell>
-                                            <TableCell>{s.student === null ?
-                                                (<Typography variant="body2" color='primary'>(Giáo Viên)</Typography>) :
-                                                (<Typography variant="body2" color='primary'>(Học Sinh)</Typography>)}
-                                                {s.account.id}</TableCell>
-                                            <TableCell>{s.paymentHistoryStatus}</TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                                {emptyRows > 0 && (
-                                    <TableRow style={{ height: 53 * emptyRows }}>
-                                        <TableCell colSpan={6} />
+                    <Table style={{ marginTop: '20px' }}>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>STT</TableCell>
+                                <TableCell>Thời gian <br />(Ngày/Tháng/Năm)</TableCell>
+                                <TableCell>Phương thức</TableCell>
+                                <TableCell>Số tiền <br />(vnd)</TableCell>
+                                <TableCell>Loại</TableCell>
+                                <TableCell>Tài khoản thực hiện</TableCell>
+                                <TableCell>Trạng thái</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {dataFilter.sort((a, b) => {
+                                return new Date(b.transactionDate) - new Date(a.transactionDate)
+                            }).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((s, index) => {
+                                return (
+                                    <TableRow hover={true} key={index}>
+                                        <TableCell>{index + (page * rowsPerPage, page * rowsPerPage) + 1}</TableCell>
+                                        <TableCell>
+                                            <Typography variant='body1' color='primary'>
+                                                {moment(s.transactionDate).format('DD/MM/YYYY')}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>{s.paymentMethod}</TableCell>
+                                        <TableCell> {s.paymentHistoryType === "WITHDRAW" ? (<>
+                                            <Typography variant="subtitle1" color='secondary'>- {s.amount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</Typography> </>) :
+                                            (<> <Typography variant="subtitle1" color='primary'>+ {s.amount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</Typography> </>)}</TableCell>
+                                        <TableCell>
+                                            {s.paymentHistoryType === "WITHDRAW" ? (<>
+                                                <Typography variant="subtitle1" color='secondary'>RÚT TIỀN</Typography> </>) :
+                                                (<> <Typography variant="subtitle1" color='primary'>NẠP TIỀN</Typography> </>)}
+                                        </TableCell>
+                                        <TableCell>{s.student === null ?
+                                            (<Typography variant="body2" color='primary'>(Giáo Viên)</Typography>) :
+                                            (<Typography variant="body2" color='primary'>(Học Sinh)</Typography>)}
+                                            {s.account.id}</TableCell>
+                                        <TableCell>{s.paymentHistoryStatus}</TableCell>
                                     </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                        <TablePagination
-                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                            component="div"
-                            count={dataFilter.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            labelRowsPerPage="Số hàng trên trang :"
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                        />
-                    </Paper>
-                </div >
+                                );
+                            })}
+                            {emptyRows > 0 && (
+                                <TableRow style={{ height: 53 * emptyRows }}>
+                                    <TableCell colSpan={6} />
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                    <TablePagination
+                        rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                        component="div"
+                        count={dataFilter.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        labelRowsPerPage="Số hàng trên trang :"
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                </Paper>
             </div >
         )
     );

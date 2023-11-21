@@ -12,8 +12,9 @@ import {
   DialogContentText,
   TextField,
   DialogActions,
+  TablePagination,
 } from '@material-ui/core';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -24,7 +25,6 @@ import { fetchData, postData } from '../../../../services/AppService';
 import Swal from 'sweetalert2';
 
 function CourseTableComponent({ courses }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [course, setCourse] = useState(null);
   const [open, setOpen] = useState(false);
   const [reason, setReason] = useState(null);
@@ -112,57 +112,65 @@ function CourseTableComponent({ courses }) {
     }
   };
 
-  const handleViewCourse = (course) => {
-    console.log(course);
-    setCourse(course);
-    setIsModalOpen(true);
-  };
-  const handleModalClose = () => {
-    setIsModalOpen(false);
+  // State to keep track of the current page and the number of rows per page
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  // Change page
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
 
+  // Change the number of rows per page
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - courses.length) : 0;
+
   return (
-    <div className="m-5">
-      <div style={{ margin: '20px' }}>
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Từ chối</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Sau khi từ chối, khóa học này sẽ không thể hoạt động và giáo viên cần cập nhật hoặc tạo mới để có thể được
-              yêu cầu xét duyệt lại.
-            </DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              label="Lý do từ chối"
-              placeholder="VD: Khóa học này chưa đảm bảo nội dung phù hợp với tiêu chuẩn cộng đồng."
-              onChange={(e) => setReason(e.target.value)}
-              fullWidth
-              variant="standard"
-              required
-            />
-          </DialogContent>
-          <DialogActions>
-            <button
-              type="submit"
-              title="Approve"
-              className="btn btn-success m-1"
-              onClick={() => handleClose}
-              // onClick={() => handleApproved(course)}
-            >
-              Hủy
-            </button>
-            <button
-              type="submit"
-              title="Approve"
-              className="btn btn-danger m-1"
-              // onClick={handleClose}
-              onClick={() => handleReject(course)}
-            >
-              Xác nhận từ chối
-            </button>
-          </DialogActions>
-        </Dialog>
+    <>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Từ chối</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Sau khi từ chối, khóa học này sẽ không thể hoạt động và giáo viên cần cập nhật hoặc tạo mới để có thể được
+            yêu cầu xét duyệt lại.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Lý do từ chối"
+            placeholder="VD: Khóa học này chưa đảm bảo nội dung phù hợp với tiêu chuẩn cộng đồng."
+            onChange={(e) => setReason(e.target.value)}
+            fullWidth
+            variant="standard"
+            required
+          />
+        </DialogContent>
+        <DialogActions>
+          <button
+            type="submit"
+            title="Approve"
+            className="btn btn-success m-1"
+            onClick={() => handleClose}
+          // onClick={() => handleApproved(course)}
+          >
+            Hủy
+          </button>
+          <button
+            type="submit"
+            title="Approve"
+            className="btn btn-danger m-1"
+            onClick={() => handleReject(course)}
+          >
+            Xác nhận từ chối
+          </button>
+        </DialogActions>
+      </Dialog>
+
+      <div className="mt-2">
         <Paper style={{ padding: '20px' }}>
           <Table>
             <TableHead>
@@ -177,7 +185,7 @@ function CourseTableComponent({ courses }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {courses.map((course, index) => (
+              {courses.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((course, index) => (
                 <TableRow key={course.id}>
                   <TableCell align="center">{index + 1}</TableCell>
                   <TableCell align="center">{course.name}</TableCell>
@@ -185,7 +193,7 @@ function CourseTableComponent({ courses }) {
                   <TableCell align="center">{course.price}</TableCell>
                   <TableCell align="center">{moment(course.createDate).format('DD/MM/YYYY')}</TableCell>
                   <TableCell align="center">
-                    <Link to={`/subject/course/syllabus/${course.id}`} title="Xem" className="btn btn-secondary m-1">
+                    <Link to={`/subject/${course.subject.id}/course/${course.id}/syllabus`} title="Xem" className="btn btn-secondary m-1">
                       <VisibilityIcon />
                     </Link>
                   </TableCell>
@@ -206,7 +214,6 @@ function CourseTableComponent({ courses }) {
                             title="Deny"
                             className="btn btn-danger m-1"
                             onClick={() => handleClickOpen(course)}
-                            //onClick={() => handleReject(course)}
                           >
                             <DoNotDisturbAltIcon />
                           </button>
@@ -216,13 +223,29 @@ function CourseTableComponent({ courses }) {
                   ) : (
                     <></>
                   )}
+                  {emptyRows > 0 && (
+                    <TableRow style={{ height: 53 * emptyRows }}>
+                      <TableCell colSpan={6} />
+                    </TableRow>
+                  )}
                 </TableRow>
               ))}
             </TableBody>
           </Table>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25, { label: 'Tất cả', value: -1 }]}
+            component="div"
+            count={courses.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            labelRowsPerPage="Số hàng trên trang :"
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
         </Paper>
       </div>
-    </div>
+
+    </>
   );
 }
 

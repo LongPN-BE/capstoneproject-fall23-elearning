@@ -12,7 +12,6 @@ import {
     TablePagination,
     Select,
     MenuItem,
-    Input,
 } from '@material-ui/core';
 import Cookies from 'js-cookie';
 import { fetchData } from '../../../services/AppService';
@@ -70,7 +69,6 @@ export default function ListTransactionHistory() {
     const [monthS, setMonthS] = useState([]);
     const [dayS, setDayS] = useState();
     let [monthA, setMonthA] = useState(new Date());
-    let [monthErro, setMonthErro] = useState("");
     let fullYearCalendar = {};
 
     function getMonthName(monthNumber) {
@@ -122,104 +120,102 @@ export default function ListTransactionHistory() {
     return (
         data && (
             <div className="m-5">
-                <div style={{ margin: '20px' }}>
-                    <Paper style={{ padding: '20px' }}>
-                        <CustomBreadcrumbs items={breadcrumbItems} />
+                <Paper style={{ padding: '20px' }}>
+                    <CustomBreadcrumbs items={breadcrumbItems} />
 
-                        <div className="d-flex align-items-center" style={{ marginTop: '20px' }}>
-                            <Typography variant="h5">Danh sách Lịch sử giao dịch</Typography>
-                        </div>
-                        <div className="d-flex align-items-center" style={{ marginTop: '20px' }}>
-                            Ngày :
-                            <Select style={{ marginLeft: '10px', marginRight: '20px', width: '10%' }}
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={dayS}
-                                onChange={(e) => setDayS(e.target.value)}
-                            >
-                                <MenuItem value={""}>--</MenuItem>
-                                {monthS && monthS.map((s, index) => {
-                                    return (
-                                        <MenuItem key={index} value={s.date}>{s.date + ", " + s.day}</MenuItem>
-                                    )
-                                })}
-                            </Select>
-                            Tháng :
-                            <Input
-                                type="month"
-                                min="2023-01"
-                                max={new Date()}
-                                onChange={(e) => handleChangeMonth(e)}
-                                style={{
-                                    borderRadius: '15px',
-                                    marginLeft: '10px'
-                                }} />
+                    <div className="d-flex align-items-center" style={{ marginTop: '20px' }}>
+                        <Typography variant="h5">Danh sách Lịch sử giao dịch</Typography>
+                    </div>
+                    <div className="d-flex align-items-center" style={{ marginTop: '20px' }}>
+                        Ngày :
+                        <Select style={{ marginLeft: '10px', marginRight: '20px', width: '10%' }}
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={dayS}
+                            onChange={(e) => setDayS(e.target.value)}
+                        >
+                            <MenuItem value={""}>--</MenuItem>
+                            {monthS && monthS.map((s, index) => {
+                                return (
+                                    <MenuItem key={index} value={s.date}>{s.date + ", " + s.day}</MenuItem>
+                                )
+                            })}
+                        </Select>
+                        Tháng :
+                        <InputBase
+                            type="month"
+                            min="2023-01"
+                            max={new Date()}
+                            onChange={(e) => handleChangeMonth(e)}
+                            style={{
+                                borderRadius: '15px',
+                                marginLeft: '10px'
+                            }} />
 
-                            <Button style={{
-                                marginLeft: '10px',
-                                borderRadius: '10px',
-                                backgroundColor: '#DDDDDD'
-                            }}
-                                onClick={() => handleFilterPayment()}>
-                                Tìm kiếm
-                            </Button>
-                        </div>
+                        <Button style={{
+                            marginLeft: '10px',
+                            borderRadius: '10px',
+                            backgroundColor: '#DDDDDD'
+                        }}
+                            onClick={() => handleFilterPayment()}>
+                            Tìm kiếm
+                        </Button>
+                    </div>
 
-                        <Table style={{ marginTop: '20px' }}>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>STT</TableCell>
-                                    <TableCell>Thời gian <br />(Ngày/Tháng/Năm)</TableCell>
-                                    <TableCell>Lý do</TableCell>
-                                    <TableCell>Số tiền <br /> (vnd)</TableCell>
-                                    <TableCell>Tài khoản thực hiện</TableCell>
-                                    <TableCell>Trạng thái</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {dataFilter.sort((a, b) => {
-                                    return new Date(b.dateProcess) - new Date(a.dateProcess)
-                                }).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((s, index) => {
-                                    return (
-                                        <TableRow hover={true} key={index}>
-                                            <TableCell>{index + (page * rowsPerPage, page * rowsPerPage) + 1}</TableCell>
-                                            <TableCell>
-                                                <Typography variant='body1' color='primary'>
-                                                    {moment(s.dateProcess).format('DD/MM/YYYY')}
-                                                </Typography>
+                    <Table style={{ marginTop: '20px' }}>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>STT</TableCell>
+                                <TableCell>Thời gian <br />(Ngày/Tháng/Năm)</TableCell>
+                                <TableCell>Lý do</TableCell>
+                                <TableCell>Số tiền <br /> (vnd)</TableCell>
+                                <TableCell>Tài khoản thực hiện</TableCell>
+                                <TableCell>Trạng thái</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {dataFilter.sort((a, b) => {
+                                return new Date(b.dateProcess) - new Date(a.dateProcess)
+                            }).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((s, index) => {
+                                return (
+                                    <TableRow hover={true} key={index}>
+                                        <TableCell>{index + (page * rowsPerPage, page * rowsPerPage) + 1}</TableCell>
+                                        <TableCell>
+                                            <Typography variant='body1' color='primary'>
+                                                {moment(s.dateProcess).format('DD/MM/YYYY')}
+                                            </Typography>
 
-                                            </TableCell>
-                                            <TableCell>{s.description}</TableCell>
-                                            <TableCell>
-                                                <Typography variant='subtitle2' color='primary'>{s.amount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</Typography>
-                                            </TableCell>
-                                            <TableCell>{s.accountName}</TableCell>
-                                            <TableCell width={'15%'}>{s.transactionStatus === "COMPLETED" ?
-                                                (<Typography variant='body2' style={{ color: 'green', fontWeight: 'bold' }}>ĐÃ THANH TOÁN</Typography>) :
-                                                (<Typography variant='body2' style={{ color: 'green', fontWeight: 'bold' }}>Chưa thanh toán</Typography>)}
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                                {emptyRows > 0 && (
-                                    <TableRow style={{ height: 53 * emptyRows }}>
-                                        <TableCell colSpan={6} />
+                                        </TableCell>
+                                        <TableCell>{s.description}</TableCell>
+                                        <TableCell>
+                                            <Typography variant='subtitle2' color='primary'>{s.amount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</Typography>
+                                        </TableCell>
+                                        <TableCell>{s.accountName}</TableCell>
+                                        <TableCell width={'15%'}>{s.transactionStatus === "COMPLETED" ?
+                                            (<Typography variant='body2' style={{ color: 'green', fontWeight: 'bold' }}>ĐÃ THANH TOÁN</Typography>) :
+                                            (<Typography variant='body2' style={{ color: 'green', fontWeight: 'bold' }}>Chưa thanh toán</Typography>)}
+                                        </TableCell>
                                     </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                        <TablePagination
-                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                            component="div"
-                            count={dataFilter.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            labelRowsPerPage="Số hàng trên trang :"
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                        />
-                    </Paper>
-                </div>
+                                );
+                            })}
+                            {emptyRows > 0 && (
+                                <TableRow style={{ height: 53 * emptyRows }}>
+                                    <TableCell colSpan={6} />
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                    <TablePagination
+                        rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                        component="div"
+                        count={dataFilter.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        labelRowsPerPage="Số hàng trên trang :"
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                </Paper>
             </div>
         )
     );
