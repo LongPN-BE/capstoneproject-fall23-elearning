@@ -126,12 +126,11 @@ export default function SyllabusDetail() {
                     // Implement your create logic here for new lessons.
                     // console.log('Lesson data to save', lessonData);
                     let arrSyllabus = new Array(syllabusId.toString())
-                    console.log(lessonData);
                     const body = {
                         ...lessonData,
                         id: 0,
                         dateTime: moment(new Date()),
-                        type: lessonData?.content.includes('iframe') ? 'video' : 'reading',
+                        type: lessonData?.url ? 'video' : 'reading',
                         courseId: parseInt(courseId), // Assuming courseId is defined
                         syllabusIds: arrSyllabus
                     };
@@ -260,8 +259,8 @@ export default function SyllabusDetail() {
                             </Typography>
 
                             <div style={{ marginTop: '20px' }}>
-                                <TextField label="Ngày tạo:" value={syllabus.createDate} />
-                                <TextField label="Trạng thái:" style={{ marginLeft: '20px' }} value={syllabus.status} />
+                                <TextField label="Ngày tạo:" value={moment(syllabus.createDate).format('HH:MM:SS DD/MM/YYYY')} />
+                                <TextField label="Trạng thái:" style={{ marginLeft: '20px' }} value={syllabus.status === 'Deactive' ? 'Không hoạt động' : 'Hoạt động'} />
 
                                 <Button variant="outlined" style={{ marginLeft: '20px' }} onClick={handleEditSyllabusClick}>
                                     Chỉnh sửa
@@ -316,7 +315,7 @@ export default function SyllabusDetail() {
                                                     </a>
                                                 </TableCell> */}
 
-                                                    <TableCell><TextTruncate text={l.createDate} /></TableCell>
+                                                    <TableCell><TextTruncate text={moment(l.createDate).format('HH:MM:SS DD/MM/YYYY')} /></TableCell>
                                                     <TableCell><TextTruncate text={l.status === 'true' ? 'Hoạt động' : 'Không hoạt động'} /></TableCell>
                                                     <TableCell><TextTruncate text={l.description} /></TableCell>
                                                     <TableCell><TextTruncate text={l.estimateTime} /></TableCell>
@@ -356,7 +355,7 @@ export default function SyllabusDetail() {
                                                         <TableCell>{index + 1}</TableCell>
                                                         <TableCell><TextTruncate text={l.name} /></TableCell>
                                                         {/* <TableCell><Link to={l.url}><TextTruncate text={l.url} /></Link></TableCell> */}
-                                                        <TableCell><TextTruncate text={l.dateTime} /></TableCell>
+                                                        <TableCell><TextTruncate text={moment(l.createDate).format('HH:MM:SS DD/MM/YYYY')} /></TableCell>
                                                         <TableCell><TextTruncate text={l.status === 'true' ? 'Hoạt động' : 'Không hoạt động'} /></TableCell>
                                                         <TableCell><TextTruncate text={l.description} /></TableCell>
                                                         <TableCell><TextTruncate text={l.estimateTime} /></TableCell>

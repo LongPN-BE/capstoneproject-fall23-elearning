@@ -18,49 +18,44 @@ import Cookies from 'js-cookie';
 import { fetchData, postData } from '../../../services/AppService';
 import moment from 'moment/moment';
 import ConfigModal from './ConfigModal';
-import ViewConfig from './ViewConfig';
 
 export default function ListConfig() {
   const { configId } = useParams();
   const [data, setData] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
-  const [isViewConfigModalOpen, setIsViewConfigModalOpen] = useState(false);
   const [configToEdit, setConfigToEdit] = useState(null);
   const [config, setConfig] = useState(null);
 
-  useEffect(() => {
-    const token = Cookies.get('token');
-    if (token) {
-      try {
-        fetchData('/system-config/configs', token).then((resp) => {
-          if (resp) {
-            setData(resp);
-          }
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }, []);
+  //   useEffect(() => {
+  //     const token = Cookies.get('token');
+  //     if (token) {
+  //       try {
+  //         fetchData('/subject/subjects', token).then((resp) => {
+  //           if (resp) {
+  //             setSubject(resp.find((s) => s.id == subjectId));
+  //             setData(resp);
+  //           }
+  //         });
+  //       } catch (error) {
+  //         console.log(error);
+  //       }
+  //     }
+  //   }, []);
 
   const handleAddConfig = () => {
     setConfigToEdit(null); // Clear any previous config data (for editing)
     setIsConfigModalOpen(true);
   };
 
-  const handleViewConfig = (configData) => {
+  const handleEditConfig = (configData) => {
     console.log(configData);
     setConfigToEdit(configData); // Set the config data to edit
-    setIsViewConfigModalOpen(true);
+    setIsConfigModalOpen(true);
   };
 
   const handleConfigModalClose = () => {
     setIsConfigModalOpen(false);
-  };
-
-  const handleViewConfigModalClose = () => {
-    setIsViewConfigModalOpen(false);
   };
 
   const saveOrUpdateConfig = async (configData) => {
@@ -99,15 +94,15 @@ export default function ListConfig() {
         dateTime: moment(new Date()),
       };
       console.log('Config data to update:', await body);
-      await postData('/system-config/save', body, token)
-        .then((resp) => {
-          if (resp) {
-            window.location.reload();
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      // await postData('##', body, token)
+      //   .then(resp => {
+      //     if (resp) {
+      //       window.location.reload();
+      //     }
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //   });
     }
 
     setIsConfigModalOpen(false); // Close the ConfigModal
@@ -172,14 +167,9 @@ export default function ListConfig() {
                       <TableCell>{c.projectName}</TableCell>
                       <TableCell>{c.dateCreate}</TableCell>
                       <TableCell>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={() => handleViewConfig(c)}
-                          className="m-1 p-0"
-                        >
+                        <Link className="btn btn-outline-secondary" to={`##`}>
                           Xem
-                        </Button>
+                        </Link>
                       </TableCell>
                     </TableRow>
                   );
@@ -193,13 +183,6 @@ export default function ListConfig() {
           onSave={saveOrUpdateConfig}
           onUpdate={saveOrUpdateConfig}
           onClose={handleConfigModalClose}
-          config={configToEdit !== null ? configToEdit : null}
-        />
-        <ViewConfig
-          isOpen={isViewConfigModalOpen}
-          onSave={saveOrUpdateConfig}
-          onUpdate={saveOrUpdateConfig}
-          onClose={handleViewConfigModalClose}
           config={configToEdit !== null ? configToEdit : null}
         />
       </div>

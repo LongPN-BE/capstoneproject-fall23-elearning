@@ -167,6 +167,6 @@ export const rating = [
 export const vapidKey = 'BNuvvPsZSm3fWGQXoH5-jar9X-tfA1a6ux3usC1ESFl5bsvc2FaZP4vLsk9lvCXDvlOpO-w1jBphfUy7_uszC9k';
 
 export const invalidInput = 'number should positive and string should not be empty';
-export const YOUR_SERVICE_ID = 'service_u5xhemm'
-export const YOUR_TEMPLATE_ID = 'template_5gs2vrg'
-export const YOUR_USER_ID = 'ePeH2byzQF0PCUbKv'
+export const YOUR_SERVICE_ID = 'service_u5xhemm';
+export const YOUR_TEMPLATE_ID = 'template_5gs2vrg';
+export const YOUR_USER_ID = 'ePeH2byzQF0PCUbKv';

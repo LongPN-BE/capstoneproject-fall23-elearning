@@ -190,7 +190,7 @@ export default function LessonDetail() {
                                     <TableCell>Tên bài kiểm tra</TableCell>
                                     <TableCell>Điểm qua môn</TableCell>
                                     <TableCell>Thời gian làm bài</TableCell>
-                                    <TableCell>Thời gian có thể làm</TableCell>
+                                    {/* <TableCell>Thời gian có thể làm</TableCell> */}
                                     <TableCell>Số lần làm lại</TableCell>
                                     <TableCell>Trạng thái</TableCell>
                                     <TableCell></TableCell>
@@ -205,7 +205,7 @@ export default function LessonDetail() {
                                                 <TableCell>{s.title}</TableCell>
                                                 <TableCell>{s.passScore}</TableCell>
                                                 <TableCell>{s.duration}</TableCell>
-                                                <TableCell>{s.dateRange}</TableCell>
+                                                {/* <TableCell>{s.dateRange}</TableCell> */}
                                                 <TableCell>{s.allowAttempt}</TableCell>
                                                 <TableCell>{s.status}</TableCell>
                                                 <TableCell>
@@ -217,11 +217,11 @@ export default function LessonDetail() {
                                                     </Link>}
                                                 </TableCell>
                                             </TableRow>
-                                            {emptyRows > 0 && (
+                                            {/* {emptyRows > 0 && (
                                                 <TableRow style={{ height: 53 * emptyRows }}>
                                                     <TableCell colSpan={6} />
                                                 </TableRow>
-                                            )}
+                                            )} */}
                                         </>
                                     );
                                 })}

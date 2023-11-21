@@ -25,6 +25,7 @@ import Cookies from 'js-cookie';
 import { sortByID, validateInputString } from '../../../util/Utilities';
 import Swal from 'sweetalert2';
 import { invalidInput } from '../../../util/Constants';
+import moment from 'moment';
 
 export default function CourseDetail() {
     const { courseId } = useParams();
@@ -223,7 +224,7 @@ export default function CourseDetail() {
                             </Typography>
 
                             <div style={{ marginTop: '20px' }}>
-                                <TextField label="Ngày tạo:" value={course.createDate} />
+                                <TextField label="Ngày tạo:" value={moment(course.createDate).format('HH:MM:SS DD/MM/YYYY')} />
                                 <TextField label="Giá:" style={{ marginLeft: '20px' }} value={course.price} />
                                 <TextField
                                     label="Thời gian học:"

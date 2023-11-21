@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogActions, DialogTitle, TextField, Typography, Button, Radio } from "@material-ui/core";
+import { Dialog, DialogContent, DialogActions, DialogTitle, TextField, Typography, Button, Radio, MenuItem } from "@material-ui/core";
 import { fetchData } from '../../../../services/AppService';
 import Cookies from 'js-cookie';
+import { Select } from '@mui/material';
+import { isValidSize } from '../../../../util/Utilities';
+import Swal from 'sweetalert2';
+import Loading from '../../../Loading/Loading';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import storage from '../../../../util/firebase';
 
 const QuestionModel = ({ isOpen, onClose, onSave, onUpdate, question, subject, course, lesson }) => {
+    const [selectedType, setSelectedType] = useState('text')
     const [editedQuestion, setEditedQuestion] = useState({
         content: "",
         answers: [
@@ -18,6 +25,7 @@ const QuestionModel = ({ isOpen, onClose, onSave, onUpdate, question, subject, c
     const [subjectItem, setSubjectItem] = useState(null)
     const [courseItem, setCourseItem] = useState(null)
     const [lessonItem, setLessonItem] = useState(null)
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const token = Cookies.get('token');
@@ -56,6 +64,9 @@ const QuestionModel = ({ isOpen, onClose, onSave, onUpdate, question, subject, c
                 answers: question.answers.map((answer) => ({ ...answer })), // Create a new array of answers to avoid modifying the original question
                 correctAnswerId: question.answers.find((answer) => answer.isCorrect)?.id || null,
             });
+            if (question.content.indexOf("https://") == 0) {
+                setSelectedType('image')
+            }
         } else {
             // If adding a new question
             setEditedQuestion({
@@ -71,7 +82,7 @@ const QuestionModel = ({ isOpen, onClose, onSave, onUpdate, question, subject, c
         }
     }, [question]);
 
-    const handleInputChange = (e, answerId) => {
+    const handleInputChange = async (e, answerId) => {
         const { name, value, checked } = e.target;
         if (name === "content") {
             // Update question content
@@ -88,10 +99,22 @@ const QuestionModel = ({ isOpen, onClose, onSave, onUpdate, question, subject, c
         }
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         if (!editedQuestion.content || editedQuestion.answers.length < 2 || editedQuestion.correctAnswerId === null) {
             // Show an error message or handle the validation as needed
             alert("Please fill in all required fields.");
+            return;
+        }
+
+        const isValidFileSize = isValidSize(2, editedQuestion.content, editedQuestion.answers[0].content, editedQuestion.answers[1].content, editedQuestion.answers[2].content, editedQuestion.answers[3].content);
+
+        if (!isValidFileSize) {
+            clearModal();
+            Swal.fire({
+                title: "Warning",
+                text: "Hình không được quá 2MB",
+                icon: "warning"
+            });
             return;
         }
 
@@ -99,23 +122,110 @@ const QuestionModel = ({ isOpen, onClose, onSave, onUpdate, question, subject, c
             // If editing an existing question, call the onUpdate function
             onUpdate({ ...question, ...editedQuestion });
         } else {
-            // If adding a new question, call the onSave function
-            // Set isCorrect: true for the correct answer
-            const updatedAnswers = editedQuestion.answers.map((answer) => {
-                if (answer.id === editedQuestion.correctAnswerId) {
-                    return { ...answer, isCorrect: true };
+
+            setLoading(true);
+            // Create an array to store upload tasks for both content and answers
+            const uploadTasks = [];
+
+            // Function to upload a single file
+            const uploadFile = (file, path) => {
+                return new Promise((resolve, reject) => {
+                    const storageRef = ref(storage, path);
+                    const uploadTask = uploadBytesResumable(storageRef, file);
+
+                    uploadTask.on(
+                        "state_changed",
+                        (snapshot) => {
+                            // Handle progress if needed
+                        },
+                        (err) => {
+                            console.log(err);
+                            reject(err);
+                        },
+                        () => {
+                            getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                                resolve(url);
+                            });
+                        }
+                    );
+                });
+            };
+
+            // Upload content file
+            if (editedQuestion.content instanceof File) {
+                uploadTasks.push(uploadFile(editedQuestion.content, `/elearning/text/${editedQuestion.content.name}`));
+            }
+
+            // Upload answer files
+            await editedQuestion.answers.forEach((answer) => {
+                if (answer.content instanceof File) {
+                    uploadTasks.push(uploadFile(answer.content, `/elearning/text/${answer.content.name}`));
                 }
-                return answer;
             });
 
-            onSave({
-                ...editedQuestion,
-                answers: updatedAnswers,
-            });
+            try {
+                // Wait for all upload tasks to complete
+                const urls = await Promise.all(uploadTasks);
+                console.log(urls);
+                // 'urls' is an array containing the download URLs of all uploaded files
+                // If adding a new question, call the onSave function
+                // Set isCorrect: true for the correct answer
+                const updatedAnswers = editedQuestion.answers.map((answer, index) => {
+                    if (answer.id === editedQuestion.correctAnswerId) {
+                        return { ...answer, isCorrect: true, content: urls[++index] };
+                    }
+                    return { ...answer, content: urls[++index] };
+                });
+                onSave({
+                    ...editedQuestion,
+                    answers: updatedAnswers,
+                    content: urls[0]
+                });
+
+                clearModal();
+            } catch (error) {
+                console.log(error);
+                setLoading(false);
+            }
+
         }
 
         clearModal();
     };
+
+
+
+    // const uploadFileToFireBase = (file) => {
+    //     // Creating a reference to the file in Firebase Storage
+    //     const storageRef = ref(storage, `/elearning/text/${file.name}`);
+
+    //     // Starting the upload task
+    //     const uploadTask = uploadBytesResumable(storageRef, file);
+
+    //     uploadTask.on(
+    //         "state_changed",
+    //         (snapshot) => {
+    //             // Calculating and updating the progress
+    //             // const percent = Math.round(
+    //             //     (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+    //             // );
+    //             // setPercent(percent);
+    //         },
+    //         (err) => {
+    //             console.log(err);
+    //             setLoading(false);
+    //         },
+    //         () => {
+    //             // Getting the download URL after successful upload
+    //             getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+    //                 // handleInputChange(url, 'url');
+    //                 const lessonSave = { ...editedLesson, url: url }
+    //                 onSave(lessonSave);
+    //                 setLoading(false);
+    //             });
+    //         }
+    //     );
+    // }
 
     const clearModal = () => {
         setEditedQuestion({
@@ -140,7 +250,7 @@ const QuestionModel = ({ isOpen, onClose, onSave, onUpdate, question, subject, c
     };
 
     return (
-        <Dialog open={isOpen} onClose={onClose} fullWidth>
+        loading ? <Loading /> : <Dialog open={isOpen} onClose={onClose} fullWidth>
             <DialogTitle>
                 <Typography variant="h5" gutterBottom>
                     {question ? 'Chi tiết câu hỏi' : 'Thêm mới câu hỏi'}
@@ -156,7 +266,16 @@ const QuestionModel = ({ isOpen, onClose, onSave, onUpdate, question, subject, c
                 <Typography variant="subtitle1" gutterBottom>
                     Tên bài học: {lessonItem?.name}
                 </Typography>
-                <TextField
+                <Select
+                    fullWidth
+                    value={selectedType}
+                    onChange={(e) => setSelectedType(e.target.value)}
+                    style={{ padding: '10px' }}
+                >
+                    <MenuItem value="text">Dạng văn bản</MenuItem>
+                    <MenuItem value="image">Dạng hình</MenuItem>
+                </Select>
+                {selectedType === 'text' ? <TextField
                     fullWidth
                     multiline
                     rows={4}
@@ -167,16 +286,26 @@ const QuestionModel = ({ isOpen, onClose, onSave, onUpdate, question, subject, c
                     value={editedQuestion.content}
                     onChange={handleInputChange}
                     required
-                />
+                /> : question ?
+                    <>
+                        <label className='my-2'>Câu hỏi </label><br />
+                        <img className='mx-5' src={editedQuestion.content} alt='img' width={200} height={200} /><br />
+                        <label className='my-2'>Đổi câu hỏi </label>
+                        <input className='mx-2' type='file' accept='.png, .jpg, .jpeg' onChange={(e) => setEditedQuestion({ ...editedQuestion, content: e.target.files[0] })} />
+                    </> : <>
+                        <label className='my-2'>Câu hỏi </label>
+                        <input className='mx-2' type='file' accept='.png, .jpg, .jpeg' onChange={(e) => setEditedQuestion({ ...editedQuestion, content: e.target.files[0] })} />
+                    </>
+                }
                 <Typography variant="subtitle1" gutterBottom>
-                    Answers:
+                    Câu trả lời:
                 </Typography>
                 {editedQuestion && editedQuestion.answers.length > 0 && editedQuestion.answers.map((answer, index) => (
                     <div key={answer.id}>
-                        <TextField
+                        {selectedType === 'text' ? <TextField
                             fullWidth
                             // style={{ height: '2.2em !important' }}
-                            label={`Answer ${index + 1}`}
+                            label={`Câu trả lời ${index + 1}`}
                             autoFocus
                             margin="dense"
                             name={`answer_${answer.id}`}
@@ -184,7 +313,26 @@ const QuestionModel = ({ isOpen, onClose, onSave, onUpdate, question, subject, c
                             onChange={(e) => handleInputChange(e, answer.id)}
                             required
 
-                        />
+                        /> : question ?
+                            <>
+                                <label className='my-2'>Câu trả lời: {index + 1}</label><br />
+                                <img className='mx-5' src={answer.content} alt='img' width={200} height={200} /><br />
+                                <label className='my-2'>Đổi câu trả lời {index + 1}</label>
+                                <input className='mx-2' type='file' accept='.png, .jpg, .jpeg' onChange={(e) => setEditedQuestion({ ...editedQuestion, content: e.target.files[0] })} />
+                            </> : <>
+                                <label className='my-2'>Câu trả lời: {index + 1} </label>
+                                <input className='mx-2' type='file' accept='.png, .jpg, .jpeg' onChange={(e) => {
+                                    const updatedAnswers = editedQuestion.answers.map((a) => {
+                                        if (a.id === answer.id) {
+                                            return { ...a, content: e.target.files[0] };
+                                        }
+                                        return a;
+                                    });
+                                    setEditedQuestion({ ...editedQuestion, answers: updatedAnswers });
+                                }} />
+
+                            </>
+                        }
                         <div className='my-3 d-flex align-items-center'>
                             <Radio
                                 name="correctAnswer"
@@ -192,7 +340,7 @@ const QuestionModel = ({ isOpen, onClose, onSave, onUpdate, question, subject, c
                                 checked={editedQuestion.correctAnswerId === answer.id}
                                 onChange={handleAnswerChange}
                             />
-                            <label className=''>check for correct answer</label>
+                            <label className=''>Chọn cho câu trả lời đúng</label>
                         </div>
                     </div>
                 ))}

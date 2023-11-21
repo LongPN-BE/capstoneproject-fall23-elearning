@@ -6,13 +6,13 @@ import { fetchData, postData } from '../../../services/AppService';
 import moment from 'moment';
 import Cookies from 'js-cookie';
 import Loading from '../../Loading/Loading';
-import { validateInputDigits, validateInputString } from '../../../util/Utilities';
+import { isInRange, isInteger, validateInputDigits, validateInputString } from '../../../util/Utilities';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import storage from '../../../util/firebase';
 import Swal from 'sweetalert2';
 import emailjs from 'emailjs-com';
 import { YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, YOUR_USER_ID } from '../../../util/Constants';
-import { Tab, Tabs } from '@material-ui/core';
+import { Tab, Tabs } from '@mui/material';
 
 // import firebase from 'firebase/compat/app';
 
@@ -124,20 +124,60 @@ function CourseTabsComponent({ activeCourses, inactiveCourses, pendingCourses, d
                 const isValidString = validateInputString(courseName, status, description);
                 const isValidDigit = validateInputDigits(price, duration, passingScore);
                 const findSubject = subjectList.find(s => s.id == subject)
-                if (findSubject !== -1) {
+                if (!isInRange(passingScore)) {
+                    handleModalClose()
+                    Swal.fire({
+                        title: "Warning",
+                        text: "Chọn điểm trong thang điểm 10",
+                        icon: "warning"
+                    });
+                    return;
+                }
+                if (findSubject !== undefined) {
                     if (parseInt(findSubject.minPrice) > parseInt(price)) {
-                        alert(`pls price should be > ${findSubject.minPrice}`);
+                        Swal.fire({
+                            title: "Warning",
+                            text: `Giá tiền phải lớn hơn  ${findSubject.minPrice}`,
+                            icon: "warning"
+                        });
+                        handleModalClose()
                         return
                     }
+                } else {
+                    Swal.fire({
+                        title: "Warning",
+                        text: 'Chọn môn học trước',
+                        icon: "warning"
+                    });
+                    handleModalClose()
+                    return
                 }
                 if (!isValidString || !isValidDigit) {
-                    alert('pls fill all fields and digit should be positive');
+                    Swal.fire({
+                        title: "Warning",
+                        text: 'Điền tất cả các trường và số phải lớn hơn 0',
+                        icon: "warning"
+                    });
+                    handleModalClose()
                     return
                 }
                 // handleOnSave(coverImage);
                 if (!coverImage) {
-                    alert("Please choose a file first!");
-                    setLoading(false);
+                    Swal.fire({
+                        title: "Warning",
+                        text: "Chọn tệp ảnh đại diện",
+                        icon: "warning"
+                    });
+                    handleModalClose()
+                    return;
+                }
+                if (!isInteger(duration)) {
+                    Swal.fire({
+                        title: "Warning",
+                        text: "Thời gian học phải là số nguyên",
+                        icon: "warning"
+                    });
+                    handleModalClose()
                     return;
                 }
                 setLoading(true)
@@ -383,15 +423,24 @@ function CourseTabsComponent({ activeCourses, inactiveCourses, pendingCourses, d
                         </FormControl>
                         <div className='d-flex justify-content-between'>
                             <TextField className='col-6 mx-1' label="Tên khóa học" value={courseName} onChange={(e) => setCourseName(e.target.value)} sx={{ my: 1 }} />
-                            <TextField className='col-6 mx-1' label="Giá" value={price} onChange={(e) => setPrice(e.target.value)} sx={{ my: 1 }} type='number' />
+                            <TextField className='col-6 mx-1' label="Giá ( VND )" value={price} onChange={(e) => setPrice(e.target.value)} sx={{ my: 1 }} type='number' />
                         </div>
                         <div className='d-flex justify-content-between'>
-                            <TextField className='col-6 mx-1' label="Thời lượng" value={duration} onChange={(e) => setDuration(e.target.value)} sx={{ my: 1 }} type='number' />
-                            <TextField className='col-6 mx-1' label="Điểm qua môn" value={passingScore} onChange={(e) => setPassingScore(e.target.value)} sx={{ my: 1 }} type='number' />
+                            <TextField className='col-6 mx-1' label="Thời gian ( tháng )" value={duration} onChange={(e) => setDuration(e.target.value)} sx={{ my: 1 }} type='number' />
+                            <TextField className='col-6 mx-1' label="Điểm qua môn ( 1 - 10 )" value={passingScore} onChange={(e) => setPassingScore(e.target.value)} sx={{ my: 1 }} type='number' />
                         </div>
 
 
-                        <TextField fullWidth label="Mô tả" value={description} onChange={(e) => setDescription(e.target.value)} multiline rows={4} sx={{ my: 1 }} />
+                        <TextField fullWidth label="Mô tả" value={description} onChange={(e) => {
+                            const inputValue = e.target.value;
+                            // Set a character limit, for example, 200 characters
+                            if (inputValue.length <= 250) {
+                                setDescription(inputValue);
+                            }
+                        }} multiline rows={4} sx={{ my: 1 }} />
+                        <div style={{ textAlign: 'right', color: description.length > 250 ? 'red' : 'inherit' }}>
+                            {description.length}/250
+                        </div>
                         <Divider sx={{ my: 2 }} />
                         <div className='d-flex'>
                             <label>Ảnh bìa: </label>

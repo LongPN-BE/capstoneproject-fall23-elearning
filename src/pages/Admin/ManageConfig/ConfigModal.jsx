@@ -43,15 +43,7 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
   };
 
   const handleSave = () => {
-    if (
-      !editedConfig.version ||
-      !editedConfig.projectName ||
-      !editedConfig.dateCreate ||
-      !editedConfig.studyingTime ||
-      !editedConfig.retryTestTime ||
-      !editedConfig.defaultImage ||
-      !editedConfig.defaultQuizTime
-    ) {
+    if (!editedConfig.name || !editedConfig.description) {
       // Show an error message or handle the validation as needed
       alert('Please fill in all required fields.');
       return;
@@ -99,7 +91,7 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
           margin="dense"
           name="name"
           value={editedConfig.version}
-          onChange={(e) => handleInputChange(e, 'version')}
+          onChange={(e) => handleInputChange(e, 'name')}
           required
         />
         <TextField
@@ -111,7 +103,7 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
           margin="dense"
           name="description"
           value={editedConfig.projectName}
-          onChange={(e) => handleInputChange(e, 'projectName')}
+          onChange={(e) => handleInputChange(e, 'firstName')}
           required
         />
         <TextField
@@ -120,8 +112,9 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
           autoFocus
           margin="dense"
           name="min_price"
-          value={editedConfig.dateCreate}
-          onChange={(e) => handleInputChange(e, 'dateCreate')}
+          value={editedConfig.lastName}
+          onChange={(e) => handleInputChange(e, 'lastName')}
+          disabled={true}
         />
         <TextField
           fullWidth
@@ -130,7 +123,7 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
           margin="dense"
           name="staff_id"
           value={editedConfig.studyingTime}
-          onChange={(e) => handleInputChange(e, 'studyingTime')}
+          onChange={(e) => handleInputChange(e, 'email')}
         />
         <TextField
           fullWidth
@@ -140,6 +133,7 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
           name="asset"
           value={editedConfig.defaultQuizTime}
           onChange={(e) => handleInputChange(e, 'defaultQuizTime')}
+
         />
         <TextField
           fullWidth
@@ -148,7 +142,8 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
           margin="dense"
           name="created_date"
           value={editedConfig.retryTestTime}
-          onChange={(e) => handleInputChange(e, 'retryTestTime')}
+          onChange={(e) => handleInputChange(e, 'role')}
+
         />
         <TextField
           fullWidth
@@ -158,6 +153,7 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
           name="asset"
           value={editedConfig.defaultImage}
           onChange={(e) => handleInputChange(e, 'defaultImage')}
+
         />
       </DialogContent>
       <DialogActions>

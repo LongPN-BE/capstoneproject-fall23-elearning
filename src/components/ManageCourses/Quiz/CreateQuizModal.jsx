@@ -12,7 +12,7 @@ import Cookies from 'js-cookie';
 import { Calendar, DateRangePicker } from 'react-date-range';
 import moment from 'moment';
 import { useEffect } from 'react';
-import { validateInputDigits, validateInputString } from '../../../util/Utilities';
+import { isInRange, isInteger, validateInputDigits, validateInputString } from '../../../util/Utilities';
 import Swal from 'sweetalert2';
 
 function CreateQuizModal({ open, onClose, data, onSave }) {
@@ -71,6 +71,7 @@ function CreateQuizModal({ open, onClose, data, onSave }) {
         const validString = validateInputString(formData.title, formData.dateRange)
         const validDigit = validateInputDigits(formData.passScore, formData.duration, formData.allowAttempt, formData.proportion)
 
+
         if (!validString && !validDigit) {
             onClose();
             Swal.fire({
@@ -81,11 +82,31 @@ function CreateQuizModal({ open, onClose, data, onSave }) {
             return
         }
 
+        if (!isInteger(formData.duration, formData.allowAttempt, formData.proportion)) {
+            onClose();
+            Swal.fire({
+                title: "Warning",
+                text: "Thời gian học, số lần thi lại, tỉ trọng phải là số nguyên",
+                icon: "warning"
+            });
+            return;
+        }
+
+        if (!isInRange(formData.passScore)) {
+            onClose();
+            Swal.fire({
+                title: "Warning",
+                text: "Chọn điểm trong thang điểm 10",
+                icon: "warning"
+            });
+            return;
+        }
+
         const formattedStartDate = moment(selectionRange.startDate);
         const formattedEndDate = moment(selectionRange.endDate);
         const body = {
             ...formData,
-            dateRange: formattedEndDate.diff(formattedStartDate, 'days')
+            dateRange: formattedEndDate.diff(formattedStartDate, 'days') === 0 ? 1 : formattedEndDate.diff(formattedStartDate, 'days')
         }
         onSave(body)
     }
@@ -106,11 +127,12 @@ function CreateQuizModal({ open, onClose, data, onSave }) {
                 />
                 <TextField
                     margin="dense"
-                    label="Điểm qua môn"
+                    label="Điểm qua môn ( 0 - 10 )"
                     type="number"
                     fullWidth
                     name="passScore"
                     value={formData.passScore}
+                    InputProps={{ inputProps: { min: 0, max: 10 } }}
                     onChange={handleChange}
                 />
                 <Select
@@ -130,7 +152,7 @@ function CreateQuizModal({ open, onClose, data, onSave }) {
                 />
                 <TextField
                     margin="dense"
-                    label="Thời gian học"
+                    label="Thời gian làm bài ( phút ) "
                     type="number"
                     fullWidth
                     name="duration"
@@ -140,7 +162,7 @@ function CreateQuizModal({ open, onClose, data, onSave }) {
 
                 <TextField
                     margin="dense"
-                    label="Số lần thi lại cho phép"
+                    label="Số lần làm bài"
                     type="number"
                     fullWidth
                     name="allowAttempt"

@@ -46,6 +46,24 @@ export const validateInputDigits = (...inputs) => {
     return true; // All inputs are valid strings
 };
 
+export function isInteger(...values) {
+    for (const i of values) {
+        if (!Number.isInteger(Number(i))) {
+            return false;
+        }
+    }
+    return true
+}
+
+export function isInRange(range, ...values) {
+    for (const i of values) {
+        if (i < 0 || i > range) {
+            return false;
+        }
+    }
+    return true
+}
+
 export const calDateRange = (dateRange) => {
     const arr = dateRange.split('---')
     // Your two date strings
@@ -58,4 +76,18 @@ export const calDateRange = (dateRange) => {
 
     // Calculating the duration between the two dates
     return moment.duration(endDate.diff(startDate));
+}
+
+export const isValidSize = (size, ...resources) => {
+    resources.forEach(resource => {
+        const fileSizeInMB = resource.size / (1024 * 1024); // Convert bytes to megabytes
+        console.log(resource);
+        if (!resource) {
+            return false;
+        }
+        if (fileSizeInMB > size) {
+            return false;
+        }
+    });
+    return true;
 }

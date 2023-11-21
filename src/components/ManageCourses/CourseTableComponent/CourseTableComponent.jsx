@@ -6,8 +6,8 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { Link } from 'react-router-dom';
-import { TablePagination } from '@material-ui/core';
-import { Paper } from '@material-ui/core';
+import { TablePagination } from '@mui/material';
+import { Paper } from '@mui/material';
 
 function CourseTableComponent({ courses, onApprove, onShowReason, onDisable }) {
     // State to keep track of the current page and the number of rows per page

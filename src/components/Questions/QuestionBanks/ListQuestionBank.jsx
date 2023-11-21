@@ -257,7 +257,7 @@ export default function ListQuestionBank() {
                                 >
                                     {subject?.length > 0 && subject.map((s) => (
                                         <MenuItem key={s.id} value={s.id}>
-                                            {s.description}
+                                            {s.name}
                                         </MenuItem>
                                     ))}
                                 </Select>
