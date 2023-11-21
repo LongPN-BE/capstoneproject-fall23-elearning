@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from '@material-ui/core';
+import moment from 'moment';
 const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
   const [editedConfig, setEditedConfig] = useState({
     version: '',
@@ -28,7 +29,7 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
       setEditedConfig({
         version: '',
         projectName: '',
-        dateCreate: '',
+        dateCreate: moment().format('DD-MM-YYYY'),
         studyingTime: '',
         retryTestTime: '',
         defaultImage: '',
@@ -43,7 +44,15 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
   };
 
   const handleSave = () => {
-    if (!editedConfig.name || !editedConfig.description) {
+    if (
+      !editedConfig.version ||
+      !editedConfig.projectName ||
+      !editedConfig.dateCreate ||
+      !editedConfig.studyingTime ||
+      !editedConfig.retryTestTime ||
+      !editedConfig.defaultImage ||
+      !editedConfig.defaultQuizTime
+    ) {
       // Show an error message or handle the validation as needed
       alert('Please fill in all required fields.');
       return;
@@ -60,7 +69,21 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
       // If adding a new config, call the onSave function
       onSave(editedConfig);
       // add function api here
-      alert(editedConfig.name);
+      alert(
+        editedConfig.version +
+          ' ' +
+          editedConfig.projectName +
+          ' ' +
+          !editedConfig.dateCreate +
+          ' ' +
+          editedConfig.studyingTime +
+          ' ' +
+          editedConfig.retryTestTime +
+          ' ' +
+          editedConfig.defaultImage +
+          ' ' +
+          editedConfig.defaultQuizTime,
+      );
       //-- end function add new
       clearModal();
     }
@@ -91,7 +114,7 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
           margin="dense"
           name="name"
           value={editedConfig.version}
-          onChange={(e) => handleInputChange(e, 'name')}
+          onChange={(e) => handleInputChange(e, 'version')}
           required
         />
         <TextField
@@ -103,7 +126,7 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
           margin="dense"
           name="description"
           value={editedConfig.projectName}
-          onChange={(e) => handleInputChange(e, 'firstName')}
+          onChange={(e) => handleInputChange(e, 'projectName')}
           required
         />
         <TextField
@@ -112,9 +135,8 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
           autoFocus
           margin="dense"
           name="min_price"
-          value={editedConfig.lastName}
-          onChange={(e) => handleInputChange(e, 'lastName')}
-          disabled={true}
+          value={editedConfig.dateCreate}
+          disabled
         />
         <TextField
           fullWidth
@@ -123,7 +145,7 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
           margin="dense"
           name="staff_id"
           value={editedConfig.studyingTime}
-          onChange={(e) => handleInputChange(e, 'email')}
+          onChange={(e) => handleInputChange(e, 'studyingTime')}
         />
         <TextField
           fullWidth

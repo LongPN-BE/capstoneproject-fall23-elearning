@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import ViewConfig from './ViewConfig';
 
 import {
   Button,
@@ -24,6 +24,7 @@ export default function ListConfig() {
   const [searchValue, setSearchValue] = useState('');
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
   const [configToEdit, setConfigToEdit] = useState(null);
+  const [isViewConfigModalOpen, setIsViewConfigModalOpen] = useState(false);
 
   useEffect(() => {
     const token = Cookies.get('token');
@@ -45,62 +46,40 @@ export default function ListConfig() {
     setIsConfigModalOpen(true);
   };
 
-  const handleEditConfig = (configData) => {
+  const handleViewConfig = (configData) => {
     console.log(configData);
     setConfigToEdit(configData); // Set the config data to edit
-    setIsConfigModalOpen(true);
+    setIsViewConfigModalOpen(true);
   };
 
   const handleConfigModalClose = () => {
     setIsConfigModalOpen(false);
   };
 
+  const handleViewConfigModalClose = () => {
+    setIsViewConfigModalOpen(false);
+  };
+
   const saveOrUpdateConfig = async (configData) => {
-    // Here you should implement logic to either save a new config or update an existing one.
-    // You may need to call an API or update your local data.
-    // After saving or updating, you can close the ConfigModal.
-    // For this example, we'll just log the config data.
     const token = Cookies.get('token');
     console.log('Config data to save or update:', configData);
-
     // If setIsConfigModalOpen has an "id", it means you are updating an existing config.
-    if (configData.id) {
-      // Implement your update logic here.
-      console.log('Config data to update:', configData);
-
-      const body = {
-        ...configData,
-        dateTime: moment(new Date()),
-      };
-      console.log('Config data to update:', await body);
-      // await postData('##', body, token)
-      //   .then(resp => {
-      //     if (resp) {
-      //       window.location.reload();
-      //     }
-      //   })
-      //   .catch(err => {
-      //     console.log(err);
-      //   });
-    } else {
-      // Implement your create logic here for new config.
-
-      console.log('Config data to create:', configData);
-      const body = {
-        ...configData,
-        dateTime: moment(new Date()),
-      };
-      console.log('Config data to update:', await body);
-      await postData('/system-config/save', body, token)
-        .then((resp) => {
-          if (resp) {
-            window.location.reload();
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    // Implement your create logic here for new config.
+    console.log('Config data to create:', configData);
+    const body = {
+      ...configData,
+      dateTime: moment(new Date()),
+    };
+    console.log('Config data to update:', await body);
+    await postData('/system-config/save', body, token)
+      .then((resp) => {
+        if (resp) {
+          window.location.reload();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     setIsConfigModalOpen(false); // Close the ConfigModal
   };
@@ -164,9 +143,14 @@ export default function ListConfig() {
                       <TableCell>{c.projectName}</TableCell>
                       <TableCell>{c.dateCreate}</TableCell>
                       <TableCell>
-                        <Link className="btn btn-outline-secondary" to={`##`}>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => handleViewConfig(c)}
+                          className="m-1 p-0"
+                        >
                           Xem
-                        </Link>
+                        </Button>
                       </TableCell>
                     </TableRow>
                   );
@@ -180,6 +164,13 @@ export default function ListConfig() {
           onSave={saveOrUpdateConfig}
           onUpdate={saveOrUpdateConfig}
           onClose={handleConfigModalClose}
+          config={configToEdit !== null ? configToEdit : null}
+        />
+        <ViewConfig
+          isOpen={isViewConfigModalOpen}
+          onSave={saveOrUpdateConfig}
+          onUpdate={saveOrUpdateConfig}
+          onClose={handleViewConfigModalClose}
           config={configToEdit !== null ? configToEdit : null}
         />
       </div>
