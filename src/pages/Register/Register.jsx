@@ -1,11 +1,76 @@
-import React from "react";
+import React, { useState } from "react";
 import Logo from "../../assets/images/logo.png";
 import "bootstrap/dist/css/bootstrap.css";
 import classNames from "classnames";
 import Styles from "./Register.module.scss";
+import Loading from "../../components/Loading/Loading";
+import { Link, useNavigate } from "react-router-dom";
+import { postData } from "../../services/AppService";
+import Cookies from "js-cookie";
+
 
 const Register = () => {
-  return (
+  const navigate = useNavigate();
+  const [isLoading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+    repeat: "",
+    email: "",
+    firstName: "",
+    lastName: "",
+    phone: "",
+    checkbox: ""
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  console.log(formData)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true); // Set loading to true while waiting for the response
+
+    if (formData.checkbox === "OK" && formData.username !== "" && formData.password !== "" && formData.email !== "" && formData.phone !== "" && formData.firstName !== "" && formData.lastName !== "") {
+      const response = await postData('auth/register', formData);
+
+      if (response) {
+        try {
+          const response1 = await postData('/auth/login', {
+            "username": response.username,
+            "password": response.password
+          });
+          if (response1.token) {
+            console.log('Authentication successful!');
+            Cookies.set("token", response1.token, { expires: 1 })
+            navigate('/');
+          } else {
+            // Authentication failed, handle the error (e.g., show an error message)
+            console.error('Authentication failed. Invalid email or password.');
+          }
+        } catch (error) {
+          console.error('Error during authentication:', error.message);
+        } finally {
+          setLoading(false); // Set loading to false after the response is received
+        }
+      } else {
+        setLoading(false); // Set loading to false after the response is received
+      }
+    } else {
+      alert("Please accept the terms and conditions");
+    }
+  };
+
+
+  return isLoading ? (
+    <Loading />
+  ) : (
     <div className=" vh-100 ">
       <nav className="navbar navbar-light px-5 mb-5 pt-4">
         <div className="container-fluid p-0">
@@ -20,17 +85,20 @@ const Register = () => {
             <div className="card border-0 shadow-lg rounded-3 my-5">
               <div className="card-body p-4 p-sm-5 ">
                 <h2 className="card-title text-center text-uppercase mb-5 fw-bold fs-5">
-                  Create an account
+                  Đăng ký tài khoản
                 </h2>
-                <form>
+                <form onSubmit={handleSubmit}>
                   <div className="row">
                     <div className="col-md-6 mb-3">
                       <div className="form-outline">
                         <input
                           type="text"
                           id="firstName"
+                          name="firstName"
+                          value={formData.firstName}
+                          onChange={handleChange}
                           className="form-control"
-                          placeholder="First name"
+                          placeholder="Tên"
                         />
                       </div>
                     </div>
@@ -40,8 +108,11 @@ const Register = () => {
                         <input
                           type="text"
                           id="lastName"
+                          name="lastName"
+                          value={formData.lastName}
+                          onChange={handleChange}
                           className="form-control"
-                          placeholder="Last name"
+                          placeholder="Họ"
                         />
                       </div>
                     </div>
@@ -50,6 +121,49 @@ const Register = () => {
                   <div className={classNames(Styles.ipt_custom, "mb-3")}>
                     <input
                       type="email"
+                      id="username"
+                      name="username"
+                      value={formData.username}
+                      onChange={handleChange}
+                      className="form-control"
+                      placeholder="Tên tài khoản"
+                    />
+                  </div>
+
+
+                  <div className={classNames(Styles.ipt_custom, "mb-3")}>
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      className="form-control"
+                      placeholder="Mật khẩu"
+                    />
+                  </div>
+
+                  <div className={classNames(Styles.ipt_custom, "mb-5")}>
+                    <input
+                      type="password"
+                      id="repeat"
+                      name="repeat"
+                      value={formData.repeat}
+                      onChange={handleChange}
+                      className="form-control"
+                      placeholder="Nhập lại mật khẩu"
+                    />
+                  </div>
+
+                  <hr className="my-4" />
+
+                  <div className={classNames(Styles.ipt_custom, "mb-3")}>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
                       className="form-control"
                       placeholder="Email"
                     />
@@ -57,21 +171,23 @@ const Register = () => {
 
                   <div className={classNames(Styles.ipt_custom, "mb-3")}>
                     <input
-                      type="password"
+                      type="text"
+                      id="phone"
+                      name="phone"
+                      pattern="[789][0-9]{9}"
+                      value={formData.phone}
+                      onChange={handleChange}
                       className="form-control"
-                      placeholder="Password"
+                      placeholder="Số điện thoại"
                     />
                   </div>
 
-                  <div className={classNames(Styles.ipt_custom, "mb-5")}>
-                    <input
-                      type="password"
-                      className="form-control"
-                      placeholder="Repeat Password"
-                    />
-                  </div>
 
-                  <div className="d-grid">
+                  <input type="checkbox" id="checkbox" name="checkbox" value="OK" onClick={handleChange} />
+                  <label style={{ marginLeft: 5 }}> Đồng ý với các điều khoản.</label>
+                  <Link to="##" style={{ color: "blue" }}> Tài liệu chính sách đồng ý.</Link>
+
+                  {formData.checkbox === "OK" ? (<div className="d-grid mt-3">
                     <button
                       className={classNames(
                         Styles.btn_custom,
@@ -79,27 +195,29 @@ const Register = () => {
                       )}
                       type="submit"
                     >
-                      Sign up
+                      Đăng ký
                     </button>
                   </div>
+                  ) : (<div className="d-grid mt-3">
+                    <button
+                      className={classNames(
+                        Styles.btn_custom,
+                        "btn text-uppercase fw-bold"
+                      )}
+                      type="submit"
+                      disabled
+                    >
+                      Đăng ký
+                    </button>
+                  </div>
+                  )}
 
                   <hr className="my-4" />
 
-                  <div className="d-grid mb-5">
-                    <button
-                      className={classNames(
-                        Styles.btn_google,
-                        "btn btn-login text-uppercase fw-bold"
-                      )}
-                      type="submit"
-                    >
-                      Continue with Google
-                    </button>
-                  </div>
                   <div className="d-flex justify-content-center">
-                    <p className="form-check-label">
-                      Already have an account? <a href="/">Sign up now</a>
-                    </p>
+                    <div className="form-check-label">
+                      Bạn đã có tài khoản? <Link to="/login" style={{ color: "blue" }}>Đăng nhập</Link> ngay.
+                    </div>
                   </div>
                 </form>
               </div>

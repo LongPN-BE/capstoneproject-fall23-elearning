@@ -4,9 +4,8 @@ import Styles from "./Login.module.scss";
 import classNames from "classnames";
 import "bootstrap/dist/css/bootstrap.css";
 import { useState } from "react";
-import { account } from "../../mock/mock-data";
-import { useNavigate } from "react-router-dom";
-import { fetchData, postData } from "../../services/AppService";
+import { Link, useNavigate } from "react-router-dom";
+import { postData } from "../../services/AppService";
 import Loading from "../../components/Loading/Loading";
 import Cookies from "js-cookie";
 
@@ -71,7 +70,7 @@ const Login = () => {
           <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div className="card border-0 shadow-lg rounded-3 my-5">
               <div className="card-body p-4 p-sm-5 ">
-                <h2 className="card-title text-center text-uppercase mb-5 fw-bold fs-5">Log in</h2>
+                <h2 className="card-title text-center text-uppercase mb-5 fw-bold fs-5">Đăng nhập</h2>
 
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">
@@ -81,7 +80,7 @@ const Login = () => {
                       value={formData.username}
                       onChange={handleChange}
                       className="form-control"
-                      placeholder="Email"
+                      placeholder="Tên đăng nhập (hoặc Email)"
                       required
                     />
                   </div>
@@ -92,13 +91,13 @@ const Login = () => {
                       value={formData.password}
                       onChange={handleChange}
                       className="form-control"
-                      placeholder="Password"
+                      placeholder="Mật khẩu"
                       required
                     />
                   </div>
                   <div className="d-grid">
                     <button className={classNames(Styles.btn_custom, ' text-uppercase fw-bold')} type="submit">
-                      Sign in
+                      Đăng nhập
                     </button>
                   </div>
                 </form>
@@ -109,12 +108,12 @@ const Login = () => {
                     className={classNames(Styles.btn_custom, Styles.btn_google, ' text-uppercase fw-bold')}
                     type="submit"
                   >
-                    Continue with Google
+                    Tiếp tục với Google
                   </button>
                 </div>
                 <div className="mb-3 d-flex justify-content-center">
                   <p className="form-check-label">
-                    Don't have an account? <a href="/">Sign up now</a>
+                    Bạn chưa có tài khoản đăng nhập? <Link to="/register">Đăng ký ngay</Link>
                   </p>
                 </div>
               </div>
