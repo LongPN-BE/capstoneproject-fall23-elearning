@@ -18,6 +18,7 @@ import Cookies from 'js-cookie';
 import { fetchData } from '../../../services/AppService';
 import moment from 'moment/moment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import SourceIcon from '@mui/icons-material/Source';
 import CustomBreadcrumbs from '../../../components/Breadcrumbs';
 import { Box } from '@mui/system';
 import { CardContent, Divider } from '@mui/material';
@@ -131,7 +132,7 @@ export default function SyllabusByCourse() {
                   <div className="d-flex w-100 py-3">
                     <div className="pr-5 text-center">
                       <Typography variant="caption">
-                        <strong>ĐIỂM QUA MÔN</strong>{' '}
+                        <strong>ĐIỂM QUA MÔN</strong>
                       </Typography>
                       <Typography>{courseData?.averagePoint} /10</Typography>
                     </div>
@@ -187,6 +188,8 @@ export default function SyllabusByCourse() {
                   <TableCell>Tên</TableCell>
                   <TableCell>Trạng thái</TableCell>
                   <TableCell>Ngày tạo</TableCell>
+                  <TableCell>Tài liệu</TableCell>
+                  <TableCell>Live preview</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -198,9 +201,14 @@ export default function SyllabusByCourse() {
                       <TableCell>{s.status}</TableCell>
                       <TableCell>{moment(s.createDate).format('DD/MM/YYYY')}</TableCell>
                       <TableCell>
+                        <Link to={`##`} aria-label="Tài liệu" className="btn btn-secondary m-1">
+                          <SourceIcon />
+                        </Link>
+                      </TableCell>
+                      <TableCell>
                         <Link
                           to={`/subject/${subjectId}/course/${courseId}/syllabus/preview`}
-                          title="Xem"
+                          aria-label="Xem"
                           className="btn btn-secondary m-1"
                         >
                           <VisibilityIcon />

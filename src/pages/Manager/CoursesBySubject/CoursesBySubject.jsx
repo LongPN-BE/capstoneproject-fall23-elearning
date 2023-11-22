@@ -32,7 +32,6 @@ const CourseBySubject = () => {
     },
   ];
 
-
   useEffect(() => {
     const token = Cookies.get('token');
     if (token) {
@@ -56,7 +55,6 @@ const CourseBySubject = () => {
     }
   }, [subjectId]);
 
-
   return (
     subjectData && (
       <div className="m-5">
@@ -64,28 +62,51 @@ const CourseBySubject = () => {
           <Box>
             <CustomBreadcrumbs items={breadcrumbItems} />
             <Card sx={{ minWidth: 275 }}>
-              <CardContent>
-                <Typography variant="h3" component="div" style={{ fontWeight: 'bold' }}>
+              <CardContent className="text-center">
+                <Typography variant="h4" component="div" style={{ fontWeight: 'bold' }}>
                   {subjectData.name}
                 </Typography>
-                <Typography style={{ marginTop: 5, marginBottom: 10 }} color="textPrimary">
-                  {subjectData.description}
-                </Typography>
+                <div className="d-flex justify-content-center">
+                  <div className="w-50">
+                    <Typography className="text-center" style={{ marginTop: 5, marginBottom: 10 }} color="textPrimary">
+                      {subjectData.description}
+                    </Typography>
+                  </div>
+                </div>
+
                 <Divider style={{ color: 'black', height: 2 }} />
-                <div className='d-flex'>
-                  <Typography sx={{ mb: 1.5 }} color="textPrimary" variant='caption'>
-                    Giá thấp nhất : {subjectData.minPrice}<br />
-                    Tạo ngày: {moment(subjectData.createDate).format('DD/MM/YYYY')}
-                  </Typography>
+                <div className="d-flex align-items-center">
+                  <div className="w-100">
+                    <div className="d-inline-flex py-3 text-center">
+                      <div className="px-5 text-center">
+                        <Typography variant="caption">
+                          <strong>GIÁ THẤP NHẤT</strong>
+                        </Typography>
+                        <br />
+                        <Typography> {subjectData.minPrice?.toLocaleString()} VND</Typography>
+                      </div>
+                      <div className="px-5 text-center">
+                        <Typography variant="caption">
+                          <strong>NGÀY TẠO</strong>
+                        </Typography>
+                        <br />
+                        <Typography>{moment(subjectData.createDate).format('DD/MM/YYYY')}</Typography>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
           </Box>
           <Box textAlign="center" mt={2}>
-            <CourseTabComponent activeCourses={activeCourses} pendingCourses={pendingCourses} deActiveCourses={deActiveCourses} />
+            <CourseTabComponent
+              activeCourses={activeCourses}
+              pendingCourses={pendingCourses}
+              deActiveCourses={deActiveCourses}
+            />
           </Box>
         </Container>
-      </div >
+      </div>
     )
   );
 };
