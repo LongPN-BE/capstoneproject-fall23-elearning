@@ -33,26 +33,25 @@ export default function SyllabusByCourse() {
     fullName: '',
     email: '',
     avatar: '',
-    rating: ''
+    rating: '',
   });
-
 
   useEffect(() => {
     const token = Cookies.get('token');
     if (token) {
       fetchData('/subject/byId?subject-id=' + subjectId, token).then((resp) => {
-        setSubjectData(resp)
-      })
+        setSubjectData(resp);
+      });
       fetchData('/course/byId?id=' + courseId, token).then((resp) => {
         if (resp) {
           setCourseData(resp);
           fetchData('/teacher/byId?teacher_id=' + resp.teacher.id, token).then((resp1) => {
             if (resp1) {
               setTeacherData({
-                fullName: resp1.account.profile.firstName + " " + resp1.account.profile.firstName,
+                fullName: resp1.account.profile.firstName + ' ' + resp1.account.profile.firstName,
                 email: resp1.account.profile.email,
                 avatar: resp1.account.profile.avatar,
-                rating: resp1.rating
+                rating: resp1.rating,
               });
             }
           });
@@ -76,12 +75,12 @@ export default function SyllabusByCourse() {
       label: `Danh sách môn học`,
     },
     {
-      url: `/course/subject/` + subjectId,
+      url: `/subject/${subjectId}/course/`,
       label: `Môn ` + subjectData.name,
     },
     {
       url: `/subject/${subjectId}/course/${courseId}/syllabus`,
-      label: 'Khóa ' + courseData.name,
+      label: 'Khóa học ' + courseData.name,
     },
   ];
 
@@ -96,40 +95,72 @@ export default function SyllabusByCourse() {
       <div className="m-5">
         <Box>
           <CustomBreadcrumbs items={breadcrumbItems} />
-          <Card sx={{ minWidth: 275 }}>
-            <CardMedia
-              component="img"
-              height="194"
-              image={courseData.image}
-              alt="Ảnh bìa môn học"
-            />
-            <CardContent>
-              <Typography variant="h3" component="div" style={{ fontWeight: 'bold' }}>
-                {courseData.name}
-              </Typography>
-              <Typography style={{ marginTop: 5, marginBottom: 10 }} color="textPrimary">
-                {courseData.description}
-              </Typography>
-              <Divider style={{ color: 'black', height: 2 }} />
-              <div className="d-flex justify-content-sm-between">
-                <div className='d-flex'>
-                  <Typography sx={{ mb: 1.5 }} color="textPrimary" variant='caption'>
-                    Điểm qua môn: {courseData.averagePoint}<br />
-                    Giá tiền: {courseData.price} <br />
-                    Tạo ngày: {moment(courseData.createDate).format('DD/MM/YYYY')}<br />
-
-                    Môn: {subjectData.name}<br />
-
-                  </Typography>
-                </div>
-                <div className="p-3">
-                  <Avatar alt={teacherData.fullName} src={teacherData.avatar} />
-                  {teacherData.rating} -
-                  {teacherData.fullName} <br />
-                  {teacherData.email}
+          <Card className="d-flex" style={{ backgroundColor: '#4356ff12' }}>
+            <div className="d-flex">
+              <div className="p-3">
+                <div className="p-3 border rounded" style={{ height: 200, width: 200, backgroundColor: 'white' }}>
+                  <CardMedia component="img" sx={{ width: 151 }} image={courseData.image} alt="Ảnh bìa môn học" />
                 </div>
               </div>
-            </CardContent>
+              <CardContent>
+                <div className="d-flex">
+                  <div>
+                    <Typography variant="h4" component="div" style={{ fontWeight: 'bold' }}>
+                      {courseData.name}
+                    </Typography>
+                    <div className="vw-75">
+                      <Typography className="w-75" variant="subtitle2" style={{ marginTop: 5, marginBottom: 10 }}>
+                        {courseData.description}
+                      </Typography>
+                    </div>
+                  </div>
+
+                  {/* Teacher button */}
+                  <div className="m-2">
+                    <div className="btn hover-overlay btn-light border rounded d-flex text-center">
+                      <Avatar alt={teacherData.fullName} src={teacherData.avatar} />
+                      <div className="p-2">
+                        <Typography variant="subtitle2">{teacherData.fullName}</Typography>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <Divider style={{ color: 'black', height: 2 }} />
+
+                <div className="d-flex justify-content-sm-between">
+                  <div className="d-flex w-100 py-3">
+                    <div className="pr-5 text-center">
+                      <Typography variant="caption">
+                        <strong>ĐIỂM QUA MÔN</strong>{' '}
+                      </Typography>
+                      <Typography>{courseData?.averagePoint} /10</Typography>
+                    </div>
+
+                    <div className="px-5 text-center">
+                      <Typography variant="caption">
+                        <strong>GIÁ TIỀN </strong>
+                      </Typography>
+                      <Typography>{courseData.price?.toLocaleString()} VNĐ</Typography>
+                    </div>
+
+                    <div className="px-5 text-center">
+                      <Typography variant="caption">
+                        {' '}
+                        <strong>TẠO NGÀY </strong>
+                      </Typography>
+                      <Typography>{moment(courseData?.createDate).format('DD/MM/YYYY')}</Typography>
+                    </div>
+
+                    <div className="px-5 text-center">
+                      <Typography variant="caption">
+                        <strong>MÔN HỌC </strong>
+                      </Typography>
+                      <Typography>{subjectData?.name}</Typography>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </div>
           </Card>
         </Box>
         <div className="mt-2">
@@ -168,7 +199,7 @@ export default function SyllabusByCourse() {
                       <TableCell>{moment(s.createDate).format('DD/MM/YYYY')}</TableCell>
                       <TableCell>
                         <Link
-                          to={`/subject/course/syllabus/courses/${courseId}/preview`}
+                          to={`/subject/${subjectId}/course/${courseId}/syllabus/preview`}
                           title="Xem"
                           className="btn btn-secondary m-1"
                         >

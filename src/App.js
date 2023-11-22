@@ -148,9 +148,9 @@ const App = () => {
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/subjects" element={<ManageSubject />} />
-            <Route path="/course/subject/:subjectId" element={<CourseBySubject />} />
+            <Route path="/subject/:subjectId/course" element={<CourseBySubject />} />
             <Route path="/subject/:subjectId/course/:courseId/syllabus" element={<SyllabusByCourse />} />
-            <Route path="/subject/course/syllabus/courses/:courseId/preview">
+            <Route path="/subject/:subjectId/course/:courseId/syllabus/preview">
               <Route path="" element={<PreviewCourse />}>
                 <Route path=":lessonId/:type/:id" element={<PreviewLesson />} />
                 <Route path=":lessonId/:type" element={<PreviewLesson />} />

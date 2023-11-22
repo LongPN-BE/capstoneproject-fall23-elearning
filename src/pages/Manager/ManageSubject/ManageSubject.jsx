@@ -190,7 +190,7 @@ export default function ListSubject() {
                     <TableCell width="10%">
                       {/* <Link className="btn btn-outline-secondary" to={`/subjects/courseBySubject`}> */}
                       <div className="d-flex justify-content-center">
-                        <Link to={`/course/subject/${s.id}`} title="Xem" className="btn btn-secondary m-1">
+                        <Link to={`/subject/${s.id}/course`} title="Xem" className="btn btn-secondary m-1">
                           <VisibilityIcon />
                         </Link>
 

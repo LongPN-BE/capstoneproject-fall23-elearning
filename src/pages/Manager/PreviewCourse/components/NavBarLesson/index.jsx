@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
@@ -51,8 +51,9 @@ const quizApi = new QuizControllerApi(ApiClientSingleton.getInstance());
 
 function NavBarLesson(props) {
   const { courseId } = props;
+  const { subjectId } = useParams();
   const [lessons, setLessons] = useState([]);
-  const localtion = useLocation();
+  //const location = useLocation();
   const [expanded, setExpanded] = useState();
   const [lessonId, setLessonId] = useState();
   const [resources, setResources] = useState([]);
@@ -102,7 +103,7 @@ function NavBarLesson(props) {
                       ) : (
                         ''
                       )}
-                      <Link to={`/subject/course/syllabus/courses/${courseId}/preview/${data?.id}/${data?.type}`}>
+                      <Link to={`/subject/${subjectId}/course/${courseId}/syllabus/preview/${data?.id}/${data?.type}`}>
                         <strong>{data?.type}</strong>: {data.name}
                       </Link>
                     </div>
@@ -113,7 +114,9 @@ function NavBarLesson(props) {
                       return (
                         <div className="d-flex align-items-start gap-2">
                           <QuizIcon />
-                          <Link to={`/subject/course/syllabus/courses/${courseId}/preview/${data.id}/Quiz/${item.id}`}>
+                          <Link
+                            to={`/subject/${subjectId}/course/${courseId}/syllabus/preview/${data.id}/Quiz/${item.id}`}
+                          >
                             <strong>Quiz</strong>: {item.title}
                           </Link>
                         </div>

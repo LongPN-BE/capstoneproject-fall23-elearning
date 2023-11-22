@@ -3,25 +3,39 @@ import { Outlet, useParams } from 'react-router-dom';
 import { Container } from 'reactstrap';
 import { Divider } from '@mui/material';
 import NavBarLesson from './components/NavBarLesson';
-//import CustomBreadcrumbs from '../../components/Breadcrumbs';
-import { CourseControllerApi } from '../../../api/generated/generate-api';
+import CustomBreadcrumbs from '../../../components/Breadcrumbs';
+import { CourseControllerApi, SubjectControllerApi } from '../../../api/generated/generate-api';
 import ApiClientSingleton from '../../../api/apiClientImpl';
-import { Paper } from '@material-ui/core';
+import { Paper, Typography } from '@material-ui/core';
 
 const courseApi = new CourseControllerApi(ApiClientSingleton.getInstance());
+const subjectApi = new SubjectControllerApi(ApiClientSingleton.getInstance());
 function PreviewCourse() {
   const [course, setCourse] = useState();
-  const { courseId } = useParams();
-  // const breadcrumbItems = [
-  //   {
-  //     url: '/student-home',
-  //     label: 'Home',
-  //   },
-  //   {
-  //     url: `/course/${courseId}`,
-  //     label: `Learn Course: ${course?.name}`,
-  //   },
-  // ];
+  const { courseId, subjectId } = useParams();
+  const [subjectData, setSubject] = useState();
+  const breadcrumbItems = [
+    {
+      url: '/dashboard',
+      label: 'Trang chủ',
+    },
+    {
+      url: '/subjects',
+      label: 'Danh sách môn học',
+    },
+    {
+      url: `/subject/${subjectId}/course/`,
+      label: `Môn ${subjectData?.name}`,
+    },
+    {
+      url: `/subject/${subjectId}/course/${courseId}/syllabus/`,
+      label: `Khoá học ${course?.name}`,
+    },
+    {
+      url: `/subject/course/${courseId}/syllabus/`,
+      label: `Live Preview`,
+    },
+  ];
 
   const getCourseById = () => {
     courseApi.getCourseById(courseId, (err, res) => {
@@ -30,24 +44,38 @@ function PreviewCourse() {
       }
     });
   };
+  const getSubjectById = () => {
+    subjectApi.findSubjectById(subjectId, (err, res) => {
+      if (res) {
+        setSubject(res);
+        console.log(res);
+      }
+    });
+  };
   useEffect(() => {
     getCourseById();
+    getSubjectById();
   }, [courseId]);
 
   return (
     <>
-      {/* <CustomBreadcrumbs items={breadcrumbItems} /> */}
-      <Container className="mt-4">
+      <CustomBreadcrumbs items={breadcrumbItems} />
+      <Container className="mt-4 vh-100">
+        <div className="mt-4 d-flex justify-content-center">
+          <Typography variant="h4" style={{ color: '#616161' }}>
+            <strong>Live Preview</strong>
+          </Typography>
+        </div>
         <Divider className="my-4" />
-        <div className="row">
-          <div className="col-3">
+        <div className="row h-75">
+          <div className="col-3 p-1 " style={{ backgroundColor: '#b9b9b9' }}>
             <div className="d-flex flex-column gap-3">
               <div>
                 <NavBarLesson courseId={courseId} />
               </div>
             </div>
           </div>
-          <div className="col-9">
+          <div className="col-9 p-5" style={{ backgroundColor: '#f0f0f078' }}>
             <Outlet />
           </div>
         </div>
