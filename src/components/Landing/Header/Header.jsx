@@ -7,27 +7,24 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import profile_image from './../../../assets/images/mask-group.png';
-import { Link, Router } from 'react-router-dom';
-import { Divider, IconButton, InputBase, Paper, TextField } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { IconButton, InputBase, Paper } from '@mui/material';
 
-import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
-import DirectionsIcon from '@mui/icons-material/Directions';
-import { AiOutlineSearch } from 'react-icons/ai';
 import Cookies from 'js-cookie';
 
 const navLinks = [
   {
-    display: 'Home',
+    display: 'Trang chủ',
     url: '/',
   },
   {
-    display: 'Courses',
-    url: '/my-course',
+    display: 'Danh sách khóa học',
+    url: '##',
   },
   {
-    display: 'About',
-    url: '#',
+    display: 'Chúng tôi',
+    url: '##',
   },
 ];
 
@@ -65,41 +62,48 @@ const Header = ({ setSearchValue, getCourses }) => {
                 <img src={Logo} style={{ height: 30 }} alt="" />
               </Link>
             </div>
-            <div>
-              <Paper
-                component="form"
-                sx={{
-                  p: '2px 4px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  width: 400,
-                }}
-              >
-                <InputBase
-                  sx={{ ml: 1, flex: 1 }}
-                  placeholder="What do you want to learn?"
-                  inputProps={{ 'aria-label': 'What do you want to learn?' }}
-                  onChange={(e) => {
-                    if (setSearchValue) {
-                      setSearchValue(e.target.value);
-                      console.log(e.target.value);
-                    }
-                  }}
-                />
-                <IconButton
-                  type="button"
-                  sx={{ p: '10px' }}
-                  aria-label="search"
-                  onClick={() => {
-                    if (getCourses) {
-                      getCourses();
-                    }
-                  }}
-                >
-                  <SearchIcon />
-                </IconButton>
-              </Paper>
-            </div>
+            {user ? (
+              <>
+                <div>
+                  <Paper
+                    component="form"
+                    sx={{
+                      p: '2px 4px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      width: 400,
+                    }}
+                  >
+                    <InputBase
+                      sx={{ ml: 1, flex: 1 }}
+                      placeholder="Bạn muốn tìm hiểu về nội dung gì?"
+                      inputProps={{ 'aria-label': 'Bạn muốn tìm hiểu về nội dung gì?' }}
+                      onChange={(e) => {
+                        if (setSearchValue) {
+                          setSearchValue(e.target.value);
+                          console.log(e.target.value);
+                        }
+                      }}
+                    />
+                    <IconButton
+                      type="button"
+                      sx={{ p: '10px' }}
+                      aria-label="search"
+                      onClick={() => {
+                        if (getCourses) {
+                          getCourses();
+                        }
+                      }}
+                    >
+                      <SearchIcon />
+                    </IconButton>
+                  </Paper>
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
+
           </div>
 
           <div className="nav d-flex align-items-center gap-5">
@@ -126,25 +130,20 @@ const Header = ({ setSearchValue, getCourses }) => {
                   <div className={Styles.dropdown} id="myDropdown">
                     <ul>
                       <Link to="/my-course">
-                        <li>My Course </li>
+                        <li>Khóa học của tôi </li>
                       </Link>
                       <Link to="/my-profile">
-                        <li>My Profile </li>
+                        <li>Trang cá nhân </li>
                       </Link>
-                      <li onClick={handleLogout}>Log Out</li>
+                      <li onClick={handleLogout}>Đăng xuất</li>
                     </ul>
                   </div>
                 </>
               ) : (
                 <div className="mb-0 d-flex align-items-center gap-2">
                   <Link to="/login" className={classNames(Styles.nav__btn, 'btn')}>
-                    Login
+                    Đăng nhập
                   </Link>
-                  <div>
-                    <Link to="/" className={classNames('btn', Styles.nav__btn)}>
-                      Join for free
-                    </Link>
-                  </div>
                 </div>
               )}
             </div>

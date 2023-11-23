@@ -20,15 +20,15 @@ const ContactUs = () => {
                   className="mb-4 fw-bold fs-1"
                   style={{ opacity: 1, transform: "none" }}
                 >
-                  LET'S GET STARTED
+                  BẮT ĐẦU NÀO
                 </h2>
                 <p
                   className="fw-bolder"
                   style={{ opacity: 1, transform: "none" }}
                 >
-                  OnLearn is developed based on the purpose of flexible study
-                  time, courses will be divided by class and someone is willing
-                  to assist in guiding the course content.
+                  OnLearn được phát triển dựa trên mục đích học tập linh hoạt
+                  thời gian, các khóa học sẽ được chia theo lớp và có người sẵn sàng
+                  hỗ trợ hướng dẫn nội dung bài học.
                 </p>
               </div>
               <a
@@ -38,7 +38,7 @@ const ContactUs = () => {
                   "mt-4 btn fw-bold text-body-tertiary"
                 )}
               >
-                Contact Us
+                Liên hệ chúng tôi
               </a>
             </div>
 

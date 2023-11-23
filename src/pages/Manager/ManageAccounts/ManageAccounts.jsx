@@ -20,6 +20,7 @@ import AccountDetailModal from './AccountDetail';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
 import CustomBreadcrumbs from '../../../components/Breadcrumbs';
+import Swal from 'sweetalert2';
 
 export default function ListAccount() {
   const [data, setData] = useState([]);
@@ -122,7 +123,6 @@ export default function ListAccount() {
           console.log(err);
         });
     }
-
     setIsAccountModalOpen(false); // Close the AccountModal
   };
 
@@ -130,31 +130,71 @@ export default function ListAccount() {
   const handleEnable = (account) => {
     const token = Cookies.get('token');
     if (token) {
-      alert(account.id);
-      try {
-        fetchData('/account/enable?account_id=' + account.id, token).then((resp) => {
-          if (resp) {
+      Swal.fire({
+        title: "Bạn có chắc muốn kích hoạt tài khoản " + account.username + "?",
+        icon: "question",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Xác nhận",
+        denyButtonText: `Không đồng ý`,
+        cancelButtonText: `Hủy`,
+        footer: '<a href="#">Tại sao tôi gặp vấn đề này?</a>'
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          let res = fetchData('/account/enable?account_id=' + account.id, token);
+          if (res) {
+            Swal.fire({
+              title: "Kích hoạt thành công!",
+              text: res.message,
+              icon: "success",
+              footer: '<a href="#">Tại sao tôi gặp vấn đề này?</a>'
+            });
             window.location.reload();
           }
-        });
-      } catch (error) {
-        console.log(error);
-      }
+          // Swal.fire("Saved!", "", "success");
+        } else if (result.isDenied) {
+          Swal.fire("Không có gì thay đổi", "", "info");
+        }
+      });
+
+
     }
   };
+
   const handleDisable = (account) => {
     const token = Cookies.get('token');
     if (token) {
-      alert(account.id);
-      try {
-        fetchData('/account/disable?account_id=' + account.id, token).then((resp) => {
-          if (resp) {
+
+      Swal.fire({
+        title: "Bạn có chắc muốn vô hiệu hóa tài khoản " + account.username + "?",
+        icon: "question",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Xác nhận",
+        denyButtonText: `Không đồng ý`,
+        cancelButtonText: `Hủy`,
+        footer: '<a href="#">Tại sao tôi gặp vấn đề này?</a>'
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          let res = fetchData('/account/disable?account_id=' + account.id, token);
+          if (res) {
+            Swal.fire({
+              title: "Vô hiệu thành công!",
+              text: res.message,
+              icon: "success",
+              footer: '<a href="#">Why do I have this issue?</a>'
+            });
             window.location.reload();
+
           }
-        });
-      } catch (error) {
-        console.log(error);
-      }
+          // Swal.fire("Saved!", "", "success");
+        } else if (result.isDenied) {
+          Swal.fire("Không có gì thay đổi", "", "info");
+        }
+      });
+
     }
   };
 

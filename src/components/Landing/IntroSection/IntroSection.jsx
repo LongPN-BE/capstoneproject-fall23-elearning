@@ -4,6 +4,7 @@ import introImg from "../../../assets/images/intro-img.png";
 import Styles from "./IntroSection.module.scss";
 import classNames from "classnames";
 import "bootstrap/dist/css/bootstrap.css";
+import { Link } from "react-router-dom";
 
 const IntroSection = () => {
   return (
@@ -13,21 +14,20 @@ const IntroSection = () => {
           <Col lg="6" md="6">
             <div className={classNames(Styles.intro__content)}>
               <h2 className={classNames(Styles.intro__title, "mb-4")}>
-                Anytime Anywhere <br /> Learn on your <br /> Suitable Schedule
+                Bất kỳ thời gian Bất kỳ chốn <br /> Việc học của bạn <br /> Lịch trình phù hợp
               </h2>
               <p className="mb-5 w-75">
-                Start, switch, or advance your career with more than 5,800
-                courses, Professional Certificates, and degrees from world-class
-                universities and companies.
+                Bắt đầu, chuyển đổi hoặc thăng tiến trong sự nghiệp của bạn với hơn 5.800 khóa học,
+                nội dung chuyên môn và đẳng cấp từ các chuyên gia, trường đại học và công ty đẳng cấp thế giới.
               </p>
             </div>
             <div className={classNames(Styles.intro__button)}>
-              <a
-                href="#"
+              <Link
+                to="/login"
                 className={classNames("btn btn-lg", Styles.btn__custom)}
               >
-                JOIN FOR FREE
-              </a>
+                Trải nghiệm ngay
+              </Link>
             </div>
           </Col>
 

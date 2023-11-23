@@ -9,7 +9,7 @@ const Footer = () => {
       <Container>
         <hr />
         <div className="footer__content">
-          <h5>2023 Onlearn. All Rights Reserved</h5>
+          <h5>2023 Onlearn.</h5>
         </div>
       </Container>
     </footer>

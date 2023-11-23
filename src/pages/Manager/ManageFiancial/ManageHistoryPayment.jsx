@@ -195,8 +195,16 @@ export default function ListPaymenHistory() {
                                         <TableCell>{s.student === null ?
                                             (<Typography variant="body2" color='primary'>(Giáo Viên)</Typography>) :
                                             (<Typography variant="body2" color='primary'>(Học Sinh)</Typography>)}
-                                            {s.account.id}</TableCell>
-                                        <TableCell>{s.paymentHistoryStatus}</TableCell>
+                                            <Typography variant="body1" color='initial' style={{ fontWeight: 'bold', textTransform: 'uppercase' }}>{s.account.username}</Typography> </TableCell>
+                                        <TableCell>
+                                            {s.paymentHistoryStatus === "CREATED" ? (<Typography style={{ fontWeight: 'bold', textTransform: 'uppercase', color: 'green' }}>Đã Tạo</Typography>)
+                                                : s.paymentHistoryStatus === "COMPLETED" ? (<Typography style={{ fontWeight: 'bold', textTransform: 'uppercase', color: 'green' }}>Đã hoàn thành</Typography>)
+                                                    : s.paymentHistoryStatus === "REFUNDED" ? (<Typography style={{ fontWeight: 'bold', textTransform: 'uppercase', color: 'blue' }}>Hoàn trả</Typography>)
+                                                        : s.paymentHistoryStatus === "PENDING" ? (<Typography style={{ fontWeight: 'bold', textTransform: 'uppercase', color: 'red' }}>Đang xử lý</Typography>)
+                                                            : s.paymentHistoryStatus === "PENDING_PAYOUT" ? (<Typography style={{ fontWeight: 'bold', textTransform: 'uppercase', color: 'red' }}>Đang xử lý rút tiền</Typography>)
+                                                                : s.paymentHistoryStatus === "COMPLETED_PAYOUT" ? (<Typography style={{ fontWeight: 'bold', textTransform: 'uppercase', color: 'green' }}>Rút tiền thành công</Typography>)
+                                                                    : s.paymentHistoryStatus === "CANCEL" ? (<Typography style={{ fontWeight: 'bold', textTransform: 'uppercase', color: 'red' }}>Đã hủy</Typography>) : (<></>)}
+                                        </TableCell>
                                     </TableRow>
                                 );
                             })}

@@ -35,11 +35,11 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true while waiting for the response
+
 
     if (formData.checkbox === "OK" && formData.username !== "" && formData.password !== "" && formData.email !== "" && formData.phone !== "" && formData.firstName !== "" && formData.lastName !== "") {
       const response = await postData('auth/register', formData);
-
+      setLoading(true); // Set loading to true while waiting for the response
       if (response) {
         try {
           const response1 = await postData('/auth/login', {
@@ -53,9 +53,11 @@ const Register = () => {
           } else {
             // Authentication failed, handle the error (e.g., show an error message)
             console.error('Authentication failed. Invalid email or password.');
+            setLoading(false); // Set loading to false after the response is received
           }
         } catch (error) {
           console.error('Error during authentication:', error.message);
+          setLoading(false); // Set loading to false after the response is received
         } finally {
           setLoading(false); // Set loading to false after the response is received
         }
