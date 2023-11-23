@@ -207,7 +207,7 @@ export default function SyllabusByCourse() {
                       </TableCell>
                       <TableCell>
                         <Link
-                          to={`/subject/${subjectId}/course/${courseId}/syllabus/preview`}
+                          to={`/subject/${subjectId}/course/${courseId}/syllabus/preview/${s.id}`}
                           aria-label="Xem"
                           className="btn btn-secondary m-1"
                         >

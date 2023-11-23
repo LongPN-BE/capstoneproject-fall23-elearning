@@ -7,13 +7,17 @@ import CustomBreadcrumbs from '../../../components/Breadcrumbs';
 import { CourseControllerApi, SubjectControllerApi } from '../../../api/generated/generate-api';
 import ApiClientSingleton from '../../../api/apiClientImpl';
 import { Paper, Typography } from '@material-ui/core';
+import Cookies from 'js-cookie';
+import { fetchData } from '../../../services/AppService';
 
 const courseApi = new CourseControllerApi(ApiClientSingleton.getInstance());
 const subjectApi = new SubjectControllerApi(ApiClientSingleton.getInstance());
 function PreviewCourse() {
   const [course, setCourse] = useState();
-  const { courseId, subjectId } = useParams();
+  const { courseId, subjectId, syllabusId } = useParams();
   const [subjectData, setSubject] = useState();
+  const [lessons, setLessons] = useState([]);
+
   const breadcrumbItems = [
     {
       url: '/dashboard',
@@ -55,6 +59,12 @@ function PreviewCourse() {
   useEffect(() => {
     getCourseById();
     getSubjectById();
+    const token = Cookies.get('token');
+    fetchData('/lesson/by-syllabus?syllabus_id=' + syllabusId, token).then((resp) => {
+      if (resp) {
+        setLessons(resp);
+      }
+    });
   }, [courseId]);
 
   return (
@@ -67,18 +77,24 @@ function PreviewCourse() {
           </Typography>
         </div>
         <Divider className="my-4" />
-        <div className="row" style={{ height: 700, overflow: 'auto' }}>
-          <div className="col-3 p-1 " style={{ backgroundColor: '#b9b9b9' }}>
-            <div className="d-flex flex-column gap-3">
-              <div>
-                <NavBarLesson courseId={courseId} />
+        {lessons?.length === 0 ? (
+          <div className="row" style={{ height: 700, overflow: 'auto' }}>
+            <h3>HIỆN KHÔNG CÓ BÀI HỌC TRONG KHUNG CHƯƠNG TRÌNH</h3>
+          </div>
+        ) : (
+          <div className="row" style={{ height: 700, overflow: 'auto' }}>
+            <div className="col-3 p-1 " style={{ backgroundColor: '#b9b9b9' }}>
+              <div className="d-flex flex-column gap-3">
+                <div>
+                  <NavBarLesson courseId={courseId} />
+                </div>
               </div>
             </div>
+            <div className="col-9 p-2" style={{ backgroundColor: '#f0f0f078' }}>
+              <Outlet />
+            </div>
           </div>
-          <div className="col-9 p-2" style={{ backgroundColor: '#f0f0f078' }}>
-            <Outlet />
-          </div>
-        </div>
+        )}
       </Container>
     </>
   );

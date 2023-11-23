@@ -104,11 +104,11 @@ export const navData = {
           icon: <GridViewRoundedIcon />,
           path: '/subjects',
         },
-        {
-          label: 'Báo cáo',
-          icon: <ReportIcon />,
-          path: '##',
-        },
+        // {
+        //   label: 'Báo cáo',
+        //   icon: <ReportIcon />,
+        //   path: '##',
+        // },
       ],
     },
     {

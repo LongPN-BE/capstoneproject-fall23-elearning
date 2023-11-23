@@ -60,6 +60,7 @@ import ListPaymenHistory from './pages/Manager/ManageFiancial/ManageHistoryPayme
 import ListTransactionHistory from './pages/Manager/ManageFiancial/ManageHistoryTransaction';
 import AllCourses from './components/Landing/AllCourses/AllCourses';
 import CoursesPage from './pages/Landing/CoursesPage';
+import ListFeedback from './pages/Manager/CoursesBySubject/Evaluate/ListFeedback';
 
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -152,9 +153,10 @@ const App = () => {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/subjects" element={<ManageSubject />} />
             <Route path="/subject/:subjectId/course" element={<CourseBySubject />} />
+            <Route path="/subject/:subjectId/course/:courseId/evaluate" element={<ListFeedback />} />
             <Route path="/subject/:subjectId/course/:courseId/syllabus" element={<SyllabusByCourse />} />
             <Route path="/subject/:subjectId/course/:courseId/syllabus/preview">
-              <Route path="" element={<PreviewCourse />}>
+              <Route path=":syllabusId" element={<PreviewCourse />}>
                 <Route path=":lessonId/:type/:id" element={<PreviewLesson />} />
                 <Route path=":lessonId/:type" element={<PreviewLesson />} />
               </Route>

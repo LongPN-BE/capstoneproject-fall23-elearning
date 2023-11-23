@@ -14,7 +14,7 @@ import {
   DialogActions,
   TablePagination,
 } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import moment from 'moment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -26,6 +26,7 @@ import { fetchData, postData } from '../../../../services/AppService';
 import Swal from 'sweetalert2';
 
 function CourseTableComponent({ courses }) {
+  const { subjectId } = useParams();
   const [course, setCourse] = useState(null);
   const [open, setOpen] = useState(false);
   const [reason, setReason] = useState(null);
@@ -217,6 +218,21 @@ function CourseTableComponent({ courses }) {
                           >
                             <DoNotDisturbAltIcon />
                           </button>
+                        </div>
+                      </TableCell>
+                    </>
+                  ) : course?.status === 'ACTIVE' ? (
+                    <>
+                      <TableCell align="center">
+                        <div className="d-flex justify-content-center">
+                          <Link
+                            to={`/subject/${subjectId}/course/${course?.id}/evaluate`}
+                            title="Đánh giá"
+                            aria-label="Đánh giá"
+                            className="btn btn-warning m-1"
+                          >
+                            <FeedbackIcon />
+                          </Link>
                         </div>
                       </TableCell>
                     </>

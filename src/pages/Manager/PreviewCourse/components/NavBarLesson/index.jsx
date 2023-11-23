@@ -12,6 +12,8 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import QuizIcon from '@mui/icons-material/Quiz';
 import LessonControllerApi from '../../../../../api/generated/generate-api/api/LessonControllerApi';
 import ApiClientSingleton from '../../../../../api/apiClientImpl';
+import { fetchData } from '../../../../../services/AppService';
+import Cookies from 'js-cookie';
 import {
   QuizControllerApi,
   ResourceControllerApi,
@@ -51,7 +53,7 @@ const quizApi = new QuizControllerApi(ApiClientSingleton.getInstance());
 
 function NavBarLesson(props) {
   const { courseId } = props;
-  const { subjectId } = useParams();
+  const { subjectId, syllabusId } = useParams();
   const [lessons, setLessons] = useState([]);
   //const location = useLocation();
   const [expanded, setExpanded] = useState();
@@ -65,11 +67,18 @@ function NavBarLesson(props) {
   };
 
   useEffect(() => {
-    lessonApi.findLessonByCourseId(courseId, (err, res) => {
-      if (res) {
-        setLessons(res);
+    const token = Cookies.get('token');
+    fetchData('/lesson/by-syllabus?syllabus_id=' + syllabusId, token).then((resp) => {
+      if (resp) {
+        setLessons(resp);
       }
     });
+
+    // lessonApi.findLessonByCourseId(courseId, (err, res) => {
+    //   if (res) {
+    //     setLessons(res);
+    //   }
+    // });
   }, []);
   useEffect(() => {
     if (lessonId) {
@@ -86,7 +95,7 @@ function NavBarLesson(props) {
   return (
     <>
       <div>
-        {lessons.map((data) => {
+        {lessons?.map((data) => {
           return (
             <>
               <Accordion expanded={expanded === data.id} onChange={handleChange(data.id)}>
@@ -103,7 +112,9 @@ function NavBarLesson(props) {
                       ) : (
                         ''
                       )}
-                      <Link to={`/subject/${subjectId}/course/${courseId}/syllabus/preview/${data?.id}/${data?.type}`}>
+                      <Link
+                        to={`/subject/${subjectId}/course/${courseId}/syllabus/preview/${syllabusId}/${data?.id}/${data?.type}`}
+                      >
                         <strong>{data?.type === 'VIDEO' ? <>VIDEO</> : data?.type === 'READING'(<>BÀI ĐỌC</>)}</strong>:{' '}
                         {data.name}
                       </Link>
@@ -116,7 +127,7 @@ function NavBarLesson(props) {
                         <div className="d-flex align-items-start gap-2">
                           <QuizIcon />
                           <Link
-                            to={`/subject/${subjectId}/course/${courseId}/syllabus/preview/${data.id}/Quiz/${item.id}`}
+                            to={`/subject/${subjectId}/course/${courseId}/syllabus/preview/${syllabusId}/${data.id}/Quiz/${item.id}`}
                           >
                             <strong>Trắc Nghiệm</strong>: {item.title}
                           </Link>
