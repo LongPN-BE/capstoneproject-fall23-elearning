@@ -158,7 +158,7 @@ const App = () => {
                 <Route path=":lessonId/:type/:id" element={<PreviewLesson />} />
                 <Route path=":lessonId/:type" element={<PreviewLesson />} />
               </Route>
-              <Route path=":lessonId/quiz/:id" element={<PreviewQuizz />} />
+              <Route path=":lessonId/quiz/:id/view" element={<PreviewQuizz />} />
             </Route>
             <Route path="/payments" element={<ListPaymenHistory />} />
             <Route path="/transactions" element={<ListTransactionHistory />} />

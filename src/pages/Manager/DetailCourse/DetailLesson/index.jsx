@@ -18,6 +18,7 @@ import CodeIcon from '@mui/icons-material/Code';
 import 'react-quill/dist/quill.snow.css';
 import './index.scss';
 import Cookies from 'js-cookie';
+import PreviewQuizz from './Quizz';
 
 const resourceApi = new ResourceControllerApi(ApiClientSingleton.getInstance());
 const lessonApi = new LessonControllerApi(ApiClientSingleton.getInstance());
@@ -39,11 +40,6 @@ function PreviewLesson() {
     if (type === 'Quiz') {
       quizApi.findQuizById(id, (err, res) => {
         setQuiz(res);
-      });
-      quizResultApi.findAllByStudentId(user?.studentId, id, (err, res) => {
-        if (res) {
-          setQuizResult(res);
-        }
       });
     } else {
       resourceApi.getResourceByLesson(lessonId, (err, res) => {
@@ -71,15 +67,15 @@ function PreviewLesson() {
   return (
     <>
       <div className="d-flex ">
-        <Typography variant="h5" gutterBottom>
-          {type === 'Quiz' ? (
-            quiz.title
-          ) : (
-            <>
+        {type === 'Quiz' ? (
+          <></>
+        ) : (
+          <>
+            <Typography className="mt-3" variant="h5" gutterBottom>
               {lesson?.name}: <span style={{ color: '#495057' }}>{lesson?.description}</span>
-            </>
-          )}
-        </Typography>
+            </Typography>
+          </>
+        )}
       </div>
       {type === 'VIDEO' ? (
         <div className="d-flex justify-content-center">
@@ -95,41 +91,7 @@ function PreviewLesson() {
         <LearnReading content={lesson?.content} />
       ) : type === 'Quiz' ? (
         <>
-          <Typography variant="subtitle1" gutterBottom>
-            Gửi bài tập của bạn
-          </Typography>
-          <div className="d-flex justify-content-between align-items-center">
-            <div className="d-flex align-items-center gap-4">
-              <div>
-                <strong>Ngày đến hạn:</strong>{' '}
-                {moment(quiz?.dateCreate).add(quiz?.dateRange, 'days').format('DD/MM/YYYY')}
-              </div>
-              <div>
-                <strong>Số lần làm lại:</strong> {quizResult?.length || 0} / {quiz.allowAttempt}
-              </div>
-              <div>
-                <strong>Điểm:</strong> {resultMax() ? resultMax()?.lastPoint : ''}Đ{' '}
-                {resultMax() ? (resultMax()?.resultStatus === 'PASS' ? 'Đạt' : 'Không đạt') : ''}
-              </div>
-            </div>
-            {checkTimeQuiz() ? (
-              <div>
-                <Link
-                  style={{
-                    padding: '12px 20px',
-                    backgroundColor: '#00419e',
-                    color: '#fff',
-                    borderRadius: '6px',
-                  }}
-                  to={`/courses/2/learn/${lessonId}/Quiz/${id}/start`}
-                >
-                  Bắt đầu làm bài
-                </Link>
-              </div>
-            ) : (
-              <></>
-            )}
-          </div>
+          <PreviewQuizz />
         </>
       ) : (
         <></>

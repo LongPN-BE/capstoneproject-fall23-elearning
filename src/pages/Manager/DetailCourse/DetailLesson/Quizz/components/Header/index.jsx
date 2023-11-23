@@ -13,18 +13,6 @@ function HeaderQuiz({ name, timeMinute, point, due, onAutoSubmit, lesson }) {
   return (
     <>
       <div className={`d-flex ${classNames(Styles.header__quiz)} align-items-center`}>
-        <div style={{ marginLeft: '4rem' }}>
-          <Button
-            onClick={(e) => navigate(-1)}
-            variant="outlined"
-            startIcon={<ArrowBackIcon />}
-            style={{ border: 'none' }}
-          >
-            <Typography variant="subtitle1" style={{ fontWeight: 700 }}>
-              Trở lại
-            </Typography>
-          </Button>
-        </div>
         <div
           className="d-flex flex-grow-1 align-items-center justify-content-between"
           style={{ margin: '0 1rem', height: '90%' }}

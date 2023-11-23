@@ -110,7 +110,7 @@ function PreviewQuizz() {
                                   <FormControlLabel
                                     {...register(`${question.id}`)}
                                     value={option.id}
-                                    control={<Radio />}
+                                    control={<Radio disabled />}
                                     label={option.content}
                                   />
                                 )}
@@ -123,20 +123,6 @@ function PreviewQuizz() {
                   );
                 })}
               </FormControl>
-              <button
-                type="submit"
-                style={{
-                  padding: '8px 20px',
-                  backgroundColor: '#00419e',
-                  color: '#fff',
-                  borderRadius: '6px',
-                }}
-                onClick={() => {
-                  console.log(useForm);
-                }}
-              >
-                Trở lại
-              </button>
             </div>
           </div>
         </form>

@@ -130,11 +130,11 @@ export default function SyllabusByCourse() {
 
                 <div className="d-flex justify-content-sm-between">
                   <div className="d-flex w-100 py-3">
-                    <div className="pr-5 text-center">
+                    <div className="px-5 text-center">
                       <Typography variant="caption">
-                        <strong>ĐIỂM QUA MÔN</strong>
+                        <strong>MÔN HỌC </strong>
                       </Typography>
-                      <Typography>{courseData?.averagePoint} /10</Typography>
+                      <Typography>{subjectData?.name}</Typography>
                     </div>
 
                     <div className="px-5 text-center">
@@ -144,19 +144,19 @@ export default function SyllabusByCourse() {
                       <Typography>{courseData.price?.toLocaleString()} VNĐ</Typography>
                     </div>
 
+                    <div className="pr-5 text-center">
+                      <Typography variant="caption">
+                        <strong>ĐIỂM QUA MÔN</strong>
+                      </Typography>
+                      <Typography>{courseData?.averagePoint} /10</Typography>
+                    </div>
+
                     <div className="px-5 text-center">
                       <Typography variant="caption">
                         {' '}
                         <strong>TẠO NGÀY </strong>
                       </Typography>
                       <Typography>{moment(courseData?.createDate).format('DD/MM/YYYY')}</Typography>
-                    </div>
-
-                    <div className="px-5 text-center">
-                      <Typography variant="caption">
-                        <strong>MÔN HỌC </strong>
-                      </Typography>
-                      <Typography>{subjectData?.name}</Typography>
                     </div>
                   </div>
                 </div>
@@ -189,7 +189,7 @@ export default function SyllabusByCourse() {
                   <TableCell>Trạng thái</TableCell>
                   <TableCell>Ngày tạo</TableCell>
                   <TableCell>Tài liệu</TableCell>
-                  <TableCell>Live preview</TableCell>
+                  <TableCell>Xem tổng quan</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
