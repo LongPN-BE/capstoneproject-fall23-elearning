@@ -26,6 +26,7 @@ const AllCourses = () => {
   useEffect(() => {
     fetchData('/course/by-status-active').then((resp) => {
       setData(resp);
+      setDataSubmit(resp);
     });
   }, []);
 

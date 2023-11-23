@@ -1,27 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'reactstrap';
-import courseImg1 from '../../../assets/images/web-design.png';
-import courseImg2 from '../../../assets/images/graphics-design.png';
-import courseImg3 from '../../../assets/images/ui-ux.png';
-import CourseCard from './CourseCard';
+import CourseCard from '../AllCourses/CourseCard';
 import Styles from './Courses.module.scss';
 import classNames from 'classnames';
 import 'bootstrap/dist/css/bootstrap.css';
 import { fetchData } from '../../../services/AppService';
+import { useNavigate } from 'react-router';
 
 
 const Courses = () => {
   const [dataCourse, setDataCourse] = useState([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     fetchData('/course/by-status-active').then((resp) => {
       setDataCourse(resp);
     })
   }, [])
 
-  const handleViewAllCourse = () => {
-    // alert('View all course')
-  }
   return (
     <section className="mt-5 mb-5">
       <Container className="pt-5 pb-5">
@@ -41,13 +36,15 @@ const Courses = () => {
               </div>
 
               <div className={classNames('w-50 text-end')}>
-                <button className={classNames('btn', Styles.course__btn)} onClick={() => handleViewAllCourse()}>Xem tất cả</button>
+                <button className={classNames('btn', Styles.course__btn)} onClick={() => (
+                  navigate("/all-courses")
+                )}>Xem tất cả</button>
               </div>
             </div>
           </Col>
           {dataCourse?.map((item, index) => (
             <>
-              {index + 1 < 7 ?
+              {index < 3 ?
                 (<Col key={item.id} lg="4" md="6" sm="6">
                   <CourseCard item={item} />
                 </Col>)

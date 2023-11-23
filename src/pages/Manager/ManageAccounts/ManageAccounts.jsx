@@ -10,6 +10,8 @@ import {
   TableHead,
   TableRow,
   TablePagination,
+  Select,
+  MenuItem,
 } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
 import Cookies from 'js-cookie';
@@ -24,6 +26,7 @@ import Swal from 'sweetalert2';
 
 export default function ListAccount() {
   const [data, setData] = useState([]);
+  const [dataSubmit, setDataSubmit] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
   const [isAccountDetailModalOpen, setIsAccountDetailModalOpen] = useState(false);
@@ -46,6 +49,7 @@ export default function ListAccount() {
         fetchData('/account/accounts', token).then((resp) => {
           if (resp) {
             setData(resp);
+            setDataSubmit(resp);
           }
         });
       } catch (error) {
@@ -202,8 +206,11 @@ export default function ListAccount() {
   const handleSearchChange = (event) => {
     setSearchValue(event.target.value);
   };
-  const filterData = data.filter((account) =>
-    account.profile.firstName.toLowerCase().includes(searchValue.toLowerCase()),
+  const filterData = dataSubmit.filter((account) =>
+    account.profile.lastName.toLowerCase().includes(searchValue.toLowerCase())
+    || account.profile.firstName.toLowerCase().includes(searchValue.toLowerCase())
+    || account.username.toLowerCase().includes(searchValue.toLowerCase())
+    || account.profile.email.toLowerCase().includes(searchValue.toLowerCase())
   );
 
   // State to keep track of the current page and the number of rows per page
@@ -221,7 +228,7 @@ export default function ListAccount() {
     setPage(0);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dataSubmit.length) : 0;
 
   return (
     data && (
@@ -233,11 +240,12 @@ export default function ListAccount() {
           <div className="d-flex align-items-center" style={{ marginTop: '20px' }}>
             <Typography variant="h5">Danh sách tài khoản</Typography>
 
-            <div className="text-end col-9">
+
+            {/* <div className="text-end col-9">
               <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={handleAddAccount}>
                 Tạo mới tài khoản giáo viên
               </Button>
-            </div>
+            </div> */}
           </div>
           <div className="d-flex" style={{ marginTop: '20px' }}>
             <InputBase
@@ -246,6 +254,22 @@ export default function ListAccount() {
               startAdornment={<Search />}
               onChange={handleSearchChange}
             />
+            <Select
+              labelId="account-status-select-label"
+              label="Status"
+              onChange={(e, value) => {
+                if (value.props.value === "none")
+                  setDataSubmit(data)
+                if (value.props.value === "true")
+                  setDataSubmit(data.filter((account) => account.active === true))
+                if (value.props.value === "false")
+                  setDataSubmit(data.filter((account) => account.active === false))
+              }
+              }>
+              <MenuItem value="none">Tất cả</MenuItem>
+              <MenuItem value="true">Đang hoạt động</MenuItem>
+              <MenuItem value="false">Chưa hoạt động</MenuItem>
+            </Select>
           </div>
 
           <Table style={{ marginTop: '20px' }}>
@@ -327,21 +351,22 @@ export default function ListAccount() {
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
-        </Paper>
+        </Paper >
         {/* </div> */}
-        <AccountModal
+        < AccountModal
           isOpen={isAccountModalOpen}
           onSave={saveOrUpdateAccount}
           onUpdate={saveOrUpdateAccount}
           onClose={handleAccountModalClose}
-          account={accountToEdit !== null ? accountToEdit : null}
+          account={accountToEdit !== null ? accountToEdit : null
+          }
         />
-        <AccountDetailModal
+        < AccountDetailModal
           isOpen={isAccountDetailModalOpen}
           onClose={handleAccountDetailModalClose}
           account={accountToEdit !== null ? accountToEdit : null}
         />
-      </div>
+      </div >
     )
   );
 }

@@ -60,9 +60,9 @@ const Register = () => {
     <div className=" vh-100 ">
       <nav className="navbar navbar-light px-5 mb-5 pt-4">
         <div className="container-fluid p-0">
-          <a className="navbar-brand" href="/">
+          <Link className="navbar-brand" to="/">
             <img src={Logo} style={{ height: 30 }} alt="" />
-          </a>
+          </Link>
         </div>
       </nav>
       <div className="container">
