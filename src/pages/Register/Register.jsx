@@ -1,26 +1,25 @@
-import React, { useState } from "react";
-import Logo from "../../assets/images/logo.png";
-import "bootstrap/dist/css/bootstrap.css";
-import classNames from "classnames";
-import Styles from "./Register.module.scss";
-import Loading from "../../components/Loading/Loading";
-import { Link, useNavigate } from "react-router-dom";
-import { postData } from "../../services/AppService";
-import Cookies from "js-cookie";
-
+import React, { useState } from 'react';
+import Logo from '../../assets/images/logo.png';
+import 'bootstrap/dist/css/bootstrap.css';
+import classNames from 'classnames';
+import Styles from './Register.module.scss';
+import Loading from '../../components/Loading/Loading';
+import { Link, useNavigate } from 'react-router-dom';
+import { postData } from '../../services/AppService';
+import Cookies from 'js-cookie';
 
 const Register = () => {
   const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-    repeat: "",
-    email: "",
-    firstName: "",
-    lastName: "",
-    phone: "",
-    checkbox: ""
+    username: '',
+    password: '',
+    repeat: '',
+    email: '',
+    firstName: '',
+    lastName: '',
+    phone: '',
+    checkbox: '',
   });
 
   const handleChange = (e) => {
@@ -31,24 +30,31 @@ const Register = () => {
     });
   };
 
-  console.log(formData)
+  console.log(formData);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-
-    if (formData.checkbox === "OK" && formData.username !== "" && formData.password !== "" && formData.email !== "" && formData.phone !== "" && formData.firstName !== "" && formData.lastName !== "") {
+    if (
+      formData.checkbox === 'OK' &&
+      formData.username !== '' &&
+      formData.password !== '' &&
+      formData.email !== '' &&
+      formData.phone !== '' &&
+      formData.firstName !== '' &&
+      formData.lastName !== ''
+    ) {
       const response = await postData('auth/register', formData);
       setLoading(true); // Set loading to true while waiting for the response
       if (response) {
         try {
           const response1 = await postData('/auth/login', {
-            "username": response.username,
-            "password": response.password
+            username: response.username,
+            password: response.password,
           });
           if (response1.token) {
             console.log('Authentication successful!');
-            Cookies.set("token", response1.token, { expires: 1 })
+            Cookies.set('token', response1.token, { expires: 1 });
             navigate('/');
           } else {
             // Authentication failed, handle the error (e.g., show an error message)
@@ -65,10 +71,9 @@ const Register = () => {
         setLoading(false); // Set loading to false after the response is received
       }
     } else {
-      alert("Please accept the terms and conditions");
+      alert('Please accept the terms and conditions');
     }
   };
-
 
   return isLoading ? (
     <Loading />
@@ -86,9 +91,7 @@ const Register = () => {
           <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div className="card border-0 shadow-lg rounded-3 my-5">
               <div className="card-body p-4 p-sm-5 ">
-                <h2 className="card-title text-center text-uppercase mb-5 fw-bold fs-5">
-                  Đăng ký tài khoản
-                </h2>
+                <h2 className="card-title text-center text-uppercase mb-5 fw-bold fs-5">Đăng ký tài khoản</h2>
                 <form onSubmit={handleSubmit}>
                   <div className="row">
                     <div className="col-md-6 mb-3">
@@ -120,9 +123,10 @@ const Register = () => {
                     </div>
                   </div>
 
-                  <div className={classNames(Styles.ipt_custom, "mb-3")}>
+                  <div className={classNames(Styles.ipt_custom, 'mb-3')}>
                     <input
-                      type="email"
+                      type="text"
+                      minlength="6"
                       id="username"
                       name="username"
                       value={formData.username}
@@ -132,10 +136,10 @@ const Register = () => {
                     />
                   </div>
 
-
-                  <div className={classNames(Styles.ipt_custom, "mb-3")}>
+                  <div className={classNames(Styles.ipt_custom, 'mb-3')}>
                     <input
                       type="password"
+                      minlength="6"
                       id="password"
                       name="password"
                       value={formData.password}
@@ -145,9 +149,10 @@ const Register = () => {
                     />
                   </div>
 
-                  <div className={classNames(Styles.ipt_custom, "mb-5")}>
+                  <div className={classNames(Styles.ipt_custom, 'mb-5')}>
                     <input
                       type="password"
+                      minlength="6"
                       id="repeat"
                       name="repeat"
                       value={formData.repeat}
@@ -159,7 +164,7 @@ const Register = () => {
 
                   <hr className="my-4" />
 
-                  <div className={classNames(Styles.ipt_custom, "mb-3")}>
+                  <div className={classNames(Styles.ipt_custom, 'mb-3')}>
                     <input
                       type="email"
                       id="email"
@@ -171,12 +176,12 @@ const Register = () => {
                     />
                   </div>
 
-                  <div className={classNames(Styles.ipt_custom, "mb-3")}>
+                  <div className={classNames(Styles.ipt_custom, 'mb-3')}>
                     <input
                       type="text"
                       id="phone"
                       name="phone"
-                      pattern="[789][0-9]{9}"
+                      pattern="[0-9]{10}"
                       value={formData.phone}
                       onChange={handleChange}
                       className="form-control"
@@ -184,41 +189,40 @@ const Register = () => {
                     />
                   </div>
 
-
                   <input type="checkbox" id="checkbox" name="checkbox" value="OK" onClick={handleChange} />
                   <label style={{ marginLeft: 5 }}> Đồng ý với các điều khoản.</label>
-                  <Link to="##" style={{ color: "blue" }}> Tài liệu chính sách đồng ý.</Link>
+                  <Link to="##" style={{ color: 'blue' }}>
+                    {' '}
+                    Tài liệu chính sách đồng ý.
+                  </Link>
 
-                  {formData.checkbox === "OK" ? (<div className="d-grid mt-3">
-                    <button
-                      className={classNames(
-                        Styles.btn_custom,
-                        "btn text-uppercase fw-bold"
-                      )}
-                      type="submit"
-                    >
-                      Đăng ký
-                    </button>
-                  </div>
-                  ) : (<div className="d-grid mt-3">
-                    <button
-                      className={classNames(
-                        Styles.btn_custom,
-                        "btn text-uppercase fw-bold"
-                      )}
-                      type="submit"
-                      disabled
-                    >
-                      Đăng ký
-                    </button>
-                  </div>
+                  {formData.checkbox === 'OK' ? (
+                    <div className="d-grid mt-3">
+                      <button className={classNames(Styles.btn_custom, 'btn text-uppercase fw-bold')} type="submit">
+                        Đăng ký
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="d-grid mt-3">
+                      <button
+                        className={classNames(Styles.btn_custom, 'btn text-uppercase fw-bold')}
+                        type="submit"
+                        disabled
+                      >
+                        Đăng ký
+                      </button>
+                    </div>
                   )}
 
                   <hr className="my-4" />
 
                   <div className="d-flex justify-content-center">
                     <div className="form-check-label">
-                      Bạn đã có tài khoản? <Link to="/login" style={{ color: "blue" }}>Đăng nhập</Link> ngay.
+                      Bạn đã có tài khoản?{' '}
+                      <Link to="/login" style={{ color: 'blue' }}>
+                        Đăng nhập
+                      </Link>{' '}
+                      ngay.
                     </div>
                   </div>
                 </form>
