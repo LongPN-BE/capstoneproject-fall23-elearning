@@ -26,6 +26,7 @@ const CourseCard = (props) => {
     teacher: {
       name: '',
       email: '',
+      avatar: ''
     },
     subject: {
       name: '',
@@ -43,6 +44,7 @@ const CourseCard = (props) => {
         teacher: {
           name: props.item.teacher.account.profile.lastName + ' ' + props.item.teacher.account.profile.firstName,
           email: '',
+          avatar: props.item.teacher.account.profile.avatar
         },
         subject: {
           name: props.item.subject.name,
@@ -87,7 +89,7 @@ const CourseCard = (props) => {
               className="p-2 mx-2"
               style={{ width: 30, height: 30 }}
               alt={data.teacher.name}
-              src={data.teacher.name}
+              src={data.teacher.avatar}
             />
             {data.teacher.name}
           </Button>

@@ -18,6 +18,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 const AllCourses = () => {
   const [data, setData] = useState([]);
+  const [subjectData, setSubjectData] = useState([]);
   const [dataSubmit, setDataSubmit] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [subject, setSubject] = useState('');
@@ -28,22 +29,22 @@ const AllCourses = () => {
       setData(resp);
       setDataSubmit(resp);
     });
+
+    fetchData('/subject/subjects').then((resp) => {
+      setSubjectData(resp)
+    });
   }, []);
 
-  // useEffect(() => {
-  // để call subject
-  // }, []);
-
-  // Search
+  // Search  
   const filterData = dataSubmit.filter((course) =>
-    course.name.toLowerCase().includes(searchValue.toLowerCase()),
+    course.name.toLowerCase().includes(searchValue.toLowerCase())
+    || course.subject.name.toLowerCase().includes(searchValue.toLowerCase())
+    || (course.teacher.account.profile.firstName + " " + course.teacher.account.profile.lastName).toLowerCase().includes(searchValue.toLowerCase())
   );
 
   // State to keep track of the current page and the number of rows per page
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
-
-
 
   return (
     <section className="mt-5 d-flex justify-content-between align-items-center">
@@ -89,10 +90,11 @@ const AllCourses = () => {
                             setSubject(value.props.value)
                           }}
                           label="Môn học">
-                          <MenuItem value="0">--</MenuItem>
-                          <MenuItem value="Ngôn ngữ lập trình Java">Java</MenuItem>
-                          <MenuItem value="Ngôn ngữ lập trình C#">C#</MenuItem>
-                          <MenuItem value="Ngôn ngữ lập trình Javascript">Javascript</MenuItem>
+                          <MenuItem value="None">--</MenuItem>
+                          {subjectData?.map((subject) =>
+                            <MenuItem value={subject.name}>{subject.name}</MenuItem>
+                          )
+                          }
                         </Select>
                       </FormControl>
                     </Box>
@@ -119,7 +121,7 @@ const AllCourses = () => {
 
               <div className={classNames('w-50 text-end')}>
                 <button className={classNames('btn', Styles.course__btn)} onClick={() => {
-                  if (money !== "0" && money !== "" && subject !== "0" && subject !== "") {
+                  if (money !== "0" && money !== "" && subject !== "None" && subject !== "") {
                     //chọn đủ các field
                     switch (money) {
                       case "0":
@@ -159,7 +161,7 @@ const AllCourses = () => {
                           break;
                       }
                     } else {
-                      if (subject !== "0" && subject !== "") {
+                      if (subject !== "None" && subject !== "") {
                         //chỉ chọn môn học
                         setDataSubmit(data.filter((course) => course.subject.name === subject))
                       } else {
@@ -199,7 +201,6 @@ const AllCourses = () => {
                   label="RowsPerPage"
                   onChange={(e, value) => setRowsPerPage(value.props.value)}
                 >
-                  <MenuItem value={2}>2</MenuItem>
                   <MenuItem value={3}>3</MenuItem>
                   <MenuItem value={6}>6</MenuItem>
                   <MenuItem value={9}>9</MenuItem>
