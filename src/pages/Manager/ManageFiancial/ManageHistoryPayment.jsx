@@ -164,6 +164,7 @@ export default function ListPaymenHistory() {
                             <TableRow>
                                 <TableCell>STT</TableCell>
                                 <TableCell>Thời gian <br />(Ngày/Tháng/Năm)</TableCell>
+                                <TableCell></TableCell>
                                 <TableCell>Phương thức</TableCell>
                                 <TableCell>Số tiền <br />(vnd)</TableCell>
                                 <TableCell>Loại</TableCell>
@@ -181,6 +182,11 @@ export default function ListPaymenHistory() {
                                         <TableCell>
                                             <Typography variant='body1' color='primary'>
                                                 {moment(s.transactionDate).format('DD/MM/YYYY')}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography variant='body1' color='primary'>
+                                                {moment(s.transactionDate).format('hh:mm:ss')}
                                             </Typography>
                                         </TableCell>
                                         <TableCell>{s.paymentMethod}</TableCell>

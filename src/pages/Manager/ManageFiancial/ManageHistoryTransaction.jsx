@@ -182,6 +182,7 @@ export default function ListTransactionHistory() {
                   Thời gian <br />
                   (Ngày/Tháng/Năm)
                 </TableCell>
+                <TableCell></TableCell>
                 <TableCell>Lý do</TableCell>
                 <TableCell>
                   Số tiền <br /> (vnd)
@@ -203,6 +204,11 @@ export default function ListTransactionHistory() {
                       <TableCell>
                         <Typography variant="body1" color="primary">
                           {moment(s.dateProcess).format('DD/MM/YYYY')}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="body1" color="primary">
+                          {moment(s.dateProcess).format('hh:mm:ss')}
                         </Typography>
                       </TableCell>
                       <TableCell>{s.description}</TableCell>
