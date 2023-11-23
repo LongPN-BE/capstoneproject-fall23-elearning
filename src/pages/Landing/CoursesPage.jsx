@@ -20,7 +20,7 @@ const CoursesPage = () => {
       >
         <div className="w-100">
           <Typography className="text-center" style={{ color: 'white' }} variant="h4">
-            <strong>OUR COURSES</strong>
+            <strong>DANH SÁCH KHÓA HỌC</strong>
           </Typography>
         </div>
       </div>
