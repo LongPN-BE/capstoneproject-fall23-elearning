@@ -6,7 +6,6 @@ import Styles from './Register.module.scss';
 import Loading from '../../components/Loading/Loading';
 import { Link, useNavigate } from 'react-router-dom';
 import { postData } from '../../services/AppService';
-import Cookies from 'js-cookie';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -34,7 +33,6 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (
       formData.checkbox === 'OK' &&
       formData.username !== '' &&
@@ -44,32 +42,13 @@ const Register = () => {
       formData.firstName !== '' &&
       formData.lastName !== ''
     ) {
-      const response = await postData('auth/register', formData);
-      setLoading(true); // Set loading to true while waiting for the response
+
+      const response = await postData('/auth/register', formData);
       if (response) {
-        try {
-          const response1 = await postData('/auth/login', {
-            username: response.username,
-            password: response.password,
-          });
-          if (response1.token) {
-            console.log('Authentication successful!');
-            Cookies.set('token', response1.token, { expires: 1 });
-            navigate('/');
-          } else {
-            // Authentication failed, handle the error (e.g., show an error message)
-            console.error('Authentication failed. Invalid email or password.');
-            setLoading(false); // Set loading to false after the response is received
-          }
-        } catch (error) {
-          console.error('Error during authentication:', error.message);
-          setLoading(false); // Set loading to false after the response is received
-        } finally {
-          setLoading(false); // Set loading to false after the response is received
-        }
-      } else {
-        setLoading(false); // Set loading to false after the response is received
+        alert("Đăng ký thành công")
+        navigate("/login")
       }
+
     } else {
       alert('Please accept the terms and conditions');
     }
