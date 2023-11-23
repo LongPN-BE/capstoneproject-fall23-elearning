@@ -18,7 +18,10 @@ import SearchIcon from '@mui/icons-material/Search';
 
 const AllCourses = () => {
   const [data, setData] = useState([]);
+  const [dataSubmit, setDataSubmit] = useState([]);
   const [searchValue, setSearchValue] = useState('');
+  const [subject, setSubject] = useState('');
+  const [money, setMoney] = useState('');
 
   useEffect(() => {
     fetchData('/course/by-status-active').then((resp) => {
@@ -26,17 +29,12 @@ const AllCourses = () => {
     });
   }, []);
 
-  useEffect(() => {
-    fetchData('/course/by-status-active').then((resp) => {
-      setData(resp);
-    });
-  }, []);
+  // useEffect(() => {
+  // để call subject
+  // }, []);
 
   // Search
-  const handleSearchChange = (event) => {
-    setSearchValue(event.target.value);
-  };
-  const filterData = data.filter((course) =>
+  const filterData = dataSubmit.filter((course) =>
     course.name.toLowerCase().includes(searchValue.toLowerCase()),
   );
 
@@ -67,7 +65,7 @@ const AllCourses = () => {
                     sx={{ ml: 1, flex: 1 }}
                     placeholder="Bạn muốn tìm hiểu về nội dung gì?"
                     inputProps={{ 'aria-label': 'Bạn muốn tìm hiểu về nội dung gì?' }}
-                    onChange={handleSearchChange}
+                    onChange={(e) => setSearchValue(e.target.value)}
                     startAdornment={<SearchIcon />}
                   />
                 </Paper>
@@ -84,20 +82,33 @@ const AllCourses = () => {
                     <Box className="border rounded mx-2" style={{ width: 400 }}>
                       <FormControl fullWidth>
                         <InputLabel id="subject-select-label">Môn học</InputLabel>
-                        <Select labelId="subject-select-label" label="Môn học">
-                          <MenuItem value="Java">Java</MenuItem>
-                          <MenuItem value="C#">C#</MenuItem>
-                          <MenuItem value="Javascript">Javascript</MenuItem>
+                        <Select
+                          labelId="subject-select-label"
+                          onChange={(e, value) => {
+                            setSubject(value.props.value)
+                          }}
+                          label="Môn học">
+                          <MenuItem value="0">--</MenuItem>
+                          <MenuItem value="Ngôn ngữ lập trình Java">Java</MenuItem>
+                          <MenuItem value="Ngôn ngữ lập trình C#">C#</MenuItem>
+                          <MenuItem value="Ngôn ngữ lập trình Javascript">Javascript</MenuItem>
                         </Select>
                       </FormControl>
                     </Box>
                     <Box className="border rounded mx-2" style={{ width: 400 }}>
                       <FormControl fullWidth>
                         <InputLabel id="subject-select-label">Giá tiền</InputLabel>
-                        <Select labelId="subject-select-label" label="Giá tiền">
-                          <MenuItem value="Java">0 - 1,500,000 VNĐ</MenuItem>
-                          <MenuItem value="C#">1,500,000 VNĐ - 5,000,000 VNĐ</MenuItem>
-                          <MenuItem value="Javascript">5,000,000 VNĐ - Không giới hạn</MenuItem>
+                        <Select
+                          labelId="subject-select-label"
+                          onChange={(e, value) => {
+                            setMoney(value.props.value)
+                          }}
+                          label="Giá tiền">
+                          <MenuItem value="0">--</MenuItem>
+                          <MenuItem value="1">0 - 1,500,000 VNĐ</MenuItem>
+                          <MenuItem value="2">1,500,000 VNĐ - 5,000,000 VNĐ</MenuItem>
+                          <MenuItem value="3">5,000,000 VNĐ - 10,000,000 VNĐ</MenuItem>
+                          <MenuItem value="4">10,000,000 VNĐ - Không giới hạn</MenuItem>
                         </Select>
                       </FormControl>
                     </Box>
@@ -106,7 +117,57 @@ const AllCourses = () => {
               </div>
 
               <div className={classNames('w-50 text-end')}>
-                <button className={classNames('btn', Styles.course__btn)}>Tìm kiếm</button>
+                <button className={classNames('btn', Styles.course__btn)} onClick={() => {
+                  if (money !== "0" && money !== "" && subject !== "0" && subject !== "") {
+                    //chọn đủ các field
+                    switch (money) {
+                      case "0":
+                        setDataSubmit(data)
+                        break;
+                      case "1":
+                        setDataSubmit(data.filter((course) => course.price <= 1500000 && course.subject.name === subject))
+                        break;
+                      case "2":
+                        setDataSubmit(data.filter((course) => course.price >= 1500000 && course.price <= 5000000 && course.subject.name === subject))
+                        break;
+                      case "3":
+                        setDataSubmit(data.filter((course) => course.price >= 5000000 && course.price <= 1000000 && course.subject.name === subject))
+                        break;
+                      case "4":
+                        setDataSubmit(data.filter((course) => course.price >= 1000000 && course.subject.name === subject))
+                        break;
+                    }
+                  } else {
+                    if (money !== "0" && money !== "") {
+                      //chỉ chọn tiền
+                      switch (money) {
+                        case "0":
+                          setDataSubmit(data)
+                          break;
+                        case "1":
+                          setDataSubmit(data.filter((course) => course.price <= 1500000))
+                          break;
+                        case "2":
+                          setDataSubmit(data.filter((course) => course.price >= 1500000 && course.price <= 5000000))
+                          break;
+                        case "3":
+                          setDataSubmit(data.filter((course) => course.price >= 5000000 && course.price <= 10000000))
+                          break;
+                        case "4":
+                          setDataSubmit(data.filter((course) => course.price >= 10000000))
+                          break;
+                      }
+                    } else {
+                      if (subject !== "0" && subject !== "") {
+                        //chỉ chọn môn học
+                        setDataSubmit(data.filter((course) => course.subject.name === subject))
+                      } else {
+                        //không chọn gì
+                        setDataSubmit(data)
+                      }
+                    }
+                  }
+                }}>Tìm kiếm</button>
               </div>
             </div>
           </Col>
@@ -137,15 +198,10 @@ const AllCourses = () => {
                   label="RowsPerPage"
                   onChange={(e, value) => setRowsPerPage(value.props.value)}
                 >
-
                   <MenuItem value={2}>2</MenuItem>
-
                   <MenuItem value={3}>3</MenuItem>
-
                   <MenuItem value={6}>6</MenuItem>
-
                   <MenuItem value={9}>9</MenuItem>
-
                 </Select>
               </FormControl>
             </Box>
