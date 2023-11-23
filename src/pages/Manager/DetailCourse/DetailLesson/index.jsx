@@ -19,6 +19,7 @@ import 'react-quill/dist/quill.snow.css';
 import './index.scss';
 import Cookies from 'js-cookie';
 import PreviewQuizz from './Quizz';
+import SourceIcon from '@mui/icons-material/Source';
 
 const resourceApi = new ResourceControllerApi(ApiClientSingleton.getInstance());
 const lessonApi = new LessonControllerApi(ApiClientSingleton.getInstance());
@@ -67,6 +68,7 @@ function PreviewLesson() {
   return (
     <>
       <div className="d-flex ">
+        {resources?.map((data) => {})}
         {type === 'Quiz' ? (
           <></>
         ) : (
@@ -102,7 +104,7 @@ function PreviewLesson() {
             return (
               <div className="mt-3 d-flex align-items-center gap-2">
                 <div>
-                  <CodeIcon /> Link tài liệu:{' '}
+                  <CodeIcon /> <strong>Link tài liệu:</strong>
                 </div>
                 <div>
                   <a href={data.content} target="_blank">
@@ -113,6 +115,22 @@ function PreviewLesson() {
             );
           }
           return <div>{data.content}</div>;
+        }
+        if (data.resourceType === 'file') {
+          if (data.content.startsWith('http')) {
+            return (
+              <div className="mt-3 d-flex align-items-center gap-2">
+                <div>
+                  <SourceIcon /> <strong>Tài liệu:</strong>
+                </div>
+                <div>
+                  <a href={data.content} target="_blank">
+                    {data.name}
+                  </a>
+                </div>
+              </div>
+            );
+          }
         }
       })}
     </>

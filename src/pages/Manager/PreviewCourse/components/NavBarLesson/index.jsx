@@ -104,7 +104,8 @@ function NavBarLesson(props) {
                         ''
                       )}
                       <Link to={`/subject/${subjectId}/course/${courseId}/syllabus/preview/${data?.id}/${data?.type}`}>
-                        <strong>{data?.type}</strong>: {data.name}
+                        <strong>{data?.type === 'VIDEO' ? <>VIDEO</> : data?.type === 'READING'(<>BÀI ĐỌC</>)}</strong>:{' '}
+                        {data.name}
                       </Link>
                     </div>
                   </div>
@@ -117,7 +118,7 @@ function NavBarLesson(props) {
                           <Link
                             to={`/subject/${subjectId}/course/${courseId}/syllabus/preview/${data.id}/Quiz/${item.id}`}
                           >
-                            <strong>Quiz</strong>: {item.title}
+                            <strong>Trắc Nghiệm</strong>: {item.title}
                           </Link>
                         </div>
                       );
