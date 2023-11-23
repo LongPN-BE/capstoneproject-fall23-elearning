@@ -63,7 +63,7 @@ function PreviewCourse() {
       <Container className="mt-4 vh-100">
         <div className="mt-4 d-flex justify-content-center">
           <Typography variant="h4" style={{ color: '#616161' }}>
-            <strong>Live Preview</strong>
+            <strong>TỔNG QUAN KHOÁ HỌC</strong>
           </Typography>
         </div>
         <Divider className="my-4" />

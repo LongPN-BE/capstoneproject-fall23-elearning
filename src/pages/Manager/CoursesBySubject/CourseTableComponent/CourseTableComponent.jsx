@@ -18,6 +18,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import FeedbackIcon from '@mui/icons-material/Feedback';
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
@@ -155,16 +156,11 @@ function CourseTableComponent({ courses }) {
             title="Approve"
             className="btn btn-success m-1"
             onClick={() => handleClose}
-          // onClick={() => handleApproved(course)}
+            // onClick={() => handleApproved(course)}
           >
             Hủy
           </button>
-          <button
-            type="submit"
-            title="Approve"
-            className="btn btn-danger m-1"
-            onClick={() => handleReject(course)}
-          >
+          <button type="submit" title="Approve" className="btn btn-danger m-1" onClick={() => handleReject(course)}>
             Xác nhận từ chối
           </button>
         </DialogActions>
@@ -193,7 +189,11 @@ function CourseTableComponent({ courses }) {
                   <TableCell align="center">{course.price}</TableCell>
                   <TableCell align="center">{moment(course.createDate).format('DD/MM/YYYY')}</TableCell>
                   <TableCell align="center">
-                    <Link to={`/subject/${course.subject.id}/course/${course.id}/syllabus`} title="Xem" className="btn btn-secondary m-1">
+                    <Link
+                      to={`/subject/${course.subject.id}/course/${course.id}/syllabus`}
+                      title="Xem"
+                      className="btn btn-secondary m-1"
+                    >
                       <VisibilityIcon />
                     </Link>
                   </TableCell>
@@ -244,7 +244,6 @@ function CourseTableComponent({ courses }) {
           />
         </Paper>
       </div>
-
     </>
   );
 }

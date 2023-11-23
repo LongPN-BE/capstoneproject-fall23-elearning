@@ -58,6 +58,8 @@ import PreviewLesson from './pages/Manager/DetailCourse/DetailLesson';
 import PreviewQuizz from './pages/Manager/DetailCourse/DetailLesson/Quizz';
 import ListPaymenHistory from './pages/Manager/ManageFiancial/ManageHistoryPayment';
 import ListTransactionHistory from './pages/Manager/ManageFiancial/ManageHistoryTransaction';
+import AllCourses from './components/Landing/AllCourses/AllCourses';
+import CoursesPage from './pages/Landing/CoursesPage';
 
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -102,7 +104,7 @@ const App = () => {
 
   if (!user) {
     let userTmp = Cookies.get('user');
-    if (!userTmp && location.pathname !== '/' && location.pathname !== '/login' && location.pathname !== '/register') {
+    if (!userTmp && location.pathname !== '/' && location.pathname !== '/login' && location.pathname !== '/register' && location.pathname !== '/all-courses') {
       return (window.location.href = '/');
     }
   }
@@ -191,6 +193,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/" element={<LandingPage />} />
+          <Route path="/all-courses" element={<CoursesPage />} />
         </Routes>
       )}
     </>

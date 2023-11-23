@@ -20,7 +20,7 @@ const navLinks = [
   },
   {
     display: 'Danh sách khóa học',
-    url: '##',
+    url: '/all-courses',
   },
   {
     display: 'Chúng tôi',
@@ -103,7 +103,6 @@ const Header = ({ setSearchValue, getCourses }) => {
             ) : (
               <></>
             )}
-
           </div>
 
           <div className="nav d-flex align-items-center gap-5">
