@@ -22,14 +22,18 @@ import SourceIcon from '@mui/icons-material/Source';
 import CustomBreadcrumbs from '../../../components/Breadcrumbs';
 import { Box } from '@mui/system';
 import { CardContent, Divider } from '@mui/material';
+import AccountDetailModal from '../ManageAccounts/AccountDetail';
 
 export default function SyllabusByCourse() {
   const { courseId } = useParams();
   const { subjectId } = useParams();
+
   const [data, setData] = useState([]);
   const [searchValue, setSearchValue] = useState('');
+  const [numEnroll, setNumEnroll] = useState('');
   const [subjectData, setSubjectData] = useState({});
   const [courseData, setCourseData] = useState({});
+  const [accountData, setAccountData] = useState(null);
   const [teacherData, setTeacherData] = useState({
     fullName: '',
     email: '',
@@ -40,6 +44,10 @@ export default function SyllabusByCourse() {
   useEffect(() => {
     const token = Cookies.get('token');
     if (token) {
+      fetchData('/enroll/byCourseId?course_id=' + courseId, token).then((resp) => {
+        setNumEnroll(resp.length);
+        console.log(numEnroll)
+      });
       fetchData('/subject/byId?subject-id=' + subjectId, token).then((resp) => {
         setSubjectData(resp);
       });
@@ -48,6 +56,7 @@ export default function SyllabusByCourse() {
           setCourseData(resp);
           fetchData('/teacher/byId?teacher_id=' + resp.teacher.id, token).then((resp1) => {
             if (resp1) {
+              setAccountData(resp1.account)
               setTeacherData({
                 fullName: resp1.account.profile.firstName + ' ' + resp1.account.profile.firstName,
                 email: resp1.account.profile.email,
@@ -90,6 +99,11 @@ export default function SyllabusByCourse() {
   };
 
   const filterData = data.filter((item) => item.name.toLowerCase().includes(searchValue.toLowerCase()));
+  const [isAccountDetailModalOpen, setIsAccountDetailModalOpen] = useState(false);
+
+  const handleAccountDetailModalClose = () => {
+    setIsAccountDetailModalOpen(false);
+  };
 
   return (
     data && (
@@ -118,7 +132,10 @@ export default function SyllabusByCourse() {
 
                   {/* Teacher button */}
                   <div className="m-2">
-                    <div className="btn hover-overlay btn-light border rounded d-flex text-center">
+                    <div className="btn hover-overlay btn-light border rounded d-flex text-center"
+                      onClick={() => {
+                        setIsAccountDetailModalOpen(true);
+                      }}>
                       <Avatar alt={teacherData.fullName} src={teacherData.avatar} />
                       <div className="p-2">
                         <Typography variant="subtitle2">{teacherData.fullName}</Typography>
@@ -158,6 +175,14 @@ export default function SyllabusByCourse() {
                       </Typography>
                       <Typography>{moment(courseData?.createDate).format('DD/MM/YYYY')}</Typography>
                     </div>
+
+                    <div className="px-5 text-center">
+                      <Typography variant="caption">
+                        {' '}
+                        <strong>LƯỢT ĐĂNG KÝ </strong>
+                      </Typography>
+                      <Typography>{numEnroll}</Typography>
+                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -188,7 +213,7 @@ export default function SyllabusByCourse() {
                   <TableCell>Tên</TableCell>
                   <TableCell>Trạng thái</TableCell>
                   <TableCell>Ngày tạo</TableCell>
-                  <TableCell>Tài liệu</TableCell>
+                  {/* <TableCell>Tài liệu</TableCell> */}
                   <TableCell>Xem tổng quan</TableCell>
                 </TableRow>
               </TableHead>
@@ -198,13 +223,13 @@ export default function SyllabusByCourse() {
                     <TableRow hover={true} key={index}>
                       <TableCell>{index + 1}</TableCell>
                       <TableCell>{s.name}</TableCell>
-                      <TableCell>{s.status}</TableCell>
+                      <TableCell>{s.status === "Deactive" ? "Không hoạt động" : s.status === "Active" ? "Đang hoạt động" : (<></>)}</TableCell>
                       <TableCell>{moment(s.createDate).format('DD/MM/YYYY')}</TableCell>
-                      <TableCell>
+                      {/* <TableCell>
                         <Link to={`##`} aria-label="Tài liệu" className="btn btn-secondary m-1">
                           <SourceIcon />
                         </Link>
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell>
                         <Link
                           to={`/subject/${subjectId}/course/${courseId}/syllabus/preview/${s.id}`}
@@ -220,6 +245,11 @@ export default function SyllabusByCourse() {
               </TableBody>
             </Table>
           </Paper>
+          < AccountDetailModal
+            isOpen={isAccountDetailModalOpen}
+            onClose={handleAccountDetailModalClose}
+            account={accountData !== null ? accountData : null}
+          />
         </div>
       </div>
     )

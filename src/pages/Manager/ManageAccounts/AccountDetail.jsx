@@ -98,7 +98,7 @@ const AccountModal = ({ isOpen, onClose, account }) => {
       </DialogContent>
       <DialogContent dividers>
         <Typography variant="inherit">Mô tả: </Typography>
-        <Typography variant="inherit">{editedAccount.email}</Typography> <br />
+        <Typography variant="inherit">{editedAccount.description}</Typography> <br />
         <Divider style={{ height: '3px', color: 'silver' }} />
         <Typography variant="inherit">Họ và tên: </Typography>
         <Typography variant="inherit">
