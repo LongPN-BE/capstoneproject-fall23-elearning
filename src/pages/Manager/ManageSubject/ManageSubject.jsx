@@ -193,99 +193,6 @@ export default function ListSubject() {
                     <TableCell width="15%">
                       {/* <Link className="btn btn-outline-secondary" to={`/subjects/courseBySubject`}> */}
                       <div className="d-flex justify-content-center">
-                        {s.status ? <>
-                          <button
-                            type="submit"
-                            title="Vô hiệu hóa"
-                            className="btn btn-danger m-1"
-                            onClick={() => {
-                              const token = Cookies.get('token');
-                              if (token) {
-                                fetchData('/course/bySubjectId?subject-id=' + s.id, token).then((resp) => {
-                                  if (resp) {
-                                    if (resp.length > 0) {
-                                      Swal.fire("Không đủ điều kiện vô hiệu hóa!",
-                                        "Hiện tại đang có " + resp.length + " khóa học thuộc môn này đang hoạt động.",
-                                        "warning");
-                                    } else {
-                                      Swal.fire({
-                                        title: "Bạn chắc rằng muốn vô hiệu hóa môn học này?",
-                                        text: "Sau khi vô hiệu hóa, khóa học này sẽ không còn hoạt động nữa.",
-                                        showDenyButton: true,
-                                        showCancelButton: true,
-                                        confirmButtonText: "Xác nhận",
-                                        denyButtonText: `Không xác nhận`,
-                                        cancelButtonText: `Hủy`
-                                      }).then((result) => {
-                                        if (result.isConfirmed) {
-                                          if (token) {
-                                            postData('/subject/update-status', {
-                                              'subjectId': s.id,
-                                              'status': false
-                                            }, token)
-                                              .then((resp) => {
-                                                if (resp) {
-                                                  Swal.fire("Đã vô hiệu hóa thành công!", "Khóa học " + s.name + " đã được vô hiệu hóa.", "success");
-                                                  window.location.reload();
-                                                }
-                                              })
-                                              .catch((err) => {
-                                                console.log(err);
-                                              });
-                                          }
-                                        } else if (result.isDenied) {
-                                          Swal.fire("Không có gì thay đổi.", "Khóa học " + s.name + " không có gì thay đổi.", "info");
-                                        }
-                                      });
-                                    }
-                                  }
-                                });
-                              }
-                            }}
-                          >
-                            <DoNotDisturbAltIcon />
-                          </button>
-                        </> : <>
-                          <button
-                            type="submit"
-                            title="Kích hoạt"
-                            className="btn btn-success m-1"
-                            onClick={() => {
-                              const token = Cookies.get('token');
-                              Swal.fire({
-                                title: "Bạn chắc rằng muốn kích hoạt môn học này?",
-                                text: "Sau khi kích hoạt, khóa học này sẽ hoạt động ngay sau đó.",
-                                showDenyButton: true,
-                                showCancelButton: true,
-                                confirmButtonText: "Xác nhận",
-                                denyButtonText: `Không xác nhận`,
-                                cancelButtonText: `Hủy`
-                              }).then((result) => {
-                                if (result.isConfirmed) {
-                                  if (token) {
-                                    postData('/subject/update-status', {
-                                      'subjectId': s.id,
-                                      'status': true
-                                    }, token)
-                                      .then((resp) => {
-                                        if (resp) {
-                                          Swal.fire("Đã vô kích hoạt thành công!", "Khóa học " + s.name + " đã được kích hoạt.", "success");
-                                          window.location.reload();
-                                        }
-                                      })
-                                      .catch((err) => {
-                                        console.log(err);
-                                      });
-                                  }
-                                } else if (result.isDenied) {
-                                  Swal.fire("Không có gì thay đổi.", "Khóa học " + s.name + " không có gì thay đổi.", "info");
-                                }
-                              });
-                            }}
-                          >
-                            <CheckCircleOutlineIcon />
-                          </button>
-                        </>}
                         <Link to={`/subject/${s.id}/course`} title="Xem" className="btn btn-secondary m-1">
                           <VisibilityIcon />
                         </Link>
@@ -295,10 +202,133 @@ export default function ListSubject() {
                           color="primary"
                           title="Chỉnh sửa"
                           onClick={() => handleEditSubject(s)}
-                          className="m-1 p-0"
+                          className="m-1"
                         >
                           <EditIcon />
                         </Button>
+                        {s.status ? (
+                          <>
+                            <button
+                              type="submit"
+                              title="Vô hiệu hóa"
+                              className="btn btn-danger m-1"
+                              onClick={() => {
+                                const token = Cookies.get('token');
+                                if (token) {
+                                  fetchData('/course/bySubjectId?subject-id=' + s.id, token).then((resp) => {
+                                    if (resp) {
+                                      if (resp.length > 0) {
+                                        Swal.fire(
+                                          'Không đủ điều kiện vô hiệu hóa!',
+                                          'Hiện tại đang có ' + resp.length + ' khóa học thuộc môn này đang hoạt động.',
+                                          'warning',
+                                        );
+                                      } else {
+                                        Swal.fire({
+                                          title: 'Bạn chắc rằng muốn vô hiệu hóa môn học này?',
+                                          text: 'Sau khi vô hiệu hóa, khóa học này sẽ không còn hoạt động nữa.',
+                                          showDenyButton: true,
+                                          showCancelButton: true,
+                                          confirmButtonText: 'Xác nhận',
+                                          denyButtonText: `Không xác nhận`,
+                                          cancelButtonText: `Hủy`,
+                                        }).then((result) => {
+                                          if (result.isConfirmed) {
+                                            if (token) {
+                                              postData(
+                                                '/subject/update-status',
+                                                {
+                                                  subjectId: s.id,
+                                                  status: false,
+                                                },
+                                                token,
+                                              )
+                                                .then((resp) => {
+                                                  if (resp) {
+                                                    Swal.fire(
+                                                      'Đã vô hiệu hóa thành công!',
+                                                      'Khóa học ' + s.name + ' đã được vô hiệu hóa.',
+                                                      'success',
+                                                    );
+                                                    window.location.reload();
+                                                  }
+                                                })
+                                                .catch((err) => {
+                                                  console.log(err);
+                                                });
+                                            }
+                                          } else if (result.isDenied) {
+                                            Swal.fire(
+                                              'Không có gì thay đổi.',
+                                              'Khóa học ' + s.name + ' không có gì thay đổi.',
+                                              'info',
+                                            );
+                                          }
+                                        });
+                                      }
+                                    }
+                                  });
+                                }
+                              }}
+                            >
+                              <DoNotDisturbAltIcon />
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              type="submit"
+                              title="Kích hoạt"
+                              className="btn btn-success m-1"
+                              onClick={() => {
+                                const token = Cookies.get('token');
+                                Swal.fire({
+                                  title: 'Bạn chắc rằng muốn kích hoạt môn học này?',
+                                  text: 'Sau khi kích hoạt, khóa học này sẽ hoạt động ngay sau đó.',
+                                  showDenyButton: true,
+                                  showCancelButton: true,
+                                  confirmButtonText: 'Xác nhận',
+                                  denyButtonText: `Không xác nhận`,
+                                  cancelButtonText: `Hủy`,
+                                }).then((result) => {
+                                  if (result.isConfirmed) {
+                                    if (token) {
+                                      postData(
+                                        '/subject/update-status',
+                                        {
+                                          subjectId: s.id,
+                                          status: true,
+                                        },
+                                        token,
+                                      )
+                                        .then((resp) => {
+                                          if (resp) {
+                                            Swal.fire(
+                                              'Đã vô kích hoạt thành công!',
+                                              'Khóa học ' + s.name + ' đã được kích hoạt.',
+                                              'success',
+                                            );
+                                            window.location.reload();
+                                          }
+                                        })
+                                        .catch((err) => {
+                                          console.log(err);
+                                        });
+                                    }
+                                  } else if (result.isDenied) {
+                                    Swal.fire(
+                                      'Không có gì thay đổi.',
+                                      'Khóa học ' + s.name + ' không có gì thay đổi.',
+                                      'info',
+                                    );
+                                  }
+                                });
+                              }}
+                            >
+                              <CheckCircleOutlineIcon />
+                            </button>
+                          </>
+                        )}
                       </div>
                     </TableCell>
                   </TableRow>
