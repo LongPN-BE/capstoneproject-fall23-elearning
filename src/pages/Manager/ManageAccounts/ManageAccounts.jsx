@@ -165,14 +165,14 @@ export default function ListAccount() {
         denyButtonText: `Không đồng ý`,
         cancelButtonText: `Hủy`,
         footer: '<a href="#">Tại sao tôi gặp vấn đề này?</a>'
-      }).then((result) => {
+      }).then(async (result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-          let res = fetchData('/account/enable?account_id=' + account.id, token);
+          let res = await fetchData('/account/enable?account_id=' + account.id, token);
           if (res) {
             const templateParams = {
               from_email: "onlearn@gmail.com",
-              to_email: account.email,
+              to_email: account.profile.email,
               user_name: "Onlearn",
               message: "Tài khoản của bạn đã được kích hoạt lại.\n Chúng tôi rất vui vì có sự tham gia của bạn. \n Nếu có vấn đề xin liên hệ qua email: onlearn@gmail.com . Để được hỗ trợ."
             };
@@ -180,12 +180,10 @@ export default function ListAccount() {
             emailjs.send(YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, templateParams, YOUR_USER_ID)
               .then((result) => {
                 Swal.fire({
-                  title: "Kích hoạt thành công!",
-                  text: res.message,
-                  icon: "success",
-                  footer: '<a href="#">Tại sao tôi gặp vấn đề này?</a>'
-                });
-                window.location.reload();
+                  title: "Chúc mừng",
+                  text: "Thông tin khóa tài khoản đã được gửi email",
+                  icon: "success"
+                }).then((result) => { window.location.reload() })
               }, (error) => {
                 console.log('Gửi mail thất bại.', error.text);
               });
@@ -213,30 +211,36 @@ export default function ListAccount() {
         denyButtonText: `Không đồng ý`,
         cancelButtonText: `Hủy`,
         footer: '<a href="#">Tại sao tôi gặp vấn đề này?</a>'
-      }).then((result) => {
+      }).then(async (result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-          let res = fetchData('/account/disable?account_id=' + account.id, token);
+          let res = await fetchData('/account/disable?account_id=' + account.id, token);
           if (res) {
-            const templateParams = {
-              from_email: "onlearn@gmail.com",
-              to_email: account.email,
-              user_name: "Onlearn",
-              message: "Tài khoản của bạn hiện đã bị khóa vì một số lý do. \n Nếu có vấn đề xin liên hệ qua email: onlearn@gmail.com . Để được hỗ trợ. Cám ơn " + account.profile.firstName + " vì đã đồng hành cùng chúng tôi trong thời gian qua."
-            };
+            Swal.fire({
+              title: "Vô hiệu thành công!",
+              text: res.message,
+              icon: "success",
+              footer: '<a href="#">Tại sao tôi gặp vấn đề này?</a>'
+            }).then((result) => {
+              const templateParams = {
+                from_email: "onlearn@gmail.com",
+                to_email: account.profile.email,
+                user_name: "Onlearn",
+                message: "Tài khoản của bạn hiện đã bị khóa vì một số lý do. \n Nếu có vấn đề xin liên hệ qua email: onlearn@gmail.com . Để được hỗ trợ. Cám ơn " + account.profile.firstName + " vì đã đồng hành cùng chúng tôi trong thời gian qua."
+              };
 
-            emailjs.send(YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, templateParams, YOUR_USER_ID)
-              .then((result) => {
-                Swal.fire({
-                  title: "Vô hiệu thành công!",
-                  text: res.message,
-                  icon: "success",
-                  footer: '<a href="#">Tại sao tôi gặp vấn đề này?</a>'
+              emailjs.send(YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, templateParams, YOUR_USER_ID)
+                .then((result) => {
+                  Swal.fire({
+                    title: "Chúc mừng",
+                    text: "Thông tin khóa tài khoản đã được gửi email",
+                    icon: "success"
+                  }).then((result) => { window.location.reload() })
+                }, (error) => {
+                  console.log('Gửi mail thất bại.', error.text);
                 });
-                window.location.reload();
-              }, (error) => {
-                console.log('Gửi mail thất bại.', error.text);
-              });
+            })
+
           }
         } else if (result.isDenied) {
           Swal.fire("Không có gì thay đổi", "", "info");
