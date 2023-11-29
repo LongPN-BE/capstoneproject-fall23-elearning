@@ -14,11 +14,10 @@ import {
 import moment from 'moment';
 import Cookies from 'js-cookie';
 
-const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
-  const [user, setUser] = useState({});
+const userTmp = JSON.parse(Cookies.get('user'));
 
+const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
   useEffect(() => {
-    setUser(JSON.parse(Cookies.get('user')));
     if (subject) {
       // Populate the form fields if a subject is provided for editing
       setEditedSubject({
@@ -26,7 +25,7 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
         description: subject.description,
         minPrice: subject.minPrice,
         createDate: subject.createDate,
-        staffId: user.id,
+        staffId: userTmp.id,
         status: subject.status,
       });
     } else {
@@ -35,9 +34,8 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
         name: '',
         description: '',
         minPrice: '',
-        createDate: new Date(),
-        staffId: user.id,
-        status: 'Chưa kích hoạt',
+        staffId: userTmp.id,
+        status: false,
       });
     }
   }, [subject]);
@@ -46,18 +44,16 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
     name: '',
     description: '',
     minPrice: '',
-    createDate: new Date(),
-    staffId: user.id,
-    status: 'Chưa kích hoạt',
+    staffId: userTmp.id,
+    status: false,
   });
 
   const [editedSubjectError, setEditedSubjectError] = useState({
     name: '',
     description: '',
     minPrice: '',
-    createDate: new Date(),
-    staffId: user.id,
-    status: 'Chưa kích hoạt',
+    staffId: userTmp.id,
+    status: false,
   });
 
   const handleInputChange = (e, fieldName) => {
@@ -101,11 +97,11 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
   };
 
   const handleSave = () => {
-    if (!editedSubject.name || !editedSubject.description) {
-      // Show an error message or handle the validation as needed
-      alert('Please fill in all required fields.');
-      return;
-    }
+    // if (!editedSubject.name || !editedSubject.description) {
+    //   // Show an error message or handle the validation as needed
+    //   alert('Please fill in all required fields.');
+    //   return;
+    // }
 
     if (subject) {
       // If editing an existing subject, call the onUpdate function
@@ -130,7 +126,7 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
       description: '',
       minPrice: '',
       createDate: new Date(),
-      staffId: user.id,
+      staffId: userTmp.id,
       status: false,
     });
 
@@ -176,7 +172,7 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
             <TextField
               fullWidth
               multiline
-              rows={4}
+              minRows={4}
               label="Chú thích"
               autoFocus
               margin="dense"
@@ -192,7 +188,7 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
               error
               fullWidth
               multiline
-              rows={4}
+              minRows={4}
               label="Chú thích"
               autoFocus
               margin="dense"
@@ -244,7 +240,7 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
           disabled={true}
         />
 
-        {/* <TextField fullWidth label="ID" autoFocus margin="dense" name="staffId" value={user.id} disabled={true} /> */}
+        {/* <TextField fullWidth label="ID" autoFocus margin="dense" name="staffId" value={userTmp.id} disabled={true} /> */}
         {/* <TextField
           fullWidth
           autoFocus

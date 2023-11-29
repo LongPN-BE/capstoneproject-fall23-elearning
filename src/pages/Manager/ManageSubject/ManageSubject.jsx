@@ -75,7 +75,7 @@ export default function ListSubject() {
     // console.log('Subject data to save or update:', subjectData);
     const body = {
       ...subjectData,
-      dateTime: moment(new Date()),
+      createDate: moment(new Date()),
     };
     // If subjectData has an "id", it means you are updating an existing subject.
     if (subjectData.id) {
@@ -84,25 +84,25 @@ export default function ListSubject() {
 
       const body = {
         ...subjectData,
-        dateTime: moment(new Date()),
+        createDate: moment(new Date()),
       };
       console.log('Subject data to update:', await body);
       await postData('/subject/save', body, token)
         .then((resp) => {
           if (resp) {
             Swal.fire({
-              title: "Tuyệt vời!",
-              text: "Bạn đã cập nhật thành công môn" + subjectData.name + " !",
-              icon: "success"
+              title: 'Tuyệt vời!',
+              text: 'Bạn đã cập nhật thành công môn' + subjectData.name + ' !',
+              icon: 'success',
             });
-            window.location.reload();
+            //window.location.reload();
           }
         })
         .catch((err) => {
           Swal.fire({
-            title: "Opss..",
+            title: 'Opss..',
             text: err,
-            icon: "warning"
+            icon: 'warning',
           });
           console.log(err);
         });
@@ -114,18 +114,18 @@ export default function ListSubject() {
         .then((resp) => {
           if (resp) {
             Swal.fire({
-              title: "Tuyệt vời!",
-              text: "Bạn đã khởi tạo thành công môn" + subjectData.name + " !",
-              icon: "success"
+              title: 'Tuyệt vời!',
+              text: 'Bạn đã khởi tạo thành công môn' + subjectData.name + ' !',
+              icon: 'success',
             });
-            window.location.reload();
+            //window.location.reload();
           }
         })
         .catch((err) => {
           Swal.fire({
-            title: "Opss..",
+            title: 'Opss..',
             text: err,
-            icon: "warning"
+            icon: 'warning',
           });
           console.log(err);
         });
