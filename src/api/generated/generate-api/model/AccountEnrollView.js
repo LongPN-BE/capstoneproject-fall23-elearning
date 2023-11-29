@@ -13,7 +13,6 @@
 
 import ApiClient from '../ApiClient';
 import GrantedAuthorityEnrollView from './GrantedAuthorityEnrollView';
-import ProfileEnrollView from './ProfileEnrollView';
 
 /**
  * The AccountEnrollView model module.
@@ -67,8 +66,8 @@ class AccountEnrollView {
             if (data.hasOwnProperty('active')) {
                 obj['active'] = ApiClient.convertToType(data['active'], 'Boolean');
             }
-            if (data.hasOwnProperty('profile')) {
-                obj['profile'] = ProfileEnrollView.constructFromObject(data['profile']);
+            if (data.hasOwnProperty('authorities')) {
+                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthorityEnrollView]);
             }
             if (data.hasOwnProperty('accountNonExpired')) {
                 obj['accountNonExpired'] = ApiClient.convertToType(data['accountNonExpired'], 'Boolean');
@@ -78,9 +77,6 @@ class AccountEnrollView {
             }
             if (data.hasOwnProperty('accountNonLocked')) {
                 obj['accountNonLocked'] = ApiClient.convertToType(data['accountNonLocked'], 'Boolean');
-            }
-            if (data.hasOwnProperty('authorities')) {
-                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthorityEnrollView]);
             }
             if (data.hasOwnProperty('enabled')) {
                 obj['enabled'] = ApiClient.convertToType(data['enabled'], 'Boolean');
@@ -102,10 +98,6 @@ class AccountEnrollView {
         // ensure the json data is a string
         if (data['role'] && !(typeof data['role'] === 'string' || data['role'] instanceof String)) {
             throw new Error("Expected the field `role` to be a primitive type in the JSON string but got " + data['role']);
-        }
-        // validate the optional field `profile`
-        if (data['profile']) { // data not null
-          ProfileEnrollView.validateJSON(data['profile']);
         }
         if (data['authorities']) { // data not null
             // ensure the json data is an array
@@ -157,9 +149,9 @@ AccountEnrollView.prototype['role'] = undefined;
 AccountEnrollView.prototype['active'] = undefined;
 
 /**
- * @member {module:model/ProfileEnrollView} profile
+ * @member {Array.<module:model/GrantedAuthorityEnrollView>} authorities
  */
-AccountEnrollView.prototype['profile'] = undefined;
+AccountEnrollView.prototype['authorities'] = undefined;
 
 /**
  * @member {Boolean} accountNonExpired
@@ -175,11 +167,6 @@ AccountEnrollView.prototype['credentialsNonExpired'] = undefined;
  * @member {Boolean} accountNonLocked
  */
 AccountEnrollView.prototype['accountNonLocked'] = undefined;
-
-/**
- * @member {Array.<module:model/GrantedAuthorityEnrollView>} authorities
- */
-AccountEnrollView.prototype['authorities'] = undefined;
 
 /**
  * @member {Boolean} enabled

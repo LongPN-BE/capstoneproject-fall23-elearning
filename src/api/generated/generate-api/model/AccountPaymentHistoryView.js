@@ -13,7 +13,6 @@
 
 import ApiClient from '../ApiClient';
 import GrantedAuthorityPaymentHistoryView from './GrantedAuthorityPaymentHistoryView';
-import ProfilePaymentHistoryView from './ProfilePaymentHistoryView';
 
 /**
  * The AccountPaymentHistoryView model module.
@@ -61,6 +60,9 @@ class AccountPaymentHistoryView {
             if (data.hasOwnProperty('id')) {
                 obj['id'] = ApiClient.convertToType(data['id'], 'Number');
             }
+            if (data.hasOwnProperty('username')) {
+                obj['username'] = ApiClient.convertToType(data['username'], 'String');
+            }
             if (data.hasOwnProperty('password')) {
                 obj['password'] = ApiClient.convertToType(data['password'], 'String');
             }
@@ -70,8 +72,8 @@ class AccountPaymentHistoryView {
             if (data.hasOwnProperty('active')) {
                 obj['active'] = ApiClient.convertToType(data['active'], 'Boolean');
             }
-            if (data.hasOwnProperty('profile')) {
-                obj['profile'] = ProfilePaymentHistoryView.constructFromObject(data['profile']);
+            if (data.hasOwnProperty('authorities')) {
+                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthorityPaymentHistoryView]);
             }
             if (data.hasOwnProperty('accountNonExpired')) {
                 obj['accountNonExpired'] = ApiClient.convertToType(data['accountNonExpired'], 'Boolean');
@@ -81,9 +83,6 @@ class AccountPaymentHistoryView {
             }
             if (data.hasOwnProperty('accountNonLocked')) {
                 obj['accountNonLocked'] = ApiClient.convertToType(data['accountNonLocked'], 'Boolean');
-            }
-            if (data.hasOwnProperty('authorities')) {
-                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthorityPaymentHistoryView]);
             }
             if (data.hasOwnProperty('enabled')) {
                 obj['enabled'] = ApiClient.convertToType(data['enabled'], 'Boolean');
@@ -99,16 +98,16 @@ class AccountPaymentHistoryView {
      */
     static validateJSON(data) {
         // ensure the json data is a string
+        if (data['username'] && !(typeof data['username'] === 'string' || data['username'] instanceof String)) {
+            throw new Error("Expected the field `username` to be a primitive type in the JSON string but got " + data['username']);
+        }
+        // ensure the json data is a string
         if (data['password'] && !(typeof data['password'] === 'string' || data['password'] instanceof String)) {
             throw new Error("Expected the field `password` to be a primitive type in the JSON string but got " + data['password']);
         }
         // ensure the json data is a string
         if (data['role'] && !(typeof data['role'] === 'string' || data['role'] instanceof String)) {
             throw new Error("Expected the field `role` to be a primitive type in the JSON string but got " + data['role']);
-        }
-        // validate the optional field `profile`
-        if (data['profile']) { // data not null
-          ProfilePaymentHistoryView.validateJSON(data['profile']);
         }
         if (data['authorities']) { // data not null
             // ensure the json data is an array
@@ -150,6 +149,11 @@ AccountPaymentHistoryView.prototype['deletedAt'] = undefined;
 AccountPaymentHistoryView.prototype['id'] = undefined;
 
 /**
+ * @member {String} username
+ */
+AccountPaymentHistoryView.prototype['username'] = undefined;
+
+/**
  * @member {String} password
  */
 AccountPaymentHistoryView.prototype['password'] = undefined;
@@ -165,9 +169,9 @@ AccountPaymentHistoryView.prototype['role'] = undefined;
 AccountPaymentHistoryView.prototype['active'] = undefined;
 
 /**
- * @member {module:model/ProfilePaymentHistoryView} profile
+ * @member {Array.<module:model/GrantedAuthorityPaymentHistoryView>} authorities
  */
-AccountPaymentHistoryView.prototype['profile'] = undefined;
+AccountPaymentHistoryView.prototype['authorities'] = undefined;
 
 /**
  * @member {Boolean} accountNonExpired
@@ -183,11 +187,6 @@ AccountPaymentHistoryView.prototype['credentialsNonExpired'] = undefined;
  * @member {Boolean} accountNonLocked
  */
 AccountPaymentHistoryView.prototype['accountNonLocked'] = undefined;
-
-/**
- * @member {Array.<module:model/GrantedAuthorityPaymentHistoryView>} authorities
- */
-AccountPaymentHistoryView.prototype['authorities'] = undefined;
 
 /**
  * @member {Boolean} enabled

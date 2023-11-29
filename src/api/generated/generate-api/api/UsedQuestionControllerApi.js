@@ -13,6 +13,8 @@
 
 
 import ApiClient from "../ApiClient";
+import ResponseDTOString from '../model/ResponseDTOString';
+import ResponseDTOUsedQuestion from '../model/ResponseDTOUsedQuestion';
 import UsedQuestionRequestViewUsedQuestion from '../model/UsedQuestionRequestViewUsedQuestion';
 import UsedQuestionViewUsedQuestion from '../model/UsedQuestionViewUsedQuestion';
 import UsedQuestionViewUsedQuestionDoQuiz from '../model/UsedQuestionViewUsedQuestionDoQuiz';
@@ -35,6 +37,129 @@ export default class UsedQuestionControllerApi {
         this.apiClient = apiClient || ApiClient.instance;
     }
 
+
+    /**
+     * Callback function to receive the result of the checkCanDoQuiz operation.
+     * @callback module:api/UsedQuestionControllerApi~checkCanDoQuizCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/ResponseDTOString} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Number} quizId 
+     * @param {module:api/UsedQuestionControllerApi~checkCanDoQuizCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/ResponseDTOString}
+     */
+    checkCanDoQuiz(quizId, callback) {
+      let postBody = null;
+      // verify the required parameter 'quizId' is set
+      if (quizId === undefined || quizId === null) {
+        throw new Error("Missing the required parameter 'quizId' when calling checkCanDoQuiz");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'quiz_id': quizId
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = ResponseDTOString;
+      return this.apiClient.callApi(
+        '/api/v1/used-question/check-can-do', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the disableUsedQuestion operation.
+     * @callback module:api/UsedQuestionControllerApi~disableUsedQuestionCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/ResponseDTOUsedQuestion} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Number} usedQuestionId 
+     * @param {module:api/UsedQuestionControllerApi~disableUsedQuestionCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/ResponseDTOUsedQuestion}
+     */
+    disableUsedQuestion(usedQuestionId, callback) {
+      let postBody = null;
+      // verify the required parameter 'usedQuestionId' is set
+      if (usedQuestionId === undefined || usedQuestionId === null) {
+        throw new Error("Missing the required parameter 'usedQuestionId' when calling disableUsedQuestion");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'used_question_id': usedQuestionId
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = ResponseDTOUsedQuestion;
+      return this.apiClient.callApi(
+        '/api/v1/used-question/disable', 'DELETE',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the enableUsedQuestion operation.
+     * @callback module:api/UsedQuestionControllerApi~enableUsedQuestionCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/ResponseDTOUsedQuestion} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Number} usedQuestionId 
+     * @param {module:api/UsedQuestionControllerApi~enableUsedQuestionCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/ResponseDTOUsedQuestion}
+     */
+    enableUsedQuestion(usedQuestionId, callback) {
+      let postBody = null;
+      // verify the required parameter 'usedQuestionId' is set
+      if (usedQuestionId === undefined || usedQuestionId === null) {
+        throw new Error("Missing the required parameter 'usedQuestionId' when calling enableUsedQuestion");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'used_question_id': usedQuestionId
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = ResponseDTOUsedQuestion;
+      return this.apiClient.callApi(
+        '/api/v1/used-question/enable', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
 
     /**
      * Callback function to receive the result of the findAllUsedQuestion operation.

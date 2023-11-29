@@ -12,7 +12,6 @@
  */
 
 import ApiClient from '../ApiClient';
-import AccountReportView from './AccountReportView';
 
 /**
  * The TeacherReportView model module.
@@ -54,9 +53,6 @@ class TeacherReportView {
             if (data.hasOwnProperty('rating')) {
                 obj['rating'] = ApiClient.convertToType(data['rating'], 'Number');
             }
-            if (data.hasOwnProperty('account')) {
-                obj['account'] = AccountReportView.constructFromObject(data['account']);
-            }
         }
         return obj;
     }
@@ -70,10 +66,6 @@ class TeacherReportView {
         // ensure the json data is a string
         if (data['teacherNumber'] && !(typeof data['teacherNumber'] === 'string' || data['teacherNumber'] instanceof String)) {
             throw new Error("Expected the field `teacherNumber` to be a primitive type in the JSON string but got " + data['teacherNumber']);
-        }
-        // validate the optional field `account`
-        if (data['account']) { // data not null
-          AccountReportView.validateJSON(data['account']);
         }
 
         return true;
@@ -93,11 +85,6 @@ TeacherReportView.prototype['teacherNumber'] = undefined;
  * @member {Number} rating
  */
 TeacherReportView.prototype['rating'] = undefined;
-
-/**
- * @member {module:model/AccountReportView} account
- */
-TeacherReportView.prototype['account'] = undefined;
 
 
 

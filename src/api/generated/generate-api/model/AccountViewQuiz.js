@@ -13,7 +13,6 @@
 
 import ApiClient from '../ApiClient';
 import GrantedAuthorityViewQuiz from './GrantedAuthorityViewQuiz';
-import ProfileViewQuiz from './ProfileViewQuiz';
 
 /**
  * The AccountViewQuiz model module.
@@ -67,8 +66,8 @@ class AccountViewQuiz {
             if (data.hasOwnProperty('active')) {
                 obj['active'] = ApiClient.convertToType(data['active'], 'Boolean');
             }
-            if (data.hasOwnProperty('profile')) {
-                obj['profile'] = ProfileViewQuiz.constructFromObject(data['profile']);
+            if (data.hasOwnProperty('authorities')) {
+                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthorityViewQuiz]);
             }
             if (data.hasOwnProperty('accountNonExpired')) {
                 obj['accountNonExpired'] = ApiClient.convertToType(data['accountNonExpired'], 'Boolean');
@@ -78,9 +77,6 @@ class AccountViewQuiz {
             }
             if (data.hasOwnProperty('accountNonLocked')) {
                 obj['accountNonLocked'] = ApiClient.convertToType(data['accountNonLocked'], 'Boolean');
-            }
-            if (data.hasOwnProperty('authorities')) {
-                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthorityViewQuiz]);
             }
             if (data.hasOwnProperty('enabled')) {
                 obj['enabled'] = ApiClient.convertToType(data['enabled'], 'Boolean');
@@ -102,10 +98,6 @@ class AccountViewQuiz {
         // ensure the json data is a string
         if (data['role'] && !(typeof data['role'] === 'string' || data['role'] instanceof String)) {
             throw new Error("Expected the field `role` to be a primitive type in the JSON string but got " + data['role']);
-        }
-        // validate the optional field `profile`
-        if (data['profile']) { // data not null
-          ProfileViewQuiz.validateJSON(data['profile']);
         }
         if (data['authorities']) { // data not null
             // ensure the json data is an array
@@ -157,9 +149,9 @@ AccountViewQuiz.prototype['role'] = undefined;
 AccountViewQuiz.prototype['active'] = undefined;
 
 /**
- * @member {module:model/ProfileViewQuiz} profile
+ * @member {Array.<module:model/GrantedAuthorityViewQuiz>} authorities
  */
-AccountViewQuiz.prototype['profile'] = undefined;
+AccountViewQuiz.prototype['authorities'] = undefined;
 
 /**
  * @member {Boolean} accountNonExpired
@@ -175,11 +167,6 @@ AccountViewQuiz.prototype['credentialsNonExpired'] = undefined;
  * @member {Boolean} accountNonLocked
  */
 AccountViewQuiz.prototype['accountNonLocked'] = undefined;
-
-/**
- * @member {Array.<module:model/GrantedAuthorityViewQuiz>} authorities
- */
-AccountViewQuiz.prototype['authorities'] = undefined;
 
 /**
  * @member {Boolean} enabled

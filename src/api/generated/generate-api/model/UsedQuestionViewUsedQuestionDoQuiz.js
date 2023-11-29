@@ -55,6 +55,9 @@ class UsedQuestionViewUsedQuestionDoQuiz {
             if (data.hasOwnProperty('content')) {
                 obj['content'] = ApiClient.convertToType(data['content'], 'String');
             }
+            if (data.hasOwnProperty('status')) {
+                obj['status'] = ApiClient.convertToType(data['status'], 'Boolean');
+            }
             if (data.hasOwnProperty('quiz')) {
                 obj['quiz'] = QuizViewUsedQuestionDoQuiz.constructFromObject(data['quiz']);
             }
@@ -107,6 +110,11 @@ UsedQuestionViewUsedQuestionDoQuiz.prototype['id'] = undefined;
  * @member {String} content
  */
 UsedQuestionViewUsedQuestionDoQuiz.prototype['content'] = undefined;
+
+/**
+ * @member {Boolean} status
+ */
+UsedQuestionViewUsedQuestionDoQuiz.prototype['status'] = undefined;
 
 /**
  * @member {module:model/QuizViewUsedQuestionDoQuiz} quiz

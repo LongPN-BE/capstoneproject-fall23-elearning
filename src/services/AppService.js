@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 const BASE_URL = 'https://api.fpt-ec.click/onlearn/api/v1';
 // const BASE_URL = 'http://localhost:8080/api/v1';
 
-export const fetchData = async (endpoint, token) => {
+export const fetchData = async (endpoint, token, method) => {
     try {
         const headers = {
             'Content-Type': 'application/json',
@@ -16,7 +16,7 @@ export const fetchData = async (endpoint, token) => {
         }
 
         const response = await fetch(`${BASE_URL}${endpoint}`, {
-            method: 'GET',
+            method: method ? method : 'GET',
             headers: headers,
         });
 
@@ -27,10 +27,8 @@ export const fetchData = async (endpoint, token) => {
             } else if (response.status === 401) {
                 Cookies.remove('token')
                 Cookies.remove('user')
-            } else if (response.status === 403) {
-                throw new Error(`Forbidden! Status: ${response.status}`);
             } else if (response.status === 500) {
-                throw new Error(`Internal Server Error! Status: ${response.status}`);
+                return response;
             } else {
                 throw new Error(`HTTP Error! Status: ${response.status}`);
             }

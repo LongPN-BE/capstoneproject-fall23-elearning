@@ -12,7 +12,6 @@
  */
 
 import ApiClient from '../ApiClient';
-import AccountViewUsedQuestionDoQuiz from './AccountViewUsedQuestionDoQuiz';
 
 /**
  * The TeacherViewUsedQuestionDoQuiz model module.
@@ -54,9 +53,6 @@ class TeacherViewUsedQuestionDoQuiz {
             if (data.hasOwnProperty('rating')) {
                 obj['rating'] = ApiClient.convertToType(data['rating'], 'Number');
             }
-            if (data.hasOwnProperty('account')) {
-                obj['account'] = AccountViewUsedQuestionDoQuiz.constructFromObject(data['account']);
-            }
         }
         return obj;
     }
@@ -70,10 +66,6 @@ class TeacherViewUsedQuestionDoQuiz {
         // ensure the json data is a string
         if (data['teacherNumber'] && !(typeof data['teacherNumber'] === 'string' || data['teacherNumber'] instanceof String)) {
             throw new Error("Expected the field `teacherNumber` to be a primitive type in the JSON string but got " + data['teacherNumber']);
-        }
-        // validate the optional field `account`
-        if (data['account']) { // data not null
-          AccountViewUsedQuestionDoQuiz.validateJSON(data['account']);
         }
 
         return true;
@@ -93,11 +85,6 @@ TeacherViewUsedQuestionDoQuiz.prototype['teacherNumber'] = undefined;
  * @member {Number} rating
  */
 TeacherViewUsedQuestionDoQuiz.prototype['rating'] = undefined;
-
-/**
- * @member {module:model/AccountViewUsedQuestionDoQuiz} account
- */
-TeacherViewUsedQuestionDoQuiz.prototype['account'] = undefined;
 
 
 

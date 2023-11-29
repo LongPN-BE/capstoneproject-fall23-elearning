@@ -128,7 +128,7 @@ class CourseViewUsedQuestionDoQuiz {
 CourseViewUsedQuestionDoQuiz.prototype['name'] = undefined;
 
 /**
- * @member {String} status
+ * @member {module:model/CourseViewUsedQuestionDoQuiz.StatusEnum} status
  */
 CourseViewUsedQuestionDoQuiz.prototype['status'] = undefined;
 
@@ -174,6 +174,45 @@ CourseViewUsedQuestionDoQuiz.prototype['subject'] = undefined;
 
 
 
+
+
+/**
+ * Allowed values for the <code>status</code> property.
+ * @enum {String}
+ * @readonly
+ */
+CourseViewUsedQuestionDoQuiz['StatusEnum'] = {
+
+    /**
+     * value: "ACTIVE"
+     * @const
+     */
+    "ACTIVE": "ACTIVE",
+
+    /**
+     * value: "DEACTIVE"
+     * @const
+     */
+    "DEACTIVE": "DEACTIVE",
+
+    /**
+     * value: "PENDING"
+     * @const
+     */
+    "PENDING": "PENDING",
+
+    /**
+     * value: "DRAFT"
+     * @const
+     */
+    "DRAFT": "DRAFT",
+
+    /**
+     * value: "REJECT"
+     * @const
+     */
+    "REJECT": "REJECT"
+};
 
 
 

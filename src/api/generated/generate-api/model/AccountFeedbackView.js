@@ -13,7 +13,6 @@
 
 import ApiClient from '../ApiClient';
 import GrantedAuthorityFeedbackView from './GrantedAuthorityFeedbackView';
-import ProfileFeedbackView from './ProfileFeedbackView';
 
 /**
  * The AccountFeedbackView model module.
@@ -70,8 +69,8 @@ class AccountFeedbackView {
             if (data.hasOwnProperty('active')) {
                 obj['active'] = ApiClient.convertToType(data['active'], 'Boolean');
             }
-            if (data.hasOwnProperty('profile')) {
-                obj['profile'] = ProfileFeedbackView.constructFromObject(data['profile']);
+            if (data.hasOwnProperty('authorities')) {
+                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthorityFeedbackView]);
             }
             if (data.hasOwnProperty('accountNonExpired')) {
                 obj['accountNonExpired'] = ApiClient.convertToType(data['accountNonExpired'], 'Boolean');
@@ -81,9 +80,6 @@ class AccountFeedbackView {
             }
             if (data.hasOwnProperty('accountNonLocked')) {
                 obj['accountNonLocked'] = ApiClient.convertToType(data['accountNonLocked'], 'Boolean');
-            }
-            if (data.hasOwnProperty('authorities')) {
-                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthorityFeedbackView]);
             }
             if (data.hasOwnProperty('enabled')) {
                 obj['enabled'] = ApiClient.convertToType(data['enabled'], 'Boolean');
@@ -109,10 +105,6 @@ class AccountFeedbackView {
         // ensure the json data is a string
         if (data['role'] && !(typeof data['role'] === 'string' || data['role'] instanceof String)) {
             throw new Error("Expected the field `role` to be a primitive type in the JSON string but got " + data['role']);
-        }
-        // validate the optional field `profile`
-        if (data['profile']) { // data not null
-          ProfileFeedbackView.validateJSON(data['profile']);
         }
         if (data['authorities']) { // data not null
             // ensure the json data is an array
@@ -169,9 +161,9 @@ AccountFeedbackView.prototype['role'] = undefined;
 AccountFeedbackView.prototype['active'] = undefined;
 
 /**
- * @member {module:model/ProfileFeedbackView} profile
+ * @member {Array.<module:model/GrantedAuthorityFeedbackView>} authorities
  */
-AccountFeedbackView.prototype['profile'] = undefined;
+AccountFeedbackView.prototype['authorities'] = undefined;
 
 /**
  * @member {Boolean} accountNonExpired
@@ -187,11 +179,6 @@ AccountFeedbackView.prototype['credentialsNonExpired'] = undefined;
  * @member {Boolean} accountNonLocked
  */
 AccountFeedbackView.prototype['accountNonLocked'] = undefined;
-
-/**
- * @member {Array.<module:model/GrantedAuthorityFeedbackView>} authorities
- */
-AccountFeedbackView.prototype['authorities'] = undefined;
 
 /**
  * @member {Boolean} enabled

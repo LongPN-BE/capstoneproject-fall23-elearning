@@ -13,7 +13,6 @@
 
 import ApiClient from '../ApiClient';
 import GrantedAuthorityResultQuizView from './GrantedAuthorityResultQuizView';
-import ProfileResultQuizView from './ProfileResultQuizView';
 
 /**
  * The AccountResultQuizView model module.
@@ -70,8 +69,8 @@ class AccountResultQuizView {
             if (data.hasOwnProperty('active')) {
                 obj['active'] = ApiClient.convertToType(data['active'], 'Boolean');
             }
-            if (data.hasOwnProperty('profile')) {
-                obj['profile'] = ProfileResultQuizView.constructFromObject(data['profile']);
+            if (data.hasOwnProperty('authorities')) {
+                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthorityResultQuizView]);
             }
             if (data.hasOwnProperty('accountNonExpired')) {
                 obj['accountNonExpired'] = ApiClient.convertToType(data['accountNonExpired'], 'Boolean');
@@ -81,9 +80,6 @@ class AccountResultQuizView {
             }
             if (data.hasOwnProperty('accountNonLocked')) {
                 obj['accountNonLocked'] = ApiClient.convertToType(data['accountNonLocked'], 'Boolean');
-            }
-            if (data.hasOwnProperty('authorities')) {
-                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthorityResultQuizView]);
             }
             if (data.hasOwnProperty('enabled')) {
                 obj['enabled'] = ApiClient.convertToType(data['enabled'], 'Boolean');
@@ -109,10 +105,6 @@ class AccountResultQuizView {
         // ensure the json data is a string
         if (data['role'] && !(typeof data['role'] === 'string' || data['role'] instanceof String)) {
             throw new Error("Expected the field `role` to be a primitive type in the JSON string but got " + data['role']);
-        }
-        // validate the optional field `profile`
-        if (data['profile']) { // data not null
-          ProfileResultQuizView.validateJSON(data['profile']);
         }
         if (data['authorities']) { // data not null
             // ensure the json data is an array
@@ -169,9 +161,9 @@ AccountResultQuizView.prototype['role'] = undefined;
 AccountResultQuizView.prototype['active'] = undefined;
 
 /**
- * @member {module:model/ProfileResultQuizView} profile
+ * @member {Array.<module:model/GrantedAuthorityResultQuizView>} authorities
  */
-AccountResultQuizView.prototype['profile'] = undefined;
+AccountResultQuizView.prototype['authorities'] = undefined;
 
 /**
  * @member {Boolean} accountNonExpired
@@ -187,11 +179,6 @@ AccountResultQuizView.prototype['credentialsNonExpired'] = undefined;
  * @member {Boolean} accountNonLocked
  */
 AccountResultQuizView.prototype['accountNonLocked'] = undefined;
-
-/**
- * @member {Array.<module:model/GrantedAuthorityResultQuizView>} authorities
- */
-AccountResultQuizView.prototype['authorities'] = undefined;
 
 /**
  * @member {Boolean} enabled

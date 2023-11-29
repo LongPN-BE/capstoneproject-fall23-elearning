@@ -14,7 +14,13 @@
 
 import ApiClient from "../ApiClient";
 import CourseCourseView from '../model/CourseCourseView';
+import CourseFilterCourseView from '../model/CourseFilterCourseView';
 import CourseRequestCourseView from '../model/CourseRequestCourseView';
+import RejectCourseRequestCourseView from '../model/RejectCourseRequestCourseView';
+import ResponseDTOCourse from '../model/ResponseDTOCourse';
+import ResponseDTOCourseCourseView from '../model/ResponseDTOCourseCourseView';
+import ResponseDTOInteger from '../model/ResponseDTOInteger';
+import ResponseDTOTransaction from '../model/ResponseDTOTransaction';
 
 /**
 * CourseController service.
@@ -34,6 +40,94 @@ export default class CourseControllerApi {
         this.apiClient = apiClient || ApiClient.instance;
     }
 
+
+    /**
+     * Callback function to receive the result of the approveCourse1 operation.
+     * @callback module:api/CourseControllerApi~approveCourse1Callback
+     * @param {String} error Error message, if any.
+     * @param {module:model/ResponseDTOCourseCourseView} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Number} courseId 
+     * @param {module:api/CourseControllerApi~approveCourse1Callback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/ResponseDTOCourseCourseView}
+     */
+    approveCourse1(courseId, callback) {
+      let postBody = null;
+      // verify the required parameter 'courseId' is set
+      if (courseId === undefined || courseId === null) {
+        throw new Error("Missing the required parameter 'courseId' when calling approveCourse1");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'course_id': courseId
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = ResponseDTOCourseCourseView;
+      return this.apiClient.callApi(
+        '/api/v1/course/approve', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the chargeFeeTeacher operation.
+     * @callback module:api/CourseControllerApi~chargeFeeTeacherCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/ResponseDTOTransaction} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Number} teacherId 
+     * @param {Number} courseId 
+     * @param {module:api/CourseControllerApi~chargeFeeTeacherCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/ResponseDTOTransaction}
+     */
+    chargeFeeTeacher(teacherId, courseId, callback) {
+      let postBody = null;
+      // verify the required parameter 'teacherId' is set
+      if (teacherId === undefined || teacherId === null) {
+        throw new Error("Missing the required parameter 'teacherId' when calling chargeFeeTeacher");
+      }
+      // verify the required parameter 'courseId' is set
+      if (courseId === undefined || courseId === null) {
+        throw new Error("Missing the required parameter 'courseId' when calling chargeFeeTeacher");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'teacher_id': teacherId,
+        'course_id': courseId
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = ResponseDTOTransaction;
+      return this.apiClient.callApi(
+        '/api/v1/course/charge-fee-teacher', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
 
     /**
      * Callback function to receive the result of the deleteCourse operation.
@@ -71,6 +165,46 @@ export default class CourseControllerApi {
       let returnType = 'String';
       return this.apiClient.callApi(
         '/api/v1/course/delete', 'DELETE',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the filterCourse operation.
+     * @callback module:api/CourseControllerApi~filterCourseCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<module:model/CourseCourseView>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {module:model/CourseFilterCourseView} courseFilterCourseView 
+     * @param {module:api/CourseControllerApi~filterCourseCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<module:model/CourseCourseView>}
+     */
+    filterCourse(courseFilterCourseView, callback) {
+      let postBody = courseFilterCourseView;
+      // verify the required parameter 'courseFilterCourseView' is set
+      if (courseFilterCourseView === undefined || courseFilterCourseView === null) {
+        throw new Error("Missing the required parameter 'courseFilterCourseView' when calling filterCourse");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = ['application/json'];
+      let accepts = ['*/*'];
+      let returnType = [CourseCourseView];
+      return this.apiClient.callApi(
+        '/api/v1/course/search', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );
@@ -210,6 +344,41 @@ export default class CourseControllerApi {
     }
 
     /**
+     * Callback function to receive the result of the getAllByStatus operation.
+     * @callback module:api/CourseControllerApi~getAllByStatusCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<module:model/CourseCourseView>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {module:api/CourseControllerApi~getAllByStatusCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<module:model/CourseCourseView>}
+     */
+    getAllByStatus(callback) {
+      let postBody = null;
+
+      let pathParams = {
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = [];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = [CourseCourseView];
+      return this.apiClient.callApi(
+        '/api/v1/course/by-status-active', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
      * Callback function to receive the result of the getAllCourses operation.
      * @callback module:api/CourseControllerApi~getAllCoursesCallback
      * @param {String} error Error message, if any.
@@ -233,12 +402,53 @@ export default class CourseControllerApi {
       let formParams = {
       };
 
-      let authNames = ['Bearer'];
+      let authNames = [];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [CourseCourseView];
       return this.apiClient.callApi(
         '/api/v1/course/courses', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the getCountEnrolledByCourse operation.
+     * @callback module:api/CourseControllerApi~getCountEnrolledByCourseCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/ResponseDTOInteger} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Number} courseId 
+     * @param {module:api/CourseControllerApi~getCountEnrolledByCourseCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/ResponseDTOInteger}
+     */
+    getCountEnrolledByCourse(courseId, callback) {
+      let postBody = null;
+      // verify the required parameter 'courseId' is set
+      if (courseId === undefined || courseId === null) {
+        throw new Error("Missing the required parameter 'courseId' when calling getCountEnrolledByCourse");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'course_id': courseId
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = ResponseDTOInteger;
+      return this.apiClient.callApi(
+        '/api/v1/course/count-enrolled', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );
@@ -280,6 +490,87 @@ export default class CourseControllerApi {
       let returnType = CourseCourseView;
       return this.apiClient.callApi(
         '/api/v1/course/byId', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the rejectCourse operation.
+     * @callback module:api/CourseControllerApi~rejectCourseCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/ResponseDTOCourseCourseView} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {module:model/RejectCourseRequestCourseView} rejectCourseRequestCourseView 
+     * @param {module:api/CourseControllerApi~rejectCourseCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/ResponseDTOCourseCourseView}
+     */
+    rejectCourse(rejectCourseRequestCourseView, callback) {
+      let postBody = rejectCourseRequestCourseView;
+      // verify the required parameter 'rejectCourseRequestCourseView' is set
+      if (rejectCourseRequestCourseView === undefined || rejectCourseRequestCourseView === null) {
+        throw new Error("Missing the required parameter 'rejectCourseRequestCourseView' when calling rejectCourse");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = ['application/json'];
+      let accepts = ['*/*'];
+      let returnType = ResponseDTOCourseCourseView;
+      return this.apiClient.callApi(
+        '/api/v1/course/reject', 'POST',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the removeCourse operation.
+     * @callback module:api/CourseControllerApi~removeCourseCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/ResponseDTOCourse} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Number} courseId 
+     * @param {module:api/CourseControllerApi~removeCourseCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/ResponseDTOCourse}
+     */
+    removeCourse(courseId, callback) {
+      let postBody = null;
+      // verify the required parameter 'courseId' is set
+      if (courseId === undefined || courseId === null) {
+        throw new Error("Missing the required parameter 'courseId' when calling removeCourse");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'course_id': courseId
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = ResponseDTOCourse;
+      return this.apiClient.callApi(
+        '/api/v1/course/remove-course', 'DELETE',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );

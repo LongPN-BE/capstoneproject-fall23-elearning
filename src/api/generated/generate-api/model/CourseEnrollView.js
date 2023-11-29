@@ -136,7 +136,7 @@ CourseEnrollView.prototype['id'] = undefined;
 CourseEnrollView.prototype['name'] = undefined;
 
 /**
- * @member {String} status
+ * @member {module:model/CourseEnrollView.StatusEnum} status
  */
 CourseEnrollView.prototype['status'] = undefined;
 
@@ -182,6 +182,45 @@ CourseEnrollView.prototype['subject'] = undefined;
 
 
 
+
+
+/**
+ * Allowed values for the <code>status</code> property.
+ * @enum {String}
+ * @readonly
+ */
+CourseEnrollView['StatusEnum'] = {
+
+    /**
+     * value: "ACTIVE"
+     * @const
+     */
+    "ACTIVE": "ACTIVE",
+
+    /**
+     * value: "DEACTIVE"
+     * @const
+     */
+    "DEACTIVE": "DEACTIVE",
+
+    /**
+     * value: "PENDING"
+     * @const
+     */
+    "PENDING": "PENDING",
+
+    /**
+     * value: "DRAFT"
+     * @const
+     */
+    "DRAFT": "DRAFT",
+
+    /**
+     * value: "REJECT"
+     * @const
+     */
+    "REJECT": "REJECT"
+};
 
 
 

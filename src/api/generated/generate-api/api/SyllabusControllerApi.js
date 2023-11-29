@@ -36,6 +36,47 @@ export default class SyllabusControllerApi {
 
 
     /**
+     * Callback function to receive the result of the findSyllabusByCourseEnrolled operation.
+     * @callback module:api/SyllabusControllerApi~findSyllabusByCourseEnrolledCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/SyllabusSyllabusView} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Number} courseId 
+     * @param {module:api/SyllabusControllerApi~findSyllabusByCourseEnrolledCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/SyllabusSyllabusView}
+     */
+    findSyllabusByCourseEnrolled(courseId, callback) {
+      let postBody = null;
+      // verify the required parameter 'courseId' is set
+      if (courseId === undefined || courseId === null) {
+        throw new Error("Missing the required parameter 'courseId' when calling findSyllabusByCourseEnrolled");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'course_id': courseId
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = SyllabusSyllabusView;
+      return this.apiClient.callApi(
+        '/api/v1/syllabus/by-course-enroll', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
      * Callback function to receive the result of the findSyllabusByCourseId operation.
      * @callback module:api/SyllabusControllerApi~findSyllabusByCourseIdCallback
      * @param {String} error Error message, if any.

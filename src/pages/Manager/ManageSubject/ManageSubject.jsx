@@ -95,7 +95,7 @@ export default function ListSubject() {
               text: 'Bạn đã cập nhật thành công môn' + subjectData.name + ' !',
               icon: 'success',
             });
-            //window.location.reload();
+            window.location.reload();
           }
         })
         .catch((err) => {
@@ -118,7 +118,7 @@ export default function ListSubject() {
               text: 'Bạn đã khởi tạo thành công môn' + subjectData.name + ' !',
               icon: 'success',
             });
-            //window.location.reload();
+            window.location.reload();
           }
         })
         .catch((err) => {

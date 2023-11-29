@@ -199,7 +199,7 @@ export default class ResultQuizControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [ResultQuizResultQuizView];

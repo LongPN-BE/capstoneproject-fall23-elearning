@@ -15,8 +15,9 @@
 import ApiClient from "../ApiClient";
 import CreateOrderRequest from '../model/CreateOrderRequest';
 import OrderResponse from '../model/OrderResponse';
-import PaymentHistoryWithdrawRequestView from '../model/PaymentHistoryWithdrawRequestView';
 import PayoutRequestWithdrawRequestView from '../model/PayoutRequestWithdrawRequestView';
+import ResponseDTOOrderResponse from '../model/ResponseDTOOrderResponse';
+import ResponseDTOPaymentHistoryWithdrawRequestView from '../model/ResponseDTOPaymentHistoryWithdrawRequestView';
 
 /**
 * PaypalV2Controller service.
@@ -123,14 +124,14 @@ export default class PaypalV2ControllerApi {
      * Callback function to receive the result of the createOrders operation.
      * @callback module:api/PaypalV2ControllerApi~createOrdersCallback
      * @param {String} error Error message, if any.
-     * @param {module:model/OrderResponse} data The data returned by the service call.
+     * @param {module:model/ResponseDTOOrderResponse} data The data returned by the service call.
      * @param {String} response The complete HTTP response.
      */
 
     /**
      * @param {module:model/CreateOrderRequest} createOrderRequest 
      * @param {module:api/PaypalV2ControllerApi~createOrdersCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/OrderResponse}
+     * data is of type: {@link module:model/ResponseDTOOrderResponse}
      */
     createOrders(createOrderRequest, callback) {
       let postBody = createOrderRequest;
@@ -151,7 +152,7 @@ export default class PaypalV2ControllerApi {
       let authNames = ['Bearer'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
-      let returnType = OrderResponse;
+      let returnType = ResponseDTOOrderResponse;
       return this.apiClient.callApi(
         '/api/v1/paypal/orders', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,
@@ -210,14 +211,14 @@ export default class PaypalV2ControllerApi {
      * Callback function to receive the result of the payoutWithdraw operation.
      * @callback module:api/PaypalV2ControllerApi~payoutWithdrawCallback
      * @param {String} error Error message, if any.
-     * @param {module:model/PaymentHistoryWithdrawRequestView} data The data returned by the service call.
+     * @param {module:model/ResponseDTOPaymentHistoryWithdrawRequestView} data The data returned by the service call.
      * @param {String} response The complete HTTP response.
      */
 
     /**
      * @param {module:model/PayoutRequestWithdrawRequestView} payoutRequestWithdrawRequestView 
      * @param {module:api/PaypalV2ControllerApi~payoutWithdrawCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/PaymentHistoryWithdrawRequestView}
+     * data is of type: {@link module:model/ResponseDTOPaymentHistoryWithdrawRequestView}
      */
     payoutWithdraw(payoutRequestWithdrawRequestView, callback) {
       let postBody = payoutRequestWithdrawRequestView;
@@ -238,7 +239,7 @@ export default class PaypalV2ControllerApi {
       let authNames = ['Bearer'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
-      let returnType = PaymentHistoryWithdrawRequestView;
+      let returnType = ResponseDTOPaymentHistoryWithdrawRequestView;
       return this.apiClient.callApi(
         '/api/v1/paypal/payout', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,

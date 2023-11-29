@@ -17,7 +17,9 @@ import Account from '../model/Account';
 import AccountDetailResponse from '../model/AccountDetailResponse';
 import AuthenticationRequest from '../model/AuthenticationRequest';
 import AuthenticationResponse from '../model/AuthenticationResponse';
+import CreateAccountRequest from '../model/CreateAccountRequest';
 import GoogleLoginRequest from '../model/GoogleLoginRequest';
+import ResponseDTOAccount from '../model/ResponseDTOAccount';
 
 /**
 * AuthenticationController service.
@@ -224,6 +226,46 @@ export default class AuthenticationControllerApi {
       let returnType = AuthenticationResponse;
       return this.apiClient.callApi(
         '/api/v1/auth/refresh-token', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the registerAccount operation.
+     * @callback module:api/AuthenticationControllerApi~registerAccountCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/ResponseDTOAccount} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {module:model/CreateAccountRequest} createAccountRequest 
+     * @param {module:api/AuthenticationControllerApi~registerAccountCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/ResponseDTOAccount}
+     */
+    registerAccount(createAccountRequest, callback) {
+      let postBody = createAccountRequest;
+      // verify the required parameter 'createAccountRequest' is set
+      if (createAccountRequest === undefined || createAccountRequest === null) {
+        throw new Error("Missing the required parameter 'createAccountRequest' when calling registerAccount");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = [];
+      let contentTypes = ['application/json'];
+      let accepts = ['*/*'];
+      let returnType = ResponseDTOAccount;
+      return this.apiClient.callApi(
+        '/api/v1/auth/register', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );

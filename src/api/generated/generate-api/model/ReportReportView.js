@@ -66,6 +66,9 @@ class ReportReportView {
             if (data.hasOwnProperty('student')) {
                 obj['student'] = ApiClient.convertToType(data['student'], Object);
             }
+            if (data.hasOwnProperty('reportType')) {
+                obj['reportType'] = ApiClient.convertToType(data['reportType'], 'String');
+            }
         }
         return obj;
     }
@@ -83,6 +86,10 @@ class ReportReportView {
         // validate the optional field `teacher`
         if (data['teacher']) { // data not null
           TeacherReportView.validateJSON(data['teacher']);
+        }
+        // ensure the json data is a string
+        if (data['reportType'] && !(typeof data['reportType'] === 'string' || data['reportType'] instanceof String)) {
+            throw new Error("Expected the field `reportType` to be a primitive type in the JSON string but got " + data['reportType']);
         }
 
         return true;
@@ -123,8 +130,34 @@ ReportReportView.prototype['teacher'] = undefined;
  */
 ReportReportView.prototype['student'] = undefined;
 
+/**
+ * @member {module:model/ReportReportView.ReportTypeEnum} reportType
+ */
+ReportReportView.prototype['reportType'] = undefined;
 
 
+
+
+
+/**
+ * Allowed values for the <code>reportType</code> property.
+ * @enum {String}
+ * @readonly
+ */
+ReportReportView['ReportTypeEnum'] = {
+
+    /**
+     * value: "STUDENT"
+     * @const
+     */
+    "STUDENT": "STUDENT",
+
+    /**
+     * value: "TEACHER"
+     * @const
+     */
+    "TEACHER": "TEACHER"
+};
 
 
 

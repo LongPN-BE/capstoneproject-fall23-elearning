@@ -65,6 +65,9 @@ class EnrollFeedbackView {
             if (data.hasOwnProperty('commission')) {
                 obj['commission'] = ApiClient.convertToType(data['commission'], 'Number');
             }
+            if (data.hasOwnProperty('commissionAmount')) {
+                obj['commissionAmount'] = ApiClient.convertToType(data['commissionAmount'], 'Number');
+            }
             if (data.hasOwnProperty('status')) {
                 obj['status'] = ApiClient.convertToType(data['status'], 'String');
             }
@@ -79,6 +82,9 @@ class EnrollFeedbackView {
             }
             if (data.hasOwnProperty('syllabus')) {
                 obj['syllabus'] = SyllabusFeedbackView.constructFromObject(data['syllabus']);
+            }
+            if (data.hasOwnProperty('banned')) {
+                obj['banned'] = ApiClient.convertToType(data['banned'], 'Boolean');
             }
         }
         return obj;
@@ -145,6 +151,11 @@ EnrollFeedbackView.prototype['paymentStatus'] = undefined;
 EnrollFeedbackView.prototype['commission'] = undefined;
 
 /**
+ * @member {Number} commissionAmount
+ */
+EnrollFeedbackView.prototype['commissionAmount'] = undefined;
+
+/**
  * @member {module:model/EnrollFeedbackView.StatusEnum} status
  */
 EnrollFeedbackView.prototype['status'] = undefined;
@@ -168,6 +179,11 @@ EnrollFeedbackView.prototype['course'] = undefined;
  * @member {module:model/SyllabusFeedbackView} syllabus
  */
 EnrollFeedbackView.prototype['syllabus'] = undefined;
+
+/**
+ * @member {Boolean} banned
+ */
+EnrollFeedbackView.prototype['banned'] = undefined;
 
 
 
@@ -202,7 +218,13 @@ EnrollFeedbackView['StatusEnum'] = {
      * value: "REMOVED"
      * @const
      */
-    "REMOVED": "REMOVED"
+    "REMOVED": "REMOVED",
+
+    /**
+     * value: "REFUNDED"
+     * @const
+     */
+    "REFUNDED": "REFUNDED"
 };
 
 

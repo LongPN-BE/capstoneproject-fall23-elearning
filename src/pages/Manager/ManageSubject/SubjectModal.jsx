@@ -14,7 +14,7 @@ import {
 import moment from 'moment';
 import Cookies from 'js-cookie';
 
-const userTmp = JSON.parse(Cookies.get('user'));
+// const userTmp = JSON.parse(Cookies.get('user'));
 
 const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
   useEffect(() => {
@@ -25,7 +25,7 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
         description: subject.description,
         minPrice: subject.minPrice,
         createDate: subject.createDate,
-        staffId: userTmp.id,
+        // staffId: userTmp.id,
         status: subject.status,
       });
     } else {
@@ -34,7 +34,7 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
         name: '',
         description: '',
         minPrice: '',
-        staffId: userTmp.id,
+        // staffId: userTmp.id,
         status: false,
       });
     }
@@ -44,7 +44,7 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
     name: '',
     description: '',
     minPrice: '',
-    staffId: userTmp.id,
+    // staffId: userTmp.id,
     status: false,
   });
 
@@ -52,7 +52,7 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
     name: '',
     description: '',
     minPrice: '',
-    staffId: userTmp.id,
+    // staffId: userTmp.id,
     status: false,
   });
 
@@ -126,7 +126,7 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
       description: '',
       minPrice: '',
       createDate: new Date(),
-      staffId: userTmp.id,
+      // staffId: userTmp.id,
       status: false,
     });
 

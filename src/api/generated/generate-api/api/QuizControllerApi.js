@@ -16,7 +16,9 @@ import ApiClient from "../ApiClient";
 import DoQuizRequestResultQuizView from '../model/DoQuizRequestResultQuizView';
 import QuizRequestViewQuiz from '../model/QuizRequestViewQuiz';
 import QuizViewQuiz from '../model/QuizViewQuiz';
-import ResultQuizResultQuizView from '../model/ResultQuizResultQuizView';
+import ResponseDTOInteger from '../model/ResponseDTOInteger';
+import ResponseDTOQuiz from '../model/ResponseDTOQuiz';
+import ResponseDTOResultQuizResultQuizView from '../model/ResponseDTOResultQuizResultQuizView';
 
 /**
 * QuizController service.
@@ -41,20 +43,67 @@ export default class QuizControllerApi {
      * Callback function to receive the result of the deleteQuiz operation.
      * @callback module:api/QuizControllerApi~deleteQuizCallback
      * @param {String} error Error message, if any.
+     * @param {module:model/ResponseDTOInteger} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Number} quizId 
+     * @param {Number} studentId 
+     * @param {module:api/QuizControllerApi~deleteQuizCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/ResponseDTOInteger}
+     */
+    deleteQuiz(quizId, studentId, callback) {
+      let postBody = null;
+      // verify the required parameter 'quizId' is set
+      if (quizId === undefined || quizId === null) {
+        throw new Error("Missing the required parameter 'quizId' when calling deleteQuiz");
+      }
+      // verify the required parameter 'studentId' is set
+      if (studentId === undefined || studentId === null) {
+        throw new Error("Missing the required parameter 'studentId' when calling deleteQuiz");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'quizId': quizId,
+        'studentId': studentId
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = ResponseDTOInteger;
+      return this.apiClient.callApi(
+        '/api/v1/quiz/attempt-time', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the deleteQuiz1 operation.
+     * @callback module:api/QuizControllerApi~deleteQuiz1Callback
+     * @param {String} error Error message, if any.
      * @param {Object} data The data returned by the service call.
      * @param {String} response The complete HTTP response.
      */
 
     /**
      * @param {Number} quizId 
-     * @param {module:api/QuizControllerApi~deleteQuizCallback} callback The callback function, accepting three arguments: error, data, response
+     * @param {module:api/QuizControllerApi~deleteQuiz1Callback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link Object}
      */
-    deleteQuiz(quizId, callback) {
+    deleteQuiz1(quizId, callback) {
       let postBody = null;
       // verify the required parameter 'quizId' is set
       if (quizId === undefined || quizId === null) {
-        throw new Error("Missing the required parameter 'quizId' when calling deleteQuiz");
+        throw new Error("Missing the required parameter 'quizId' when calling deleteQuiz1");
       }
 
       let pathParams = {
@@ -79,17 +128,58 @@ export default class QuizControllerApi {
     }
 
     /**
+     * Callback function to receive the result of the disableQuiz operation.
+     * @callback module:api/QuizControllerApi~disableQuizCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/ResponseDTOQuiz} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Number} quizId 
+     * @param {module:api/QuizControllerApi~disableQuizCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/ResponseDTOQuiz}
+     */
+    disableQuiz(quizId, callback) {
+      let postBody = null;
+      // verify the required parameter 'quizId' is set
+      if (quizId === undefined || quizId === null) {
+        throw new Error("Missing the required parameter 'quizId' when calling disableQuiz");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'quizId': quizId
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = ResponseDTOQuiz;
+      return this.apiClient.callApi(
+        '/api/v1/quiz/disable', 'DELETE',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
      * Callback function to receive the result of the doQuiz operation.
      * @callback module:api/QuizControllerApi~doQuizCallback
      * @param {String} error Error message, if any.
-     * @param {module:model/ResultQuizResultQuizView} data The data returned by the service call.
+     * @param {module:model/ResponseDTOResultQuizResultQuizView} data The data returned by the service call.
      * @param {String} response The complete HTTP response.
      */
 
     /**
      * @param {module:model/DoQuizRequestResultQuizView} doQuizRequestResultQuizView 
      * @param {module:api/QuizControllerApi~doQuizCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/ResultQuizResultQuizView}
+     * data is of type: {@link module:model/ResponseDTOResultQuizResultQuizView}
      */
     doQuiz(doQuizRequestResultQuizView, callback) {
       let postBody = doQuizRequestResultQuizView;
@@ -110,9 +200,50 @@ export default class QuizControllerApi {
       let authNames = ['Bearer'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
-      let returnType = ResultQuizResultQuizView;
+      let returnType = ResponseDTOResultQuizResultQuizView;
       return this.apiClient.callApi(
         '/api/v1/quiz/do-quiz', 'POST',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the enableQuiz operation.
+     * @callback module:api/QuizControllerApi~enableQuizCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/ResponseDTOQuiz} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Number} quizId 
+     * @param {module:api/QuizControllerApi~enableQuizCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/ResponseDTOQuiz}
+     */
+    enableQuiz(quizId, callback) {
+      let postBody = null;
+      // verify the required parameter 'quizId' is set
+      if (quizId === undefined || quizId === null) {
+        throw new Error("Missing the required parameter 'quizId' when calling enableQuiz");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'quizId': quizId
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = ResponseDTOQuiz;
+      return this.apiClient.callApi(
+        '/api/v1/quiz/enable', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );
@@ -128,10 +259,13 @@ export default class QuizControllerApi {
 
     /**
      * @param {Number} lessonId 
+     * @param {Object} opts Optional parameters
+     * @param {String} opts.status  (default to '')
      * @param {module:api/QuizControllerApi~findAllQuizByLessonIdCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link Array.<module:model/QuizViewQuiz>}
      */
-    findAllQuizByLessonId(lessonId, callback) {
+    findAllQuizByLessonId(lessonId, opts, callback) {
+      opts = opts || {};
       let postBody = null;
       // verify the required parameter 'lessonId' is set
       if (lessonId === undefined || lessonId === null) {
@@ -141,7 +275,8 @@ export default class QuizControllerApi {
       let pathParams = {
       };
       let queryParams = {
-        'lesson_id': lessonId
+        'lesson_id': lessonId,
+        'status': opts['status']
       };
       let headerParams = {
       };

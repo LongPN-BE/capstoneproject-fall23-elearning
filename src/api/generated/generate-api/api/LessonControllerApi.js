@@ -77,6 +77,47 @@ export default class LessonControllerApi {
     }
 
     /**
+     * Callback function to receive the result of the findLessonBySyllabusId operation.
+     * @callback module:api/LessonControllerApi~findLessonBySyllabusIdCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<module:model/LessonLessonView>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Number} syllabusId 
+     * @param {module:api/LessonControllerApi~findLessonBySyllabusIdCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<module:model/LessonLessonView>}
+     */
+    findLessonBySyllabusId(syllabusId, callback) {
+      let postBody = null;
+      // verify the required parameter 'syllabusId' is set
+      if (syllabusId === undefined || syllabusId === null) {
+        throw new Error("Missing the required parameter 'syllabusId' when calling findLessonBySyllabusId");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'syllabus_id': syllabusId
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = [LessonLessonView];
+      return this.apiClient.callApi(
+        '/api/v1/lesson/by-syllabus', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
      * Callback function to receive the result of the getAllLesson operation.
      * @callback module:api/LessonControllerApi~getAllLessonCallback
      * @param {String} error Error message, if any.

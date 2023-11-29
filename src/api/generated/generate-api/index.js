@@ -24,7 +24,7 @@ import AccountLessonView from './model/AccountLessonView';
 import AccountPaymentHistoryView from './model/AccountPaymentHistoryView';
 import AccountPaymentMethodsView from './model/AccountPaymentMethodsView';
 import AccountQuestionView from './model/AccountQuestionView';
-import AccountReportView from './model/AccountReportView';
+import AccountRejectCourseView from './model/AccountRejectCourseView';
 import AccountResultDetailView from './model/AccountResultDetailView';
 import AccountResultQuizView from './model/AccountResultQuizView';
 import AccountSubjectView from './model/AccountSubjectView';
@@ -40,25 +40,31 @@ import AnswerQuestionView from './model/AnswerQuestionView';
 import AuthenticationRequest from './model/AuthenticationRequest';
 import AuthenticationResponse from './model/AuthenticationResponse';
 import BatchResponse from './model/BatchResponse';
+import ChangePasswordRequest from './model/ChangePasswordRequest';
 import Course from './model/Course';
 import CourseCourseView from './model/CourseCourseView';
 import CourseEnrollView from './model/CourseEnrollView';
 import CourseFeedbackView from './model/CourseFeedbackView';
+import CourseFilterCourseView from './model/CourseFilterCourseView';
 import CourseLessonView from './model/CourseLessonView';
 import CourseQuestionView from './model/CourseQuestionView';
+import CourseRejectCourseView from './model/CourseRejectCourseView';
 import CourseRequestCourseView from './model/CourseRequestCourseView';
+import CourseResponse from './model/CourseResponse';
 import CourseResultDetailView from './model/CourseResultDetailView';
 import CourseResultQuizView from './model/CourseResultQuizView';
 import CourseSyllabusView from './model/CourseSyllabusView';
 import CourseViewQuiz from './model/CourseViewQuiz';
 import CourseViewUsedQuestion from './model/CourseViewUsedQuestion';
 import CourseViewUsedQuestionDoQuiz from './model/CourseViewUsedQuestionDoQuiz';
+import CreateAccountRequest from './model/CreateAccountRequest';
 import CreateOrderRequest from './model/CreateOrderRequest';
 import DeviceDeviceView from './model/DeviceDeviceView';
 import DeviceRequestDeviceView from './model/DeviceRequestDeviceView';
 import DoFeedbackRequestFeedbackView from './model/DoFeedbackRequestFeedbackView';
 import DoQuizDetailRequestResultQuizView from './model/DoQuizDetailRequestResultQuizView';
 import DoQuizRequestResultQuizView from './model/DoQuizRequestResultQuizView';
+import Enroll from './model/Enroll';
 import EnrollEnrollView from './model/EnrollEnrollView';
 import EnrollFeedbackView from './model/EnrollFeedbackView';
 import EnrollRequestEnrollView from './model/EnrollRequestEnrollView';
@@ -84,7 +90,7 @@ import GrantedAuthorityLessonView from './model/GrantedAuthorityLessonView';
 import GrantedAuthorityPaymentHistoryView from './model/GrantedAuthorityPaymentHistoryView';
 import GrantedAuthorityPaymentMethodsView from './model/GrantedAuthorityPaymentMethodsView';
 import GrantedAuthorityQuestionView from './model/GrantedAuthorityQuestionView';
-import GrantedAuthorityReportView from './model/GrantedAuthorityReportView';
+import GrantedAuthorityRejectCourseView from './model/GrantedAuthorityRejectCourseView';
 import GrantedAuthorityResultDetailView from './model/GrantedAuthorityResultDetailView';
 import GrantedAuthorityResultQuizView from './model/GrantedAuthorityResultQuizView';
 import GrantedAuthoritySubjectView from './model/GrantedAuthoritySubjectView';
@@ -109,7 +115,8 @@ import LessonViewUsedQuestion from './model/LessonViewUsedQuestion';
 import LessonViewUsedQuestionDoQuiz from './model/LessonViewUsedQuestionDoQuiz';
 import LinkDescriptionResponse from './model/LinkDescriptionResponse';
 import OrderResponse from './model/OrderResponse';
-import PaginateCourse from './model/PaginateCourse';
+import PaginateCourseResponse from './model/PaginateCourseResponse';
+import PaymentHistoryFilterPaymentHistoryView from './model/PaymentHistoryFilterPaymentHistoryView';
 import PaymentHistoryPaymentHistoryView from './model/PaymentHistoryPaymentHistoryView';
 import PaymentHistoryRequestPaymentHistoryView from './model/PaymentHistoryRequestPaymentHistoryView';
 import PaymentHistoryWithdrawRequestView from './model/PaymentHistoryWithdrawRequestView';
@@ -119,34 +126,20 @@ import PayoutRequestWithdrawRequestView from './model/PayoutRequestWithdrawReque
 import PnsRequest from './model/PnsRequest';
 import Profile from './model/Profile';
 import ProfileCourseView from './model/ProfileCourseView';
-import ProfileDeviceView from './model/ProfileDeviceView';
-import ProfileEnrollView from './model/ProfileEnrollView';
-import ProfileFeedbackView from './model/ProfileFeedbackView';
-import ProfileLessonView from './model/ProfileLessonView';
-import ProfilePaymentHistoryView from './model/ProfilePaymentHistoryView';
-import ProfilePaymentMethodsView from './model/ProfilePaymentMethodsView';
-import ProfileQuestionView from './model/ProfileQuestionView';
-import ProfileReportView from './model/ProfileReportView';
-import ProfileResultDetailView from './model/ProfileResultDetailView';
-import ProfileResultQuizView from './model/ProfileResultQuizView';
-import ProfileSubjectView from './model/ProfileSubjectView';
-import ProfileSyllabusView from './model/ProfileSyllabusView';
-import ProfileTransactionView from './model/ProfileTransactionView';
-import ProfileViewQuiz from './model/ProfileViewQuiz';
-import ProfileViewUsedQuestion from './model/ProfileViewUsedQuestion';
-import ProfileViewUsedQuestionDoQuiz from './model/ProfileViewUsedQuestionDoQuiz';
-import ProfileWalletView from './model/ProfileWalletView';
-import ProfileWithdrawRequestView from './model/ProfileWithdrawRequestView';
-import Question from './model/Question';
+import ProfileRequest from './model/ProfileRequest';
 import QuestionQuestionView from './model/QuestionQuestionView';
 import QuestionRequestQuestionView from './model/QuestionRequestQuestionView';
+import Quiz from './model/Quiz';
 import QuizRequestViewQuiz from './model/QuizRequestViewQuiz';
 import QuizResultDetailView from './model/QuizResultDetailView';
 import QuizResultQuizView from './model/QuizResultQuizView';
 import QuizViewQuiz from './model/QuizViewQuiz';
 import QuizViewUsedQuestion from './model/QuizViewUsedQuestion';
 import QuizViewUsedQuestionDoQuiz from './model/QuizViewUsedQuestionDoQuiz';
-import RefundRequestEnrollView from './model/RefundRequestEnrollView';
+import RefundRequestTransactionView from './model/RefundRequestTransactionView';
+import RejectCourseRejectCourseView from './model/RejectCourseRejectCourseView';
+import RejectCourseRequestCourseView from './model/RejectCourseRequestCourseView';
+import Report from './model/Report';
 import ReportReportView from './model/ReportReportView';
 import ReportRequestReportView from './model/ReportRequestReportView';
 import Resource from './model/Resource';
@@ -163,6 +156,23 @@ import ResourceSyllabusView from './model/ResourceSyllabusView';
 import ResourceViewQuiz from './model/ResourceViewQuiz';
 import ResourceViewUsedQuestion from './model/ResourceViewUsedQuestion';
 import ResourceViewUsedQuestionDoQuiz from './model/ResourceViewUsedQuestionDoQuiz';
+import ResponseDTOAccount from './model/ResponseDTOAccount';
+import ResponseDTOCourse from './model/ResponseDTOCourse';
+import ResponseDTOCourseCourseView from './model/ResponseDTOCourseCourseView';
+import ResponseDTOInteger from './model/ResponseDTOInteger';
+import ResponseDTOListReport from './model/ResponseDTOListReport';
+import ResponseDTOListReportReportView from './model/ResponseDTOListReportReportView';
+import ResponseDTOLong from './model/ResponseDTOLong';
+import ResponseDTOOrderResponse from './model/ResponseDTOOrderResponse';
+import ResponseDTOPaymentHistoryWithdrawRequestView from './model/ResponseDTOPaymentHistoryWithdrawRequestView';
+import ResponseDTOProfile from './model/ResponseDTOProfile';
+import ResponseDTOQuiz from './model/ResponseDTOQuiz';
+import ResponseDTOResultQuizResultQuizView from './model/ResponseDTOResultQuizResultQuizView';
+import ResponseDTOString from './model/ResponseDTOString';
+import ResponseDTOSubjectSubjectView from './model/ResponseDTOSubjectSubjectView';
+import ResponseDTOTransaction from './model/ResponseDTOTransaction';
+import ResponseDTOTransactionTransactionView from './model/ResponseDTOTransactionTransactionView';
+import ResponseDTOUsedQuestion from './model/ResponseDTOUsedQuestion';
 import ResultDetailResultDetailView from './model/ResultDetailResultDetailView';
 import ResultDetailResultQuizView from './model/ResultDetailResultQuizView';
 import ResultQuizResultDetailView from './model/ResultQuizResultDetailView';
@@ -174,6 +184,7 @@ import StaffEnrollView from './model/StaffEnrollView';
 import StaffFeedbackView from './model/StaffFeedbackView';
 import StaffLessonView from './model/StaffLessonView';
 import StaffQuestionView from './model/StaffQuestionView';
+import StaffRejectCourseView from './model/StaffRejectCourseView';
 import StaffResultDetailView from './model/StaffResultDetailView';
 import StaffResultQuizView from './model/StaffResultQuizView';
 import StaffSubjectView from './model/StaffSubjectView';
@@ -193,6 +204,7 @@ import SubjectEnrollView from './model/SubjectEnrollView';
 import SubjectFeedbackView from './model/SubjectFeedbackView';
 import SubjectLessonView from './model/SubjectLessonView';
 import SubjectQuestionView from './model/SubjectQuestionView';
+import SubjectRejectCourseView from './model/SubjectRejectCourseView';
 import SubjectRequestSubjectView from './model/SubjectRequestSubjectView';
 import SubjectResultDetailView from './model/SubjectResultDetailView';
 import SubjectResultQuizView from './model/SubjectResultQuizView';
@@ -221,6 +233,7 @@ import TeacherFeedbackView from './model/TeacherFeedbackView';
 import TeacherLessonView from './model/TeacherLessonView';
 import TeacherPaymentHistoryView from './model/TeacherPaymentHistoryView';
 import TeacherQuestionView from './model/TeacherQuestionView';
+import TeacherRejectCourseView from './model/TeacherRejectCourseView';
 import TeacherReportView from './model/TeacherReportView';
 import TeacherResultDetailView from './model/TeacherResultDetailView';
 import TeacherResultQuizView from './model/TeacherResultQuizView';
@@ -230,26 +243,28 @@ import TeacherViewQuiz from './model/TeacherViewQuiz';
 import TeacherViewUsedQuestion from './model/TeacherViewUsedQuestion';
 import TeacherViewUsedQuestionDoQuiz from './model/TeacherViewUsedQuestionDoQuiz';
 import TeacherWithdrawRequestView from './model/TeacherWithdrawRequestView';
-import TransactionEnrollView from './model/TransactionEnrollView';
+import Transaction from './model/Transaction';
 import TransactionTransactionView from './model/TransactionTransactionView';
 import TransactionWithdrawRequestView from './model/TransactionWithdrawRequestView';
+import UpdateSubjectStatusSubjectView from './model/UpdateSubjectStatusSubjectView';
 import UsedAnswer from './model/UsedAnswer';
 import UsedAnswerRequest from './model/UsedAnswerRequest';
 import UsedAnswerResultDetailView from './model/UsedAnswerResultDetailView';
 import UsedAnswerViewUsedQuestion from './model/UsedAnswerViewUsedQuestion';
 import UsedAnswerViewUsedQuestionDoQuiz from './model/UsedAnswerViewUsedQuestionDoQuiz';
+import UsedQuestion from './model/UsedQuestion';
 import UsedQuestionRequestViewUsedQuestion from './model/UsedQuestionRequestViewUsedQuestion';
 import UsedQuestionResultDetailView from './model/UsedQuestionResultDetailView';
 import UsedQuestionResultQuizView from './model/UsedQuestionResultQuizView';
 import UsedQuestionViewUsedQuestion from './model/UsedQuestionViewUsedQuestion';
 import UsedQuestionViewUsedQuestionDoQuiz from './model/UsedQuestionViewUsedQuestionDoQuiz';
-import WalletEnrollView from './model/WalletEnrollView';
+import Wallet from './model/Wallet';
 import WalletPaymentHistoryView from './model/WalletPaymentHistoryView';
 import WalletRequestWalletView from './model/WalletRequestWalletView';
 import WalletTransactionView from './model/WalletTransactionView';
 import WalletWalletView from './model/WalletWalletView';
 import WalletWithdrawRequestView from './model/WalletWithdrawRequestView';
-import WithdrawalRequestEnrollView from './model/WithdrawalRequestEnrollView';
+import WithdrawalRequest from './model/WithdrawalRequest';
 import WithdrawalRequestTransactionView from './model/WithdrawalRequestTransactionView';
 import WithdrawalRequestWithdrawRequestView from './model/WithdrawalRequestWithdrawRequestView';
 import AccountControllerApi from './api/AccountControllerApi';
@@ -264,9 +279,11 @@ import LessonControllerApi from './api/LessonControllerApi';
 import PaymentHistoryControllerApi from './api/PaymentHistoryControllerApi';
 import PaymentMethodControllerApi from './api/PaymentMethodControllerApi';
 import PaypalV2ControllerApi from './api/PaypalV2ControllerApi';
+import ProfileControllerApi from './api/ProfileControllerApi';
 import PushNotificationControllerApi from './api/PushNotificationControllerApi';
 import QuestionControllerApi from './api/QuestionControllerApi';
 import QuizControllerApi from './api/QuizControllerApi';
+import RejectCourseControllerApi from './api/RejectCourseControllerApi';
 import ReportControllerApi from './api/ReportControllerApi';
 import ResourceControllerApi from './api/ResourceControllerApi';
 import ResultDetailControllerApi from './api/ResultDetailControllerApi';
@@ -389,10 +406,10 @@ export {
     AccountQuestionView,
 
     /**
-     * The AccountReportView model constructor.
-     * @property {module:model/AccountReportView}
+     * The AccountRejectCourseView model constructor.
+     * @property {module:model/AccountRejectCourseView}
      */
-    AccountReportView,
+    AccountRejectCourseView,
 
     /**
      * The AccountResultDetailView model constructor.
@@ -485,6 +502,12 @@ export {
     BatchResponse,
 
     /**
+     * The ChangePasswordRequest model constructor.
+     * @property {module:model/ChangePasswordRequest}
+     */
+    ChangePasswordRequest,
+
+    /**
      * The Course model constructor.
      * @property {module:model/Course}
      */
@@ -509,6 +532,12 @@ export {
     CourseFeedbackView,
 
     /**
+     * The CourseFilterCourseView model constructor.
+     * @property {module:model/CourseFilterCourseView}
+     */
+    CourseFilterCourseView,
+
+    /**
      * The CourseLessonView model constructor.
      * @property {module:model/CourseLessonView}
      */
@@ -521,10 +550,22 @@ export {
     CourseQuestionView,
 
     /**
+     * The CourseRejectCourseView model constructor.
+     * @property {module:model/CourseRejectCourseView}
+     */
+    CourseRejectCourseView,
+
+    /**
      * The CourseRequestCourseView model constructor.
      * @property {module:model/CourseRequestCourseView}
      */
     CourseRequestCourseView,
+
+    /**
+     * The CourseResponse model constructor.
+     * @property {module:model/CourseResponse}
+     */
+    CourseResponse,
 
     /**
      * The CourseResultDetailView model constructor.
@@ -563,6 +604,12 @@ export {
     CourseViewUsedQuestionDoQuiz,
 
     /**
+     * The CreateAccountRequest model constructor.
+     * @property {module:model/CreateAccountRequest}
+     */
+    CreateAccountRequest,
+
+    /**
      * The CreateOrderRequest model constructor.
      * @property {module:model/CreateOrderRequest}
      */
@@ -597,6 +644,12 @@ export {
      * @property {module:model/DoQuizRequestResultQuizView}
      */
     DoQuizRequestResultQuizView,
+
+    /**
+     * The Enroll model constructor.
+     * @property {module:model/Enroll}
+     */
+    Enroll,
 
     /**
      * The EnrollEnrollView model constructor.
@@ -749,10 +802,10 @@ export {
     GrantedAuthorityQuestionView,
 
     /**
-     * The GrantedAuthorityReportView model constructor.
-     * @property {module:model/GrantedAuthorityReportView}
+     * The GrantedAuthorityRejectCourseView model constructor.
+     * @property {module:model/GrantedAuthorityRejectCourseView}
      */
-    GrantedAuthorityReportView,
+    GrantedAuthorityRejectCourseView,
 
     /**
      * The GrantedAuthorityResultDetailView model constructor.
@@ -899,10 +952,16 @@ export {
     OrderResponse,
 
     /**
-     * The PaginateCourse model constructor.
-     * @property {module:model/PaginateCourse}
+     * The PaginateCourseResponse model constructor.
+     * @property {module:model/PaginateCourseResponse}
      */
-    PaginateCourse,
+    PaginateCourseResponse,
+
+    /**
+     * The PaymentHistoryFilterPaymentHistoryView model constructor.
+     * @property {module:model/PaymentHistoryFilterPaymentHistoryView}
+     */
+    PaymentHistoryFilterPaymentHistoryView,
 
     /**
      * The PaymentHistoryPaymentHistoryView model constructor.
@@ -959,118 +1018,10 @@ export {
     ProfileCourseView,
 
     /**
-     * The ProfileDeviceView model constructor.
-     * @property {module:model/ProfileDeviceView}
+     * The ProfileRequest model constructor.
+     * @property {module:model/ProfileRequest}
      */
-    ProfileDeviceView,
-
-    /**
-     * The ProfileEnrollView model constructor.
-     * @property {module:model/ProfileEnrollView}
-     */
-    ProfileEnrollView,
-
-    /**
-     * The ProfileFeedbackView model constructor.
-     * @property {module:model/ProfileFeedbackView}
-     */
-    ProfileFeedbackView,
-
-    /**
-     * The ProfileLessonView model constructor.
-     * @property {module:model/ProfileLessonView}
-     */
-    ProfileLessonView,
-
-    /**
-     * The ProfilePaymentHistoryView model constructor.
-     * @property {module:model/ProfilePaymentHistoryView}
-     */
-    ProfilePaymentHistoryView,
-
-    /**
-     * The ProfilePaymentMethodsView model constructor.
-     * @property {module:model/ProfilePaymentMethodsView}
-     */
-    ProfilePaymentMethodsView,
-
-    /**
-     * The ProfileQuestionView model constructor.
-     * @property {module:model/ProfileQuestionView}
-     */
-    ProfileQuestionView,
-
-    /**
-     * The ProfileReportView model constructor.
-     * @property {module:model/ProfileReportView}
-     */
-    ProfileReportView,
-
-    /**
-     * The ProfileResultDetailView model constructor.
-     * @property {module:model/ProfileResultDetailView}
-     */
-    ProfileResultDetailView,
-
-    /**
-     * The ProfileResultQuizView model constructor.
-     * @property {module:model/ProfileResultQuizView}
-     */
-    ProfileResultQuizView,
-
-    /**
-     * The ProfileSubjectView model constructor.
-     * @property {module:model/ProfileSubjectView}
-     */
-    ProfileSubjectView,
-
-    /**
-     * The ProfileSyllabusView model constructor.
-     * @property {module:model/ProfileSyllabusView}
-     */
-    ProfileSyllabusView,
-
-    /**
-     * The ProfileTransactionView model constructor.
-     * @property {module:model/ProfileTransactionView}
-     */
-    ProfileTransactionView,
-
-    /**
-     * The ProfileViewQuiz model constructor.
-     * @property {module:model/ProfileViewQuiz}
-     */
-    ProfileViewQuiz,
-
-    /**
-     * The ProfileViewUsedQuestion model constructor.
-     * @property {module:model/ProfileViewUsedQuestion}
-     */
-    ProfileViewUsedQuestion,
-
-    /**
-     * The ProfileViewUsedQuestionDoQuiz model constructor.
-     * @property {module:model/ProfileViewUsedQuestionDoQuiz}
-     */
-    ProfileViewUsedQuestionDoQuiz,
-
-    /**
-     * The ProfileWalletView model constructor.
-     * @property {module:model/ProfileWalletView}
-     */
-    ProfileWalletView,
-
-    /**
-     * The ProfileWithdrawRequestView model constructor.
-     * @property {module:model/ProfileWithdrawRequestView}
-     */
-    ProfileWithdrawRequestView,
-
-    /**
-     * The Question model constructor.
-     * @property {module:model/Question}
-     */
-    Question,
+    ProfileRequest,
 
     /**
      * The QuestionQuestionView model constructor.
@@ -1083,6 +1034,12 @@ export {
      * @property {module:model/QuestionRequestQuestionView}
      */
     QuestionRequestQuestionView,
+
+    /**
+     * The Quiz model constructor.
+     * @property {module:model/Quiz}
+     */
+    Quiz,
 
     /**
      * The QuizRequestViewQuiz model constructor.
@@ -1121,10 +1078,28 @@ export {
     QuizViewUsedQuestionDoQuiz,
 
     /**
-     * The RefundRequestEnrollView model constructor.
-     * @property {module:model/RefundRequestEnrollView}
+     * The RefundRequestTransactionView model constructor.
+     * @property {module:model/RefundRequestTransactionView}
      */
-    RefundRequestEnrollView,
+    RefundRequestTransactionView,
+
+    /**
+     * The RejectCourseRejectCourseView model constructor.
+     * @property {module:model/RejectCourseRejectCourseView}
+     */
+    RejectCourseRejectCourseView,
+
+    /**
+     * The RejectCourseRequestCourseView model constructor.
+     * @property {module:model/RejectCourseRequestCourseView}
+     */
+    RejectCourseRequestCourseView,
+
+    /**
+     * The Report model constructor.
+     * @property {module:model/Report}
+     */
+    Report,
 
     /**
      * The ReportReportView model constructor.
@@ -1223,6 +1198,108 @@ export {
     ResourceViewUsedQuestionDoQuiz,
 
     /**
+     * The ResponseDTOAccount model constructor.
+     * @property {module:model/ResponseDTOAccount}
+     */
+    ResponseDTOAccount,
+
+    /**
+     * The ResponseDTOCourse model constructor.
+     * @property {module:model/ResponseDTOCourse}
+     */
+    ResponseDTOCourse,
+
+    /**
+     * The ResponseDTOCourseCourseView model constructor.
+     * @property {module:model/ResponseDTOCourseCourseView}
+     */
+    ResponseDTOCourseCourseView,
+
+    /**
+     * The ResponseDTOInteger model constructor.
+     * @property {module:model/ResponseDTOInteger}
+     */
+    ResponseDTOInteger,
+
+    /**
+     * The ResponseDTOListReport model constructor.
+     * @property {module:model/ResponseDTOListReport}
+     */
+    ResponseDTOListReport,
+
+    /**
+     * The ResponseDTOListReportReportView model constructor.
+     * @property {module:model/ResponseDTOListReportReportView}
+     */
+    ResponseDTOListReportReportView,
+
+    /**
+     * The ResponseDTOLong model constructor.
+     * @property {module:model/ResponseDTOLong}
+     */
+    ResponseDTOLong,
+
+    /**
+     * The ResponseDTOOrderResponse model constructor.
+     * @property {module:model/ResponseDTOOrderResponse}
+     */
+    ResponseDTOOrderResponse,
+
+    /**
+     * The ResponseDTOPaymentHistoryWithdrawRequestView model constructor.
+     * @property {module:model/ResponseDTOPaymentHistoryWithdrawRequestView}
+     */
+    ResponseDTOPaymentHistoryWithdrawRequestView,
+
+    /**
+     * The ResponseDTOProfile model constructor.
+     * @property {module:model/ResponseDTOProfile}
+     */
+    ResponseDTOProfile,
+
+    /**
+     * The ResponseDTOQuiz model constructor.
+     * @property {module:model/ResponseDTOQuiz}
+     */
+    ResponseDTOQuiz,
+
+    /**
+     * The ResponseDTOResultQuizResultQuizView model constructor.
+     * @property {module:model/ResponseDTOResultQuizResultQuizView}
+     */
+    ResponseDTOResultQuizResultQuizView,
+
+    /**
+     * The ResponseDTOString model constructor.
+     * @property {module:model/ResponseDTOString}
+     */
+    ResponseDTOString,
+
+    /**
+     * The ResponseDTOSubjectSubjectView model constructor.
+     * @property {module:model/ResponseDTOSubjectSubjectView}
+     */
+    ResponseDTOSubjectSubjectView,
+
+    /**
+     * The ResponseDTOTransaction model constructor.
+     * @property {module:model/ResponseDTOTransaction}
+     */
+    ResponseDTOTransaction,
+
+    /**
+     * The ResponseDTOTransactionTransactionView model constructor.
+     * @property {module:model/ResponseDTOTransactionTransactionView}
+     */
+    ResponseDTOTransactionTransactionView,
+
+    /**
+     * The ResponseDTOUsedQuestion model constructor.
+     * @property {module:model/ResponseDTOUsedQuestion}
+     */
+    ResponseDTOUsedQuestion,
+
+    /**
      * The ResultDetailResultDetailView model constructor.
      * @property {module:model/ResultDetailResultDetailView}
      */
@@ -1287,6 +1364,12 @@ export {
      * @property {module:model/StaffQuestionView}
      */
     StaffQuestionView,
+
+    /**
+     * The StaffRejectCourseView model constructor.
+     * @property {module:model/StaffRejectCourseView}
+     */
+    StaffRejectCourseView,
 
     /**
      * The StaffResultDetailView model constructor.
@@ -1401,6 +1484,12 @@ export {
      * @property {module:model/SubjectQuestionView}
      */
     SubjectQuestionView,
+
+    /**
+     * The SubjectRejectCourseView model constructor.
+     * @property {module:model/SubjectRejectCourseView}
+     */
+    SubjectRejectCourseView,
 
     /**
      * The SubjectRequestSubjectView model constructor.
@@ -1571,6 +1660,12 @@ export {
     TeacherQuestionView,
 
     /**
+     * The TeacherRejectCourseView model constructor.
+     * @property {module:model/TeacherRejectCourseView}
+     */
+    TeacherRejectCourseView,
+
+    /**
      * The TeacherReportView model constructor.
      * @property {module:model/TeacherReportView}
      */
@@ -1625,10 +1720,10 @@ export {
     TeacherWithdrawRequestView,
 
     /**
-     * The TransactionEnrollView model constructor.
-     * @property {module:model/TransactionEnrollView}
+     * The Transaction model constructor.
+     * @property {module:model/Transaction}
      */
-    TransactionEnrollView,
+    Transaction,
 
     /**
      * The TransactionTransactionView model constructor.
@@ -1641,6 +1736,12 @@ export {
      * @property {module:model/TransactionWithdrawRequestView}
      */
     TransactionWithdrawRequestView,
+
+    /**
+     * The UpdateSubjectStatusSubjectView model constructor.
+     * @property {module:model/UpdateSubjectStatusSubjectView}
+     */
+    UpdateSubjectStatusSubjectView,
 
     /**
      * The UsedAnswer model constructor.
@@ -1673,6 +1774,12 @@ export {
     UsedAnswerViewUsedQuestionDoQuiz,
 
     /**
+     * The UsedQuestion model constructor.
+     * @property {module:model/UsedQuestion}
+     */
+    UsedQuestion,
+
+    /**
      * The UsedQuestionRequestViewUsedQuestion model constructor.
      * @property {module:model/UsedQuestionRequestViewUsedQuestion}
      */
@@ -1703,10 +1810,10 @@ export {
     UsedQuestionViewUsedQuestionDoQuiz,
 
     /**
-     * The WalletEnrollView model constructor.
-     * @property {module:model/WalletEnrollView}
+     * The Wallet model constructor.
+     * @property {module:model/Wallet}
      */
-    WalletEnrollView,
+    Wallet,
 
     /**
      * The WalletPaymentHistoryView model constructor.
@@ -1739,10 +1846,10 @@ export {
     WalletWithdrawRequestView,
 
     /**
-     * The WithdrawalRequestEnrollView model constructor.
-     * @property {module:model/WithdrawalRequestEnrollView}
+     * The WithdrawalRequest model constructor.
+     * @property {module:model/WithdrawalRequest}
      */
-    WithdrawalRequestEnrollView,
+    WithdrawalRequest,
 
     /**
      * The WithdrawalRequestTransactionView model constructor.
@@ -1829,6 +1936,12 @@ export {
     PaypalV2ControllerApi,
 
     /**
+    * The ProfileControllerApi service constructor.
+    * @property {module:api/ProfileControllerApi}
+    */
+    ProfileControllerApi,
+
+    /**
     * The PushNotificationControllerApi service constructor.
     * @property {module:api/PushNotificationControllerApi}
     */
@@ -1845,6 +1958,12 @@ export {
     * @property {module:api/QuizControllerApi}
     */
     QuizControllerApi,
+
+    /**
+    * The RejectCourseControllerApi service constructor.
+    * @property {module:api/RejectCourseControllerApi}
+    */
+    RejectCourseControllerApi,
 
     /**
     * The ReportControllerApi service constructor.

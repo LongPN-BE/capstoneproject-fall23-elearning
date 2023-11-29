@@ -90,9 +90,9 @@ function PreviewQuizz() {
                 {questions?.map((question, index) => {
                   return (
                     <>
-                      <FormLabel style={{ color: '#1f1f1f' }} id="demo-radio-buttons-group-label">
+                      <FormLabel className="d-flex" style={{ color: '#1f1f1f' }} id="demo-radio-buttons-group-label">
                         <strong>{index + 1}: </strong>
-                        {question.content}
+                        <p dangerouslySetInnerHTML={{ __html: question.content || '' }} />
                       </FormLabel>
                       <Container>
                         <RadioGroup aria-labelledby="demo-radio-buttons-group-label" name="radio-buttons-group">
@@ -104,14 +104,24 @@ function PreviewQuizz() {
                                     {...register(`${question.id}`)}
                                     value={option.id}
                                     control={<Radio checked />}
-                                    label={option.content}
+                                    label={
+                                      <div
+                                        className="cus-option"
+                                        dangerouslySetInnerHTML={{ __html: option.content || '' }}
+                                      />
+                                    }
                                   />
                                 ) : (
                                   <FormControlLabel
                                     {...register(`${question.id}`)}
                                     value={option.id}
                                     control={<Radio disabled />}
-                                    label={option.content}
+                                    label={
+                                      <div
+                                        className="cus-option"
+                                        dangerouslySetInnerHTML={{ __html: option.content || '' }}
+                                      />
+                                    }
                                   />
                                 )}
                               </>

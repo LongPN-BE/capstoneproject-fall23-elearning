@@ -55,6 +55,9 @@ class UsedQuestionResultDetailView {
             if (data.hasOwnProperty('content')) {
                 obj['content'] = ApiClient.convertToType(data['content'], 'String');
             }
+            if (data.hasOwnProperty('status')) {
+                obj['status'] = ApiClient.convertToType(data['status'], 'Boolean');
+            }
             if (data.hasOwnProperty('quiz')) {
                 obj['quiz'] = QuizResultDetailView.constructFromObject(data['quiz']);
             }
@@ -107,6 +110,11 @@ UsedQuestionResultDetailView.prototype['id'] = undefined;
  * @member {String} content
  */
 UsedQuestionResultDetailView.prototype['content'] = undefined;
+
+/**
+ * @member {Boolean} status
+ */
+UsedQuestionResultDetailView.prototype['status'] = undefined;
 
 /**
  * @member {module:model/QuizResultDetailView} quiz

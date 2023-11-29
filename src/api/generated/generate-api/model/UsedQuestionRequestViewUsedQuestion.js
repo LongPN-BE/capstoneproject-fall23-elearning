@@ -53,6 +53,9 @@ class UsedQuestionRequestViewUsedQuestion {
             if (data.hasOwnProperty('content')) {
                 obj['content'] = ApiClient.convertToType(data['content'], 'String');
             }
+            if (data.hasOwnProperty('status')) {
+                obj['status'] = ApiClient.convertToType(data['status'], 'Boolean');
+            }
             if (data.hasOwnProperty('quizId')) {
                 obj['quizId'] = ApiClient.convertToType(data['quizId'], 'Number');
             }
@@ -95,6 +98,11 @@ UsedQuestionRequestViewUsedQuestion.prototype['id'] = undefined;
  * @member {String} content
  */
 UsedQuestionRequestViewUsedQuestion.prototype['content'] = undefined;
+
+/**
+ * @member {Boolean} status
+ */
+UsedQuestionRequestViewUsedQuestion.prototype['status'] = undefined;
 
 /**
  * @member {Number} quizId

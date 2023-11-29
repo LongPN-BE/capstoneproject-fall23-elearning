@@ -57,19 +57,31 @@ class SystemConfig {
                 obj['projectName'] = ApiClient.convertToType(data['projectName'], 'String');
             }
             if (data.hasOwnProperty('dateCreate')) {
-                obj['dateCreate'] = ApiClient.convertToType(data['dateCreate'], 'String');
+                obj['dateCreate'] = ApiClient.convertToType(data['dateCreate'], 'Date');
             }
             if (data.hasOwnProperty('studyingTime')) {
                 obj['studyingTime'] = ApiClient.convertToType(data['studyingTime'], 'Number');
-            }
-            if (data.hasOwnProperty('retryTestTime')) {
-                obj['retryTestTime'] = ApiClient.convertToType(data['retryTestTime'], 'Number');
             }
             if (data.hasOwnProperty('defaultImage')) {
                 obj['defaultImage'] = ApiClient.convertToType(data['defaultImage'], 'String');
             }
             if (data.hasOwnProperty('defaultQuizTime')) {
                 obj['defaultQuizTime'] = ApiClient.convertToType(data['defaultQuizTime'], 'Number');
+            }
+            if (data.hasOwnProperty('waitingQuizTime')) {
+                obj['waitingQuizTime'] = ApiClient.convertToType(data['waitingQuizTime'], 'Number');
+            }
+            if (data.hasOwnProperty('description')) {
+                obj['description'] = ApiClient.convertToType(data['description'], 'String');
+            }
+            if (data.hasOwnProperty('commissionFee')) {
+                obj['commissionFee'] = ApiClient.convertToType(data['commissionFee'], 'Number');
+            }
+            if (data.hasOwnProperty('teacherCommissionFee')) {
+                obj['teacherCommissionFee'] = ApiClient.convertToType(data['teacherCommissionFee'], 'Number');
+            }
+            if (data.hasOwnProperty('refundedTime')) {
+                obj['refundedTime'] = ApiClient.convertToType(data['refundedTime'], 'Number');
             }
         }
         return obj;
@@ -90,12 +102,12 @@ class SystemConfig {
             throw new Error("Expected the field `projectName` to be a primitive type in the JSON string but got " + data['projectName']);
         }
         // ensure the json data is a string
-        if (data['dateCreate'] && !(typeof data['dateCreate'] === 'string' || data['dateCreate'] instanceof String)) {
-            throw new Error("Expected the field `dateCreate` to be a primitive type in the JSON string but got " + data['dateCreate']);
-        }
-        // ensure the json data is a string
         if (data['defaultImage'] && !(typeof data['defaultImage'] === 'string' || data['defaultImage'] instanceof String)) {
             throw new Error("Expected the field `defaultImage` to be a primitive type in the JSON string but got " + data['defaultImage']);
+        }
+        // ensure the json data is a string
+        if (data['description'] && !(typeof data['description'] === 'string' || data['description'] instanceof String)) {
+            throw new Error("Expected the field `description` to be a primitive type in the JSON string but got " + data['description']);
         }
 
         return true;
@@ -122,7 +134,7 @@ SystemConfig.prototype['version'] = undefined;
 SystemConfig.prototype['projectName'] = undefined;
 
 /**
- * @member {String} dateCreate
+ * @member {Date} dateCreate
  */
 SystemConfig.prototype['dateCreate'] = undefined;
 
@@ -130,11 +142,6 @@ SystemConfig.prototype['dateCreate'] = undefined;
  * @member {Number} studyingTime
  */
 SystemConfig.prototype['studyingTime'] = undefined;
-
-/**
- * @member {Number} retryTestTime
- */
-SystemConfig.prototype['retryTestTime'] = undefined;
 
 /**
  * @member {String} defaultImage
@@ -145,6 +152,31 @@ SystemConfig.prototype['defaultImage'] = undefined;
  * @member {Number} defaultQuizTime
  */
 SystemConfig.prototype['defaultQuizTime'] = undefined;
+
+/**
+ * @member {Number} waitingQuizTime
+ */
+SystemConfig.prototype['waitingQuizTime'] = undefined;
+
+/**
+ * @member {String} description
+ */
+SystemConfig.prototype['description'] = undefined;
+
+/**
+ * @member {Number} commissionFee
+ */
+SystemConfig.prototype['commissionFee'] = undefined;
+
+/**
+ * @member {Number} teacherCommissionFee
+ */
+SystemConfig.prototype['teacherCommissionFee'] = undefined;
+
+/**
+ * @member {Number} refundedTime
+ */
+SystemConfig.prototype['refundedTime'] = undefined;
 
 
 

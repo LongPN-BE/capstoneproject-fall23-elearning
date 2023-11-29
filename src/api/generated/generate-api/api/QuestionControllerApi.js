@@ -13,7 +13,6 @@
 
 
 import ApiClient from "../ApiClient";
-import Question from '../model/Question';
 import QuestionQuestionView from '../model/QuestionQuestionView';
 import QuestionRequestQuestionView from '../model/QuestionRequestQuestionView';
 
@@ -40,14 +39,14 @@ export default class QuestionControllerApi {
      * Callback function to receive the result of the findAllQuestionByTeacher operation.
      * @callback module:api/QuestionControllerApi~findAllQuestionByTeacherCallback
      * @param {String} error Error message, if any.
-     * @param {Array.<module:model/Question>} data The data returned by the service call.
+     * @param {Array.<module:model/QuestionQuestionView>} data The data returned by the service call.
      * @param {String} response The complete HTTP response.
      */
 
     /**
      * @param {Number} teacherId 
      * @param {module:api/QuestionControllerApi~findAllQuestionByTeacherCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link Array.<module:model/Question>}
+     * data is of type: {@link Array.<module:model/QuestionQuestionView>}
      */
     findAllQuestionByTeacher(teacherId, callback) {
       let postBody = null;
@@ -69,7 +68,7 @@ export default class QuestionControllerApi {
       let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
-      let returnType = [Question];
+      let returnType = [QuestionQuestionView];
       return this.apiClient.callApi(
         '/api/v1/question/by-teacher', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
@@ -81,13 +80,13 @@ export default class QuestionControllerApi {
      * Callback function to receive the result of the findAllQuestions operation.
      * @callback module:api/QuestionControllerApi~findAllQuestionsCallback
      * @param {String} error Error message, if any.
-     * @param {Array.<module:model/Question>} data The data returned by the service call.
+     * @param {Array.<module:model/QuestionQuestionView>} data The data returned by the service call.
      * @param {String} response The complete HTTP response.
      */
 
     /**
      * @param {module:api/QuestionControllerApi~findAllQuestionsCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link Array.<module:model/Question>}
+     * data is of type: {@link Array.<module:model/QuestionQuestionView>}
      */
     findAllQuestions(callback) {
       let postBody = null;
@@ -104,7 +103,7 @@ export default class QuestionControllerApi {
       let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
-      let returnType = [Question];
+      let returnType = [QuestionQuestionView];
       return this.apiClient.callApi(
         '/api/v1/question/questions', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
@@ -116,14 +115,14 @@ export default class QuestionControllerApi {
      * Callback function to receive the result of the findQuestionById operation.
      * @callback module:api/QuestionControllerApi~findQuestionByIdCallback
      * @param {String} error Error message, if any.
-     * @param {module:model/Question} data The data returned by the service call.
+     * @param {module:model/QuestionQuestionView} data The data returned by the service call.
      * @param {String} response The complete HTTP response.
      */
 
     /**
      * @param {Number} id 
      * @param {module:api/QuestionControllerApi~findQuestionByIdCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/Question}
+     * data is of type: {@link module:model/QuestionQuestionView}
      */
     findQuestionById(id, callback) {
       let postBody = null;
@@ -145,7 +144,7 @@ export default class QuestionControllerApi {
       let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
-      let returnType = Question;
+      let returnType = QuestionQuestionView;
       return this.apiClient.callApi(
         '/api/v1/question/by-id', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,

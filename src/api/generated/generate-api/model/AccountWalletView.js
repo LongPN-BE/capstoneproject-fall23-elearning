@@ -13,7 +13,6 @@
 
 import ApiClient from '../ApiClient';
 import GrantedAuthorityWalletView from './GrantedAuthorityWalletView';
-import ProfileWalletView from './ProfileWalletView';
 
 /**
  * The AccountWalletView model module.
@@ -70,8 +69,8 @@ class AccountWalletView {
             if (data.hasOwnProperty('active')) {
                 obj['active'] = ApiClient.convertToType(data['active'], 'Boolean');
             }
-            if (data.hasOwnProperty('profile')) {
-                obj['profile'] = ProfileWalletView.constructFromObject(data['profile']);
+            if (data.hasOwnProperty('authorities')) {
+                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthorityWalletView]);
             }
             if (data.hasOwnProperty('accountNonExpired')) {
                 obj['accountNonExpired'] = ApiClient.convertToType(data['accountNonExpired'], 'Boolean');
@@ -81,9 +80,6 @@ class AccountWalletView {
             }
             if (data.hasOwnProperty('accountNonLocked')) {
                 obj['accountNonLocked'] = ApiClient.convertToType(data['accountNonLocked'], 'Boolean');
-            }
-            if (data.hasOwnProperty('authorities')) {
-                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthorityWalletView]);
             }
             if (data.hasOwnProperty('enabled')) {
                 obj['enabled'] = ApiClient.convertToType(data['enabled'], 'Boolean');
@@ -105,10 +101,6 @@ class AccountWalletView {
         // ensure the json data is a string
         if (data['role'] && !(typeof data['role'] === 'string' || data['role'] instanceof String)) {
             throw new Error("Expected the field `role` to be a primitive type in the JSON string but got " + data['role']);
-        }
-        // validate the optional field `profile`
-        if (data['profile']) { // data not null
-          ProfileWalletView.validateJSON(data['profile']);
         }
         if (data['authorities']) { // data not null
             // ensure the json data is an array
@@ -165,9 +157,9 @@ AccountWalletView.prototype['role'] = undefined;
 AccountWalletView.prototype['active'] = undefined;
 
 /**
- * @member {module:model/ProfileWalletView} profile
+ * @member {Array.<module:model/GrantedAuthorityWalletView>} authorities
  */
-AccountWalletView.prototype['profile'] = undefined;
+AccountWalletView.prototype['authorities'] = undefined;
 
 /**
  * @member {Boolean} accountNonExpired
@@ -183,11 +175,6 @@ AccountWalletView.prototype['credentialsNonExpired'] = undefined;
  * @member {Boolean} accountNonLocked
  */
 AccountWalletView.prototype['accountNonLocked'] = undefined;
-
-/**
- * @member {Array.<module:model/GrantedAuthorityWalletView>} authorities
- */
-AccountWalletView.prototype['authorities'] = undefined;
 
 /**
  * @member {Boolean} enabled

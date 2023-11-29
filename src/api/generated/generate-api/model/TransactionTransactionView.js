@@ -262,6 +262,12 @@ TransactionTransactionView['TransactionTypeEnum'] = {
     "ENROLLED": "ENROLLED",
 
     /**
+     * value: "SERVICE_CHARGE"
+     * @const
+     */
+    "SERVICE_CHARGE": "SERVICE_CHARGE",
+
+    /**
      * value: "REFUNDED"
      * @const
      */

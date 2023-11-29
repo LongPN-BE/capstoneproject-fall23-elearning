@@ -12,7 +12,6 @@
  */
 
 import ApiClient from '../ApiClient';
-import AccountTransactionView from './AccountTransactionView';
 
 /**
  * The TeacherTransactionView model module.
@@ -57,9 +56,6 @@ class TeacherTransactionView {
             if (data.hasOwnProperty('rating')) {
                 obj['rating'] = ApiClient.convertToType(data['rating'], 'Number');
             }
-            if (data.hasOwnProperty('account')) {
-                obj['account'] = AccountTransactionView.constructFromObject(data['account']);
-            }
         }
         return obj;
     }
@@ -73,10 +69,6 @@ class TeacherTransactionView {
         // ensure the json data is a string
         if (data['teacherNumber'] && !(typeof data['teacherNumber'] === 'string' || data['teacherNumber'] instanceof String)) {
             throw new Error("Expected the field `teacherNumber` to be a primitive type in the JSON string but got " + data['teacherNumber']);
-        }
-        // validate the optional field `account`
-        if (data['account']) { // data not null
-          AccountTransactionView.validateJSON(data['account']);
         }
 
         return true;
@@ -101,11 +93,6 @@ TeacherTransactionView.prototype['teacherNumber'] = undefined;
  * @member {Number} rating
  */
 TeacherTransactionView.prototype['rating'] = undefined;
-
-/**
- * @member {module:model/AccountTransactionView} account
- */
-TeacherTransactionView.prototype['account'] = undefined;
 
 
 

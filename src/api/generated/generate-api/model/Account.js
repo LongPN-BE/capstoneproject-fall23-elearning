@@ -76,6 +76,9 @@ class Account {
             if (data.hasOwnProperty('profile')) {
                 obj['profile'] = Profile.constructFromObject(data['profile']);
             }
+            if (data.hasOwnProperty('authorities')) {
+                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthority]);
+            }
             if (data.hasOwnProperty('accountNonExpired')) {
                 obj['accountNonExpired'] = ApiClient.convertToType(data['accountNonExpired'], 'Boolean');
             }
@@ -84,9 +87,6 @@ class Account {
             }
             if (data.hasOwnProperty('accountNonLocked')) {
                 obj['accountNonLocked'] = ApiClient.convertToType(data['accountNonLocked'], 'Boolean');
-            }
-            if (data.hasOwnProperty('authorities')) {
-                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthority]);
             }
             if (data.hasOwnProperty('enabled')) {
                 obj['enabled'] = ApiClient.convertToType(data['enabled'], 'Boolean');
@@ -182,6 +182,11 @@ Account.prototype['active'] = undefined;
 Account.prototype['profile'] = undefined;
 
 /**
+ * @member {Array.<module:model/GrantedAuthority>} authorities
+ */
+Account.prototype['authorities'] = undefined;
+
+/**
  * @member {Boolean} accountNonExpired
  */
 Account.prototype['accountNonExpired'] = undefined;
@@ -195,11 +200,6 @@ Account.prototype['credentialsNonExpired'] = undefined;
  * @member {Boolean} accountNonLocked
  */
 Account.prototype['accountNonLocked'] = undefined;
-
-/**
- * @member {Array.<module:model/GrantedAuthority>} authorities
- */
-Account.prototype['authorities'] = undefined;
 
 /**
  * @member {Boolean} enabled

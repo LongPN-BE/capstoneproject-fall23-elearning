@@ -35,6 +35,41 @@ export default class TransactionControllerApi {
 
 
     /**
+     * Callback function to receive the result of the getAllTransaction operation.
+     * @callback module:api/TransactionControllerApi~getAllTransactionCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<module:model/TransactionTransactionView>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {module:api/TransactionControllerApi~getAllTransactionCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<module:model/TransactionTransactionView>}
+     */
+    getAllTransaction(callback) {
+      let postBody = null;
+
+      let pathParams = {
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = [TransactionTransactionView];
+      return this.apiClient.callApi(
+        '/api/v1/transaction/transactions', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
      * Callback function to receive the result of the getById operation.
      * @callback module:api/TransactionControllerApi~getByIdCallback
      * @param {String} error Error message, if any.
@@ -84,21 +119,23 @@ export default class TransactionControllerApi {
      */
 
     /**
-     * @param {Number} id 
+     * @param {Object} opts Optional parameters
+     * @param {Number} opts.studentId 
+     * @param {Date} opts.startDate 
+     * @param {Date} opts.endDate 
      * @param {module:api/TransactionControllerApi~getByStudentIdCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link Array.<module:model/TransactionTransactionView>}
      */
-    getByStudentId(id, callback) {
+    getByStudentId(opts, callback) {
+      opts = opts || {};
       let postBody = null;
-      // verify the required parameter 'id' is set
-      if (id === undefined || id === null) {
-        throw new Error("Missing the required parameter 'id' when calling getByStudentId");
-      }
 
       let pathParams = {
       };
       let queryParams = {
-        'id': id
+        'studentId': opts['studentId'],
+        'startDate': opts['startDate'],
+        'endDate': opts['endDate']
       };
       let headerParams = {
       };
@@ -125,21 +162,23 @@ export default class TransactionControllerApi {
      */
 
     /**
-     * @param {Number} id 
+     * @param {Object} opts Optional parameters
+     * @param {Number} opts.teacherId 
+     * @param {Date} opts.startDate 
+     * @param {Date} opts.endDate 
      * @param {module:api/TransactionControllerApi~getByTeacherIdCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link Array.<module:model/TransactionTransactionView>}
      */
-    getByTeacherId(id, callback) {
+    getByTeacherId(opts, callback) {
+      opts = opts || {};
       let postBody = null;
-      // verify the required parameter 'id' is set
-      if (id === undefined || id === null) {
-        throw new Error("Missing the required parameter 'id' when calling getByTeacherId");
-      }
 
       let pathParams = {
       };
       let queryParams = {
-        'id': id
+        'teacherId': opts['teacherId'],
+        'startDate': opts['startDate'],
+        'endDate': opts['endDate']
       };
       let headerParams = {
       };

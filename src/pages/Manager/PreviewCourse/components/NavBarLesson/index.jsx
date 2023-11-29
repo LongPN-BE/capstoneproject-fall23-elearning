@@ -73,12 +73,6 @@ function NavBarLesson(props) {
         setLessons(resp);
       }
     });
-
-    // lessonApi.findLessonByCourseId(courseId, (err, res) => {
-    //   if (res) {
-    //     setLessons(res);
-    //   }
-    // });
   }, []);
   useEffect(() => {
     if (lessonId) {
@@ -87,11 +81,12 @@ function NavBarLesson(props) {
           setResources(res);
         }
       });
-      quizApi.findAllQuizByLessonId(lessonId, (err, res) => {
+      quizApi.findAllQuizByLessonId(lessonId, { status: 'Active' }, (err, res) => {
         setQuiz(res);
       });
     }
   }, [lessonId]);
+
   return (
     <>
       <div>
@@ -115,8 +110,7 @@ function NavBarLesson(props) {
                       <Link
                         to={`/subject/${subjectId}/course/${courseId}/syllabus/preview/${syllabusId}/${data?.id}/${data?.type}`}
                       >
-                        <strong>{data?.type === 'VIDEO' ? <>VIDEO</> : data?.type === 'READING'(<>BÀI ĐỌC</>)}</strong>:{' '}
-                        {data.name}
+                        <strong>{data?.type}</strong>: {data.name}
                       </Link>
                     </div>
                   </div>

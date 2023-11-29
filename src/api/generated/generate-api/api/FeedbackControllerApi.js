@@ -16,6 +16,7 @@ import ApiClient from "../ApiClient";
 import DoFeedbackRequestFeedbackView from '../model/DoFeedbackRequestFeedbackView';
 import FeedContent from '../model/FeedContent';
 import FeedbackFeedbackView from '../model/FeedbackFeedbackView';
+import ResponseDTOLong from '../model/ResponseDTOLong';
 
 /**
 * FeedbackController service.
@@ -182,6 +183,47 @@ export default class FeedbackControllerApi {
       let returnType = [FeedbackFeedbackView];
       return this.apiClient.callApi(
         '/api/v1/feedback/feedbacks', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the getRatingByTeacher operation.
+     * @callback module:api/FeedbackControllerApi~getRatingByTeacherCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/ResponseDTOLong} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Number} teacherId 
+     * @param {module:api/FeedbackControllerApi~getRatingByTeacherCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/ResponseDTOLong}
+     */
+    getRatingByTeacher(teacherId, callback) {
+      let postBody = null;
+      // verify the required parameter 'teacherId' is set
+      if (teacherId === undefined || teacherId === null) {
+        throw new Error("Missing the required parameter 'teacherId' when calling getRatingByTeacher");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'teacher_id': teacherId
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = ResponseDTOLong;
+      return this.apiClient.callApi(
+        '/api/v1/feedback/rating-by-teacher', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );

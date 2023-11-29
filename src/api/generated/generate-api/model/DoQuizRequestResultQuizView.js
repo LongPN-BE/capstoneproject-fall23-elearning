@@ -54,6 +54,9 @@ class DoQuizRequestResultQuizView {
             if (data.hasOwnProperty('enrollId')) {
                 obj['enrollId'] = ApiClient.convertToType(data['enrollId'], 'Number');
             }
+            if (data.hasOwnProperty('startTime')) {
+                obj['startTime'] = ApiClient.convertToType(data['startTime'], 'Date');
+            }
             if (data.hasOwnProperty('doQuizDetailRequests')) {
                 obj['doQuizDetailRequests'] = ApiClient.convertToType(data['doQuizDetailRequests'], [DoQuizDetailRequestResultQuizView]);
             }
@@ -95,6 +98,11 @@ DoQuizRequestResultQuizView.prototype['quizId'] = undefined;
  * @member {Number} enrollId
  */
 DoQuizRequestResultQuizView.prototype['enrollId'] = undefined;
+
+/**
+ * @member {Date} startTime
+ */
+DoQuizRequestResultQuizView.prototype['startTime'] = undefined;
 
 /**
  * @member {Array.<module:model/DoQuizDetailRequestResultQuizView>} doQuizDetailRequests

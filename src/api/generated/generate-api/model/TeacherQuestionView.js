@@ -12,7 +12,6 @@
  */
 
 import ApiClient from '../ApiClient';
-import AccountQuestionView from './AccountQuestionView';
 
 /**
  * The TeacherQuestionView model module.
@@ -48,14 +47,14 @@ class TeacherQuestionView {
         if (data) {
             obj = obj || new TeacherQuestionView();
 
+            if (data.hasOwnProperty('id')) {
+                obj['id'] = ApiClient.convertToType(data['id'], 'Number');
+            }
             if (data.hasOwnProperty('teacherNumber')) {
                 obj['teacherNumber'] = ApiClient.convertToType(data['teacherNumber'], 'String');
             }
             if (data.hasOwnProperty('rating')) {
                 obj['rating'] = ApiClient.convertToType(data['rating'], 'Number');
-            }
-            if (data.hasOwnProperty('account')) {
-                obj['account'] = AccountQuestionView.constructFromObject(data['account']);
             }
         }
         return obj;
@@ -71,10 +70,6 @@ class TeacherQuestionView {
         if (data['teacherNumber'] && !(typeof data['teacherNumber'] === 'string' || data['teacherNumber'] instanceof String)) {
             throw new Error("Expected the field `teacherNumber` to be a primitive type in the JSON string but got " + data['teacherNumber']);
         }
-        // validate the optional field `account`
-        if (data['account']) { // data not null
-          AccountQuestionView.validateJSON(data['account']);
-        }
 
         return true;
     }
@@ -85,6 +80,11 @@ class TeacherQuestionView {
 
 
 /**
+ * @member {Number} id
+ */
+TeacherQuestionView.prototype['id'] = undefined;
+
+/**
  * @member {String} teacherNumber
  */
 TeacherQuestionView.prototype['teacherNumber'] = undefined;
@@ -93,11 +93,6 @@ TeacherQuestionView.prototype['teacherNumber'] = undefined;
  * @member {Number} rating
  */
 TeacherQuestionView.prototype['rating'] = undefined;
-
-/**
- * @member {module:model/AccountQuestionView} account
- */
-TeacherQuestionView.prototype['account'] = undefined;
 
 
 

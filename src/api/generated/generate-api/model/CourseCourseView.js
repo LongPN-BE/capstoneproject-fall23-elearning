@@ -136,7 +136,7 @@ CourseCourseView.prototype['id'] = undefined;
 CourseCourseView.prototype['name'] = undefined;
 
 /**
- * @member {String} status
+ * @member {module:model/CourseCourseView.StatusEnum} status
  */
 CourseCourseView.prototype['status'] = undefined;
 
@@ -182,6 +182,45 @@ CourseCourseView.prototype['subject'] = undefined;
 
 
 
+
+
+/**
+ * Allowed values for the <code>status</code> property.
+ * @enum {String}
+ * @readonly
+ */
+CourseCourseView['StatusEnum'] = {
+
+    /**
+     * value: "ACTIVE"
+     * @const
+     */
+    "ACTIVE": "ACTIVE",
+
+    /**
+     * value: "DEACTIVE"
+     * @const
+     */
+    "DEACTIVE": "DEACTIVE",
+
+    /**
+     * value: "PENDING"
+     * @const
+     */
+    "PENDING": "PENDING",
+
+    /**
+     * value: "DRAFT"
+     * @const
+     */
+    "DRAFT": "DRAFT",
+
+    /**
+     * value: "REJECT"
+     * @const
+     */
+    "REJECT": "REJECT"
+};
 
 
 

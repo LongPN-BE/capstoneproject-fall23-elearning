@@ -13,6 +13,7 @@
 
 
 import ApiClient from "../ApiClient";
+import PaymentHistoryFilterPaymentHistoryView from '../model/PaymentHistoryFilterPaymentHistoryView';
 import PaymentHistoryPaymentHistoryView from '../model/PaymentHistoryPaymentHistoryView';
 import PaymentHistoryRequestPaymentHistoryView from '../model/PaymentHistoryRequestPaymentHistoryView';
 
@@ -120,21 +121,23 @@ export default class PaymentHistoryControllerApi {
      */
 
     /**
-     * @param {Number} studentId 
+     * @param {Object} opts Optional parameters
+     * @param {Number} opts.studentId 
+     * @param {Date} opts.startDate 
+     * @param {Date} opts.endDate 
      * @param {module:api/PaymentHistoryControllerApi~getPaymentHistoryByStudentCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link Array.<module:model/PaymentHistoryPaymentHistoryView>}
      */
-    getPaymentHistoryByStudent(studentId, callback) {
+    getPaymentHistoryByStudent(opts, callback) {
+      opts = opts || {};
       let postBody = null;
-      // verify the required parameter 'studentId' is set
-      if (studentId === undefined || studentId === null) {
-        throw new Error("Missing the required parameter 'studentId' when calling getPaymentHistoryByStudent");
-      }
 
       let pathParams = {
       };
       let queryParams = {
-        'student_id': studentId
+        'studentId': opts['studentId'],
+        'startDate': opts['startDate'],
+        'endDate': opts['endDate']
       };
       let headerParams = {
       };
@@ -153,6 +156,46 @@ export default class PaymentHistoryControllerApi {
     }
 
     /**
+     * Callback function to receive the result of the getPaymentHistoryByStudentWithFilter operation.
+     * @callback module:api/PaymentHistoryControllerApi~getPaymentHistoryByStudentWithFilterCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<module:model/PaymentHistoryPaymentHistoryView>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {module:model/PaymentHistoryFilterPaymentHistoryView} paymentHistoryFilterPaymentHistoryView 
+     * @param {module:api/PaymentHistoryControllerApi~getPaymentHistoryByStudentWithFilterCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<module:model/PaymentHistoryPaymentHistoryView>}
+     */
+    getPaymentHistoryByStudentWithFilter(paymentHistoryFilterPaymentHistoryView, callback) {
+      let postBody = paymentHistoryFilterPaymentHistoryView;
+      // verify the required parameter 'paymentHistoryFilterPaymentHistoryView' is set
+      if (paymentHistoryFilterPaymentHistoryView === undefined || paymentHistoryFilterPaymentHistoryView === null) {
+        throw new Error("Missing the required parameter 'paymentHistoryFilterPaymentHistoryView' when calling getPaymentHistoryByStudentWithFilter");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = ['application/json'];
+      let accepts = ['*/*'];
+      let returnType = [PaymentHistoryPaymentHistoryView];
+      return this.apiClient.callApi(
+        '/api/v1/payment_history/by-student-filter', 'POST',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
      * Callback function to receive the result of the getPaymentHistoryByTeacher operation.
      * @callback module:api/PaymentHistoryControllerApi~getPaymentHistoryByTeacherCallback
      * @param {String} error Error message, if any.
@@ -161,21 +204,23 @@ export default class PaymentHistoryControllerApi {
      */
 
     /**
-     * @param {Number} teacherId 
+     * @param {Object} opts Optional parameters
+     * @param {Number} opts.teacherId 
+     * @param {Date} opts.startDate 
+     * @param {Date} opts.endDate 
      * @param {module:api/PaymentHistoryControllerApi~getPaymentHistoryByTeacherCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link Array.<module:model/PaymentHistoryPaymentHistoryView>}
      */
-    getPaymentHistoryByTeacher(teacherId, callback) {
+    getPaymentHistoryByTeacher(opts, callback) {
+      opts = opts || {};
       let postBody = null;
-      // verify the required parameter 'teacherId' is set
-      if (teacherId === undefined || teacherId === null) {
-        throw new Error("Missing the required parameter 'teacherId' when calling getPaymentHistoryByTeacher");
-      }
 
       let pathParams = {
       };
       let queryParams = {
-        'teacher_id': teacherId
+        'teacherId': opts['teacherId'],
+        'startDate': opts['startDate'],
+        'endDate': opts['endDate']
       };
       let headerParams = {
       };

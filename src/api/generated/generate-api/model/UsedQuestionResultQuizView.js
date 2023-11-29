@@ -48,6 +48,9 @@ class UsedQuestionResultQuizView {
         if (data) {
             obj = obj || new UsedQuestionResultQuizView();
 
+            if (data.hasOwnProperty('status')) {
+                obj['status'] = ApiClient.convertToType(data['status'], 'Boolean');
+            }
             if (data.hasOwnProperty('quiz')) {
                 obj['quiz'] = QuizResultQuizView.constructFromObject(data['quiz']);
             }
@@ -80,6 +83,11 @@ class UsedQuestionResultQuizView {
 }
 
 
+
+/**
+ * @member {Boolean} status
+ */
+UsedQuestionResultQuizView.prototype['status'] = undefined;
 
 /**
  * @member {module:model/QuizResultQuizView} quiz

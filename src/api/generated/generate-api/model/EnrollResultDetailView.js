@@ -59,11 +59,17 @@ class EnrollResultDetailView {
             if (data.hasOwnProperty('commission')) {
                 obj['commission'] = ApiClient.convertToType(data['commission'], 'Number');
             }
+            if (data.hasOwnProperty('commissionAmount')) {
+                obj['commissionAmount'] = ApiClient.convertToType(data['commissionAmount'], 'Number');
+            }
             if (data.hasOwnProperty('status')) {
                 obj['status'] = ApiClient.convertToType(data['status'], 'String');
             }
             if (data.hasOwnProperty('finishDate')) {
                 obj['finishDate'] = ApiClient.convertToType(data['finishDate'], 'Date');
+            }
+            if (data.hasOwnProperty('banned')) {
+                obj['banned'] = ApiClient.convertToType(data['banned'], 'Boolean');
             }
         }
         return obj;
@@ -113,6 +119,11 @@ EnrollResultDetailView.prototype['paymentStatus'] = undefined;
 EnrollResultDetailView.prototype['commission'] = undefined;
 
 /**
+ * @member {Number} commissionAmount
+ */
+EnrollResultDetailView.prototype['commissionAmount'] = undefined;
+
+/**
  * @member {module:model/EnrollResultDetailView.StatusEnum} status
  */
 EnrollResultDetailView.prototype['status'] = undefined;
@@ -121,6 +132,11 @@ EnrollResultDetailView.prototype['status'] = undefined;
  * @member {Date} finishDate
  */
 EnrollResultDetailView.prototype['finishDate'] = undefined;
+
+/**
+ * @member {Boolean} banned
+ */
+EnrollResultDetailView.prototype['banned'] = undefined;
 
 
 
@@ -155,7 +171,13 @@ EnrollResultDetailView['StatusEnum'] = {
      * value: "REMOVED"
      * @const
      */
-    "REMOVED": "REMOVED"
+    "REMOVED": "REMOVED",
+
+    /**
+     * value: "REFUNDED"
+     * @const
+     */
+    "REFUNDED": "REFUNDED"
 };
 
 

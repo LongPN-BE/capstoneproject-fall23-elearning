@@ -13,8 +13,10 @@
 
 
 import ApiClient from "../ApiClient";
+import ResponseDTOSubjectSubjectView from '../model/ResponseDTOSubjectSubjectView';
 import SubjectRequestSubjectView from '../model/SubjectRequestSubjectView';
 import SubjectSubjectView from '../model/SubjectSubjectView';
+import UpdateSubjectStatusSubjectView from '../model/UpdateSubjectStatusSubjectView';
 
 /**
 * SubjectController service.
@@ -34,6 +36,46 @@ export default class SubjectControllerApi {
         this.apiClient = apiClient || ApiClient.instance;
     }
 
+
+    /**
+     * Callback function to receive the result of the disableSubject operation.
+     * @callback module:api/SubjectControllerApi~disableSubjectCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/ResponseDTOSubjectSubjectView} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {module:model/UpdateSubjectStatusSubjectView} updateSubjectStatusSubjectView 
+     * @param {module:api/SubjectControllerApi~disableSubjectCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/ResponseDTOSubjectSubjectView}
+     */
+    disableSubject(updateSubjectStatusSubjectView, callback) {
+      let postBody = updateSubjectStatusSubjectView;
+      // verify the required parameter 'updateSubjectStatusSubjectView' is set
+      if (updateSubjectStatusSubjectView === undefined || updateSubjectStatusSubjectView === null) {
+        throw new Error("Missing the required parameter 'updateSubjectStatusSubjectView' when calling disableSubject");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = ['application/json'];
+      let accepts = ['*/*'];
+      let returnType = ResponseDTOSubjectSubjectView;
+      return this.apiClient.callApi(
+        '/api/v1/subject/update-status', 'POST',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
 
     /**
      * Callback function to receive the result of the findAllSubject operation.
@@ -59,7 +101,7 @@ export default class SubjectControllerApi {
       let formParams = {
       };
 
-      let authNames = ['Bearer'];
+      let authNames = [];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [SubjectSubjectView];

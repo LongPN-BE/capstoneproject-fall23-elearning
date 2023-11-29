@@ -50,21 +50,7 @@ function PreviewLesson() {
       });
     }
   }, [lessonId, type, id]);
-  const resultMax = () => {
-    if (quizResult) {
-      quizResult?.sort((q1, q2) => q2?.lastPoint - q1?.lastPoint);
-      return quizResult[0];
-    }
-    return undefined;
-  };
-  const checkTimeQuiz = () => {
-    const now = new Date().getTime();
-    const dateTo = new Date(moment(quiz?.dateCreate).add(quiz?.dateRange, 'days').format('YYYY-MM-DD')).getTime();
-    if (now > dateTo) {
-      return false;
-    }
-    return true;
-  };
+
   return (
     <>
       <div className="d-flex ">
@@ -104,7 +90,7 @@ function PreviewLesson() {
             return (
               <div className="mt-3 d-flex align-items-center gap-2">
                 <div>
-                  <CodeIcon /> <strong>Link tài liệu:</strong>
+                  <CodeIcon /> Link tài liệu:{' '}
                 </div>
                 <div>
                   <a href={data.content} target="_blank">
@@ -116,22 +102,18 @@ function PreviewLesson() {
           }
           return <div>{data.content}</div>;
         }
-        if (data.resourceType === 'file') {
-          if (data.content.startsWith('http')) {
-            return (
-              <div className="mt-3 d-flex align-items-center gap-2">
-                <div>
-                  <SourceIcon /> <strong>Tài liệu:</strong>
-                </div>
-                <div>
-                  <a href={data.content} target="_blank">
-                    {data.name}
-                  </a>
-                </div>
-              </div>
-            );
-          }
-        }
+        return (
+          <div className="mt-3 d-flex align-items-center gap-2">
+            <div>
+              <CodeIcon /> Link tài liệu:{' '}
+            </div>
+            <div>
+              <a href={data.content} target="_blank">
+                {data.name}
+              </a>
+            </div>
+          </div>
+        );
       })}
     </>
   );
