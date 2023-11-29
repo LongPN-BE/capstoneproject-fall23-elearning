@@ -85,27 +85,27 @@ export const navData = {
     // Add more teacher-specific items
   ],
   staff: [
-    {
-      label: 'Dashboard',
-      icon: <GridViewRoundedIcon />,
-      path: '/dashboard',
-    },
-    {
-      label: 'Quản lý tài khoản',
-      icon: <GridViewRoundedIcon />,
-      subItems: [
-        {
-          label: 'Tài khoản',
-          icon: <PeopleAltIcon />,
-          path: '/accounts',
-        },
-        {
-          label: 'Báo cáo',
-          icon: <ReportIcon />,
-          path: '/report-accounts',
-        },
-      ],
-    },
+    // {
+    //   label: 'Dashboard',
+    //   icon: <GridViewRoundedIcon />,
+    //   path: '/dashboard',
+    // },
+    // {
+    //   label: 'Quản lý tài khoản',
+    //   icon: <GridViewRoundedIcon />,
+    //   subItems: [
+    //     {
+    //       label: 'Tài khoản',
+    //       icon: <PeopleAltIcon />,
+    //       path: '/accounts',
+    //     },
+    //     {
+    //       label: 'Báo cáo',
+    //       icon: <ReportIcon />,
+    //       path: '/report-accounts',
+    //     },
+    //   ],
+    // },
     {
       label: 'Quản lý môn học',
       icon: <GridViewRoundedIcon />,
@@ -115,11 +115,11 @@ export const navData = {
           icon: <BookRoundedIcon />,
           path: '/subjects',
         },
-        {
-          label: 'Báo cáo',
-          icon: <ReportIcon />,
-          path: '/report-accounts',
-        },
+        // {
+        //   label: 'Báo cáo',
+        //   icon: <ReportIcon />,
+        //   path: '/report-accounts',
+        // },
       ],
     },
     {
@@ -136,13 +136,44 @@ export const navData = {
           icon: <PaidIcon />,
           path: '/payments',
         },
-        {
-          label: 'Duyệt tiền',
-          icon: <PaidIcon />,
-          path: '/transaction-aprroved',
-        },
+        // {
+        //   label: 'Duyệt tiền',
+        //   icon: <PaidIcon />,
+        //   path: '/transaction-aprroved',
+        // },
       ],
     },
+    // {
+    //   label: 'Cấu hình hệ thống',
+    //   icon: <SettingsIcon />,
+    //   path: '/configs',
+    // },
+    // Add more manager-specific items
+  ],
+
+  admin: [
+    // {
+    //   label: 'Dashboard',
+    //   icon: <GridViewRoundedIcon />,
+    //   path: '/dashboard',
+    // },
+    {
+      label: 'Quản lý tài khoản',
+      icon: <GridViewRoundedIcon />,
+      subItems: [
+        {
+          label: 'Tài khoản',
+          icon: <PeopleAltIcon />,
+          path: '/accounts',
+        },
+        // {
+        //   label: 'Báo cáo',
+        //   icon: <ReportIcon />,
+        //   path: '/report-accounts',
+        // },
+      ],
+    },
+
     // {
     //   label: 'Cấu hình hệ thống',
     //   icon: <SettingsIcon />,

@@ -29,6 +29,7 @@ export default function ListSubject() {
   const [searchValue, setSearchValue] = useState('');
   const [isSubjectModalOpen, setIsSubjectModalOpen] = useState(false);
   const [subjectToEdit, setSubjectToEdit] = useState(null);
+  const [user, setUser] = useState(null);
   const breadcrumbItems = [
     {
       url: '/',
@@ -41,6 +42,10 @@ export default function ListSubject() {
   ];
 
   useEffect(() => {
+    const user = Cookies.get('user');
+    if (user) {
+      setUser(JSON.parse(user));
+    }
     const token = Cookies.get('token');
     if (token) {
       try {
@@ -75,7 +80,8 @@ export default function ListSubject() {
     // console.log('Subject data to save or update:', subjectData);
     const body = {
       ...subjectData,
-      createDate: moment(new Date()),
+      createDate: new Date(),
+      staffId: user?.id,
     };
     // If subjectData has an "id", it means you are updating an existing subject.
     if (subjectData.id) {
@@ -84,7 +90,8 @@ export default function ListSubject() {
 
       const body = {
         ...subjectData,
-        createDate: moment(new Date()),
+        createDate: new Date(),
+        staffId: user?.id,
       };
       console.log('Subject data to update:', await body);
       await postData('/subject/save', body, token)

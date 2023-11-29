@@ -1,12 +1,12 @@
-import React from "react";
-import Styles from "./Dashboard.module.scss";
-import classNames from "classnames";
+import React from 'react';
+import Styles from './Dashboard.module.scss';
+import classNames from 'classnames';
 
-import Navbar from "../../components/Dashboard/Navbar/Navbar";
-import TopBox from "../../components/Dashboard/TopBox/TopBox";
-import ChartBox from "../../components/Dashboard/ChartBox/ChartBox";
-import BigChartBox from "../../components/Dashboard/BigChartBox/BigChartBox";
-import BarChartBox from "../../components/Dashboard/BarChartBox/BarChartBox";
+import Navbar from '../../components/Dashboard/Navbar/Navbar';
+import TopBox from '../../components/Dashboard/TopBox/TopBox';
+import ChartBox from '../../components/Dashboard/ChartBox/ChartBox';
+import BigChartBox from '../../components/Dashboard/BigChartBox/BigChartBox';
+import BarChartBox from '../../components/Dashboard/BarChartBox/BarChartBox';
 
 //data
 import {
@@ -17,13 +17,13 @@ import {
   chartBoxConversion,
   barChartBoxRevenue,
   barChartBoxVisit,
-} from "../../mock/mock-data";
-import PieChartBox from "../../components/Dashboard/PieChartBox/PieChartBox";
+} from '../../mock/mock-data';
+import PieChartBox from '../../components/Dashboard/PieChartBox/PieChartBox';
 
 const Dashboard = () => {
   return (
     <>
-      <div className={classNames(Styles.main)}>
+      {/* <div className={classNames(Styles.main)}>
         <Navbar />
         <div className={classNames(Styles.container)}>
           <div className={classNames(Styles.contentContainer)}>
@@ -58,7 +58,7 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

@@ -151,7 +151,7 @@ const App = () => {
       ) : user?.role === 'STAFF' ? (
         <NavBar>
           <Routes>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/" element={<Navigate to="/subjects" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/subjects" element={<ManageSubject />} />
             <Route path="/subject/:subjectId/course" element={<CourseBySubject />} />
@@ -167,6 +167,16 @@ const App = () => {
             <Route path="/payments" element={<ListPaymenHistory />} />
             <Route path="/transactions" element={<ListTransactionHistory />} />
             <Route path="/transaction-aprroved" element={<ListTransactionAproved />} />
+            <Route path="/accounts" element={<Accounts />} />
+            <Route path="/configs" element={<ListConfig />} />
+            <Route path="/report-accounts" element={<Report />} />
+          </Routes>
+        </NavBar>
+      ) : user?.role === 'ADMIN' ? (
+        <NavBar>
+          <Routes>
+            <Route path="/" element={<Navigate to="/accounts" replace />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/accounts" element={<Accounts />} />
             <Route path="/configs" element={<ListConfig />} />
             <Route path="/report-accounts" element={<Report />} />
