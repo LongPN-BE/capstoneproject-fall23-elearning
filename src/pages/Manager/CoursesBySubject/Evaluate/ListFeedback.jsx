@@ -18,13 +18,18 @@ import { useParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { fetchData } from '../../../../services/AppService';
 import CustomBreadcrumbs from '../../../../components/Breadcrumbs';
-import { CourseControllerApi, SubjectControllerApi } from '../../../../api/generated/generate-api';
+import {
+  CourseControllerApi,
+  FeedbackControllerApi,
+  SubjectControllerApi,
+} from '../../../../api/generated/generate-api';
 import ApiClientSingleton from '../../../../api/apiClientImpl';
 import { Container } from 'reactstrap';
 import FeedbackModal from './FeedbackModal';
 
 const subjectApi = new SubjectControllerApi(ApiClientSingleton.getInstance());
 const courseApi = new CourseControllerApi(ApiClientSingleton.getInstance());
+const feedbackApi = new FeedbackControllerApi(ApiClientSingleton.getInstance());
 
 const ListFeedback = () => {
   const { courseId, subjectId } = useParams();
@@ -37,6 +42,7 @@ const ListFeedback = () => {
   const [rating, setRating] = useState(0);
   const [course, setCourse] = useState();
   const [subjectData, setSubject] = useState();
+  const [feedback, setFeedback] = useState();
 
   const breadcrumbItems = [
     {
@@ -77,11 +83,21 @@ const ListFeedback = () => {
     });
   };
 
+  // const getFeedbackByCourse = () => {
+  //   feedbackApi.findAllByCourseId(courseId, (err, res) => {
+  //     if (res) {
+  //       setFeedback(res);
+  //       console.log(res);
+  //     }
+  //   });
+  // };
+
   useEffect(() => {
     const token = Cookies.get('token');
-    getCourseById();
-    getSubjectById();
+
     if (token) {
+      getCourseById();
+      getSubjectById();
       fetchData(`/feedback/ByCourse?course_id=${courseId}`, token)
         .then((resp) => {
           if (resp) {
@@ -155,56 +171,55 @@ const ListFeedback = () => {
     evaluate && (
       <div className="m-5">
         <div style={{ margin: '20px' }}>
-          <CustomBreadcrumbs items={breadcrumbItems} />
-          <Container>
-            <Paper style={{ padding: '20px' }}>
-              <div style={{ marginTop: '20px' }}>
-                <TextField label="Tổng đánh giá:" value={totalRate} />
-                <TextField label="Độ uy tín:" style={{ marginLeft: '20px' }} value={rating} />
-              </div>
+          <Paper style={{ padding: '20px' }}>
+            <CustomBreadcrumbs items={breadcrumbItems} />
 
-              <div style={{ marginTop: '20px' }} className="d-flex align-items-center">
-                <Typography variant="h6">Danh sách nhận xét</Typography>
-                <InputBase
-                  placeholder="Search"
-                  style={{ marginLeft: '20px' }}
-                  startAdornment={<Search />}
-                  onChange={handleSearchChange}
-                />
-              </div>
+            <div style={{ marginTop: '20px' }}>
+              <TextField label="Tổng đánh giá:" value={totalRate} />
+              <TextField label="Độ uy tín:" style={{ marginLeft: '20px' }} value={rating} />
+            </div>
 
-              <Table style={{ marginTop: '20px' }}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>STT</TableCell>
-                    <TableCell>Tên sinh viên</TableCell>
-                    <TableCell>Điểm đánh giá</TableCell>
-                    <TableCell>Ngày Tạo</TableCell>
-                    <TableCell></TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {filteredEvaluate &&
-                    filteredEvaluate.length > 0 &&
-                    filteredEvaluate.map((s, index) => {
-                      return (
-                        <TableRow key={index}>
-                          <TableCell>{index + 1}</TableCell>
-                          <TableCell>{s.enroll.student.account.username}</TableCell>
-                          <TableCell>{calculateSingleAverageRating(s?.feedbackDetails)} / 5</TableCell>
-                          <TableCell>{s.createDate}</TableCell>
-                          <TableCell>
-                            <Button variant="outlined" onClick={() => handleOpenModal(s)}>
-                              Chi tiết
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                </TableBody>
-              </Table>
-            </Paper>
-          </Container>
+            <div style={{ marginTop: '20px' }} className="d-flex align-items-center">
+              <Typography variant="h6">Danh sách nhận xét</Typography>
+              <InputBase
+                placeholder="Search"
+                style={{ marginLeft: '20px' }}
+                startAdornment={<Search />}
+                onChange={handleSearchChange}
+              />
+            </div>
+
+            <Table style={{ marginTop: '20px' }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>STT</TableCell>
+                  <TableCell>Tên sinh viên</TableCell>
+                  <TableCell>Điểm đánh giá</TableCell>
+                  <TableCell>Ngày Tạo</TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filteredEvaluate &&
+                  filteredEvaluate.length > 0 &&
+                  filteredEvaluate.map((s, index) => {
+                    return (
+                      <TableRow key={index}>
+                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>{s.enroll.student.account.username}</TableCell>
+                        <TableCell>{calculateSingleAverageRating(s?.feedbackDetails)} / 5</TableCell>
+                        <TableCell>{s.createDate}</TableCell>
+                        <TableCell>
+                          <Button variant="outlined" onClick={() => handleOpenModal(s)}>
+                            Chi tiết
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </Paper>
         </div>
         <FeedbackModal open={isModalOpen} onClose={handleCloseModal} data={selectedFeedback} />
       </div>

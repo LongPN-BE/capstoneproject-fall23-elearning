@@ -93,7 +93,7 @@ function NavBarLesson(props) {
         {lessons?.map((data) => {
           return (
             <>
-              <Accordion expanded={expanded === data.id} onChange={handleChange(data.id)}>
+              <Accordion key={data.id} expanded={expanded === data.id} onChange={handleChange(data.id)}>
                 <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
                   <Typography>{data.name}</Typography>
                 </AccordionSummary>
