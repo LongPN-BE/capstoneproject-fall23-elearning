@@ -67,7 +67,10 @@ const AllCourses = () => {
                     sx={{ ml: 1, flex: 1 }}
                     placeholder="Bạn muốn tìm hiểu về nội dung gì?"
                     inputProps={{ 'aria-label': 'Bạn muốn tìm hiểu về nội dung gì?' }}
-                    onChange={(e) => setSearchValue(e.target.value)}
+                    onChange={(e) => {
+                      setSearchValue(e.target.value);
+                      setPage(0);
+                    }}
                     startAdornment={<SearchIcon />}
                   />
                 </Paper>
@@ -92,7 +95,7 @@ const AllCourses = () => {
                           label="Môn học">
                           <MenuItem value="None">--</MenuItem>
                           {subjectData?.map((subject) =>
-                            <MenuItem value={subject.name}>{subject.name}</MenuItem>
+                            subject.status === true ? (<MenuItem value={subject.name}>{subject.name}</MenuItem>) : (<></>)
                           )
                           }
                         </Select>
@@ -190,7 +193,7 @@ const AllCourses = () => {
               <Pagination
                 onChange={(e, value) => setPage(value - 1)}
                 count={Math.ceil(filterData.length / rowsPerPage)}
-                page={page}
+                page={page + 1}
                 size="large" />
             </Stack>
             <Box className="border rounded mx-2" style={{ width: 60 }}>

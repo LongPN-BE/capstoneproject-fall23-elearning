@@ -28,6 +28,8 @@ export default function ListAccount() {
   const [data, setData] = useState([]);
   const [dataSubmit, setDataSubmit] = useState([]);
   const [searchValue, setSearchValue] = useState('');
+  const [statusSelect, setStatusSelect] = useState('none');
+  const [roleSelect, setRoleSelect] = useState('none');
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
   const [isAccountDetailModalOpen, setIsAccountDetailModalOpen] = useState(false);
   const [accountToEdit, setAccountToEdit] = useState(null);
@@ -203,9 +205,6 @@ export default function ListAccount() {
   };
 
   // Search
-  const handleSearchChange = (event) => {
-    setSearchValue(event.target.value);
-  };
   const filterData = dataSubmit.filter((account) =>
     account.profile.lastName.toLowerCase().includes(searchValue.toLowerCase())
     || account.profile.firstName.toLowerCase().includes(searchValue.toLowerCase())
@@ -229,7 +228,6 @@ export default function ListAccount() {
   };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dataSubmit.length) : 0;
-
   return (
     data && (
       <div className="m-5">
@@ -241,34 +239,132 @@ export default function ListAccount() {
             <Typography variant="h5">Danh sách tài khoản</Typography>
 
 
-            {/* <div className="text-end col-9">
+            <div className="text-end col-9">
               <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={handleAddAccount}>
                 Tạo mới tài khoản giáo viên
               </Button>
-            </div> */}
+            </div>
           </div>
           <div className="d-flex" style={{ marginTop: '20px' }}>
             <InputBase
               placeholder="Tìm kiếm"
               style={{ marginLeft: '20px' }}
               startAdornment={<Search />}
-              onChange={handleSearchChange}
+              onChange={(e) => {
+                setSearchValue(e.target.value)
+                setPage(0)
+              }}
             />
+            Trạng thái:
             <Select
+              style={{ marginLeft: 3, marginRight: 6 }}
               labelId="account-status-select-label"
               label="Status"
+              defaultValue={statusSelect}
               onChange={(e, value) => {
-                if (value.props.value === "none")
-                  setDataSubmit(data)
-                if (value.props.value === "true")
-                  setDataSubmit(data.filter((account) => account.active === true))
-                if (value.props.value === "false")
-                  setDataSubmit(data.filter((account) => account.active === false))
+                setStatusSelect(value.props.value)
+                setPage(0)
+                switch (value.props.value) {
+                  case "none": if (roleSelect === "none") { setDataSubmit(data) }
+                  else { setDataSubmit(data.filter((account) => account.role === roleSelect)) }
+                    break;
+                  case "true": if (roleSelect === "none") { setDataSubmit(data.filter((account) => account.active === true)) }
+                  else { setDataSubmit(data.filter((account) => account.active === true && account.role === roleSelect)) }
+                    break;
+                  case "false": if (roleSelect === "none") { setDataSubmit(data.filter((account) => account.active === false)) }
+                  else { setDataSubmit(data.filter((account) => account.active === false && account.role === roleSelect)) }
+                    break;
+                }
               }
               }>
               <MenuItem value="none">Tất cả</MenuItem>
               <MenuItem value="true">Đang hoạt động</MenuItem>
               <MenuItem value="false">Chưa hoạt động</MenuItem>
+            </Select>
+
+            Vai trò:
+            <Select
+              style={{ marginLeft: 3, marginRight: 6 }}
+              labelId="account-role-select-label"
+              label="Role"
+              defaultValue={roleSelect}
+              onChange={(e, value) => {
+                setRoleSelect(value.props.value)
+                setPage(0)
+                switch (value.props.value) {
+                  case "none":
+                    if (statusSelect === "none") { setDataSubmit(data) }
+                    else {
+                      switch (statusSelect) {
+                        case "true":
+                          setDataSubmit(data.filter((account) => account.active === true))
+                          break;
+                        case "false":
+                          setDataSubmit(data.filter((account) => account.active === false))
+                          break;
+                      }
+                    }
+                    break;
+                  case "ADMIN":
+                    if (statusSelect === "none") { setDataSubmit(data.filter((account) => account.role === "ADMIN")) }
+                    else {
+                      switch (statusSelect) {
+                        case "true":
+                          setDataSubmit(data.filter((account) => account.active === true && account.role === "ADMIN"))
+                          break;
+                        case "false":
+                          setDataSubmit(data.filter((account) => account.active === false && account.role === "ADMIN"))
+                          break;
+                      }
+                    }
+                    break;
+                  case "STAFF":
+                    if (statusSelect === "none") { setDataSubmit(data.filter((account) => account.role === "STAFF")) }
+                    else {
+                      switch (statusSelect) {
+                        case "true":
+                          setDataSubmit(data.filter((account) => account.active === true && account.role === "STAFF"))
+                          break;
+                        case "false":
+                          setDataSubmit(data.filter((account) => account.active === false && account.role === "STAFF"))
+                          break;
+                      }
+                    }
+                    break;
+                  case "TEACHER":
+                    if (statusSelect === "none") { setDataSubmit(data.filter((account) => account.role === "TEACHER")) }
+                    else {
+                      switch (statusSelect) {
+                        case "true":
+                          setDataSubmit(data.filter((account) => account.active === true && account.role === "TEACHER"))
+                          break;
+                        case "false":
+                          setDataSubmit(data.filter((account) => account.active === false && account.role === "TEACHER"))
+                          break;
+                      }
+                    }
+                    break;
+                  case "STUDENT":
+                    if (statusSelect === "none") { setDataSubmit(data.filter((account) => account.role === "STUDENT")) }
+                    else {
+                      switch (statusSelect) {
+                        case "true":
+                          setDataSubmit(data.filter((account) => account.active === true && account.role === "STUDENT"))
+                          break;
+                        case "false":
+                          setDataSubmit(data.filter((account) => account.active === false && account.role === "STUDENT"))
+                          break;
+                      }
+                    }
+                    break;
+                }
+              }}
+            >
+              <MenuItem value="none">Tất cả</MenuItem>
+              <MenuItem value="ADMIN">Quản trị viên</MenuItem>
+              <MenuItem value="STAFF">Nhân viên</MenuItem>
+              <MenuItem value="TEACHER">Giáo viên</MenuItem>
+              <MenuItem value="STUDENT">Học sinh</MenuItem>
             </Select>
           </div>
 
@@ -300,7 +396,7 @@ export default function ListAccount() {
                     <TableCell>{a.profile.email}</TableCell>
                     <TableCell>{a.active ? 'Đang hoạt động' : 'Chưa kích hoạt'} </TableCell>
                     <TableCell>
-                      {!a.active ? <>
+                      {a.role !== "ADMIN" ? (!a.active ? <>
                         <button
                           type="submit"
                           title="Kích hoạt"
@@ -318,7 +414,7 @@ export default function ListAccount() {
                         >
                           <DoNotDisturbAltIcon />
                         </button>
-                      </>}
+                      </>) : (<></>)}
                     </TableCell>
                     <TableCell>
                       {/* <Link className="btn btn-outline-secondary" to={`##`}>
