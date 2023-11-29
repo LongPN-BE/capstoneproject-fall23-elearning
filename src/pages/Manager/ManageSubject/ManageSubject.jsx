@@ -71,13 +71,12 @@ export default function ListSubject() {
   };
 
   const saveOrUpdateSubject = async (subjectData) => {
-    // Here you should implement logic to either save a new subject or update an existing one.
-    // You may need to call an API or update your local data.
-    // After saving or updating, you can close the SubjectModal.
-    // For this example, we'll just log the subject data.
     const token = Cookies.get('token');
-    console.log('Subject data to save or update:', subjectData);
-
+    // console.log('Subject data to save or update:', subjectData);
+    const body = {
+      ...subjectData,
+      dateTime: moment(new Date()),
+    };
     // If subjectData has an "id", it means you are updating an existing subject.
     if (subjectData.id) {
       // Implement your update logic here.
@@ -91,28 +90,43 @@ export default function ListSubject() {
       await postData('/subject/save', body, token)
         .then((resp) => {
           if (resp) {
+            Swal.fire({
+              title: "Tuyệt vời!",
+              text: "Bạn đã cập nhật thành công môn" + subjectData.name + " !",
+              icon: "success"
+            });
             window.location.reload();
           }
         })
         .catch((err) => {
+          Swal.fire({
+            title: "Opss..",
+            text: err,
+            icon: "warning"
+          });
           console.log(err);
         });
     } else {
       // Implement your create logic here for new subject.
-
       console.log('Subject data to create:', subjectData);
-      const body = {
-        ...subjectData,
-        dateTime: moment(new Date()),
-      };
-      console.log('Subject data to update:', await body);
+
       await postData('/subject/save', body, token)
         .then((resp) => {
           if (resp) {
+            Swal.fire({
+              title: "Tuyệt vời!",
+              text: "Bạn đã khởi tạo thành công môn" + subjectData.name + " !",
+              icon: "success"
+            });
             window.location.reload();
           }
         })
         .catch((err) => {
+          Swal.fire({
+            title: "Opss..",
+            text: err,
+            icon: "warning"
+          });
           console.log(err);
         });
     }

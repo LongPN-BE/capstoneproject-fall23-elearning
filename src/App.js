@@ -54,10 +54,12 @@ import Accounts from "./pages/Manager/ManageAccounts/ManageAccounts";
 import ListConfig from './pages/Manager/ManageConfig/ManageConfig';
 import SyllabusByCourse from './pages/Manager/DetailCourse/SyllabusByCourse';
 import PreviewCourse from './pages/Manager/PreviewCourse';
+import Report from './pages/Manager/ReportAccount/ReportAccount';
 import PreviewLesson from './pages/Manager/DetailCourse/DetailLesson';
 import PreviewQuizz from './pages/Manager/DetailCourse/DetailLesson/Quizz';
 import ListPaymenHistory from './pages/Manager/ManageFiancial/ManageHistoryPayment';
 import ListTransactionHistory from './pages/Manager/ManageFiancial/ManageHistoryTransaction';
+import ListTransactionAproved from './pages/Manager/ManageFiancial/ManageApproved';
 import AllCourses from './components/Landing/AllCourses/AllCourses';
 import CoursesPage from './pages/Landing/CoursesPage';
 import ListFeedback from './pages/Manager/CoursesBySubject/Evaluate/ListFeedback';
@@ -164,8 +166,10 @@ const App = () => {
             </Route>
             <Route path="/payments" element={<ListPaymenHistory />} />
             <Route path="/transactions" element={<ListTransactionHistory />} />
+            <Route path="/transaction-aprroved" element={<ListTransactionAproved />} />
             <Route path="/accounts" element={<Accounts />} />
             <Route path="/configs" element={<ListConfig />} />
+            <Route path="/report-accounts" element={<Report />} />
           </Routes>
         </NavBar>
       ) : user?.role === 'STUDENT' ? (

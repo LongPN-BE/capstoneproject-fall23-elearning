@@ -8,11 +8,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { postData } from "../../services/AppService";
 import Loading from "../../components/Loading/Loading";
 import Cookies from "js-cookie";
+import { Alert } from "@mui/material";
 
 const Login = () => {
   const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
-
+  const [erro, setErro] = useState('');
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -28,7 +29,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true while waiting for the response
+    // setLoading(true); // Set loading to true while waiting for the response
 
     try {
       const response = await postData('/auth/login', formData);
@@ -45,13 +46,16 @@ const Login = () => {
         navigate('/');
       } else {
         // Authentication failed, handle the error (e.g., show an error message)
+        setErro('Sai tên đăng nhập hoặc tài khoản.')
         console.error('Authentication failed. Invalid email or password.');
       }
     } catch (error) {
+      setErro('Sai tên đăng nhập hoặc tài khoản.')
       console.error('Error during authentication:', error.message);
-    } finally {
-      setLoading(false); // Set loading to false after the response is received
     }
+    // finally {
+    //   setLoading(false); // Set loading to false after the response is received
+    // }
   };
 
   return isLoading ? (
@@ -71,6 +75,7 @@ const Login = () => {
             <div className="card border-0 shadow-lg rounded-3 my-5">
               <div className="card-body p-4 p-sm-5 ">
                 <h2 className="card-title text-center text-uppercase mb-5 fw-bold fs-5">Đăng nhập</h2>
+                {erro == '' ? (<></>) : (<Alert  className="mb-3" severity="info">{erro}</Alert>)}
 
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">

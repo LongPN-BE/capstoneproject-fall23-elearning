@@ -92,23 +92,34 @@ export const navData = {
     },
     {
       label: 'Quản lý tài khoản',
-      icon: <PeopleAltIcon />,
-      path: '/accounts',
+      icon: <GridViewRoundedIcon />,
+      subItems: [
+        {
+          label: 'Tài khoản',
+          icon: <PeopleAltIcon />,
+          path: '/accounts',
+        },
+        {
+          label: 'Báo cáo',
+          icon: <ReportIcon />,
+          path: '/report-accounts',
+        },
+      ],
     },
     {
       label: 'Quản lý môn học',
-      icon: <BookRoundedIcon />,
+      icon: <GridViewRoundedIcon />,
       subItems: [
         {
           label: 'Môn học',
-          icon: <GridViewRoundedIcon />,
+          icon: <BookRoundedIcon />,
           path: '/subjects',
         },
-        // {
-        //   label: 'Báo cáo',
-        //   icon: <ReportIcon />,
-        //   path: '##',
-        // },
+        {
+          label: 'Báo cáo',
+          icon: <ReportIcon />,
+          path: '/report-accounts',
+        },
       ],
     },
     {
@@ -124,6 +135,11 @@ export const navData = {
           label: 'Lịch sử thanh toán',
           icon: <PaidIcon />,
           path: '/payments',
+        },
+        {
+          label: 'Duyệt tiền',
+          icon: <PaidIcon />,
+          path: '/transaction-aprroved',
         },
       ],
     },

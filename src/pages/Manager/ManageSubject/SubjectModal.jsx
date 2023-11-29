@@ -65,15 +65,15 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
     setEditedSubject({ ...editedSubject, [fieldName]: value });
     switch (fieldName) {
       case 'name':
-        if (value == '' || 2 <= value.length >= 20) {
+        if (value == '' || value.length >= 50) {
           setEditedSubjectError({
             ...editedSubjectError,
-            [fieldName]: 'Không được để trống hoặc quá dài quá ' + 20 + ' ký tự!',
+            [fieldName]: 'Không được để trống hoặc quá dài quá ' + 50 + ' ký tự!',
           });
         } else {
           setEditedSubjectError({ ...editedSubjectError, [fieldName]: '' });
         }
-        console.log('name valid');
+        // console.log('name valid');
         break;
       case 'description':
         if (value == '' || value.length >= 150) {
@@ -84,7 +84,7 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
         } else {
           setEditedSubjectError({ ...editedSubjectError, [fieldName]: '' });
         }
-        console.log('description valid');
+        // console.log('description valid');
         break;
       case 'minPrice':
         if (value == '' || value < 100000) {
@@ -95,20 +95,9 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
         } else {
           setEditedSubjectError({ ...editedSubjectError, [fieldName]: '' });
         }
-        console.log('minPrice valid');
+        // console.log('minPrice valid');
         break;
     }
-
-    //let max = 70; // ký tự tối đa
-    // if (value == '' || value.length >= max) {
-    //   setEditedSubjectError({
-    //     ...editedSubjectError,
-    //     [fieldName]: 'Không được để trống hoặc quá dài quá ' + max + ' ký tự!',
-    //   });
-    // }
-    // else {
-    //   setEditedSubjectError({ ...editedSubjectError, [fieldName]: '' });
-    // }
   };
 
   const handleSave = () => {
@@ -122,14 +111,14 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
       // If editing an existing subject, call the onUpdate function
       onUpdate({ ...subject, ...editedSubject });
       // add function api here
-      alert(editedSubject.name);
+      // alert(editedSubject.name);
 
       //-- end function update
     } else {
       // If adding a new subject, call the onSave function
       onSave(editedSubject);
       // add function api here
-      alert(editedSubject.name);
+      // alert(editedSubject.name);
       //-- end function add new
       clearModal();
     }
@@ -276,8 +265,8 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
             onChange={(e) => handleInputChange(e, 'status')}
             disabled
           >
-            <MenuItem value={false}>Dừng hoạt động</MenuItem>
-            <MenuItem value={true}>Đang hoạt động</MenuItem>
+            <MenuItem value={false}>Không hoạt động</MenuItem>
+            <MenuItem value={true}>Hoạt động</MenuItem>
           </Select>
         </FormControl>
       </DialogContent>
