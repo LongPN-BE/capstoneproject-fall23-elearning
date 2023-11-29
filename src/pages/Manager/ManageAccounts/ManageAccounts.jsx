@@ -23,6 +23,8 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
 import CustomBreadcrumbs from '../../../components/Breadcrumbs';
 import Swal from 'sweetalert2';
+import emailjs from 'emailjs-com';
+import { YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, YOUR_USER_ID } from '../../../util/Constants';
 
 export default function ListAccount() {
   const [data, setData] = useState([]);
@@ -122,7 +124,25 @@ export default function ListAccount() {
       await postData('/account/teacher-account', body, token)
         .then((resp) => {
           if (resp) {
-            window.location.reload();
+            const templateParams = {
+              from_email: "onlearn@gmail.com",
+              to_email: accountData.email,
+              user_name: "Onlearn",
+              message: "Đây là thông tin tài khoản giáo viên của bạn: \n Tài khoản: " + accountData.username +
+                " \n Mật khẩu: " + accountData.password +
+                " \n Rất vui khi có sự tham gia của bạn."
+            };
+
+            emailjs.send(YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, templateParams, YOUR_USER_ID)
+              .then((result) => {
+                Swal.fire({
+                  title: "Chúc mừng",
+                  text: "Thực hiện thành công tạo tài khoản " + accountData.username + "\n Thông tin đã được gửi về địa chỉ email " + accountData.email,
+                  icon: "success"
+                }).then(window.location.reload())
+              }, (error) => {
+                console.log('Gửi mail thất bại.', error.text);
+              });
           }
         })
         .catch((err) => {
@@ -150,13 +170,25 @@ export default function ListAccount() {
         if (result.isConfirmed) {
           let res = fetchData('/account/enable?account_id=' + account.id, token);
           if (res) {
-            Swal.fire({
-              title: "Kích hoạt thành công!",
-              text: res.message,
-              icon: "success",
-              footer: '<a href="#">Tại sao tôi gặp vấn đề này?</a>'
-            });
-            window.location.reload();
+            const templateParams = {
+              from_email: "onlearn@gmail.com",
+              to_email: account.email,
+              user_name: "Onlearn",
+              message: "Tài khoản của bạn đã được kích hoạt lại.\n Chúng tôi rất vui vì có sự tham gia của bạn. \n Nếu có vấn đề xin liên hệ qua email: onlearn@gmail.com . Để được hỗ trợ."
+            };
+
+            emailjs.send(YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, templateParams, YOUR_USER_ID)
+              .then((result) => {
+                Swal.fire({
+                  title: "Kích hoạt thành công!",
+                  text: res.message,
+                  icon: "success",
+                  footer: '<a href="#">Tại sao tôi gặp vấn đề này?</a>'
+                });
+                window.location.reload();
+              }, (error) => {
+                console.log('Gửi mail thất bại.', error.text);
+              });
           }
           // Swal.fire("Saved!", "", "success");
         } else if (result.isDenied) {
@@ -186,16 +218,26 @@ export default function ListAccount() {
         if (result.isConfirmed) {
           let res = fetchData('/account/disable?account_id=' + account.id, token);
           if (res) {
-            Swal.fire({
-              title: "Vô hiệu thành công!",
-              text: res.message,
-              icon: "success",
-              footer: '<a href="#">Why do I have this issue?</a>'
-            });
-            window.location.reload();
+            const templateParams = {
+              from_email: "onlearn@gmail.com",
+              to_email: account.email,
+              user_name: "Onlearn",
+              message: "Tài khoản của bạn hiện đã bị khóa vì một số lý do. \n Nếu có vấn đề xin liên hệ qua email: onlearn@gmail.com . Để được hỗ trợ. Cám ơn " + account.profile.firstName + " vì đã đồng hành cùng chúng tôi trong thời gian qua."
+            };
 
+            emailjs.send(YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, templateParams, YOUR_USER_ID)
+              .then((result) => {
+                Swal.fire({
+                  title: "Vô hiệu thành công!",
+                  text: res.message,
+                  icon: "success",
+                  footer: '<a href="#">Tại sao tôi gặp vấn đề này?</a>'
+                });
+                window.location.reload();
+              }, (error) => {
+                console.log('Gửi mail thất bại.', error.text);
+              });
           }
-          // Swal.fire("Saved!", "", "success");
         } else if (result.isDenied) {
           Swal.fire("Không có gì thay đổi", "", "info");
         }

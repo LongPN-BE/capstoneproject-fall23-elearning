@@ -5,7 +5,7 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
     username: '',
     firstName: '',
     lastName: '',
-    password: '',
+    password: 'onlearn/123@123a',
     email: '',
     role: '',
     status: '',
@@ -14,48 +14,92 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
     username: '',
     firstName: '',
     lastName: '',
-    password: '',
     email: '',
     role: '',
     status: '',
   });
 
-  useEffect(() => {
-    if (account) {
-      // Populate the form fields if a account is provided for editing
-      setEditedAccount({
-        username: account.username,
-        firstName: account.profile.firstName,
-        lastName: account.profile.lastName,
-        email: account.profile.email,
-        password: account.password,
-        role: account.role,
-      });
-    } else {
-      // Clear the form fields if adding a new account
-      setEditedAccount({
-        username: '',
-        firstName: '',
-        lastName: '',
-        password: '',
-        email: '',
-        role: '',
-      });
-    }
-  }, [account]);
+  // useEffect(() => {
+  //   if (account) {
+  //     // Populate the form fields if a account is provided for editing
+  //     setEditedAccount({
+  //       username: account.username,
+  //       firstName: account.profile.firstName,
+  //       lastName: account.profile.lastName,
+  //       email: account.profile.email,
+  //       password: account.password,
+  //       role: account.role,
+  //     });
+  //   } else {
+  //     // Clear the form fields if adding a new account
+  //     setEditedAccount({
+  //       username: '',
+  //       firstName: '',
+  //       lastName: '',
+  //       password: '',
+  //       email: '',
+  //       role: '',
+  //     });
+  //   }
+  // }, [account]);
 
   const handleInputChange = (e, fieldName) => {
     const { value } = e.target;
-    let max = 70; // ký tự tối đa
     setEditedAccount({ ...editedAccount, [fieldName]: value });
-    if (value == '' || value.length >= max) {
-      setEditedAccountError({
-        ...editedAccountError,
-        [fieldName]: 'Không được để trống hoặc quá dài quá ' + max + ' ký tự!',
-      });
-    } else {
-      setEditedAccountError({ ...editedAccountError, [fieldName]: '' });
+    switch (fieldName) {
+      case "username":
+        if (value === '' || value.length >= 50) {
+          setEditedAccountError({
+            ...editedAccountError,
+            [fieldName]: 'Không được để trống hoặc quá dài quá ' + 50 + ' ký tự!',
+          });
+        } else {
+          setEditedAccountError({ ...editedAccountError, [fieldName]: '' });
+        }
+        break;
+      case "firstName":
+        if (value === '' || value.length >= 50) {
+          setEditedAccountError({
+            ...editedAccountError,
+            [fieldName]: 'Không được để trống hoặc quá dài quá ' + 50 + ' ký tự!',
+          });
+        } else {
+          setEditedAccountError({ ...editedAccountError, [fieldName]: '' });
+        }
+        break;
+      case "lastName":
+        if (value === '' || value.length >= 50) {
+          setEditedAccountError({
+            ...editedAccountError,
+            [fieldName]: 'Không được để trống hoặc quá dài quá ' + 70 + ' ký tự!',
+          });
+        } else {
+          setEditedAccountError({ ...editedAccountError, [fieldName]: '' });
+        }
+        break;
+      case "email":
+        if (value === '' || value.length >= 50) {
+          setEditedAccountError({
+            ...editedAccountError,
+            [fieldName]: 'Không được để trống hoặc quá dài quá ' + 70 + ' ký tự!',
+          });
+        } else {
+          setEditedAccountError({ ...editedAccountError, [fieldName]: '' });
+        }
+        break;
     }
+
+
+
+
+    // if (value == '' || value.length >= max) {
+    //   setEditedAccountError({
+    //     ...editedAccountError,
+    //     [fieldName]: 'Không được để trống hoặc quá dài quá ' + max + ' ký tự!',
+    //   });
+    // } else {
+    //   setEditedAccountError({ ...editedAccountError, [fieldName]: '' });
+    // }
   };
 
   const handleSave = () => {
@@ -68,16 +112,11 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
     if (account) {
       // If editing an existing account, call the onUpdate function
       onUpdate({ ...account, ...editedAccount });
-      // add function api here
-      alert(editedAccount.username);
 
       //-- end function update
     } else {
       // If adding a new account, call the onSave function
       onSave(editedAccount);
-      // add function api here
-      alert(editedAccount.username);
-      //-- end function add new
       clearModal();
     }
   };
@@ -99,7 +138,7 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
     <Dialog open={isOpen} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>{account ? 'Cập nhật tài khoản' : 'Thêm mới tài khoản giáo viên'}</DialogTitle>
       <DialogContent>
-        {editedAccountError.username == '' ? (
+        {editedAccountError.username === '' ? (
           <>
             <TextField
               fullWidth
@@ -127,7 +166,7 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
           </>
         )}
 
-        {editedAccountError.password == '' ? (
+        {/* {editedAccountError.password == '' ? (
           <>
             {' '}
             <TextField
@@ -156,9 +195,9 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
               required
             />
           </>
-        )}
+        )} */}
 
-        {editedAccountError.firstName == '' ? (
+        {editedAccountError.firstName === '' ? (
           <>
             <TextField
               fullWidth
@@ -188,7 +227,7 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
           </>
         )}
 
-        {editedAccountError.lastName == '' ? (
+        {editedAccountError.lastName === '' ? (
           <>
             <TextField
               fullWidth
@@ -216,7 +255,7 @@ const AccountModal = ({ isOpen, onClose, onSave, onUpdate, account }) => {
           </>
         )}
 
-        {editedAccountError.email == '' ? (
+        {editedAccountError.email === '' ? (
           <>
             <TextField
               fullWidth
