@@ -50,7 +50,6 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
       !editedConfig.dateCreate ||
       !editedConfig.studyingTime ||
       !editedConfig.retryTestTime ||
-      !editedConfig.defaultImage ||
       !editedConfig.defaultQuizTime
     ) {
       // Show an error message or handle the validation as needed
@@ -164,15 +163,6 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
           name="created_date"
           value={editedConfig.retryTestTime}
           onChange={(e) => handleInputChange(e, 'retryTestTime')}
-        />
-        <TextField
-          fullWidth
-          autoFocus
-          margin="dense"
-          label="Thumbnail mặc định"
-          name="asset"
-          value={editedConfig.defaultImage}
-          onChange={(e) => handleInputChange(e, 'defaultImage')}
         />
       </DialogContent>
       <DialogActions>

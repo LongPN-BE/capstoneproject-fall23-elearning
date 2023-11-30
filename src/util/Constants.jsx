@@ -173,12 +173,11 @@ export const navData = {
         // },
       ],
     },
-
-    // {
-    //   label: 'Cấu hình hệ thống',
-    //   icon: <SettingsIcon />,
-    //   path: '/configs',
-    // },
+    {
+      label: 'Cấu hình hệ thống',
+      icon: <SettingsIcon />,
+      path: '/configs',
+    },
     // Add more manager-specific items
   ],
 };

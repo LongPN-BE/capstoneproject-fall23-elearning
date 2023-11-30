@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, Typography, Button } from '@material-ui/core';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Typography, Button, TextField } from '@material-ui/core';
+import moment from 'moment/moment';
 const ViewConfig = ({ isOpen, onClose, onSave, onUpdate, config }) => {
   const [editedConfig, setEditedConfig] = useState({
     version: '',
@@ -77,15 +78,54 @@ const ViewConfig = ({ isOpen, onClose, onSave, onUpdate, config }) => {
 
   return (
     <Dialog open={isOpen} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Cập nhật chính sách</DialogTitle>
+      <Typography className="text-end p-3" variant="caption">
+        VERSION {editedConfig.version}
+      </Typography>
+      <div className="d-flex justify-content-center">
+        <DialogTitle>Chi tiết cấu hình</DialogTitle>
+      </div>
+
       <DialogContent>
-        <Typography>Cấu hình hệ thống version {editedConfig.version}</Typography>
-        <Typography sx={{ mt: 2 }}>Mô tả cập nhật: {editedConfig.projectName} </Typography>
-        <Typography sx={{ mt: 2 }}>Ngày tạo: {editedConfig.dateCreate} </Typography>
-        <Typography sx={{ mt: 2 }}>Thời gian học mặc định: {editedConfig.studyingTime} </Typography>
-        <Typography sx={{ mt: 2 }}>Số lần làm quiz mặc định: {editedConfig.defaultQuizTime} </Typography>
-        <Typography sx={{ mt: 2 }}>Ảnh bìa mặc định: </Typography>
-        <img src={editedConfig.defaultImage} alt="" />
+        <Typography>Mô tả cập nhật: </Typography>
+        <TextField
+          helperText=" "
+          value={editedConfig.projectName}
+          id="demo-helper-text-aligned-no-helper"
+          variant="filled"
+          multiline
+          minRows={4}
+          fullWidth
+        />
+        <div className="d-flex row">
+          <div className="col-6">
+            <Typography>Thời gian học mặc định: </Typography>
+            <TextField
+              helperText=" "
+              value={editedConfig.studyingTime}
+              id="demo-helper-text-aligned-no-helper"
+              variant="filled"
+              fullWidth
+            />
+          </div>
+          <div className="col-6">
+            <Typography>Số lần làm quiz mặc định: </Typography>
+            <TextField
+              helperText=" "
+              value={editedConfig.defaultQuizTime}
+              id="demo-helper-text-aligned-no-helper"
+              variant="filled"
+              fullWidth
+            />
+          </div>
+        </div>
+        <Typography>Ngày tạo: </Typography>
+        <TextField
+          helperText=" "
+          value={moment(editedConfig.dateCreate).format('DD/MM/YYYY, h:mm A')}
+          id="demo-helper-text-aligned-no-helper"
+          variant="filled"
+          fullWidth
+        />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
