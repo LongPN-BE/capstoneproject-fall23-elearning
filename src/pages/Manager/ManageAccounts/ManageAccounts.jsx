@@ -126,11 +126,12 @@ export default function ListAccount() {
           if (resp) {
             const templateParams = {
               from_email: "onlearn@gmail.com",
+              to_name: accountData.firstName,
               to_email: accountData.email,
               user_name: "Onlearn",
               message: "Đây là thông tin tài khoản giáo viên của bạn: \n Tài khoản: " + accountData.username +
                 " \n Mật khẩu: " + accountData.password +
-                " \n Rất vui khi có sự tham gia của bạn."
+                " ."
             };
 
             emailjs.send(YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, templateParams, YOUR_USER_ID)
@@ -172,9 +173,10 @@ export default function ListAccount() {
           if (res) {
             const templateParams = {
               from_email: "onlearn@gmail.com",
+              to_name: account.profile.firstName,
               to_email: account.profile.email,
               user_name: "Onlearn",
-              message: "Tài khoản của bạn đã được kích hoạt lại.\n Chúng tôi rất vui vì có sự tham gia của bạn. \n Nếu có vấn đề xin liên hệ qua email: onlearn@gmail.com . Để được hỗ trợ."
+              message: "Tài khoản của bạn đã được kích hoạt lại.\n Chúng tôi rất vui vì có sự tham gia của bạn."
             };
 
             emailjs.send(YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, templateParams, YOUR_USER_ID)
@@ -224,9 +226,10 @@ export default function ListAccount() {
             }).then((result) => {
               const templateParams = {
                 from_email: "onlearn@gmail.com",
+                to_name: account.profile.firstName,
                 to_email: account.profile.email,
                 user_name: "Onlearn",
-                message: "Tài khoản của bạn hiện đã bị khóa vì một số lý do. \n Nếu có vấn đề xin liên hệ qua email: onlearn@gmail.com . Để được hỗ trợ. Cám ơn " + account.profile.firstName + " vì đã đồng hành cùng chúng tôi trong thời gian qua."
+                message: "Tài khoản của bạn hiện đã bị khóa vì một số lý do. "
               };
 
               emailjs.send(YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, templateParams, YOUR_USER_ID)
