@@ -24,7 +24,7 @@ const navLinks = [
   },
   {
     display: 'Chúng tôi',
-    url: '##',
+    url: '/about-us',
   },
 ];
 

@@ -215,4 +215,5 @@ export const vapidKey = 'BNuvvPsZSm3fWGQXoH5-jar9X-tfA1a6ux3usC1ESFl5bsvc2FaZP4v
 export const invalidInput = 'number should positive and string should not be empty';
 export const YOUR_SERVICE_ID = 'service_dv0ty7g';
 export const YOUR_TEMPLATE_ID = 'template_c59dohj';
+export const YOUR_TEMPLATE_CONTACT_US_ID = 'template_njkn4aq';
 export const YOUR_USER_ID = 'tClgm4YE7q5l8m6Vz';
