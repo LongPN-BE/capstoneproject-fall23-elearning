@@ -12,6 +12,7 @@ import 'boxicons/css/boxicons.min.css';
 import CreateQuiz from './components/ManageCourses/Quiz/CreateQuiz';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
+import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
 import AboutUs from './pages/Landing/ContactUs';
 import NavBar from './components/Navigation/NavBar';
 import { useState } from 'react';
@@ -108,7 +109,10 @@ const App = () => {
 
   if (!user) {
     let userTmp = Cookies.get('user');
-    if (!userTmp && location.pathname !== '/' && location.pathname !== '/login' && location.pathname !== '/register' && location.pathname !== '/all-courses' && location.pathname !== '/about-us') {
+    if (!userTmp && location.pathname !== '/'
+      && location.pathname !== '/login' && location.pathname !== '/register'
+      && location.pathname !== '/all-courses' && location.pathname !== '/about-us'
+      && location.pathname !== '/forgot-password') {
       return (window.location.href = '/');
     }
   }
@@ -210,6 +214,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/" element={<LandingPage />} />
           <Route path="/all-courses" element={<CoursesPage />} />
         </Routes>

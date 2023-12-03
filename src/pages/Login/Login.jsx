@@ -75,7 +75,7 @@ const Login = () => {
             <div className="card border-0 shadow-lg rounded-3 my-5">
               <div className="card-body p-4 p-sm-5 ">
                 <h2 className="card-title text-center text-uppercase mb-5 fw-bold fs-5">Đăng nhập</h2>
-                {erro == '' ? (<></>) : (<Alert  className="mb-3" severity="info">{erro}</Alert>)}
+                {erro == '' ? (<></>) : (<Alert className="mb-3" severity="info">{erro}</Alert>)}
 
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">
@@ -85,7 +85,7 @@ const Login = () => {
                       value={formData.username}
                       onChange={handleChange}
                       className="form-control"
-                      placeholder="Tên đăng nhập (hoặc Email)"
+                      placeholder="Tên đăng nhập"
                       required
                     />
                   </div>
@@ -106,8 +106,8 @@ const Login = () => {
                     </button>
                   </div>
                 </form>
-
-                <hr className="my-4" />
+                {/* 
+                <hr className="my-3" />
                 <div className="d-grid mb-2">
                   <button
                     className={classNames(Styles.btn_custom, Styles.btn_google, ' text-uppercase fw-bold')}
@@ -115,10 +115,18 @@ const Login = () => {
                   >
                     Tiếp tục với Google
                   </button>
-                </div>
-                <div className="mb-3 d-flex justify-content-center">
+                </div> */}
+                <hr className="my-3" />
+                <Link to="/forgot-password" className="mb-2 d-flex justify-content-center" style={{ color: 'blue' }}>
+                  Bạn quên mật khẩu?
+                </Link>
+                <div className="mb-2 d-flex justify-content-center">
                   <p className="form-check-label">
-                    Bạn chưa có tài khoản đăng nhập? <Link to="/register">Đăng ký ngay</Link>
+                    Bạn chưa có tài khoản đăng nhập?{' '}
+                    <Link to="/register" style={{ color: 'blue' }}>
+                      Đăng ký
+                    </Link>{' '}
+                    ngay.
                   </p>
                 </div>
               </div>
