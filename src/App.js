@@ -65,6 +65,8 @@ import ListTransactionAproved from './pages/Manager/ManageFiancial/ManageApprove
 import AllCourses from './components/Landing/AllCourses/AllCourses';
 import CoursesPage from './pages/Landing/CoursesPage';
 import ListFeedback from './pages/Manager/CoursesBySubject/Evaluate/ListFeedback';
+import StaffHeader from './components/StaffLanding/StaffHeader/StaffHeader';
+import StaffNavbar from './components/Dashboard/Navbar/StaffHeader';
 
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -155,6 +157,8 @@ const App = () => {
         </NavBar>
       ) : user?.role === 'STAFF' ? (
         <NavBar>
+          {/* <StaffHeader/> */}
+          <StaffNavbar/>
           <Routes>
             <Route path="/" element={<Navigate to="/subjects" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
@@ -179,6 +183,7 @@ const App = () => {
         </NavBar>
       ) : user?.role === 'ADMIN' ? (
         <NavBar>
+          <StaffNavbar/>
           <Routes>
             <Route path="/" element={<Navigate to="/accounts" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />

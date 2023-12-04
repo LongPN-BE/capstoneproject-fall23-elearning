@@ -24,11 +24,7 @@
     color: #4356FF;
   }
   
-  .nav__right p {
-    font-weight: 500;
-    color: #3540aa;
-    font-size: 1.1rem;
-  }
+  
   
   .nav__btn {
     background-color: #4356FF !important;
@@ -85,6 +81,8 @@
   
     .nav__right {
       display: none;
+      border: 1px;
+      border-radius: 5%;
     }
   
     .active__menu {
@@ -96,6 +94,7 @@
   .dropdown {
     display: none;
     position: absolute;
+    border-radius: 3%;
     background-color: white;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
@@ -112,8 +111,10 @@
     list-style-type: none;
     padding: 0;
   }
+
   
-  .dropdown ul li {
+  
+  .dropdown ul li  {
     padding: 12px;
     text-align: left;
     cursor: pointer;

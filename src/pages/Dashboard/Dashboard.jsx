@@ -2,7 +2,6 @@ import React from 'react';
 import Styles from './Dashboard.module.scss';
 import classNames from 'classnames';
 
-import Navbar from '../../components/Dashboard/Navbar/Navbar';
 import TopBox from '../../components/Dashboard/TopBox/TopBox';
 import ChartBox from '../../components/Dashboard/ChartBox/ChartBox';
 import BigChartBox from '../../components/Dashboard/BigChartBox/BigChartBox';
