@@ -68,6 +68,7 @@ import ListFeedback from './pages/Manager/CoursesBySubject/Evaluate/ListFeedback
 import StaffHeader from './components/StaffLanding/StaffHeader/StaffHeader';
 import StaffNavbar from './components/Dashboard/Navbar/StaffHeader';
 import AccountCard from './components/Account/AccountCard';
+import AccountTabComponent from './components/Account/AccountTabComponent';
 
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -163,7 +164,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Navigate to="/subjects" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/test" element={<AccountCard />} />
+            <Route path="/test" element={<AccountTabComponent />} />
             <Route path="/subjects" element={<ManageSubject />} />
             <Route path="/subject/:subjectId/course" element={<CourseBySubject />} />
             <Route path="/subject/:subjectId/course/:courseId/evaluate" element={<ListFeedback />} />
