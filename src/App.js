@@ -67,6 +67,7 @@ import CoursesPage from './pages/Landing/CoursesPage';
 import ListFeedback from './pages/Manager/CoursesBySubject/Evaluate/ListFeedback';
 import StaffHeader from './components/StaffLanding/StaffHeader/StaffHeader';
 import StaffNavbar from './components/Dashboard/Navbar/StaffHeader';
+import AccountCard from './components/Account/AccountCard';
 
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -158,10 +159,11 @@ const App = () => {
       ) : user?.role === 'STAFF' ? (
         <NavBar>
           {/* <StaffHeader/> */}
-          <StaffNavbar/>
+          <StaffNavbar />
           <Routes>
             <Route path="/" element={<Navigate to="/subjects" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/test" element={<AccountCard />} />
             <Route path="/subjects" element={<ManageSubject />} />
             <Route path="/subject/:subjectId/course" element={<CourseBySubject />} />
             <Route path="/subject/:subjectId/course/:courseId/evaluate" element={<ListFeedback />} />
@@ -183,7 +185,7 @@ const App = () => {
         </NavBar>
       ) : user?.role === 'ADMIN' ? (
         <NavBar>
-          <StaffNavbar/>
+          <StaffNavbar />
           <Routes>
             <Route path="/" element={<Navigate to="/accounts" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
