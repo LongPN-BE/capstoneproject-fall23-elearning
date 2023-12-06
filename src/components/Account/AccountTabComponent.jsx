@@ -134,13 +134,7 @@ export default function AccountTabComponent() {
       <Box sx={{ width: '100%' }}>
         <Box className="px-3">
           <StyledTabs value={value} onChange={handleChange} aria-label="basic tabs example">
-            <StyledTab
-              icon={<BadgeRoundedIcon />}
-              iconPosition="start"
-              sx={{ backgroundColor: 'transparent', color: 'inherit', textDecoration: 'none' }}
-              label="General"
-              {...a11yProps(0)}
-            ></StyledTab>
+            <StyledTab icon={<BadgeRoundedIcon />} iconPosition="start" label="General" {...a11yProps(0)}></StyledTab>
             <StyledTab icon={<ReceiptRoundedIcon />} iconPosition="start" label="Billing" {...a11yProps(1)}></StyledTab>
             <StyledTab icon={<VpnKeyRoundedIcon />} iconPosition="start" label="Security" {...a11yProps(2)}></StyledTab>
           </StyledTabs>

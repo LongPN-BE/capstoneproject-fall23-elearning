@@ -16,10 +16,13 @@ import {
 } from '@mui/material';
 import { account } from './../../mock/mock-data';
 import Cookies from 'js-cookie';
-import TableTransactions from '../../pages/StudentProfile/components/TableTransactions';
 import { fetchData, postData } from '../../services/AppService';
 import { PaymentHistoryControllerApi } from '../../api/generated/generate-api';
 import ApiClientSingleton from '../../api/apiClientImpl';
+import backgroundImg from '../../assets/images/overlay_2.jpg';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import PaypalIcon from '../../assets/images/paypal-icon.png';
+import TransactionTable from './TransactionTable';
 
 const paymentHisApi = new PaymentHistoryControllerApi(ApiClientSingleton.getInstance());
 function BillingCard() {
@@ -32,15 +35,17 @@ function BillingCard() {
       setUser(JSON.parse(user));
       const token = Cookies.get('token');
       if (token) {
-        fetchData(`/wallet/by-account?account_id=${JSON.parse(user).id}`, token).then((resp) => {
+        // ${JSON.parse(user).id}
+        fetchData(`/wallet/by-account?account_id=11`, token).then((resp) => {
           console.log(resp);
           if (resp) {
             setWallet(resp);
           }
         });
-        paymentHisApi.getPaymentHistoryByTeacher(JSON.parse(user).teacherId, (err, res) => {
-          if (res) {
-            setTransactions(res);
+        fetchData(`/transaction/by-student?studentId=11`, token).then((resp) => {
+          console.log(resp);
+          if (resp) {
+            setTransactions(resp);
           }
         });
       }
@@ -66,42 +71,49 @@ function BillingCard() {
   };
 
   return (
-    user && (
+    wallet && (
       <>
         <div className="row">
           <div className="col-4">
             <Card
-              className="p-3"
+              className="p-2"
               sx={{
                 borderRadius: '20px',
                 maxWidth: '100%',
                 boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px;',
+                background: ' linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               }}
             >
-              <CardContent sx={{ alignItems: 'center', textAlign: 'center' }}>
-                <div className="p-5">
-                  <div className="d-flex justify-content-center p-2">
-                    <div style={{ borderStyle: 'dotted' }} className="p-2 border rounded-circle">
-                      <Avatar
-                        src="/static/images/avatar/1.jpg"
-                        sx={{ width: 130, height: 130, backgroundColor: '#D7DBFF' }}
-                      />
-                    </div>
+              <CardContent>
+                <Typography className="text-end" style={{ fontWeight: 700, color: 'white', opacity: '80%' }}>
+                  {' '}
+                  # {wallet.id}
+                </Typography>
+                <div className=" d-flex">
+                  <div className="rounded-circle p-2">
+                    <AccountBalanceWalletIcon />
                   </div>
-                  <Typography style={{ fontWeight: 700, textAlign: 'center' }}>@username</Typography>
+                  <div className=" p-2">
+                    <Typography style={{ fontSize: 18, fontWeight: 700, textAlign: 'left', color: '#212b36' }}>
+                      Ví tài khoản
+                    </Typography>
+                  </div>
                 </div>
-
-                <Typography style={{ fontWeight: 700, color: 'grey', textAlign: 'center' }}>STUDENT</Typography>
+                <div className="d-flex justify-content-center p-2">
+                  <Typography style={{ fontSize: 25, fontWeight: 700, textAlign: 'center', color: 'white' }}>
+                    {wallet?.amount.toLocaleString()} VND
+                  </Typography>
+                </div>
+                <div className="d-flex my-2">
+                  <img src={PaypalIcon} className="p-1 mx-1" style={{ width: 30, height: 30 }} alt="" />
+                  <Typography className="pt-1" style={{ fontWeight: 700, color: '#212b36' }}>
+                    PAYPAL ID:
+                  </Typography>
+                </div>
+                <Typography style={{ fontWeight: 700, color: 'white', width: 500, overflow: 'hidden' }}>
+                  {wallet?.bankNumber}
+                </Typography>
               </CardContent>
-              <CardActions className="d-flex justify-content-center mb-3">
-                <Button
-                  className="rounded-pill"
-                  style={{ backgroundColor: '#ffe4de', fontWeight: 700, color: '#c4403d' }}
-                  variant="filled"
-                >
-                  Khoá tài khoản
-                </Button>
-              </CardActions>
             </Card>
           </div>
 
@@ -114,62 +126,9 @@ function BillingCard() {
                 boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px;',
               }}
             >
-              <CardContent
-                sx={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(2, minmax(80px, 1fr))',
-                  gap: 1.5,
-                }}
-              >
-                <FormControl sx={{ borderRadius: '20' }}>
-                  <TextField disabled className="rounded-top" id="first_name" label="Họ" defaultValue="Nguyễn" />
-                </FormControl>
-                <FormControl>
-                  <TextField disabled className="rounded-top" id="last_name" label="Tên" defaultValue="Anh" />
-                </FormControl>
-                <FormControl>
-                  <TextField
-                    disabled
-                    className="rounded-top"
-                    label="Email"
-                    id="email"
-                    defaultValue="anhncd@gmail.com"
-                  />
-                </FormControl>
-                <FormControl>
-                  <TextField
-                    disabled
-                    className="rounded-top"
-                    label="Số điện thoại"
-                    id="phone"
-                    defaultValue="0123456789"
-                  />
-                </FormControl>
-                <FormControl sx={{ gridColumn: '1/-1' }}>
-                  <TextField disabled className="rounded-top" label="Địa chỉ" id="address" defaultValue="" />
-                </FormControl>
-                <FormControl sx={{ gridColumn: '1/-1' }}>
-                  <TextField
-                    disabled
-                    className="rounded-top"
-                    label="Mô tả"
-                    id="descripton"
-                    minRows={4}
-                    multiline
-                    defaultValue=""
-                  />
-                </FormControl>
+              <CardContent>
+                <TransactionTable data={transactions} />
               </CardContent>
-              <div className="d-flex justify-content-end px-2">
-                <CardActions>
-                  <button
-                    className="btn px-3"
-                    style={{ backgroundColor: '#212b36', color: 'white', borderRadius: 8, fontWeight: 700 }}
-                  >
-                    Lưu
-                  </button>
-                </CardActions>
-              </div>
             </Card>
           </div>
         </div>
