@@ -169,11 +169,15 @@ const Register = () => {
                   </div>
 
                   <input type="checkbox" id="checkbox" name="checkbox" value="OK" onClick={handleChange} />
-                  <label style={{ marginLeft: 5 }}> Đồng ý với các điều khoản.</label>
+                  <label style={{ marginLeft: 5 }}> Tiếp tục nghĩa là bạn đồng ý với </label> {' '}
                   <Link to="##" style={{ color: 'blue' }}>
-                    {' '}
-                    Tài liệu chính sách đồng ý.
-                  </Link>
+                    Điều khoản sử dụng
+                  </Link> {' '}
+                  và  {' '}
+                  <Link to="/privacy-policy" style={{ color: 'blue' }}>
+                    Chính sách bảo mật
+                  </Link>{' '} của chúng tôi.
+
 
                   {formData.checkbox === 'OK' ? (
                     <div className="d-grid mt-3">
