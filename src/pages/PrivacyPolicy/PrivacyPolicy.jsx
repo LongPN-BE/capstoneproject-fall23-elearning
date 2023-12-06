@@ -11,13 +11,23 @@ const LandingPage = () => {
             <div className="container">
                 <h1>CHÍNH SÁCH BẢO MẬT</h1>
                 <hr />
+                <p>
+                    Chính sách bảo mật này được cập nhật lần cuối vào ngày 6 tháng 12 năm 2023. Xem các phiên bản trước của
+                    chính sách bảo mật trong
+                    {" "}
+                    <Link to="##" style={{ color: 'blue', textDecoration: 'underline' }}>kho lưu trữ chính sách</Link>{" "} của chúng tôi.
+                </p>
+                <p>
+                    Văn bản được đánh dấu nhằm mục đích cung cấp bản tóm tắt bằng tiếng Việt đơn giản về chính sách bảo mật của chúng tôi.
+                    Hãy đảm bảo bạn đã đọc nội dung chính vì bản tóm tắt bằng tiếng Việt đơn giản chỉ là bản tóm tắt và không nắm bắt được tất cả các thuật ngữ.
+                </p>
                 <h3>Chính sách này bao gồm những gì.</h3>
                 <p>
                     Chào mừng bạn đến với Onlearn, dịch vụ trực tuyến và di động của nhóm đồ án Onlearn.
-                    Chính sách quyền riêng tư của chúng tôi giải thích cách Onlearn thu thập, sử dụng, tiết lộ
+                    Chính sách bảo mật của chúng tôi giải thích cách Onlearn thu thập, sử dụng, tiết lộ
                     và bảo vệ thông tin áp dụng cho nền tảng giao tiếp trực quan( dịch vụ) của chúng tôi cũng như
                     các lựa chọn của bạn về việc thu thập và sử dung thông tin của mình. Các thuật ngữ viết hoa không được
-                    xác định trong Chính sách bảo mật này sẽ có ý nghĩa như được nêu trong{" "}
+                    xác định trong chính sách bảo mật này sẽ có ý nghĩa như được nêu trong{" "}
                     <Link to="##" style={{ color: 'blue', textDecoration: 'underline' }}>Điều khoản sử dụng</Link>{" "}
                     của chúng tôi. Nếu bạn không muốn thông tin của mình được xử lý theo Chính sách quyền riêng
                     tư này nói chung hoặc bất kỳ phần nào trong đó, bạn không nên sử dụng dịch vụ của chúng tôi.
@@ -279,20 +289,38 @@ const LandingPage = () => {
                     </li>
                 </ul>
                 <Alert className="mb-3" severity="info">
-                    Tóm tắt: Onlearn sử dụng thông tin về bạn vì nhiều lý do khác nhau, bao gồm để cung cấp, tùy chỉnh và cải thiện Dịch vụ.
+                    Tóm tắt: Onlearn sử dụng thông tin về bạn vì nhiều lý do khác nhau, bao gồm để cung cấp, tùy chỉnh và cải thiện dịch vụ.
                 </Alert>
                 <h5>3. Chia sẻ thông tin của bạn:</h5>
                 <ol type="a">
                     <li><h6>Cách chúng tôi chia sẻ thông tin của bạn.</h6>
                         <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                            ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                            velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                            cupidatat non proident, sunt in culpa qui
-                            officia deserunt mollit anim id est laborum.
+                            Chúng tôi chia sẻ thông tin của bạn với các nhà cung cấp dịch vụ bên thứ ba nhằm mục đích cung cấp dịch vụ cho bạn,
+                            nhằm hỗ trợ lợi ích hợp pháp của Onlearn hoặc nếu bạn đồng ý. Các nhà cung cấp dịch vụ này được chúng tôi xem xét kỹ
+                            lưỡng và sẽ chỉ được cấp quyền truy cập vào thông tin của bạn khi cần thiết một cách hợp lý cho mục đích mà Onlearn đã
+                            thuê nhà cung cấp dịch vụ. Chúng tôi yêu cầu các bên thứ ba đó phải tuân thủ luật pháp hiện hành và có các chính sách bảo mật,
+                            quyền riêng tư và lưu giữ dữ liệu nhất quán với chính sách của chúng tôi.
                         </p>
+                        <p>
+                            Một số bên thứ ba mà Onlearn có thể chia sẻ thông tin cá nhân của bạn là các nhà cung cấp dịch vụ hỗ trợ Onlearn thực hiện các chức năng như:
+                            <ul>
+                                <li>Thanh toán;</li>
+                                <li>Hỗ trợ khách hàng và quản lý khách hàng;</li>
+                                <li>Dịch vụ thư điện tử;</li>
+                                <li>Máy chủ và lưu trữ;</li>
+                                <li>Phân tích dữ liệu và phân tích dự đoán;</li>
+                                <li>Ghi nhãn dữ liệu và học máy;</li>
+                                <li>Bảo mật;</li>
+                                <li>Dịch vụ quảng cáo và tiếp thị;</li>
+                                <li>Đăng ký tên miền;</li>
+                                <li>Cung cấp các sản phẩm vật chất;</li>
+                                <li>Các nhà cung cấp dịch vụ khác.</li>
+                            </ul>
+                        </p>
+                        <Alert className="mb-3" severity="info">
+                            Tóm tắt: Chúng tôi có thể chia sẻ một số thông tin về bạn với các đối tác kinh doanh và nhà cung cấp dịch vụ
+                            bên thứ ba của chúng tôi để cung cấp dịch vụ cho bạn hoặc để đáp ứng lợi ích kinh doanh hợp pháp của Onlearn.
+                        </Alert>
                     </li>
                     <li><h6>Cách bạn có thể chia sẻ Nội dung người dùng của mình.</h6>
                         <p>
@@ -307,14 +335,17 @@ const LandingPage = () => {
                     </li>
                     <li><h6>Chia sẻ liên quan đến việc sáp nhập, mua lại hoặc tổ chức lại.</h6>
                         <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                            ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                            velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                            cupidatat non proident, sunt in culpa qui
-                            officia deserunt mollit anim id est laborum.
+                            Onlearn cũng có thể chia sẻ, bán hoặc chuyển giao thông tin của bạn cho các bên thứ ba liên quan đến hoặc dự tính
+                            (bao gồm cả như một phần của quy trình thẩm định) mọi hoạt động sáp nhập, mua lại, tổ chức lại, cấp vốn, bán tài sản
+                            , phá sản hoặc sự kiện mất khả năng thanh toán liên quan đến Onlearn hoặc bất kỳ sự kiện nào liên quan đến Onlearn. một phần tài sản,
+                            dịch vụ hoặc hoạt động kinh doanh của chúng tôi. Thông tin như tên và địa chỉ email của khách hàng, nội dung người dùng và thông tin
+                            người dùng khác liên quan đến dịch vụ có thể nằm trong số các mục được chia sẻ, bán hoặc chuyển giao trong các loại giao dịch này.
+                            Bạn sẽ được thông báo qua email và/hoặc thông báo trên dịch vụ nếu giao dịch đó diễn ra và được thông báo về bất kỳ thay đổi quan
+                            trọng nào đối với cách chúng tôi xử lý dữ liệu của bạn theo chính sách này.
                         </p>
+                        <Alert className="mb-3" severity="info">
+                            Tóm tắt: Nếu chúng tôi bán doanh nghiệp của mình, bất kỳ thông tin nào chúng tôi có được về bạn đều có thể là một phần của giao dịch mua bán đó.
+                        </Alert>
                     </li>
                     <li><h6>Chia sẻ với các bên thứ ba khác.</h6>
                         <p>
@@ -329,28 +360,40 @@ const LandingPage = () => {
                     </li>
                     <li><h6>Chia sẻ dữ liệu tổng hợp.</h6>
                         <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                            ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                            velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                            cupidatat non proident, sunt in culpa qui
-                            officia deserunt mollit anim id est laborum.
+                            Chúng tôi cũng có thể tổng hợp hoặc loại bỏ dữ liệu về tất cả các đặc điểm nhận dạng
+                            cá nhân và có thể chia sẻ dữ liệu ẩn danh tổng hợp đó với các bên thứ ba.
                         </p>
+                        <Alert className="mb-3" severity="info">
+                            Tóm tắt: Chúng tôi có thể chia sẻ dữ liệu ẩn danh với các bên thứ ba.
+                        </Alert>
                     </li>
                     <li><h6>Chia sẻ với cơ quan chức năng.</h6>
                         <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                            ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                            velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                            cupidatat non proident, sunt in culpa qui
-                            officia deserunt mollit anim id est laborum.
+                            Chúng tôi truy cập, lưu giữ và chia sẻ thông tin của bạn với các cơ quan quản lý, cơ quan thực thi pháp luật,
+                            cảnh sát, các dịch vụ chia sẻ thông tin và gỡ bỏ cũng như các dịch vụ khác theo Chính sách yêu cầu cấp phép của
+                            chúng tôi hoặc khi chúng tôi tin tưởng rằng cần phải phát hiện, ngăn chặn hoặc giải quyết gian lận, vi phạm
+                            {" "} <Link to="##" style={{ color: 'blue', textDecoration: 'underline' }}>  Chính sách bảo mật</Link>{" "} này
+                            hoặc{" "} <Link to="##" style={{ color: 'blue', textDecoration: 'underline' }}>Điều khoản sử dụng</Link>{" "}
+                            được chấp nhận của chúng tôi, hoạt động có hại hoặc bất hợp pháp,
+                            để bảo vệ Onlearn (quyền, tài sản hoặc tài sản trí tuệ của chúng tôi), bạn hoặc những người khác, bao gồm như một
+                            phần của cuộc điều tra hoặc yêu cầu pháp lý hoặc để ngăn chặn cái chết hoặc tổn hại về thể chất sắp xảy ra làm hại.
                         </p>
+                        <Alert className="mb-3" severity="info">
+                            Tóm tắt: Chúng tôi có thể chia sẻ dữ liệu với các cơ quan chức năng theo Chính sách yêu cầu cấp phép của chúng tôi hoặc khi chúng tôi cảm thấy cần thiết.
+                        </Alert>
                     </li>
                 </ol>
-                <h5>4. Quảng cáo.</h5>
+                {/* <h5>4. Quảng cáo.</h5>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+                    ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                    cupidatat non proident, sunt in culpa qui
+                    officia deserunt mollit anim id est laborum.
+                </p> */}
+                <h5>4. Cách chúng tôi chuyển, lưu trữ và bảo vệ dữ liệu của bạn.</h5>
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                     eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
@@ -360,7 +403,7 @@ const LandingPage = () => {
                     cupidatat non proident, sunt in culpa qui
                     officia deserunt mollit anim id est laborum.
                 </p>
-                <h5>5. Cách chúng tôi chuyển, lưu trữ và bảo vệ dữ liệu của bạn.</h5>
+                <h5>5. Giữ thông tin của bạn an toàn.</h5>
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                     eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
@@ -370,7 +413,7 @@ const LandingPage = () => {
                     cupidatat non proident, sunt in culpa qui
                     officia deserunt mollit anim id est laborum.
                 </p>
-                <h5>6. Giữ thông tin của bạn an toàn.</h5>
+                <h5>6. Lựa chọn của bạn về thông tin của bạn.</h5>
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                     eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
@@ -380,46 +423,54 @@ const LandingPage = () => {
                     cupidatat non proident, sunt in culpa qui
                     officia deserunt mollit anim id est laborum.
                 </p>
-                <h5>7. Lựa chọn của bạn về thông tin của bạn.</h5>
+                <h5>7. Chúng tôi lưu giữ thông tin của bạn trong bao lâu.</h5>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                    ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                    cupidatat non proident, sunt in culpa qui
-                    officia deserunt mollit anim id est laborum.
+                    Sau khi chấm dứt hoặc vô hiệu hóa tài khoản người dùng của bạn, Onlearn sẽ lưu giữ thông tin hồ sơ và
+                    nội dung người dùng của bạn trong khoảng thời gian hợp lý về mặt thương mại và miễn là chúng tôi có mục đích hợp lệ để làm như vậy.
+                    Đặc biệt, Onlearn sẽ lưu giữ thông tin của bạn nhằm mục đích tuân thủ các nghĩa vụ pháp lý và kiểm toán cũng như cho mục đích sao lưu và lưu trữ.
                 </p>
-                <h5>8. Chúng tôi lưu giữ thông tin của bạn trong bao lâu.</h5>
+                <Alert className="mb-3" severity="info">
+                    Tóm tắt: Chúng tôi lưu giữ thông tin hồ sơ và nội dung người dùng của bạn nhằm mục đích cung cấp
+                    dịch vụ của chúng tôi cho bạn và tuân thủ các nghĩa vụ pháp lý và quy định của chúng tôi.
+                </Alert>
+                <h5>8. Những thay đổi đối với Chính sách này.</h5>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                    ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                    cupidatat non proident, sunt in culpa qui
-                    officia deserunt mollit anim id est laborum.
+                    Đôi khi, chúng tôi có thể cập nhật chính sách này để phản ánh các thông tin hiện có của chúng tôi và đảm bảo tuân thủ luật pháp hành động.
+                    Khi chúng tôi đăng các thay đổi đối với chính sách này, chúng tôi sẽ sửa lại ngày “Cập nhật lần cuối” ở đầu danh sách này.
+                    Nếu chúng tôi thực hiện bất kỳ thay đổi quan trọng nào đối với cách chúng tôi thu thập, sử dụng, lưu trữ và/hoặc chia sẻ thông tin cá nhân của bạn,
+                    chúng tôi sẽ thông báo cho bạn trên trang web của chúng tôi hoặc bằng cách gửi email đến email địa chỉ được liên kết với tài khoản Onlearn của bạn.
+                    Chúng tôi khuyên bạn nên mời kiểm tra trang này để thông báo cho mình về bất kỳ thay đổi nào.
                 </p>
-                <h5>9. Những thay đổi đối với Chính sách này.</h5>
+                <Alert className="mb-3" severity="info">
+                    Tóm tắt: Chúng tôi sẽ không thực hiện bất kỳ thay đổi lớn nào đối với Chính sách bảo mật của mình mà không đưa ra thông báo –
+                    nhưng thỉnh thoảng bạn vẫn nên truy cập trang này.
+                </Alert>
+                <h5>9.Liên lạc với chúng tôi bằng cách nào.</h5>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                    ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                    cupidatat non proident, sunt in culpa qui
-                    officia deserunt mollit anim id est laborum.
+                    Nếu bạn có bất kỳ câu hỏi nào về Chính sách bảo mật hoặc dịch vụ này hoặc muốn khiếu nại, vui lòng liên hệ với chúng tôi theo địa chỉ:
                 </p>
-                <h5>10.Liên lạc với chúng tôi bằng cách nào.</h5>
+                <br />
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                    ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                    cupidatat non proident, sunt in culpa qui
-                    officia deserunt mollit anim id est laborum.
+                    Email: onlearnservice@gmail.com
                 </p>
+                <p>
+                    Viết:
+                </p>
+                <p>
+                    Trưởng nhóm thực hiện dự án Onlearn
+                </p>
+                <p>
+                    Tập thể phát triển dự án Onlearn
+                </p>
+                <p>
+                    Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thủ Đức, Thành phố Hồ Chí Minh
+                </p>
+                <p>
+                    Việt Nam
+                </p>
+                <Alert className="mb-3" severity="info">
+                    Tóm tắt: Quyền riêng tư của bạn rất quan trọng đối với chúng tôi và chúng tôi sẵn lòng trả lời bất kỳ câu hỏi nào bạn có thể có.
+                </Alert>
             </div>
             <Footer />
         </Fragment >
