@@ -266,7 +266,13 @@ TransactionWithdrawRequestView['TransactionTypeEnum'] = {
      * value: "REFUNDED"
      * @const
      */
-    "REFUNDED": "REFUNDED"
+    "REFUNDED": "REFUNDED",
+
+    /**
+     * value: "WITHDRAW"
+     * @const
+     */
+    "WITHDRAW": "WITHDRAW"
 };
 
 

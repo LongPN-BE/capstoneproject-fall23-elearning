@@ -13,6 +13,7 @@
 
 import ApiClient from '../ApiClient';
 import GrantedAuthorityEnrollView from './GrantedAuthorityEnrollView';
+import ProfileEnrollView from './ProfileEnrollView';
 
 /**
  * The AccountEnrollView model module.
@@ -57,6 +58,9 @@ class AccountEnrollView {
             if (data.hasOwnProperty('deletedAt')) {
                 obj['deletedAt'] = ApiClient.convertToType(data['deletedAt'], 'Date');
             }
+            if (data.hasOwnProperty('username')) {
+                obj['username'] = ApiClient.convertToType(data['username'], 'String');
+            }
             if (data.hasOwnProperty('password')) {
                 obj['password'] = ApiClient.convertToType(data['password'], 'String');
             }
@@ -65,6 +69,9 @@ class AccountEnrollView {
             }
             if (data.hasOwnProperty('active')) {
                 obj['active'] = ApiClient.convertToType(data['active'], 'Boolean');
+            }
+            if (data.hasOwnProperty('profile')) {
+                obj['profile'] = ProfileEnrollView.constructFromObject(data['profile']);
             }
             if (data.hasOwnProperty('authorities')) {
                 obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthorityEnrollView]);
@@ -92,12 +99,20 @@ class AccountEnrollView {
      */
     static validateJSON(data) {
         // ensure the json data is a string
+        if (data['username'] && !(typeof data['username'] === 'string' || data['username'] instanceof String)) {
+            throw new Error("Expected the field `username` to be a primitive type in the JSON string but got " + data['username']);
+        }
+        // ensure the json data is a string
         if (data['password'] && !(typeof data['password'] === 'string' || data['password'] instanceof String)) {
             throw new Error("Expected the field `password` to be a primitive type in the JSON string but got " + data['password']);
         }
         // ensure the json data is a string
         if (data['role'] && !(typeof data['role'] === 'string' || data['role'] instanceof String)) {
             throw new Error("Expected the field `role` to be a primitive type in the JSON string but got " + data['role']);
+        }
+        // validate the optional field `profile`
+        if (data['profile']) { // data not null
+          ProfileEnrollView.validateJSON(data['profile']);
         }
         if (data['authorities']) { // data not null
             // ensure the json data is an array
@@ -134,6 +149,11 @@ AccountEnrollView.prototype['updatedAt'] = undefined;
 AccountEnrollView.prototype['deletedAt'] = undefined;
 
 /**
+ * @member {String} username
+ */
+AccountEnrollView.prototype['username'] = undefined;
+
+/**
  * @member {String} password
  */
 AccountEnrollView.prototype['password'] = undefined;
@@ -147,6 +167,11 @@ AccountEnrollView.prototype['role'] = undefined;
  * @member {Boolean} active
  */
 AccountEnrollView.prototype['active'] = undefined;
+
+/**
+ * @member {module:model/ProfileEnrollView} profile
+ */
+AccountEnrollView.prototype['profile'] = undefined;
 
 /**
  * @member {Array.<module:model/GrantedAuthorityEnrollView>} authorities

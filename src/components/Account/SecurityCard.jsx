@@ -1,54 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, CardContent, Card, CardActions, FormControl, styled } from '@mui/material';
-import { account } from './../../mock/mock-data';
+import { TextField, CardContent, Card, CardActions, FormControl, styled } from '@mui/material';
 import Cookies from 'js-cookie';
-import TableTransactions from '../../pages/StudentProfile/components/TableTransactions';
 import { fetchData, postData } from '../../services/AppService';
-import { PaymentHistoryControllerApi } from '../../api/generated/generate-api';
+import {
+  AccountControllerApi,
+  PaymentHistoryControllerApi,
+  ProfileControllerApi,
+} from '../../api/generated/generate-api';
 import ApiClientSingleton from '../../api/apiClientImpl';
+import { toast } from 'react-toastify';
+import { Container } from 'reactstrap';
 
 const paymentHisApi = new PaymentHistoryControllerApi(ApiClientSingleton.getInstance());
-function SecurityCard() {
-  const [user, setUser] = useState();
-  const [wallet, setWallet] = useState();
-  const [transactions, setTransactions] = useState([]);
-  useEffect(() => {
-    const user = Cookies.get('user');
-    if (user) {
-      setUser(JSON.parse(user));
-      const token = Cookies.get('token');
-      if (token) {
-        fetchData(`/wallet/by-account?account_id=${JSON.parse(user).id}`, token).then((resp) => {
-          console.log(resp);
-          if (resp) {
-            setWallet(resp);
-          }
-        });
-        paymentHisApi.getPaymentHistoryByTeacher(JSON.parse(user).teacherId, (err, res) => {
-          if (res) {
-            setTransactions(res);
-          }
-        });
-      }
-    }
-  }, []);
+const accountApi = new AccountControllerApi(ApiClientSingleton.getInstance());
+const profileApi = new ProfileControllerApi(ApiClientSingleton.getInstance());
 
-  const handleAddWallet = async () => {
-    const token = Cookies.get('token');
-    if (token) {
-      const body = {
-        amount: 0,
-        bankNumber: '',
-        bankName: '',
-        accountId: user.id,
-        walletType: 'paypal',
-      };
-      await postData(`/wallet/save`, body, token).then((resp) => {
-        if (resp) {
-          window.location.reload();
-        }
-      });
-    }
+function SecurityCard({ user }) {
+  const [isReloadInfo, setIsReloadInfo] = useState(false);
+  const [profile, setProfile] = useState();
+  const [changePass, setChangePass] = useState({
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+
+  const notifySuccess = (msg) => {
+    toast.success(msg, {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
+
+  const notifyErorr = (msg) => {
+    toast.error(msg, {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
+
+  const validatePassword = () => {
+    return changePass.newPassword === changePass.confirmPassword;
   };
 
   const BlackTextField = styled(TextField)`
@@ -67,80 +56,110 @@ function SecurityCard() {
   return (
     user && (
       <>
-        <div className="row">
-          <div className="col-12">
-            <Card
-              className="p-3"
-              sx={{
-                borderRadius: '20px',
-                maxHeight: 'max-content',
-                boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px;',
-              }}
-            >
-              <CardContent
+        <Container>
+          <div className="row">
+            <div className="col-12">
+              <Card
+                className="p-3"
                 sx={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(2, minmax(80px, 1fr))',
-                  gap: 1.5,
+                  borderRadius: '20px',
+                  maxHeight: 'max-content',
+                  boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px;',
                 }}
               >
-                <FormControl sx={{ gridColumn: '1/-1' }}>
-                  <BlackTextField
-                    className="mb-2"
-                    inputProps={{ style: { borderRadius: '20px' } }}
-                    type="password"
-                    label="Mật khẩu"
-                    id="old_password"
-                  />
-                </FormControl>
-                <FormControl sx={{ gridColumn: '1/-1' }}>
-                  <BlackTextField
-                    className="mb-2"
-                    type="password"
-                    label="Mật khẩu mới"
-                    id="new_password"
-                    helperText="Mật khẩu phải có 6 ký tự trở lên"
-                  />
-                </FormControl>
-                <FormControl sx={{ gridColumn: '1/-1' }}>
-                  <BlackTextField
-                    className="mb-2"
-                    type="password"
-                    label="Xác nhân mật khẩu mới"
-                    id="new_password_confirm"
-                  />
-                </FormControl>
-              </CardContent>
-              <div className="d-flex justify-content-end px-2">
-                <CardActions>
-                  <button
-                    className="btn px-3"
-                    style={{ backgroundColor: '#212b36', color: 'white', borderRadius: 8, fontWeight: 700 }}
-                  >
-                    Lưu
-                  </button>
-                </CardActions>
-              </div>
-            </Card>
+                <CardContent
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(2, minmax(80px, 1fr))',
+                    gap: 1.5,
+                  }}
+                >
+                  <FormControl sx={{ gridColumn: '1/-1' }}>
+                    <BlackTextField
+                      className="mb-2"
+                      inputProps={{ style: { borderRadius: '20px' } }}
+                      type="password"
+                      label="Mật khẩu"
+                      name="password"
+                      required
+                      value={changePass.oldPassword}
+                      onChange={(e) => {
+                        const newChange = {
+                          ...changePass,
+                          oldPassword: e.target.value,
+                        };
+                        setChangePass(newChange);
+                      }}
+                    />
+                  </FormControl>
+                  <FormControl sx={{ gridColumn: '1/-1' }}>
+                    <BlackTextField
+                      className="mb-2"
+                      type="password"
+                      label="Mật khẩu mới"
+                      name="newPassword"
+                      required
+                      helperText="Mật khẩu phải có 6 ký tự trở lên"
+                      value={changePass.newPassword}
+                      onChange={(e) => {
+                        const newChange = {
+                          ...changePass,
+                          newPassword: e.target.value,
+                        };
+                      }}
+                    />
+                  </FormControl>
+                  <FormControl sx={{ gridColumn: '1/-1' }}>
+                    <BlackTextField
+                      className="mb-2"
+                      type="password"
+                      label="Xác nhân mật khẩu mới"
+                      name="confirmPassword"
+                      required
+                      value={changePass.confirmPassword}
+                      onChange={(e) => {
+                        const newChange = {
+                          ...changePass,
+                          confirmPassword: e.target.value,
+                        };
+                        setChangePass(newChange);
+                      }}
+                      error={!validatePassword()}
+                      helperText={!validatePassword() ? 'Mật khẩu xác nhận không trùng khớp.' : ''}
+                    />
+                  </FormControl>
+                </CardContent>
+                <div className="d-flex justify-content-end px-2">
+                  <CardActions>
+                    <button
+                      className="btn px-3"
+                      style={{ backgroundColor: '#212b36', color: 'white', borderRadius: 8, fontWeight: 700 }}
+                      onClick={() => {
+                        if (validatePassword()) {
+                          accountApi.changePassword(
+                            {
+                              oldPassword: changePass.oldPassword,
+                              newPassword: changePass.newPassword,
+                            },
+                            (err, res) => {
+                              if (res?.code === 200) {
+                                notifySuccess('Đổi mật khẩu thành công');
+                              } else {
+                                notifyErorr(`Đổi mật khẩu không thành công: ${res?.message}`);
+                              }
+                            },
+                          );
+                        }
+                      }}
+                    >
+                      Lưu
+                    </button>
+                  </CardActions>
+                </div>
+              </Card>
+            </div>
           </div>
-        </div>
-
-        {/* <div className="row gap-4">
-                <div className="row">
-                    <div className="col-7 flex-shrink-1">
-                        <CardProfile user={user} />
-                    </div>
-                    <div className="col-5 ">
-                        <div className="row gap-3">
-                            <BalanceInfo wallet={wallet} user={user} />
-                            <WalletCard wallet={wallet} onAddWallet={handleAddWallet} user={user} />
-                        </div>
-                    </div>
-                </div>
-                <div className="row">
-                    <TableTransactions transactions={transactions} />
-                </div>
-            </div> */}
+        </Container>
       </>
     )
   );

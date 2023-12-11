@@ -77,6 +77,9 @@ class ResultQuizResultDetailView {
             if (data.hasOwnProperty('quiz')) {
                 obj['quiz'] = QuizResultDetailView.constructFromObject(data['quiz']);
             }
+            if (data.hasOwnProperty('isCount')) {
+                obj['isCount'] = ApiClient.convertToType(data['isCount'], 'Boolean');
+            }
             if (data.hasOwnProperty('resultDetails')) {
                 obj['resultDetails'] = ApiClient.convertToType(data['resultDetails'], [ResultDetailResultDetailView]);
             }
@@ -165,6 +168,11 @@ ResultQuizResultDetailView.prototype['enroll'] = undefined;
  * @member {module:model/QuizResultDetailView} quiz
  */
 ResultQuizResultDetailView.prototype['quiz'] = undefined;
+
+/**
+ * @member {Boolean} isCount
+ */
+ResultQuizResultDetailView.prototype['isCount'] = undefined;
 
 /**
  * @member {Array.<module:model/ResultDetailResultDetailView>} resultDetails

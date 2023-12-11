@@ -40,8 +40,8 @@ export default class QuizControllerApi {
 
 
     /**
-     * Callback function to receive the result of the deleteQuiz operation.
-     * @callback module:api/QuizControllerApi~deleteQuizCallback
+     * Callback function to receive the result of the attemptTime operation.
+     * @callback module:api/QuizControllerApi~attemptTimeCallback
      * @param {String} error Error message, if any.
      * @param {module:model/ResponseDTOInteger} data The data returned by the service call.
      * @param {String} response The complete HTTP response.
@@ -50,18 +50,18 @@ export default class QuizControllerApi {
     /**
      * @param {Number} quizId 
      * @param {Number} studentId 
-     * @param {module:api/QuizControllerApi~deleteQuizCallback} callback The callback function, accepting three arguments: error, data, response
+     * @param {module:api/QuizControllerApi~attemptTimeCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/ResponseDTOInteger}
      */
-    deleteQuiz(quizId, studentId, callback) {
+    attemptTime(quizId, studentId, callback) {
       let postBody = null;
       // verify the required parameter 'quizId' is set
       if (quizId === undefined || quizId === null) {
-        throw new Error("Missing the required parameter 'quizId' when calling deleteQuiz");
+        throw new Error("Missing the required parameter 'quizId' when calling attemptTime");
       }
       // verify the required parameter 'studentId' is set
       if (studentId === undefined || studentId === null) {
-        throw new Error("Missing the required parameter 'studentId' when calling deleteQuiz");
+        throw new Error("Missing the required parameter 'studentId' when calling attemptTime");
       }
 
       let pathParams = {
@@ -87,8 +87,8 @@ export default class QuizControllerApi {
     }
 
     /**
-     * Callback function to receive the result of the deleteQuiz1 operation.
-     * @callback module:api/QuizControllerApi~deleteQuiz1Callback
+     * Callback function to receive the result of the deleteQuiz operation.
+     * @callback module:api/QuizControllerApi~deleteQuizCallback
      * @param {String} error Error message, if any.
      * @param {Object} data The data returned by the service call.
      * @param {String} response The complete HTTP response.
@@ -96,14 +96,14 @@ export default class QuizControllerApi {
 
     /**
      * @param {Number} quizId 
-     * @param {module:api/QuizControllerApi~deleteQuiz1Callback} callback The callback function, accepting three arguments: error, data, response
+     * @param {module:api/QuizControllerApi~deleteQuizCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link Object}
      */
-    deleteQuiz1(quizId, callback) {
+    deleteQuiz(quizId, callback) {
       let postBody = null;
       // verify the required parameter 'quizId' is set
       if (quizId === undefined || quizId === null) {
-        throw new Error("Missing the required parameter 'quizId' when calling deleteQuiz1");
+        throw new Error("Missing the required parameter 'quizId' when calling deleteQuiz");
       }
 
       let pathParams = {

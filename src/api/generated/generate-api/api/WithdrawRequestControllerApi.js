@@ -13,7 +13,8 @@
 
 
 import ApiClient from "../ApiClient";
-import AcceptWithdrawRequestWithdrawRequestView from '../model/AcceptWithdrawRequestWithdrawRequestView';
+import ResponseDTOWithdrawalRequestWithdrawRequestView from '../model/ResponseDTOWithdrawalRequestWithdrawRequestView';
+import WithdrawTransactionRequestWithdrawRequestView from '../model/WithdrawTransactionRequestWithdrawRequestView';
 import WithdrawalRequestWithdrawRequestView from '../model/WithdrawalRequestWithdrawRequestView';
 
 /**
@@ -34,46 +35,6 @@ export default class WithdrawRequestControllerApi {
         this.apiClient = apiClient || ApiClient.instance;
     }
 
-
-    /**
-     * Callback function to receive the result of the acceptWithdrawRequest operation.
-     * @callback module:api/WithdrawRequestControllerApi~acceptWithdrawRequestCallback
-     * @param {String} error Error message, if any.
-     * @param {Object} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
-     */
-
-    /**
-     * @param {module:model/AcceptWithdrawRequestWithdrawRequestView} acceptWithdrawRequestWithdrawRequestView 
-     * @param {module:api/WithdrawRequestControllerApi~acceptWithdrawRequestCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link Object}
-     */
-    acceptWithdrawRequest(acceptWithdrawRequestWithdrawRequestView, callback) {
-      let postBody = acceptWithdrawRequestWithdrawRequestView;
-      // verify the required parameter 'acceptWithdrawRequestWithdrawRequestView' is set
-      if (acceptWithdrawRequestWithdrawRequestView === undefined || acceptWithdrawRequestWithdrawRequestView === null) {
-        throw new Error("Missing the required parameter 'acceptWithdrawRequestWithdrawRequestView' when calling acceptWithdrawRequest");
-      }
-
-      let pathParams = {
-      };
-      let queryParams = {
-      };
-      let headerParams = {
-      };
-      let formParams = {
-      };
-
-      let authNames = ['Bearer'];
-      let contentTypes = ['application/json'];
-      let accepts = ['*/*'];
-      let returnType = Object;
-      return this.apiClient.callApi(
-        '/api/v1/withdraw-request/accept-withdraw', 'POST',
-        pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
-      );
-    }
 
     /**
      * Callback function to receive the result of the findAllById operation.
@@ -158,29 +119,28 @@ export default class WithdrawRequestControllerApi {
     }
 
     /**
-     * Callback function to receive the result of the getTransactionForWithdraw operation.
-     * @callback module:api/WithdrawRequestControllerApi~getTransactionForWithdrawCallback
+     * Callback function to receive the result of the withdrawTransaction operation.
+     * @callback module:api/WithdrawRequestControllerApi~withdrawTransactionCallback
      * @param {String} error Error message, if any.
-     * @param {Object} data The data returned by the service call.
+     * @param {module:model/ResponseDTOWithdrawalRequestWithdrawRequestView} data The data returned by the service call.
      * @param {String} response The complete HTTP response.
      */
 
     /**
-     * @param {Number} teacherId 
-     * @param {module:api/WithdrawRequestControllerApi~getTransactionForWithdrawCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link Object}
+     * @param {module:model/WithdrawTransactionRequestWithdrawRequestView} withdrawTransactionRequestWithdrawRequestView 
+     * @param {module:api/WithdrawRequestControllerApi~withdrawTransactionCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/ResponseDTOWithdrawalRequestWithdrawRequestView}
      */
-    getTransactionForWithdraw(teacherId, callback) {
-      let postBody = null;
-      // verify the required parameter 'teacherId' is set
-      if (teacherId === undefined || teacherId === null) {
-        throw new Error("Missing the required parameter 'teacherId' when calling getTransactionForWithdraw");
+    withdrawTransaction(withdrawTransactionRequestWithdrawRequestView, callback) {
+      let postBody = withdrawTransactionRequestWithdrawRequestView;
+      // verify the required parameter 'withdrawTransactionRequestWithdrawRequestView' is set
+      if (withdrawTransactionRequestWithdrawRequestView === undefined || withdrawTransactionRequestWithdrawRequestView === null) {
+        throw new Error("Missing the required parameter 'withdrawTransactionRequestWithdrawRequestView' when calling withdrawTransaction");
       }
 
       let pathParams = {
       };
       let queryParams = {
-        'teacher_id': teacherId
       };
       let headerParams = {
       };
@@ -188,11 +148,11 @@ export default class WithdrawRequestControllerApi {
       };
 
       let authNames = ['Bearer'];
-      let contentTypes = [];
+      let contentTypes = ['application/json'];
       let accepts = ['*/*'];
-      let returnType = Object;
+      let returnType = ResponseDTOWithdrawalRequestWithdrawRequestView;
       return this.apiClient.callApi(
-        '/api/v1/withdraw-request/transaction-teacher', 'GET',
+        '/api/v1/withdraw-request/withdraw-trasaction', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );

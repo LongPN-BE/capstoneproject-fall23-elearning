@@ -197,8 +197,8 @@ export default class TransactionControllerApi {
     }
 
     /**
-     * Callback function to receive the result of the getTransactionForWithdraw1 operation.
-     * @callback module:api/TransactionControllerApi~getTransactionForWithdraw1Callback
+     * Callback function to receive the result of the getTransactionForWithdraw operation.
+     * @callback module:api/TransactionControllerApi~getTransactionForWithdrawCallback
      * @param {String} error Error message, if any.
      * @param {Array.<module:model/TransactionTransactionView>} data The data returned by the service call.
      * @param {String} response The complete HTTP response.
@@ -206,14 +206,14 @@ export default class TransactionControllerApi {
 
     /**
      * @param {Number} teacherId 
-     * @param {module:api/TransactionControllerApi~getTransactionForWithdraw1Callback} callback The callback function, accepting three arguments: error, data, response
+     * @param {module:api/TransactionControllerApi~getTransactionForWithdrawCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link Array.<module:model/TransactionTransactionView>}
      */
-    getTransactionForWithdraw1(teacherId, callback) {
+    getTransactionForWithdraw(teacherId, callback) {
       let postBody = null;
       // verify the required parameter 'teacherId' is set
       if (teacherId === undefined || teacherId === null) {
-        throw new Error("Missing the required parameter 'teacherId' when calling getTransactionForWithdraw1");
+        throw new Error("Missing the required parameter 'teacherId' when calling getTransactionForWithdraw");
       }
 
       let pathParams = {

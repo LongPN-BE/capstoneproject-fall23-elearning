@@ -55,7 +55,7 @@ class DoQuizRequestResultQuizView {
                 obj['enrollId'] = ApiClient.convertToType(data['enrollId'], 'Number');
             }
             if (data.hasOwnProperty('startTime')) {
-                obj['startTime'] = ApiClient.convertToType(data['startTime'], 'Date');
+                obj['startTime'] = ApiClient.convertToType(data['startTime'], 'String');
             }
             if (data.hasOwnProperty('doQuizDetailRequests')) {
                 obj['doQuizDetailRequests'] = ApiClient.convertToType(data['doQuizDetailRequests'], [DoQuizDetailRequestResultQuizView]);
@@ -70,6 +70,10 @@ class DoQuizRequestResultQuizView {
      * @return {boolean} to indicate whether the JSON data is valid with respect to <code>DoQuizRequestResultQuizView</code>.
      */
     static validateJSON(data) {
+        // ensure the json data is a string
+        if (data['startTime'] && !(typeof data['startTime'] === 'string' || data['startTime'] instanceof String)) {
+            throw new Error("Expected the field `startTime` to be a primitive type in the JSON string but got " + data['startTime']);
+        }
         if (data['doQuizDetailRequests']) { // data not null
             // ensure the json data is an array
             if (!Array.isArray(data['doQuizDetailRequests'])) {
@@ -100,7 +104,7 @@ DoQuizRequestResultQuizView.prototype['quizId'] = undefined;
 DoQuizRequestResultQuizView.prototype['enrollId'] = undefined;
 
 /**
- * @member {Date} startTime
+ * @member {String} startTime
  */
 DoQuizRequestResultQuizView.prototype['startTime'] = undefined;
 

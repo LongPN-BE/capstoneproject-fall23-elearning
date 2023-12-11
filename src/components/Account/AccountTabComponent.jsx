@@ -26,11 +26,7 @@ function CustomTabPanel(props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -79,7 +75,7 @@ function a11yProps(index) {
   };
 }
 
-export default function AccountTabComponent() {
+export default function AccountTabComponent({ isSecurity, isBilling }) {
   const [value, setValue] = useState(0);
   //data from API
   const [user, setUser] = useState([]);
@@ -130,25 +126,39 @@ export default function AccountTabComponent() {
   };
 
   return (
-    <Container className="p-5">
-      <Box sx={{ width: '100%' }}>
-        <Box className="px-3">
-          <StyledTabs value={value} onChange={handleChange} aria-label="basic tabs example">
-            <StyledTab icon={<BadgeRoundedIcon />} iconPosition="start" label="General" {...a11yProps(0)}></StyledTab>
-            <StyledTab icon={<ReceiptRoundedIcon />} iconPosition="start" label="Billing" {...a11yProps(1)}></StyledTab>
-            <StyledTab icon={<VpnKeyRoundedIcon />} iconPosition="start" label="Security" {...a11yProps(2)}></StyledTab>
-          </StyledTabs>
-        </Box>
-        <CustomTabPanel value={value} index={0}>
-          <AccountCard user={user} />
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={1}>
-          <BillingCard />
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={2}>
-          <SecurityCard />
-        </CustomTabPanel>
+    <Box className="px-5" sx={{ width: '100%' }}>
+      <Box className="px-3">
+        <StyledTabs value={value} onChange={handleChange} aria-label="basic tabs example">
+          <StyledTab icon={<BadgeRoundedIcon />} iconPosition="start" label="General" {...a11yProps(0)}></StyledTab>
+          {isSecurity ? (
+            <StyledTab icon={<VpnKeyRoundedIcon />} iconPosition="start" label="Security" {...a11yProps(1)}></StyledTab>
+          ) : (
+            <></>
+          )}
+          {isBilling ? (
+            <StyledTab icon={<ReceiptRoundedIcon />} iconPosition="start" label="Billing" {...a11yProps(2)}></StyledTab>
+          ) : (
+            <></>
+          )}
+        </StyledTabs>
       </Box>
-    </Container>
+      <CustomTabPanel value={value} index={0}>
+        <AccountCard user={user} />
+      </CustomTabPanel>
+      {isSecurity ? (
+        <CustomTabPanel value={value} index={1}>
+          <SecurityCard user={user} />
+        </CustomTabPanel>
+      ) : (
+        <></>
+      )}
+      {isBilling ? (
+        <CustomTabPanel value={value} index={2}>
+          <BillingCard isStudent={true} userId={11} />
+        </CustomTabPanel>
+      ) : (
+        <></>
+      )}
+    </Box>
   );
 }

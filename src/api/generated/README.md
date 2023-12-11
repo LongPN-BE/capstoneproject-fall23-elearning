@@ -205,8 +205,8 @@ Class | Method | HTTP request | Description
 *FptSeOnLearnManagementApi.QuestionControllerApi* | [**findQuestionByLessonId**](docs/QuestionControllerApi.md#findQuestionByLessonId) | **GET** /api/v1/question/byLessonId | 
 *FptSeOnLearnManagementApi.QuestionControllerApi* | [**getQuestionById**](docs/QuestionControllerApi.md#getQuestionById) | **GET** /api/v1/question/byId | 
 *FptSeOnLearnManagementApi.QuestionControllerApi* | [**saveQuestion**](docs/QuestionControllerApi.md#saveQuestion) | **POST** /api/v1/question/save | 
-*FptSeOnLearnManagementApi.QuizControllerApi* | [**deleteQuiz**](docs/QuizControllerApi.md#deleteQuiz) | **GET** /api/v1/quiz/attempt-time | 
-*FptSeOnLearnManagementApi.QuizControllerApi* | [**deleteQuiz1**](docs/QuizControllerApi.md#deleteQuiz1) | **DELETE** /api/v1/quiz/delete | 
+*FptSeOnLearnManagementApi.QuizControllerApi* | [**attemptTime**](docs/QuizControllerApi.md#attemptTime) | **GET** /api/v1/quiz/attempt-time | 
+*FptSeOnLearnManagementApi.QuizControllerApi* | [**deleteQuiz**](docs/QuizControllerApi.md#deleteQuiz) | **DELETE** /api/v1/quiz/delete | 
 *FptSeOnLearnManagementApi.QuizControllerApi* | [**disableQuiz**](docs/QuizControllerApi.md#disableQuiz) | **DELETE** /api/v1/quiz/disable | 
 *FptSeOnLearnManagementApi.QuizControllerApi* | [**doQuiz**](docs/QuizControllerApi.md#doQuiz) | **POST** /api/v1/quiz/do-quiz | 
 *FptSeOnLearnManagementApi.QuizControllerApi* | [**enableQuiz**](docs/QuizControllerApi.md#enableQuiz) | **GET** /api/v1/quiz/enable | 
@@ -250,7 +250,7 @@ Class | Method | HTTP request | Description
 *FptSeOnLearnManagementApi.TransactionControllerApi* | [**getById**](docs/TransactionControllerApi.md#getById) | **GET** /api/v1/transaction/by-id | 
 *FptSeOnLearnManagementApi.TransactionControllerApi* | [**getByStudentId**](docs/TransactionControllerApi.md#getByStudentId) | **GET** /api/v1/transaction/by-student | 
 *FptSeOnLearnManagementApi.TransactionControllerApi* | [**getByTeacherId**](docs/TransactionControllerApi.md#getByTeacherId) | **GET** /api/v1/transaction/by-teacher | 
-*FptSeOnLearnManagementApi.TransactionControllerApi* | [**getTransactionForWithdraw1**](docs/TransactionControllerApi.md#getTransactionForWithdraw1) | **GET** /api/v1/transaction/transaction-for-withdraw | 
+*FptSeOnLearnManagementApi.TransactionControllerApi* | [**getTransactionForWithdraw**](docs/TransactionControllerApi.md#getTransactionForWithdraw) | **GET** /api/v1/transaction/transaction-for-withdraw | 
 *FptSeOnLearnManagementApi.TransactionControllerApi* | [**saveTransaction**](docs/TransactionControllerApi.md#saveTransaction) | **POST** /api/v1/transaction/save | 
 *FptSeOnLearnManagementApi.UsedAnswerControllerApi* | [**getByUsedQuestionId**](docs/UsedAnswerControllerApi.md#getByUsedQuestionId) | **GET** /api/v1/used-answer/by-used-question | 
 *FptSeOnLearnManagementApi.UsedAnswerControllerApi* | [**saveUsedAnswer**](docs/UsedAnswerControllerApi.md#saveUsedAnswer) | **POST** /api/v1/used-answer/save | 
@@ -265,15 +265,13 @@ Class | Method | HTTP request | Description
 *FptSeOnLearnManagementApi.UsedQuestionControllerApi* | [**saveUsedQuestion**](docs/UsedQuestionControllerApi.md#saveUsedQuestion) | **POST** /api/v1/used-question/save | 
 *FptSeOnLearnManagementApi.WalletControllerApi* | [**getByAccountId**](docs/WalletControllerApi.md#getByAccountId) | **GET** /api/v1/wallet/by-account | 
 *FptSeOnLearnManagementApi.WalletControllerApi* | [**saveWallet**](docs/WalletControllerApi.md#saveWallet) | **POST** /api/v1/wallet/save | 
-*FptSeOnLearnManagementApi.WithdrawRequestControllerApi* | [**acceptWithdrawRequest**](docs/WithdrawRequestControllerApi.md#acceptWithdrawRequest) | **POST** /api/v1/withdraw-request/accept-withdraw | 
 *FptSeOnLearnManagementApi.WithdrawRequestControllerApi* | [**findAllById**](docs/WithdrawRequestControllerApi.md#findAllById) | **GET** /api/v1/withdraw-request/by-id | 
 *FptSeOnLearnManagementApi.WithdrawRequestControllerApi* | [**findAllByTeacherId**](docs/WithdrawRequestControllerApi.md#findAllByTeacherId) | **GET** /api/v1/withdraw-request/by-teacher | 
-*FptSeOnLearnManagementApi.WithdrawRequestControllerApi* | [**getTransactionForWithdraw**](docs/WithdrawRequestControllerApi.md#getTransactionForWithdraw) | **GET** /api/v1/withdraw-request/transaction-teacher | 
+*FptSeOnLearnManagementApi.WithdrawRequestControllerApi* | [**withdrawTransaction**](docs/WithdrawRequestControllerApi.md#withdrawTransaction) | **POST** /api/v1/withdraw-request/withdraw-trasaction | 
 
 
 ## Documentation for Models
 
- - [FptSeOnLearnManagementApi.AcceptWithdrawRequestWithdrawRequestView](docs/AcceptWithdrawRequestWithdrawRequestView.md)
  - [FptSeOnLearnManagementApi.Account](docs/Account.md)
  - [FptSeOnLearnManagementApi.AccountCourseView](docs/AccountCourseView.md)
  - [FptSeOnLearnManagementApi.AccountDetailResponse](docs/AccountDetailResponse.md)
@@ -386,6 +384,7 @@ Class | Method | HTTP request | Description
  - [FptSeOnLearnManagementApi.PnsRequest](docs/PnsRequest.md)
  - [FptSeOnLearnManagementApi.Profile](docs/Profile.md)
  - [FptSeOnLearnManagementApi.ProfileCourseView](docs/ProfileCourseView.md)
+ - [FptSeOnLearnManagementApi.ProfileEnrollView](docs/ProfileEnrollView.md)
  - [FptSeOnLearnManagementApi.ProfileRequest](docs/ProfileRequest.md)
  - [FptSeOnLearnManagementApi.QuestionQuestionView](docs/QuestionQuestionView.md)
  - [FptSeOnLearnManagementApi.QuestionRequestQuestionView](docs/QuestionRequestQuestionView.md)
@@ -419,6 +418,7 @@ Class | Method | HTTP request | Description
  - [FptSeOnLearnManagementApi.ResponseDTOAccount](docs/ResponseDTOAccount.md)
  - [FptSeOnLearnManagementApi.ResponseDTOCourse](docs/ResponseDTOCourse.md)
  - [FptSeOnLearnManagementApi.ResponseDTOCourseCourseView](docs/ResponseDTOCourseCourseView.md)
+ - [FptSeOnLearnManagementApi.ResponseDTOFeedbackFeedbackView](docs/ResponseDTOFeedbackFeedbackView.md)
  - [FptSeOnLearnManagementApi.ResponseDTOInteger](docs/ResponseDTOInteger.md)
  - [FptSeOnLearnManagementApi.ResponseDTOListReport](docs/ResponseDTOListReport.md)
  - [FptSeOnLearnManagementApi.ResponseDTOListReportReportView](docs/ResponseDTOListReportReportView.md)
@@ -433,6 +433,7 @@ Class | Method | HTTP request | Description
  - [FptSeOnLearnManagementApi.ResponseDTOTransaction](docs/ResponseDTOTransaction.md)
  - [FptSeOnLearnManagementApi.ResponseDTOTransactionTransactionView](docs/ResponseDTOTransactionTransactionView.md)
  - [FptSeOnLearnManagementApi.ResponseDTOUsedQuestion](docs/ResponseDTOUsedQuestion.md)
+ - [FptSeOnLearnManagementApi.ResponseDTOWithdrawalRequestWithdrawRequestView](docs/ResponseDTOWithdrawalRequestWithdrawRequestView.md)
  - [FptSeOnLearnManagementApi.ResultDetailResultDetailView](docs/ResultDetailResultDetailView.md)
  - [FptSeOnLearnManagementApi.ResultDetailResultQuizView](docs/ResultDetailResultQuizView.md)
  - [FptSeOnLearnManagementApi.ResultQuizResultDetailView](docs/ResultQuizResultDetailView.md)
@@ -524,6 +525,7 @@ Class | Method | HTTP request | Description
  - [FptSeOnLearnManagementApi.WalletTransactionView](docs/WalletTransactionView.md)
  - [FptSeOnLearnManagementApi.WalletWalletView](docs/WalletWalletView.md)
  - [FptSeOnLearnManagementApi.WalletWithdrawRequestView](docs/WalletWithdrawRequestView.md)
+ - [FptSeOnLearnManagementApi.WithdrawTransactionRequestWithdrawRequestView](docs/WithdrawTransactionRequestWithdrawRequestView.md)
  - [FptSeOnLearnManagementApi.WithdrawalRequest](docs/WithdrawalRequest.md)
  - [FptSeOnLearnManagementApi.WithdrawalRequestTransactionView](docs/WithdrawalRequestTransactionView.md)
  - [FptSeOnLearnManagementApi.WithdrawalRequestWithdrawRequestView](docs/WithdrawalRequestWithdrawRequestView.md)

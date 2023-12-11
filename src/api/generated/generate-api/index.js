@@ -13,7 +13,6 @@
 
 
 import ApiClient from './ApiClient';
-import AcceptWithdrawRequestWithdrawRequestView from './model/AcceptWithdrawRequestWithdrawRequestView';
 import Account from './model/Account';
 import AccountCourseView from './model/AccountCourseView';
 import AccountDetailResponse from './model/AccountDetailResponse';
@@ -126,6 +125,7 @@ import PayoutRequestWithdrawRequestView from './model/PayoutRequestWithdrawReque
 import PnsRequest from './model/PnsRequest';
 import Profile from './model/Profile';
 import ProfileCourseView from './model/ProfileCourseView';
+import ProfileEnrollView from './model/ProfileEnrollView';
 import ProfileRequest from './model/ProfileRequest';
 import QuestionQuestionView from './model/QuestionQuestionView';
 import QuestionRequestQuestionView from './model/QuestionRequestQuestionView';
@@ -159,6 +159,7 @@ import ResourceViewUsedQuestionDoQuiz from './model/ResourceViewUsedQuestionDoQu
 import ResponseDTOAccount from './model/ResponseDTOAccount';
 import ResponseDTOCourse from './model/ResponseDTOCourse';
 import ResponseDTOCourseCourseView from './model/ResponseDTOCourseCourseView';
+import ResponseDTOFeedbackFeedbackView from './model/ResponseDTOFeedbackFeedbackView';
 import ResponseDTOInteger from './model/ResponseDTOInteger';
 import ResponseDTOListReport from './model/ResponseDTOListReport';
 import ResponseDTOListReportReportView from './model/ResponseDTOListReportReportView';
@@ -173,6 +174,7 @@ import ResponseDTOSubjectSubjectView from './model/ResponseDTOSubjectSubjectView
 import ResponseDTOTransaction from './model/ResponseDTOTransaction';
 import ResponseDTOTransactionTransactionView from './model/ResponseDTOTransactionTransactionView';
 import ResponseDTOUsedQuestion from './model/ResponseDTOUsedQuestion';
+import ResponseDTOWithdrawalRequestWithdrawRequestView from './model/ResponseDTOWithdrawalRequestWithdrawRequestView';
 import ResultDetailResultDetailView from './model/ResultDetailResultDetailView';
 import ResultDetailResultQuizView from './model/ResultDetailResultQuizView';
 import ResultQuizResultDetailView from './model/ResultQuizResultDetailView';
@@ -264,6 +266,7 @@ import WalletRequestWalletView from './model/WalletRequestWalletView';
 import WalletTransactionView from './model/WalletTransactionView';
 import WalletWalletView from './model/WalletWalletView';
 import WalletWithdrawRequestView from './model/WalletWithdrawRequestView';
+import WithdrawTransactionRequestWithdrawRequestView from './model/WithdrawTransactionRequestWithdrawRequestView';
 import WithdrawalRequest from './model/WithdrawalRequest';
 import WithdrawalRequestTransactionView from './model/WithdrawalRequestTransactionView';
 import WithdrawalRequestWithdrawRequestView from './model/WithdrawalRequestWithdrawRequestView';
@@ -338,12 +341,6 @@ export {
      * @property {module:ApiClient}
      */
     ApiClient,
-
-    /**
-     * The AcceptWithdrawRequestWithdrawRequestView model constructor.
-     * @property {module:model/AcceptWithdrawRequestWithdrawRequestView}
-     */
-    AcceptWithdrawRequestWithdrawRequestView,
 
     /**
      * The Account model constructor.
@@ -1018,6 +1015,12 @@ export {
     ProfileCourseView,
 
     /**
+     * The ProfileEnrollView model constructor.
+     * @property {module:model/ProfileEnrollView}
+     */
+    ProfileEnrollView,
+
+    /**
      * The ProfileRequest model constructor.
      * @property {module:model/ProfileRequest}
      */
@@ -1216,6 +1219,12 @@ export {
     ResponseDTOCourseCourseView,
 
     /**
+     * The ResponseDTOFeedbackFeedbackView model constructor.
+     * @property {module:model/ResponseDTOFeedbackFeedbackView}
+     */
+    ResponseDTOFeedbackFeedbackView,
+
+    /**
      * The ResponseDTOInteger model constructor.
      * @property {module:model/ResponseDTOInteger}
      */
@@ -1298,6 +1307,12 @@ export {
      * @property {module:model/ResponseDTOUsedQuestion}
      */
     ResponseDTOUsedQuestion,
+
+    /**
+     * The ResponseDTOWithdrawalRequestWithdrawRequestView model constructor.
+     * @property {module:model/ResponseDTOWithdrawalRequestWithdrawRequestView}
+     */
+    ResponseDTOWithdrawalRequestWithdrawRequestView,
 
     /**
      * The ResultDetailResultDetailView model constructor.
@@ -1844,6 +1859,12 @@ export {
      * @property {module:model/WalletWithdrawRequestView}
      */
     WalletWithdrawRequestView,
+
+    /**
+     * The WithdrawTransactionRequestWithdrawRequestView model constructor.
+     * @property {module:model/WithdrawTransactionRequestWithdrawRequestView}
+     */
+    WithdrawTransactionRequestWithdrawRequestView,
 
     /**
      * The WithdrawalRequest model constructor.

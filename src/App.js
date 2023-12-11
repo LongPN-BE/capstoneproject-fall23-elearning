@@ -165,7 +165,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Navigate to="/subjects" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/test" element={<AccountTabComponent />} />
+            <Route path="/test" element={<AccountTabComponent isBilling={true}  isSecurity={true} />} />
             <Route path="/subjects" element={<ManageSubject />} />
             <Route path="/subject/:subjectId/course" element={<CourseBySubject />} />
             <Route path="/subject/:subjectId/course/:courseId/evaluate" element={<ListFeedback />} />

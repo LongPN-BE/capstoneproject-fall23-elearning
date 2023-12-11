@@ -16,6 +16,7 @@ import ApiClient from "../ApiClient";
 import DoFeedbackRequestFeedbackView from '../model/DoFeedbackRequestFeedbackView';
 import FeedContent from '../model/FeedContent';
 import FeedbackFeedbackView from '../model/FeedbackFeedbackView';
+import ResponseDTOFeedbackFeedbackView from '../model/ResponseDTOFeedbackFeedbackView';
 import ResponseDTOLong from '../model/ResponseDTOLong';
 
 /**
@@ -41,14 +42,14 @@ export default class FeedbackControllerApi {
      * Callback function to receive the result of the doFeedback operation.
      * @callback module:api/FeedbackControllerApi~doFeedbackCallback
      * @param {String} error Error message, if any.
-     * @param {module:model/FeedbackFeedbackView} data The data returned by the service call.
+     * @param {module:model/ResponseDTOFeedbackFeedbackView} data The data returned by the service call.
      * @param {String} response The complete HTTP response.
      */
 
     /**
      * @param {module:model/DoFeedbackRequestFeedbackView} doFeedbackRequestFeedbackView 
      * @param {module:api/FeedbackControllerApi~doFeedbackCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/FeedbackFeedbackView}
+     * data is of type: {@link module:model/ResponseDTOFeedbackFeedbackView}
      */
     doFeedback(doFeedbackRequestFeedbackView, callback) {
       let postBody = doFeedbackRequestFeedbackView;
@@ -69,7 +70,7 @@ export default class FeedbackControllerApi {
       let authNames = ['Bearer'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
-      let returnType = FeedbackFeedbackView;
+      let returnType = ResponseDTOFeedbackFeedbackView;
       return this.apiClient.callApi(
         '/api/v1/feedback/do-feedback', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,

@@ -3,7 +3,6 @@ import {
   Button,
   Typography,
   InputBase,
-  Paper,
   Table,
   TableBody,
   TableCell,
@@ -12,7 +11,7 @@ import {
   TablePagination,
   Select,
   MenuItem,
-} from '@material-ui/core';
+} from '@mui/material';
 import moment from 'moment/moment';
 
 export default function ListTransactionHistory({ data }) {
@@ -20,7 +19,7 @@ export default function ListTransactionHistory({ data }) {
 
   useEffect(() => {
     setDataFilter(data);
-  }, []);
+  });
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -146,7 +145,6 @@ export default function ListTransactionHistory({ data }) {
           <Table style={{ marginTop: '20px' }}>
             <TableHead>
               <TableRow>
-                <TableCell>STT</TableCell>
                 <TableCell>Ngày giao dịch</TableCell>
                 <TableCell>Lý do</TableCell>
                 <TableCell>
@@ -164,7 +162,6 @@ export default function ListTransactionHistory({ data }) {
                 .map((s, index) => {
                   return (
                     <TableRow hover={true} key={index}>
-                      <TableCell>{index + (page * rowsPerPage, page * rowsPerPage) + 1}</TableCell>
                       <TableCell>
                         <Typography variant="body1" color="primary">
                           {moment(s.dateProcess).format('DD/MM/YYYY')}
