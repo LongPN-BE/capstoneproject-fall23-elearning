@@ -13,7 +13,9 @@ import {
   TableHead,
   TableRow,
   TablePagination,
-} from '@material-ui/core';
+  Popover,
+  MenuItem,
+} from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
 import { Search } from '@material-ui/icons';
@@ -23,6 +25,7 @@ import moment from 'moment/moment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CustomBreadcrumbs from '../../../components/Breadcrumbs';
 import Swal from 'sweetalert2';
+import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 
 export default function ListSubject() {
   const [data, setData] = useState([]);
@@ -30,6 +33,7 @@ export default function ListSubject() {
   const [isSubjectModalOpen, setIsSubjectModalOpen] = useState(false);
   const [subjectToEdit, setSubjectToEdit] = useState(null);
   const [user, setUser] = useState(null);
+  const [openPop, setOpenPop] = useState(null);
   const breadcrumbItems = [
     {
       url: '/',
@@ -59,6 +63,15 @@ export default function ListSubject() {
       }
     }
   }, []);
+
+  const handleOpenPop = (event) => {
+    setOpenPop(event.currentTarget);
+  };
+
+  const handleClosePop = () => {
+    setOpenPop(null);
+  };
+
 
   const handleAddSubject = () => {
     setSubjectToEdit(null); // Clear any previous subject data (for editing)
@@ -121,8 +134,8 @@ export default function ListSubject() {
         .then((resp) => {
           if (resp) {
             Swal.fire({
-              title: 'Tuyệt vời!',
-              text: 'Bạn đã khởi tạo thành công môn' + subjectData.name + ' !',
+              title: 'Tạo môn học',
+              text: 'Bạn đã tạo thành công môn' + subjectData.name + ' !',
               icon: 'success',
             });
             window.location.reload();
@@ -131,7 +144,7 @@ export default function ListSubject() {
         .catch((err) => {
           Swal.fire({
             title: 'Opss..',
-            text: err,
+            text: "Vui lòng nhập đúng thông tin",
             icon: 'warning',
           });
           console.log(err);
@@ -162,30 +175,43 @@ export default function ListSubject() {
     setPage(0);
   };
 
+
+
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
   return (
     data && (
-      <div className="m-5">
-        <Paper style={{ padding: '20px' }}>
-          <CustomBreadcrumbs items={breadcrumbItems} />
-
-          <div className="d-flex align-items-center" style={{ marginTop: '20px' }}>
-            <Typography variant="h5">Danh sách môn học</Typography>
-
-            <div className="text-end col-8">
-              <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={handleAddSubject}>
-                Tạo mới môn học
-              </Button>
-            </div>
+      <div className="p-5" style={{ overflow: 'auto' }}>
+        <div className='row mb-3'>
+          <div className='col-8' >
+            <h4>Danh sách môn học</h4>
+            <CustomBreadcrumbs items={breadcrumbItems} />
           </div>
+          <div className='text-end col-4'>
+            <Button variant="outlined" style={{ border: 0, backgroundColor: '#212b36', color: 'white', fontWeight: 700 }} onClick={handleAddSubject}>
+              Tạo mới
+            </Button>
+          </div>
+        </div>
+
+
+        <Paper style={{
+          padding: '20px',
+          borderRadius: '20px',
+          maxHeight: 'max-content',
+          boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px;',
+        }}>
           <div className="d-flex" style={{ marginTop: '20px' }}>
-            <InputBase
-              placeholder="Tìm kiếm"
-              style={{ marginLeft: '20px' }}
-              startAdornment={<Search />}
-              onChange={handleSearchChange}
-            />
+            <div className='border rounded p-1'
+              style={{ backgroundColor: "gray" }}
+            >
+              <InputBase
+                placeholder="Tìm kiếm"
+                style={{ marginInline: '10px' }}
+                startAdornment={<Search />}
+                onChange={handleSearchChange}
+              />
+            </div>
           </div>
           <Table style={{ marginTop: '20px' }}>
             <TableHead>
@@ -209,7 +235,6 @@ export default function ListSubject() {
                     <TableCell width="30%">{s.description}</TableCell>
                     <TableCell>{s.minPrice}</TableCell>
                     <TableCell>{moment(s.createDate).format('DD/MM/YYYY')}</TableCell>
-                    {/* <TableCell>{s.staff_id}</TableCell> */}
                     <TableCell>{s.status ? 'Đang hoạt động' : 'Chưa kích hoạt'} </TableCell>
                     <TableCell width="15%">
                       {/* <Link className="btn btn-outline-secondary" to={`/subjects/courseBySubject`}> */}
@@ -227,6 +252,38 @@ export default function ListSubject() {
                         >
                           <EditIcon />
                         </Button>
+
+
+                        <button className='rounded-circle btn' onClick={handleOpenPop}>
+                          <MoreVertRoundedIcon />
+                        </button>
+
+
+                        <Popover
+                          open={!!openPop}
+                          anchorEl={openPop}
+                          onClose={handleClosePop}
+                          anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                          PaperProps={{
+                            sx: { width: 140 },
+                          }}
+                        >
+                          <MenuItem onClick={handleClosePop}>
+                            <VisibilityIcon />
+                            View
+                          </MenuItem>
+
+                          <MenuItem onClick={handleClosePop} sx={{ color: 'error.main' }}>
+                            <EditIcon />
+                            Edit
+                          </MenuItem>
+                        </Popover>
+
+
+
+
+
                         {s.status ? (
                           <>
                             <button

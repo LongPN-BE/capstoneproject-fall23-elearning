@@ -74,7 +74,7 @@ export default function HistoryPaymentTable({ data }) {
         const filteredDates = data.filter(
           (d) =>
             new Date(moment(d.transactionDate).format('YYYY'), moment(d.transactionDate).format('MM'), 0) -
-              new Date(monthA.getFullYear(), monthA.getMonth() + 1, 0) ===
+            new Date(monthA.getFullYear(), monthA.getMonth() + 1, 0) ===
             0,
         );
         setDataFilter(filteredDates);
@@ -86,7 +86,7 @@ export default function HistoryPaymentTable({ data }) {
               moment(d.transactionDate).format('MM'),
               moment(d.transactionDate).format('DD'),
             ) -
-              new Date(monthA.getFullYear(), monthA.getMonth() + 1, dayS) ===
+            new Date(monthA.getFullYear(), monthA.getMonth() + 1, dayS) ===
             0,
         );
         setDataFilter(filteredDates);
@@ -98,12 +98,13 @@ export default function HistoryPaymentTable({ data }) {
     data && (
       <div className="m-1">
         <div className="d-flex align-items-center">
-          <Typography variant="h5">Lịch sử thanh toán</Typography>
+          <Typography variant="h5">NẠP/RÚT</Typography>
         </div>
         <div className="d-flex align-items-center" style={{ marginTop: '20px' }}>
           Ngày :
           <Select
-            style={{ marginLeft: '10px', marginRight: '20px', width: '10%' }}
+            className='m-1'
+            style={{ width: '10%' }}
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={dayS}

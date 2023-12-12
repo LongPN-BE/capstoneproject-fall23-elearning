@@ -163,9 +163,9 @@ const App = () => {
           {/* <StaffHeader/> */}
           <StaffNavbar />
           <Routes>
-            <Route path="/" element={<Navigate to="/subjects" replace />} />
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/test" element={<AccountTabComponent isBilling={true}  isSecurity={true} />} />
+            <Route path="/test" element={<AccountTabComponent isBilling={true} isSecurity={true} />} />
             <Route path="/subjects" element={<ManageSubject />} />
             <Route path="/subject/:subjectId/course" element={<CourseBySubject />} />
             <Route path="/subject/:subjectId/course/:courseId/evaluate" element={<ListFeedback />} />

@@ -10,7 +10,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
-} from '@material-ui/core';
+} from '@mui/material';
 import moment from 'moment';
 import Cookies from 'js-cookie';
 
@@ -133,9 +133,13 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
     onClose();
   };
 
+  const invalidSubject = () => {
+    return editedSubject.name == "" || editedSubject.description == "" || editedSubject.minPrice == ""
+  }
+
   return (
     <Dialog open={isOpen} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>{subject ? 'Cập nhật môn học' : 'Tạo mới môn học'}</DialogTitle>
+      <DialogTitle style={{ fontWeight: 700 }}>{subject ? 'Cập nhật môn học' : 'Tạo mới môn học'}</DialogTitle>
       <DialogContent>
         {editedSubjectError.name == '' ? (
           <>
@@ -148,12 +152,14 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
               value={editedSubject.name}
               onChange={(e) => handleInputChange(e, 'name')}
               required
+              variant='filled'
             />
           </>
         ) : (
           <>
             <TextField
               error
+              variant='filled'
               fullWidth
               label="Tên môn học"
               autoFocus
@@ -171,6 +177,7 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
           <>
             <TextField
               fullWidth
+              variant='filled'
               multiline
               minRows={4}
               label="Chú thích"
@@ -185,6 +192,7 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
         ) : (
           <>
             <TextField
+              variant='filled'
               error
               fullWidth
               multiline
@@ -204,6 +212,7 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
         {editedSubjectError.minPrice == '' ? (
           <>
             <TextField
+              variant='filled'
               fullWidth
               label="Giá thấp nhất"
               autoFocus
@@ -211,12 +220,14 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
               name="minPrice"
               value={editedSubject.minPrice}
               onChange={(e) => handleInputChange(e, 'minPrice')}
+              required
             />
           </>
         ) : (
           <>
             <TextField
               error
+              variant='filled'
               fullWidth
               label="Giá thấp nhất"
               autoFocus
@@ -225,12 +236,14 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
               value={editedSubject.minPrice}
               onChange={(e) => handleInputChange(e, 'minPrice')}
               helperText={editedSubjectError.minPrice}
+              required
             />
           </>
         )}
 
         <TextField
           fullWidth
+          variant='filled'
           label="Ngày khởi tạo"
           autoFocus
           margin="dense"
@@ -251,28 +264,20 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
           onChange={(e) => handleInputChange(e, 'status')}
           disabled={true}
         /> */}
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Trạng thái</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={editedSubject.status}
-            label="Trạng  thái"
-            onChange={(e) => handleInputChange(e, 'status')}
-            disabled
-          >
-            <MenuItem value={false}>Không hoạt động</MenuItem>
-            <MenuItem value={true}>Hoạt động</MenuItem>
-          </Select>
-        </FormControl>
+
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <button onClick={onClose}
+          className='btn'
+        >
           Hủy
-        </Button>
-        <Button onClick={handleSave} color="primary" variant="contained">
-          Xác nhận
-        </Button>
+        </button>
+        <button disabled={invalidSubject()}
+          onClick={handleSave}
+          className="btn px-3"
+          style={{ backgroundColor: '#212b36', color: 'white', borderRadius: 8, fontWeight: 700 }}>
+          Lưu
+        </button>
       </DialogActions>
     </Dialog>
   );

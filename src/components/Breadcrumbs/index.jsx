@@ -7,30 +7,26 @@ import { Link } from "react-router-dom";
 
 const CustomBreadcrumbs = ({ items }) => {
   return (
-    <Container>
-      <div className="mt-4">
-        <Breadcrumbs
-          separator={<NavigateNextIcon fontSize="small" />}
-          aria-label="breadcrumb"
-        >
-          {items.map((item, index) => {
-            if (index === items.length - 1) {
-              return (
-                <Typography key={index} color="textPrimary">
-                  {item.label}
-                </Typography>
-              );
-            } else {
-              return (
-                <Link key={index} color="inherit" to={item.url}>
-                  {item.label}
-                </Link>
-              );
-            }
-          })}
-        </Breadcrumbs>
-      </div>
-    </Container>
+    <Breadcrumbs
+      separator={<NavigateNextIcon fontSize="small" />}
+      aria-label="breadcrumb"
+    >
+      {items.map((item, index) => {
+        if (index === items.length - 1) {
+          return (
+            <Typography key={index} color="textPrimary">
+              {item.label}
+            </Typography>
+          );
+        } else {
+          return (
+            <Link key={index} color="inherit" to={item.url}>
+              {item.label}
+            </Link>
+          );
+        }
+      })}
+    </Breadcrumbs>
   );
 };
 

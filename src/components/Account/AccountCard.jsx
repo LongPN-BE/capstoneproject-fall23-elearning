@@ -17,8 +17,19 @@ import BalanceInfo from '../../pages/StudentProfile/components/BalanceInfo';
 import WalletCard from '../../pages/StudentProfile/components/WalletCard';
 import TableTransactions from '../../pages/StudentProfile/components/TableTransactions';
 import { Container } from 'reactstrap';
+import Cookies from 'js-cookie';
 
 function AccountCard({ user }) {
+  const [userTmp, setUserTmp] = useState([]);
+
+  useEffect(() => {
+    setUserTmp(JSON.parse(Cookies.get('user')))
+  });
+
+  const isUser = () => {
+    return userTmp.id === user.id
+  };
+
   const BlackTextField = styled(TextField)`
     & label.Mui-focused {
       color: black;
@@ -59,9 +70,11 @@ function AccountCard({ user }) {
                   <Typography style={{ fontWeight: 700, color: 'grey', textAlign: 'center' }}>{user?.role}</Typography>
                 </CardContent>
                 <CardActions className="d-flex justify-content-center mb-3">
+
                   <Button
                     style={{ backgroundColor: '#ffe4de', fontWeight: 700, color: '#c4403d', borderRadius: 8 }}
                     variant="filled"
+                    disabled={userTmp.id === user.id}
                   >
                     Khoá tài khoản
                   </Button>

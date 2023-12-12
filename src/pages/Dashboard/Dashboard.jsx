@@ -22,8 +22,7 @@ import PieChartBox from '../../components/Dashboard/PieChartBox/PieChartBox';
 const Dashboard = () => {
   return (
     <>
-      {/* <div className={classNames(Styles.main)}>
-        <Navbar />
+      <div className={classNames(Styles.main)}>
         <div className={classNames(Styles.container)}>
           <div className={classNames(Styles.contentContainer)}>
             <div className={classNames(Styles.home)}>
@@ -57,7 +56,7 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-      </div> */}
+      </div>
     </>
   );
 };

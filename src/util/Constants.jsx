@@ -15,6 +15,10 @@ import PaidIcon from '@mui/icons-material/Paid';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ReportIcon from '@mui/icons-material/Report';
+import SubjectRoundedIcon from '@mui/icons-material/SubjectRounded';
+import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalanceRounded';
+import ReceiptLongRoundedIcon from '@mui/icons-material/ReceiptLongRounded';
+import BarChartRoundedIcon from '@mui/icons-material/BarChartRounded';
 
 export const DISPLAY_LOADING = 'DISPLAY_LOADING';
 export const HIDE_LOADING = 'HIDE_LOADING';
@@ -85,11 +89,11 @@ export const navData = {
     // Add more teacher-specific items
   ],
   staff: [
-    // {
-    //   label: 'Dashboard',
-    //   icon: <GridViewRoundedIcon />,
-    //   path: '/dashboard',
-    // },
+    {
+      label: 'Biểu đồ',
+      icon: <BarChartRoundedIcon />,
+      path: '/dashboard',
+    },
     // {
     //   label: 'Quản lý tài khoản',
     //   icon: <GridViewRoundedIcon />,
@@ -108,7 +112,7 @@ export const navData = {
     // },
     {
       label: 'Quản lý môn học',
-      icon: <GridViewRoundedIcon />,
+      icon: <SubjectRoundedIcon />,
       subItems: [
         {
           label: 'Môn học',
@@ -124,11 +128,11 @@ export const navData = {
     },
     {
       label: 'Quản lý tài chính',
-      icon: <AccountBalanceIcon />,
+      icon: <AccountBalanceRoundedIcon />,
       subItems: [
         {
           label: 'Lịch sử giao dịch',
-          icon: <ReceiptIcon />,
+          icon: <ReceiptLongRoundedIcon />,
           path: '/transactions',
         },
         {
@@ -152,11 +156,11 @@ export const navData = {
   ],
 
   admin: [
-    // {
-    //   label: 'Dashboard',
-    //   icon: <GridViewRoundedIcon />,
-    //   path: '/dashboard',
-    // },
+    {
+      label: 'Dashboard',
+      icon: <GridViewRoundedIcon />,
+      path: '/dashboard',
+    },
     {
       label: 'Quản lý tài khoản',
       icon: <GridViewRoundedIcon />,
@@ -166,11 +170,11 @@ export const navData = {
           icon: <PeopleAltIcon />,
           path: '/accounts',
         },
-        // {
-        //   label: 'Báo cáo',
-        //   icon: <ReportIcon />,
-        //   path: '/report-accounts',
-        // },
+        {
+          label: 'Báo cáo',
+          icon: <ReportIcon />,
+          path: '/report-accounts',
+        },
       ],
     },
     {

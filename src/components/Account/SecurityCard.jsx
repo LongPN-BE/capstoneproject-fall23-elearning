@@ -10,6 +10,7 @@ import {
 import ApiClientSingleton from '../../api/apiClientImpl';
 import { toast } from 'react-toastify';
 import { Container } from 'reactstrap';
+import Swal from 'sweetalert2';
 
 const paymentHisApi = new PaymentHistoryControllerApi(ApiClientSingleton.getInstance());
 const accountApi = new AccountControllerApi(ApiClientSingleton.getInstance());
@@ -35,6 +36,44 @@ function SecurityCard({ user }) {
       position: toast.POSITION.TOP_CENTER,
     });
   };
+
+  const showSuccess = (msg) => {
+    Swal.fire({
+      title: 'Đổi Mật Khẩu',
+      text: msg,
+      icon: 'success',
+      confirmButtonText: 'OK',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleLogout();
+      }
+    })
+  }
+
+  const showError = (msg) => {
+    if (msg == "Mật khẩu không trùng") {
+      Swal.fire({
+        title: 'Oops...',
+        text: "Mật khẩu không đúng",
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+    }
+    Swal.fire({
+      title: 'Oops...',
+      text: msg,
+      icon: 'error',
+      confirmButtonText: 'OK',
+    });
+
+  }
+
+  const handleLogout = () => {
+    Cookies.remove('user');
+    Cookies.remove('token');
+    window.location.href = '/';
+  };
+
 
   const validatePassword = () => {
     return changePass.newPassword === changePass.confirmPassword;
@@ -75,7 +114,7 @@ function SecurityCard({ user }) {
                   }}
                 >
                   <FormControl sx={{ gridColumn: '1/-1' }}>
-                    <BlackTextField
+                    <TextField
                       className="mb-2"
                       inputProps={{ style: { borderRadius: '20px' } }}
                       type="password"
@@ -93,24 +132,25 @@ function SecurityCard({ user }) {
                     />
                   </FormControl>
                   <FormControl sx={{ gridColumn: '1/-1' }}>
-                    <BlackTextField
+                    <TextField
                       className="mb-2"
                       type="password"
                       label="Mật khẩu mới"
                       name="newPassword"
                       required
-                      helperText="Mật khẩu phải có 6 ký tự trở lên"
+                      helperText="Mật khẩu phải có 8 ký tự trở lên"
                       value={changePass.newPassword}
                       onChange={(e) => {
                         const newChange = {
                           ...changePass,
                           newPassword: e.target.value,
                         };
+                        setChangePass(newChange);
                       }}
                     />
                   </FormControl>
                   <FormControl sx={{ gridColumn: '1/-1' }}>
-                    <BlackTextField
+                    <TextField
                       className="mb-2"
                       type="password"
                       label="Xác nhân mật khẩu mới"
@@ -134,8 +174,10 @@ function SecurityCard({ user }) {
                     <button
                       className="btn px-3"
                       style={{ backgroundColor: '#212b36', color: 'white', borderRadius: 8, fontWeight: 700 }}
+                      disabled={!validatePassword()}
                       onClick={() => {
                         if (validatePassword()) {
+                          console.log("test")
                           accountApi.changePassword(
                             {
                               oldPassword: changePass.oldPassword,
@@ -143,9 +185,12 @@ function SecurityCard({ user }) {
                             },
                             (err, res) => {
                               if (res?.code === 200) {
-                                notifySuccess('Đổi mật khẩu thành công');
+                                console.log("thắng")
+                                showSuccess('Đổi mật khẩu thành công');
                               } else {
-                                notifyErorr(`Đổi mật khẩu không thành công: ${res?.message}`);
+                                console.log(`thua ${res?.message}`)
+                                showError(res?.message);
+
                               }
                             },
                           );
