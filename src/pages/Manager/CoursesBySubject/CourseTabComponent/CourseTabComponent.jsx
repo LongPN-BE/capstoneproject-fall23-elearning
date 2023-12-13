@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import CourseTableComponent from '../CourseTableComponent/CourseTableComponent';
-import {
-  InputBase
-} from '@mui/material';
-import { Paper } from '@material-ui/core';
+import { InputBase, Tab, Tabs, Paper, Divider } from '@mui/material';
 import { Search } from '@material-ui/icons';
 
 function CourseTabComponent({ activeCourses, pendingCourses, deActiveCourses }) {
@@ -42,29 +37,35 @@ function CourseTabComponent({ activeCourses, pendingCourses, deActiveCourses }) 
   };
 
   return (
-    <div>
+    <Paper
+      style={{
+        padding: '20px',
+        borderRadius: '20px',
+        maxHeight: 'max-content',
+        boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px;',
+      }}
+    >
       <Tabs value={tabValue} onChange={handleTabChange} centered className="d-flex ">
         <Tab className="p-3" label="Đang hoạt động" />
         <Tab className="p-3" label="Chờ xét duyệt" />
         <Tab className="p-3" label="Không hoạt động" />
       </Tabs>
 
-      <Paper style={{ padding: '10px' }}>
-        <div className="search-box d-flex justify-content-between">
-          <div className="d-flex">
-            <InputBase
-              placeholder="Tìm kiếm..."
-              className="search-input"
-              startAdornment={<Search />}
-              value={searchText}
-              onChange={handleSearchChange}
-            />
-          </div>
-        </div>
-      </Paper>
+      <Divider />
 
+      <div className="d-flex" style={{ margin: '20px 0' }}>
+        <div className=" rounded p-1" style={{ backgroundColor: '#f4f6f8' }}>
+          <InputBase
+            placeholder="Tìm kiếm..."
+            className="search-input"
+            startAdornment={<Search />}
+            value={searchText}
+            onChange={handleSearchChange}
+          />
+        </div>
+      </div>
       <CourseTableComponent courses={filteredCourses} />
-    </div>
+    </Paper>
   );
 }
 

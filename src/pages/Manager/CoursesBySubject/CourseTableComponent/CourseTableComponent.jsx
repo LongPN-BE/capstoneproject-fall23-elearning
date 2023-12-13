@@ -5,7 +5,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Paper,
+  Typography,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -13,13 +13,16 @@ import {
   TextField,
   DialogActions,
   TablePagination,
-} from '@material-ui/core';
+  MenuItem,
+  Popover,
+} from '@mui/material';
 import { Link, useParams } from 'react-router-dom';
 import moment from 'moment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import FeedbackIcon from '@mui/icons-material/Feedback';
-import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
+import DoNotDisturbOnRoundedIcon from '@mui/icons-material/DoNotDisturbOnRounded';
+import RuleFolderRoundedIcon from '@mui/icons-material/RuleFolderRounded';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
 import { fetchData, postData } from '../../../../services/AppService';
@@ -28,16 +31,28 @@ import Swal from 'sweetalert2';
 function CourseTableComponent({ courses }) {
   const { subjectId } = useParams();
   const [course, setCourse] = useState(null);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(null);
   const [reason, setReason] = useState(null);
+  const [openPop, setOpenPop] = useState(null);
+  const [courseTmp, setCourseTmp] = useState([]);
 
   const handleClickOpen = (course) => {
+    handleClosePop();
     setCourse(course);
     setOpen(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setOpen(null);
+  };
+
+  const handleOpenPop = (course, event) => {
+    setOpenPop(event.currentTarget);
+    setCourseTmp(course);
+  };
+
+  const handleClosePop = () => {
+    setOpenPop(null);
   };
 
   function showSuccess(course) {
@@ -74,19 +89,29 @@ function CourseTableComponent({ courses }) {
   const handleApproved = (course) => {
     // alert('Xác nhận duyệt ' + course.name + " - ID : " + course.id);
     const token = Cookies.get('token');
-    if (token) {
-      fetchData('/course/approve?course_id=' + course.id, token)
-        .then((resp) => {
-          if (resp) {
-            showSuccess(course);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          showError(err);
-        });
-      // showSuccess(course);
-    }
+    handleClosePop();
+    Swal.fire({
+      title: 'Bạn muốn duyệt học này?',
+      text: 'Hãy đảm bảo rằng khoá học đã đủ yếu tố để triển khai trên nền tảng!',
+      showCancelButton: true,
+      confirmButtonText: 'Xác nhận',
+      cancelButtonText: `Hủy`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (token) {
+          fetchData('/course/approve?course_id=' + course.id, token)
+            .then((resp) => {
+              if (resp) {
+                showSuccess(course);
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+              showError(err);
+            });
+        }
+      }
+    });
   };
 
   const handleReject = (course) => {
@@ -133,7 +158,7 @@ function CourseTableComponent({ courses }) {
 
   return (
     <>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={!!open} onClose={handleClose}>
         <DialogTitle>Từ chối</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -156,7 +181,7 @@ function CourseTableComponent({ courses }) {
             type="submit"
             title="Approve"
             className="btn btn-success m-1"
-            onClick={() => handleClose}
+            onClick={() => handleClose()}
             // onClick={() => handleApproved(course)}
           >
             Hủy
@@ -168,84 +193,144 @@ function CourseTableComponent({ courses }) {
       </Dialog>
 
       <div className="mt-2">
-        <Paper style={{ padding: '20px' }}>
+        <>
           <Table>
-            <TableHead>
+            <TableHead style={{ backgroundColor: '#f4f6f8' }}>
               <TableRow>
-                <TableCell align="center">STT</TableCell>
-                <TableCell align="center">Khoá học</TableCell>
-                <TableCell align="center">Mô tả</TableCell>
-                <TableCell align="center">Giá</TableCell>
-                <TableCell align="center">Ngày tạo</TableCell>
-                <TableCell align="center">Xem</TableCell>
-                <TableCell align="center"></TableCell>
+                <TableCell width={'2%'} style={{ color: '#808d99', fontWeight: 700 }}>
+                  #
+                </TableCell>
+                <TableCell width={'20%'} style={{ color: '#808d99', fontWeight: 700 }}>
+                  Khoá học
+                </TableCell>
+                <TableCell width={'40%'} style={{ color: '#808d99', fontWeight: 700 }}>
+                  Mô tả
+                </TableCell>
+                <TableCell style={{ color: '#808d99', fontWeight: 700 }}>Giá</TableCell>
+                <TableCell width={'15%'} style={{ color: '#808d99', fontWeight: 700 }}>
+                  Ngày tạo
+                </TableCell>
+                <TableCell style={{ color: '#808d99', fontWeight: 700 }}></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {courses.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((course, index) => (
-                <TableRow key={course.id}>
-                  <TableCell align="center">{index + 1}</TableCell>
-                  <TableCell align="center">{course.name}</TableCell>
-                  <TableCell align="center">{course.description}</TableCell>
-                  <TableCell align="center">{course.price}</TableCell>
-                  <TableCell align="center">{moment(course.createDate).format('DD/MM/YYYY')}</TableCell>
-                  <TableCell align="center">
-                    <Link
-                      to={`/subject/${course.subject.id}/course/${course.id}/syllabus`}
-                      title="Xem"
-                      className="btn btn-secondary m-1"
-                    >
-                      <VisibilityIcon />
-                    </Link>
-                  </TableCell>
-                  {course?.status === 'PENDING' ? (
-                    <>
-                      <TableCell align="center">
-                        <div className="d-flex justify-content-center">
-                          <button
-                            type="submit"
-                            title="Approve"
-                            className="btn btn-success m-1"
-                            onClick={() => handleApproved(course)}
-                          >
-                            <CheckCircleOutlineIcon />
-                          </button>
-                          <button
-                            type="submit"
-                            title="Deny"
-                            className="btn btn-danger m-1"
-                            onClick={() => handleClickOpen(course)}
-                          >
-                            <DoNotDisturbAltIcon />
-                          </button>
+              {courses.length > 0 ? (
+                <>
+                  {courses.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((course, index) => (
+                    <TableRow hover={true} key={course.id}>
+                      <TableCell style={{ fontWeight: 600, color: '#5a6068' }}>{index + 1}</TableCell>
+                      <TableCell style={{ fontWeight: 600, color: '#686f77' }}> {course.name}</TableCell>
+                      <TableCell style={{ fontWeight: 600, color: '#686f77' }}>
+                        <div style={{ overflow: 'auto', height: '35px', textOverflow: 'ellipsis' }}>
+                          <p>{course.description}</p>{' '}
                         </div>
                       </TableCell>
-                    </>
-                  ) : course?.status === 'ACTIVE' ? (
-                    <>
-                      <TableCell align="center">
-                        <div className="d-flex justify-content-center">
+                      <TableCell style={{ fontWeight: 600, color: '#686f77' }} width={'23%'}>
+                        {course.price?.toLocaleString()} VNĐ
+                      </TableCell>
+                      <TableCell style={{ fontWeight: 600, color: '#686f77' }}>
+                        {moment(course.createDate).format('DD-MM-YYYY')}
+                      </TableCell>
+                      <TableCell>
+                        <div className="d-flex">
                           <Link
-                            to={`/subject/${subjectId}/course/${course?.id}/evaluate`}
-                            title="Đánh giá"
-                            aria-label="Đánh giá"
-                            className="btn btn-warning m-1"
+                            to={`/subject/${course.subject.id}/course/${course.id}/syllabus`}
+                            title="Xem"
+                            className="btn m-1"
+                            style={{ color: '#79858f', border: 0 }}
                           >
-                            <FeedbackIcon />
+                            <VisibilityIcon />
                           </Link>
+
+                          {course?.status === 'PENDING' ? (
+                            <>
+                              <button
+                                className="btn p-2"
+                                style={{ padding: 0, border: 0, borderRadius: '50%', minWidth: '50', color: '#79858f' }}
+                                onClick={(e) => handleOpenPop(course, e)}
+                              >
+                                <RuleFolderRoundedIcon />
+                              </button>
+
+                              <Popover
+                                className="p-1"
+                                open={!!openPop}
+                                anchorEl={openPop}
+                                onClose={handleClosePop}
+                                anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                                PaperProps={{
+                                  sx: {
+                                    border: 0,
+                                    width: 180,
+                                    borderRadius: '15px',
+                                    boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px',
+                                  },
+                                }}
+                              >
+                                <div className="p-2">
+                                  <MenuItem
+                                    onClick={() => handleApproved(courseTmp)}
+                                    style={{ borderRadius: '10px', marginBottom: '5px' }}
+                                  >
+                                    <div className="d-flex p-1">
+                                      <CheckCircleRoundedIcon style={{ color: '#03a13d' }} />
+                                      <Typography className="mx-2" style={{ fontWeight: 600, color: '#23c55f' }}>
+                                        Xét Duyệt
+                                      </Typography>
+                                    </div>
+                                  </MenuItem>
+
+                                  <MenuItem onClick={() => handleClickOpen(courseTmp)} style={{ borderRadius: '10px' }}>
+                                    <div className="d-flex p-1">
+                                      <DoNotDisturbOnRoundedIcon style={{ color: '#d32903' }} />
+                                      <Typography className="mx-2" style={{ fontWeight: 600, color: '#ff5630' }}>
+                                        Từ Chối
+                                      </Typography>
+                                    </div>
+                                  </MenuItem>
+                                </div>
+                              </Popover>
+                            </>
+                          ) : course?.status === 'ACTIVE' ? (
+                            <>
+                              <div className="d-flex justify-content-center">
+                                <Link
+                                  to={`/subject/${subjectId}/course/${course?.id}/evaluate`}
+                                  title="Đánh giá"
+                                  aria-label="Đánh giá"
+                                  className="btn m-1"
+                                  style={{ color: '#ffab00', border: 0 }}
+                                >
+                                  <FeedbackIcon />
+                                </Link>
+                              </div>
+                            </>
+                          ) : (
+                            <></>
+                          )}
                         </div>
                       </TableCell>
-                    </>
-                  ) : (
-                    <></>
-                  )}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
+
+                      {emptyRows > 0 && (
+                        <TableRow style={{ height: 53 * emptyRows }}>
+                          <TableCell colSpan={6} />
+                        </TableRow>
+                      )}
                     </TableRow>
-                  )}
+                  ))}
+                </>
+              ) : (
+                <TableRow style={{ height: 53 * emptyRows }}>
+                  <TableCell colSpan={6}>
+                    <div className="text-center">
+                      <Typography style={{ fontWeight: 700, color: '#cdd2d6' }} variant="h6">
+                        Hiện chưa có khoá học
+                      </Typography>
+                    </div>
+                  </TableCell>
                 </TableRow>
-              ))}
+              )}
             </TableBody>
           </Table>
           <TablePagination
@@ -258,7 +343,7 @@ function CourseTableComponent({ courses }) {
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
-        </Paper>
+        </>
       </div>
     </>
   );

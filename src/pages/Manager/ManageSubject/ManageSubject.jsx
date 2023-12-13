@@ -45,7 +45,7 @@ export default function ListSubject() {
     },
     {
       url: `/subjects`,
-      label: `Danh sách sách môn học`,
+      label: `Danh sách chủ đề`,
     },
   ];
 
@@ -84,7 +84,8 @@ export default function ListSubject() {
 
   const handleEditSubject = (subjectData) => {
     console.log(subjectData);
-    setSubjectToEdit(subjectData); // Set the subject data to edit
+    setSubjectToEdit(subjectData);
+    handleClosePop(); // Set the subject data to edit
     setIsSubjectModalOpen(true);
   };
 
@@ -187,10 +188,10 @@ export default function ListSubject() {
 
   return (
     data && (
-      <div className="p-5" style={{ overflow: 'auto' }}>
+      <div className="px-5 py-3" style={{ overflow: 'auto', height: 850 }}>
         <div className="row mb-3">
           <div className="col-8">
-            <h4>Danh sách môn học</h4>
+            <h4 style={{ fontWeight: 'bold' }}>Danh sách chủ đề</h4>
             <CustomBreadcrumbs items={breadcrumbItems} />
           </div>
           <div className="text-end col-4">
@@ -225,7 +226,7 @@ export default function ListSubject() {
           <Table style={{ marginTop: '20px' }}>
             <TableHead style={{ backgroundColor: '#f4f6f8' }}>
               <TableRow>
-                <TableCell style={{ color: '#808d99', fontWeight: 700 }}>STT</TableCell>
+                <TableCell style={{ color: '#808d99', fontWeight: 700 }}>#</TableCell>
                 <TableCell style={{ color: '#808d99', fontWeight: 700 }}>Tên</TableCell>
                 <TableCell style={{ color: '#808d99', fontWeight: 700 }}>Mô tả</TableCell>
                 <TableCell style={{ color: '#808d99', fontWeight: 700 }}>Giá thấp nhất</TableCell>
@@ -239,22 +240,30 @@ export default function ListSubject() {
               {filterData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((s, index) => {
                 return (
                   <TableRow hover={true} key={index}>
-                    <TableCell>{index + (page * rowsPerPage, page * rowsPerPage) + 1}</TableCell>
-                    <TableCell>{s.name}</TableCell>
-                    <TableCell width="30%">{s.description}</TableCell>
-                    <TableCell>{s.minPrice}</TableCell>
-                    <TableCell>{moment(s.createDate).format('DD/MM/YYYY')}</TableCell>
+                    <TableCell style={{ fontWeight: 600, color: '#686f77' }}>
+                      {index + (page * rowsPerPage, page * rowsPerPage) + 1}
+                    </TableCell>
+                    <TableCell style={{ fontWeight: 600, color: '#686f77' }} width="20%">
+                      {s.name}
+                    </TableCell>
+                    <TableCell style={{ fontWeight: 600, color: '#686f77' }} width="28%">
+                      {s.description}
+                    </TableCell>
+                    <TableCell style={{ fontWeight: 600, color: '#686f77' }}>{s.minPrice?.toLocaleString()}</TableCell>
+                    <TableCell style={{ fontWeight: 600, color: '#686f77' }}>
+                      {moment(s.createDate).format('DD/MM/YYYY')}
+                    </TableCell>
                     <TableCell width="11%">
                       {s.status ? (
                         <div
-                          className="p-2"
+                          className="p-2 text-center"
                           style={{ backgroundColor: '#dbf6e5', color: '#2a9a68', borderRadius: 10, fontWeight: 700 }}
                         >
                           Đang hoạt động
                         </div>
                       ) : (
                         <div
-                          className="p-2"
+                          className="p-2 text-center"
                           style={{ backgroundColor: '#ffe4de', color: '#c64843', borderRadius: 10, fontWeight: 700 }}
                         >
                           Chưa kích hoạt
@@ -302,7 +311,7 @@ export default function ListSubject() {
                             sx: {
                               border: 0,
                               width: 180,
-                              borderRadius: '10px',
+                              borderRadius: '15px',
                               boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px',
                             },
                           }}
@@ -334,6 +343,7 @@ export default function ListSubject() {
                                 color="red"
                                 style={{ borderRadius: '10px' }}
                                 onClick={() => {
+                                  handleClosePop();
                                   const token = Cookies.get('token');
                                   if (token) {
                                     fetchData('/course/bySubjectId?subject-id=' + subjectTmp.id, token).then((resp) => {
@@ -397,6 +407,7 @@ export default function ListSubject() {
                               <MenuItem
                                 style={{ borderRadius: '10px' }}
                                 onClick={() => {
+                                  handleClosePop();
                                   const token = Cookies.get('token');
                                   Swal.fire({
                                     title: 'Bạn chắc rằng muốn kích hoạt môn học này?',
