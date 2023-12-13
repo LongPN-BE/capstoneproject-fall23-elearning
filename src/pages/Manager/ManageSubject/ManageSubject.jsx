@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SubjectModal from './SubjectModal';
-import EditIcon from '@mui/icons-material/Edit';
 import {
   Button,
   Typography,
@@ -22,10 +21,13 @@ import { Search } from '@material-ui/icons';
 import Cookies from 'js-cookie';
 import { fetchData, postData } from '../../../services/AppService';
 import moment from 'moment/moment';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
 import CustomBreadcrumbs from '../../../components/Breadcrumbs';
 import Swal from 'sweetalert2';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import DoDisturbOnRoundedIcon from '@mui/icons-material/DoDisturbOnRounded';
 
 export default function ListSubject() {
   const [data, setData] = useState([]);
@@ -33,7 +35,9 @@ export default function ListSubject() {
   const [isSubjectModalOpen, setIsSubjectModalOpen] = useState(false);
   const [subjectToEdit, setSubjectToEdit] = useState(null);
   const [user, setUser] = useState(null);
+  const [subjectTmp, setSubjectTmp] = useState([]);
   const [openPop, setOpenPop] = useState(null);
+  const navigate = useNavigate();
   const breadcrumbItems = [
     {
       url: '/',
@@ -64,14 +68,14 @@ export default function ListSubject() {
     }
   }, []);
 
-  const handleOpenPop = (event) => {
+  const handleOpenPop = (subject, event) => {
     setOpenPop(event.currentTarget);
+    setSubjectTmp(subject);
   };
 
   const handleClosePop = () => {
     setOpenPop(null);
   };
-
 
   const handleAddSubject = () => {
     setSubjectToEdit(null); // Clear any previous subject data (for editing)
@@ -82,6 +86,10 @@ export default function ListSubject() {
     console.log(subjectData);
     setSubjectToEdit(subjectData); // Set the subject data to edit
     setIsSubjectModalOpen(true);
+  };
+
+  const handleViewSubject = (subjectId) => {
+    navigate(`/subject/${subjectId}/course`);
   };
 
   const handleSubjectModalClose = () => {
@@ -144,7 +152,7 @@ export default function ListSubject() {
         .catch((err) => {
           Swal.fire({
             title: 'Opss..',
-            text: "Vui lòng nhập đúng thông tin",
+            text: 'Vui lòng nhập đúng thông tin',
             icon: 'warning',
           });
           console.log(err);
@@ -175,36 +183,37 @@ export default function ListSubject() {
     setPage(0);
   };
 
-
-
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
   return (
     data && (
       <div className="p-5" style={{ overflow: 'auto' }}>
-        <div className='row mb-3'>
-          <div className='col-8' >
+        <div className="row mb-3">
+          <div className="col-8">
             <h4>Danh sách môn học</h4>
             <CustomBreadcrumbs items={breadcrumbItems} />
           </div>
-          <div className='text-end col-4'>
-            <Button variant="outlined" style={{ border: 0, backgroundColor: '#212b36', color: 'white', fontWeight: 700 }} onClick={handleAddSubject}>
+          <div className="text-end col-4">
+            <Button
+              variant="outlined"
+              style={{ border: 0, backgroundColor: '#212b36', color: 'white', fontWeight: 700 }}
+              onClick={handleAddSubject}
+            >
               Tạo mới
             </Button>
           </div>
         </div>
 
-
-        <Paper style={{
-          padding: '20px',
-          borderRadius: '20px',
-          maxHeight: 'max-content',
-          boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px;',
-        }}>
+        <Paper
+          style={{
+            padding: '20px',
+            borderRadius: '20px',
+            maxHeight: 'max-content',
+            boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px;',
+          }}
+        >
           <div className="d-flex" style={{ marginTop: '20px' }}>
-            <div className='border rounded p-1'
-              style={{ backgroundColor: "gray" }}
-            >
+            <div className=" rounded p-1" style={{ backgroundColor: '#f4f6f8' }}>
               <InputBase
                 placeholder="Tìm kiếm"
                 style={{ marginInline: '10px' }}
@@ -214,16 +223,16 @@ export default function ListSubject() {
             </div>
           </div>
           <Table style={{ marginTop: '20px' }}>
-            <TableHead>
+            <TableHead style={{ backgroundColor: '#f4f6f8' }}>
               <TableRow>
-                <TableCell>STT</TableCell>
-                <TableCell>Tên</TableCell>
-                <TableCell>Mô tả</TableCell>
-                <TableCell>Giá thấp nhất</TableCell>
-                <TableCell>Ngày tạo</TableCell>
+                <TableCell style={{ color: '#808d99', fontWeight: 700 }}>STT</TableCell>
+                <TableCell style={{ color: '#808d99', fontWeight: 700 }}>Tên</TableCell>
+                <TableCell style={{ color: '#808d99', fontWeight: 700 }}>Mô tả</TableCell>
+                <TableCell style={{ color: '#808d99', fontWeight: 700 }}>Giá thấp nhất</TableCell>
+                <TableCell style={{ color: '#808d99', fontWeight: 700 }}>Ngày tạo</TableCell>
                 {/* <TableCell>Staff ID</TableCell> */}
-                <TableCell>Trạng thái</TableCell>
-                <TableCell>Hành động</TableCell>
+                <TableCell style={{ color: '#808d99', fontWeight: 700 }}>Trạng thái</TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -235,178 +244,205 @@ export default function ListSubject() {
                     <TableCell width="30%">{s.description}</TableCell>
                     <TableCell>{s.minPrice}</TableCell>
                     <TableCell>{moment(s.createDate).format('DD/MM/YYYY')}</TableCell>
-                    <TableCell>{s.status ? 'Đang hoạt động' : 'Chưa kích hoạt'} </TableCell>
-                    <TableCell width="15%">
+                    <TableCell width="11%">
+                      {s.status ? (
+                        <div
+                          className="p-2"
+                          style={{ backgroundColor: '#dbf6e5', color: '#2a9a68', borderRadius: 10, fontWeight: 700 }}
+                        >
+                          Đang hoạt động
+                        </div>
+                      ) : (
+                        <div
+                          className="p-2"
+                          style={{ backgroundColor: '#ffe4de', color: '#c64843', borderRadius: 10, fontWeight: 700 }}
+                        >
+                          Chưa kích hoạt
+                        </div>
+                      )}{' '}
+                    </TableCell>
+                    <TableCell width="10%">
                       {/* <Link className="btn btn-outline-secondary" to={`/subjects/courseBySubject`}> */}
                       <div className="d-flex justify-content-center">
-                        <Link to={`/subject/${s.id}/course`} title="Xem" className="btn btn-secondary m-1">
-                          <VisibilityIcon />
+                        <Link
+                          to={`/subject/${s.id}/course`}
+                          title="Xem"
+                          style={{ color: '#637381', border: 0 }}
+                          className="btn m-1"
+                        >
+                          <VisibilityRoundedIcon />
                         </Link>
 
-                        <Button
+                        {/* <Button
                           variant="contained"
                           color="primary"
                           title="Chỉnh sửa"
                           onClick={() => handleEditSubject(s)}
                           className="m-1"
                         >
-                          <EditIcon />
-                        </Button>
+                          <EditRoundedIcon />
+                        </Button> */}
 
-
-                        <button className='rounded-circle btn' onClick={handleOpenPop}>
+                        <button
+                          className="btn p-2"
+                          style={{ padding: 0, border: 0, borderRadius: '50%', minWidth: '50', color: '#637381' }}
+                          onClick={(e) => handleOpenPop(s, e)}
+                        >
                           <MoreVertRoundedIcon />
                         </button>
 
-
                         <Popover
+                          className="p-1"
                           open={!!openPop}
                           anchorEl={openPop}
                           onClose={handleClosePop}
                           anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
                           transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                           PaperProps={{
-                            sx: { width: 140 },
+                            sx: {
+                              border: 0,
+                              width: 180,
+                              borderRadius: '10px',
+                              boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px',
+                            },
                           }}
                         >
-                          <MenuItem onClick={handleClosePop}>
-                            <VisibilityIcon />
-                            View
-                          </MenuItem>
+                          <div className="p-2">
+                            {/* <MenuItem
+                              onClick={() => handleViewSubject(subjectTmp.id)}
+                              style={{ borderRadius: '10px', marginBottom: '5px' }}
+                            >
+                              <div style={{ color: '#212b36' }} className="d-flex p-1">
+                                <VisibilityRoundedIcon />
+                                <Typography className="mx-2" style={{ fontWeight: 600 }}>
+                                  Xem
+                                </Typography>
+                              </div>
+                            </MenuItem> */}
 
-                          <MenuItem onClick={handleClosePop} sx={{ color: 'error.main' }}>
-                            <EditIcon />
-                            Edit
-                          </MenuItem>
-                        </Popover>
+                            <MenuItem style={{ borderRadius: '10px' }} onClick={() => handleEditSubject(subjectTmp)}>
+                              <div style={{ color: '#212b36' }} className="d-flex p-1">
+                                <EditRoundedIcon />
+                                <Typography className="mx-2" style={{ fontWeight: 600 }}>
+                                  Sửa
+                                </Typography>
+                              </div>
+                            </MenuItem>
 
-
-
-
-
-                        {s.status ? (
-                          <>
-                            <button
-                              type="submit"
-                              title="Vô hiệu hóa"
-                              className="btn btn-danger m-1"
-                              onClick={() => {
-                                const token = Cookies.get('token');
-                                if (token) {
-                                  fetchData('/course/bySubjectId?subject-id=' + s.id, token).then((resp) => {
-                                    if (resp) {
-                                      if (resp.length > 0) {
-                                        Swal.fire(
-                                          'Không đủ điều kiện vô hiệu hóa!',
-                                          'Hiện tại đang có ' + resp.length + ' khóa học thuộc môn này đang hoạt động.',
-                                          'warning',
-                                        );
-                                      } else {
-                                        Swal.fire({
-                                          title: 'Bạn chắc rằng muốn vô hiệu hóa môn học này?',
-                                          text: 'Sau khi vô hiệu hóa, khóa học này sẽ không còn hoạt động nữa.',
-                                          showDenyButton: true,
-                                          showCancelButton: true,
-                                          confirmButtonText: 'Xác nhận',
-                                          denyButtonText: `Không xác nhận`,
-                                          cancelButtonText: `Hủy`,
-                                        }).then((result) => {
-                                          if (result.isConfirmed) {
-                                            if (token) {
-                                              postData(
-                                                '/subject/update-status',
-                                                {
-                                                  subjectId: s.id,
-                                                  status: false,
-                                                },
-                                                token,
-                                              )
-                                                .then((resp) => {
-                                                  if (resp) {
-                                                    Swal.fire(
-                                                      'Đã vô hiệu hóa thành công!',
-                                                      'Khóa học ' + s.name + ' đã được vô hiệu hóa.',
-                                                      'success',
-                                                    );
-                                                    window.location.reload();
-                                                  }
-                                                })
-                                                .catch((err) => {
-                                                  console.log(err);
-                                                });
+                            {subjectTmp.status ? (
+                              <MenuItem
+                                color="red"
+                                style={{ borderRadius: '10px' }}
+                                onClick={() => {
+                                  const token = Cookies.get('token');
+                                  if (token) {
+                                    fetchData('/course/bySubjectId?subject-id=' + subjectTmp.id, token).then((resp) => {
+                                      if (resp) {
+                                        if (resp.length > 0) {
+                                          Swal.fire(
+                                            'Không đủ điều kiện vô hiệu hóa!',
+                                            'Hiện tại đang có ' +
+                                              resp.length +
+                                              ' khóa học thuộc môn này đang hoạt động.',
+                                            'warning',
+                                          );
+                                        } else {
+                                          Swal.fire({
+                                            title: 'Bạn chắc rằng muốn vô hiệu hóa môn học này?',
+                                            text: 'Sau khi vô hiệu hóa, khóa học này sẽ không còn hoạt động nữa.',
+                                            showCancelButton: true,
+                                            confirmButtonText: 'Xác nhận',
+                                            cancelButtonText: `Hủy`,
+                                          }).then((result) => {
+                                            if (result.isConfirmed) {
+                                              if (token) {
+                                                postData(
+                                                  '/subject/update-status',
+                                                  {
+                                                    subjectId: subjectTmp.id,
+                                                    status: false,
+                                                  },
+                                                  token,
+                                                )
+                                                  .then((resp) => {
+                                                    if (resp) {
+                                                      Swal.fire(
+                                                        'Đã vô hiệu hóa thành công!',
+                                                        'Khóa học ' + subjectTmp.name + ' đã được vô hiệu hóa.',
+                                                        'success',
+                                                      );
+                                                      window.location.reload();
+                                                    }
+                                                  })
+                                                  .catch((err) => {
+                                                    console.log(err);
+                                                  });
+                                              }
                                             }
-                                          } else if (result.isDenied) {
-                                            Swal.fire(
-                                              'Không có gì thay đổi.',
-                                              'Khóa học ' + s.name + ' không có gì thay đổi.',
-                                              'info',
-                                            );
-                                          }
-                                        });
+                                          });
+                                        }
+                                      }
+                                    });
+                                  }
+                                }}
+                              >
+                                <div style={{ color: '#c25d5a' }} className="d-flex p-1">
+                                  <DoDisturbOnRoundedIcon />
+                                  <Typography className="mx-2" style={{ fontWeight: 600 }}>
+                                    Vô hiệu hoá
+                                  </Typography>
+                                </div>
+                              </MenuItem>
+                            ) : (
+                              <MenuItem
+                                style={{ borderRadius: '10px' }}
+                                onClick={() => {
+                                  const token = Cookies.get('token');
+                                  Swal.fire({
+                                    title: 'Bạn chắc rằng muốn kích hoạt môn học này?',
+                                    text: 'Sau khi kích hoạt, khóa học này sẽ hoạt động ngay sau đó.',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Xác nhận',
+                                    cancelButtonText: `Hủy`,
+                                  }).then((result) => {
+                                    if (result.isConfirmed) {
+                                      if (token) {
+                                        postData(
+                                          '/subject/update-status',
+                                          {
+                                            subjectId: subjectTmp.id,
+                                            status: true,
+                                          },
+                                          token,
+                                        )
+                                          .then((resp) => {
+                                            if (resp) {
+                                              Swal.fire(
+                                                'Đã vô kích hoạt thành công!',
+                                                'Khóa học ' + subjectTmp.name + ' đã được kích hoạt.',
+                                                'success',
+                                              );
+                                              window.location.reload();
+                                            }
+                                          })
+                                          .catch((err) => {
+                                            console.log(err);
+                                          });
                                       }
                                     }
                                   });
-                                }
-                              }}
-                            >
-                              <DoNotDisturbAltIcon />
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <button
-                              type="submit"
-                              title="Kích hoạt"
-                              className="btn btn-success m-1"
-                              onClick={() => {
-                                const token = Cookies.get('token');
-                                Swal.fire({
-                                  title: 'Bạn chắc rằng muốn kích hoạt môn học này?',
-                                  text: 'Sau khi kích hoạt, khóa học này sẽ hoạt động ngay sau đó.',
-                                  showDenyButton: true,
-                                  showCancelButton: true,
-                                  confirmButtonText: 'Xác nhận',
-                                  denyButtonText: `Không xác nhận`,
-                                  cancelButtonText: `Hủy`,
-                                }).then((result) => {
-                                  if (result.isConfirmed) {
-                                    if (token) {
-                                      postData(
-                                        '/subject/update-status',
-                                        {
-                                          subjectId: s.id,
-                                          status: true,
-                                        },
-                                        token,
-                                      )
-                                        .then((resp) => {
-                                          if (resp) {
-                                            Swal.fire(
-                                              'Đã vô kích hoạt thành công!',
-                                              'Khóa học ' + s.name + ' đã được kích hoạt.',
-                                              'success',
-                                            );
-                                            window.location.reload();
-                                          }
-                                        })
-                                        .catch((err) => {
-                                          console.log(err);
-                                        });
-                                    }
-                                  } else if (result.isDenied) {
-                                    Swal.fire(
-                                      'Không có gì thay đổi.',
-                                      'Khóa học ' + s.name + ' không có gì thay đổi.',
-                                      'info',
-                                    );
-                                  }
-                                });
-                              }}
-                            >
-                              <CheckCircleOutlineIcon />
-                            </button>
-                          </>
-                        )}
+                                }}
+                              >
+                                <div style={{ color: '#58af86' }} className="d-flex p-1">
+                                  <CheckCircleRoundedIcon />
+                                  <Typography className="mx-2" style={{ fontWeight: 600 }}>
+                                    Kích hoạt
+                                  </Typography>
+                                </div>
+                              </MenuItem>
+                            )}
+                          </div>
+                        </Popover>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -419,17 +455,18 @@ export default function ListSubject() {
               )}
             </TableBody>
           </Table>
-
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-            component="div"
-            count={filterData.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            labelRowsPerPage="Số hàng trên trang :"
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+          <div className="p-1">
+            <TablePagination
+              page={page}
+              component="div"
+              rowsPerPage={rowsPerPage}
+              count={filterData.length}
+              onPageChange={handleChangePage}
+              labelRowsPerPage="Số hàng trên trang :"
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+            />
+          </div>
         </Paper>
 
         <SubjectModal
