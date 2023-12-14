@@ -12,17 +12,20 @@ function HeaderQuiz({ name, timeMinute, point, due, onAutoSubmit, lesson }) {
   const navigate = useNavigate();
   return (
     <>
-      <div className={`d-flex ${classNames(Styles.header__quiz)} align-items-center`}>
+      <div
+        style={{ backgroundColor: '#f4f6f8', borderRadius: '20px' }}
+        className={`d-flex ${classNames(Styles.header__quiz)} align-items-center`}
+      >
         <div
           className="d-flex flex-grow-1 align-items-center justify-content-between"
           style={{ margin: '0 1rem', height: '90%' }}
         >
           <div className="">
             <Typography variant="subtitle1" style={{ fontWeight: 700 }}>
-              {lesson?.name} - {name}
+              {name}
             </Typography>
             <Typography variant="subtitle2">
-              Bài {name} • {timeMinute} phút • Điểm đạt là {point}/10 tổng điểm
+              Kiểm tra: {name} • {timeMinute} phút • Điểm đạt là {point}/10 tổng điểm
             </Typography>
           </div>
           <div>
@@ -32,7 +35,6 @@ function HeaderQuiz({ name, timeMinute, point, due, onAutoSubmit, lesson }) {
           </div>
         </div>
       </div>
-      <hr className="m-0" />
     </>
   );
 }

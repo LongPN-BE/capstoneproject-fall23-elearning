@@ -20,6 +20,7 @@ import './index.scss';
 import Cookies from 'js-cookie';
 import PreviewQuizz from './Quizz';
 import SourceIcon from '@mui/icons-material/Source';
+import DownloadForOfflineRoundedIcon from '@mui/icons-material/DownloadForOfflineRounded';
 
 const resourceApi = new ResourceControllerApi(ApiClientSingleton.getInstance());
 const lessonApi = new LessonControllerApi(ApiClientSingleton.getInstance());
@@ -54,24 +55,174 @@ function PreviewLesson() {
   return (
     <>
       <div className="d-flex ">
-        {resources?.map((data) => {})}
-        {type === 'Quiz' ? (
-          <></>
-        ) : (
-          <>
-            <Typography className="mt-3" variant="h5" gutterBottom>
-              {lesson?.name}: <span style={{ color: '#495057' }}>{lesson?.description}</span>
-            </Typography>
-          </>
-        )}
+        <div className="mb-2 border-bottom p-1" style={{ width: '100%' }}>
+          <div className="row">
+            {resources?.map((data) => {})}
+            {type === 'Quiz' ? (
+              <>
+                <div className="col-8 d-flex">
+                  <div
+                    className=" mb-1"
+                    style={{
+                      backgroundColor: '#ffebc2',
+                      color: '#ffab00',
+                      width: '20%',
+                      borderRadius: '20px',
+                      marginRight: '10px',
+                    }}
+                  >
+                    <Typography style={{ fontWeight: 700 }} className="text-center" variant="body1">
+                      Kiểm tra
+                    </Typography>
+                  </div>
+
+                  <Typography style={{ fontWeight: 700 }} variant="subtitle1">
+                    {lesson?.name}
+                  </Typography>
+                </div>
+              </>
+            ) : type === 'VIDEO' ? (
+              <>
+                <div className="col-8 d-flex">
+                  <div
+                    className=" mb-1"
+                    style={{
+                      backgroundColor: '#d6f1e4',
+                      color: '#25955c',
+                      width: '20%',
+                      borderRadius: '20px',
+                      marginRight: '10px',
+                    }}
+                  >
+                    <Typography style={{ fontWeight: 700 }} className="text-center" variant="body1">
+                      Video
+                    </Typography>
+                  </div>
+
+                  <Typography style={{ fontWeight: 700 }} variant="subtitle1">
+                    {lesson?.name}
+                  </Typography>
+                </div>
+                {resources?.map((data) => {
+                  if (data.resourceType === 'READING') {
+                    if (data.content.startsWith('http')) {
+                      return (
+                        <div className="col-4 d-flex justify-content-end ">
+                          <a
+                            className="btn"
+                            style={{ backgroundColor: '#212b36', color: 'white' }}
+                            href={data.content}
+                            target="_blank"
+                          >
+                            <Typography style={{ fontWeight: 700 }} className="text-center" variant="body1">
+                              Tài liệu <SourceIcon />
+                            </Typography>
+                          </a>
+                        </div>
+                      );
+                    }
+                    return <div>{data.content}</div>;
+                  }
+                  return (
+                    <div className="col-4 d-flex justify-content-end ">
+                      <a
+                        className="btn"
+                        style={{ backgroundColor: '#212b36', color: 'white' }}
+                        href={data.content}
+                        target="_blank"
+                      >
+                        <Typography style={{ fontWeight: 700 }} className="text-center" variant="body1">
+                          Tài liệu <SourceIcon />
+                        </Typography>
+                      </a>
+                    </div>
+                  );
+                })}
+              </>
+            ) : (
+              <>
+                <div className="col-8 d-flex">
+                  <div
+                    className=" mb-1"
+                    style={{
+                      backgroundColor: '#d6f4f9',
+                      color: '#0d75a2',
+                      width: '20%',
+                      borderRadius: '20px',
+                      marginRight: '10px',
+                    }}
+                  >
+                    <Typography style={{ fontWeight: 700 }} className="text-center" variant="body1">
+                      Bài đọc
+                    </Typography>
+                  </div>
+                  <Typography style={{ fontWeight: 700 }} variant="subtitle1">
+                    {lesson?.name}
+                  </Typography>
+                </div>
+                {resources?.map((data) => {
+                  if (data.resourceType === 'READING') {
+                    if (data.content.startsWith('http')) {
+                      return (
+                        <div className="col-4 d-flex justify-content-end ">
+                          <a
+                            className="btn"
+                            style={{ backgroundColor: '#212b36', color: 'white' }}
+                            href={data.content}
+                            target="_blank"
+                          >
+                            <Typography style={{ fontWeight: 700 }} className="text-center" variant="body1">
+                              Tài liệu <SourceIcon />
+                            </Typography>
+                          </a>
+                        </div>
+                      );
+                    }
+                    return <div>{data.content}</div>;
+                  }
+                  return (
+                    <div className="col-4 d-flex justify-content-end ">
+                      <a
+                        className="btn"
+                        style={{ backgroundColor: '#212b36', color: 'white', borderRadius: '10px', padding: '2px 8px' }}
+                        href={data.content}
+                        target="_blank"
+                      >
+                        <Typography style={{ fontWeight: 700 }} className="text-center" variant="body1">
+                          Tài liệu <SourceIcon />
+                        </Typography>
+                      </a>
+                    </div>
+                  );
+                })}
+              </>
+            )}
+          </div>
+        </div>
       </div>
       {type === 'VIDEO' ? (
         <div className="d-flex justify-content-center">
           {lesson?.url ? (
-            <LearnVideo url={lesson?.url} />
+            <div className="p-2">
+              <LearnVideo url={lesson?.url} />
+              <div
+                className="p-3"
+                style={{ borderRadius: '20px', backgroundColor: '#f4f6f8', height: 110, overflow: 'auto' }}
+              >
+                <Typography style={{ fontWeight: 700 }}>Nội dung:</Typography>
+                <p style={{ color: '#495057' }}>{lesson?.description}</p>
+              </div>
+            </div>
           ) : (
             <div className="ql-editor cus-video" style={{ padding: 0, marginLeft: '20px', wordBreak: 'break-word' }}>
               <div dangerouslySetInnerHTML={{ __html: lesson?.content || '' }} />
+              <div
+                className="p-3"
+                style={{ borderRadius: '20px', backgroundColor: '#f4f6f8', height: 110, overflow: 'auto' }}
+              >
+                <Typography style={{ fontWeight: 700 }}>Nội dung:</Typography>
+                <p style={{ color: '#495057' }}>{lesson?.description}</p>
+              </div>
             </div>
           )}
         </div>
@@ -79,42 +230,13 @@ function PreviewLesson() {
         <LearnReading content={lesson?.content} />
       ) : type === 'Quiz' ? (
         <>
-          <PreviewQuizz />
+          <div style={{ overflow: 'auto', height: 550 }}>
+            <PreviewQuizz />
+          </div>
         </>
       ) : (
         <></>
       )}
-      {resources?.map((data) => {
-        if (data.resourceType === 'READING') {
-          if (data.content.startsWith('http')) {
-            return (
-              <div className="mt-3 d-flex align-items-center gap-2">
-                <div>
-                  <CodeIcon /> Link tài liệu:{' '}
-                </div>
-                <div>
-                  <a href={data.content} target="_blank">
-                    {data.content}
-                  </a>
-                </div>
-              </div>
-            );
-          }
-          return <div>{data.content}</div>;
-        }
-        return (
-          <div className="mt-3 d-flex align-items-center gap-2">
-            <div>
-              <CodeIcon /> Link tài liệu:{' '}
-            </div>
-            <div>
-              <a href={data.content} target="_blank">
-                {data.name}
-              </a>
-            </div>
-          </div>
-        );
-      })}
     </>
   );
 }

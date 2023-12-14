@@ -82,61 +82,62 @@ function PreviewQuizz() {
         onAutoSubmit={handleSubmit(onSubmitQuiz)}
         lesson={lesson}
       />
-      <Container className="my-4">
-        <form onSubmit={handleSubmit(onSubmitQuiz)}>
-          <div className="d-flex align-items-start justify-content-center">
-            <div className="d-flex align-items-start justify-content-center gap-4 flex-column" style={{ width: '70%' }}>
-              <FormControl>
-                {questions?.map((question, index) => {
-                  return (
-                    <>
-                      <FormLabel className="d-flex" style={{ color: '#1f1f1f' }} id="demo-radio-buttons-group-label">
-                        <strong>{index + 1}: </strong>
-                        <p dangerouslySetInnerHTML={{ __html: question.content || '' }} />
-                      </FormLabel>
-                      <Container>
-                        <RadioGroup aria-labelledby="demo-radio-buttons-group-label" name="radio-buttons-group">
-                          {question?.usedAnswers?.map((option) => {
-                            return (
-                              <>
-                                {option.isCorrect === true ? (
-                                  <FormControlLabel
-                                    {...register(`${question.id}`)}
-                                    value={option.id}
-                                    control={<Radio checked />}
-                                    label={
-                                      <div
-                                        className="cus-option"
-                                        dangerouslySetInnerHTML={{ __html: option.content || '' }}
-                                      />
-                                    }
-                                  />
-                                ) : (
-                                  <FormControlLabel
-                                    {...register(`${question.id}`)}
-                                    value={option.id}
-                                    control={<Radio disabled />}
-                                    label={
-                                      <div
-                                        className="cus-option"
-                                        dangerouslySetInnerHTML={{ __html: option.content || '' }}
-                                      />
-                                    }
-                                  />
-                                )}
-                              </>
-                            );
-                          })}
-                        </RadioGroup>
-                      </Container>
-                    </>
-                  );
-                })}
-              </FormControl>
-            </div>
+      <div className="my-4">
+        <div className="d-flex align-items-start justify-content-center">
+          <div className="d-flex align-items-start justify-content-center gap-4 flex-column" style={{ width: '100%' }}>
+            {questions?.map((question, index) => {
+              return (
+                <>
+                  <div style={{ backgroundColor: '#f4f6f8', width: '100%', borderRadius: '20px', padding: '20px' }}>
+                    <FormLabel className="d-flex" style={{ color: '#1f1f1f' }} id="demo-radio-buttons-group-label">
+                      <strong>{index + 1}: </strong>
+                      <p
+                        style={{ fontWeight: 600, color: '#212b36' }}
+                        dangerouslySetInnerHTML={{ __html: question.content || '' }}
+                      />
+                    </FormLabel>
+                    <div>
+                      <RadioGroup aria-labelledby="demo-radio-buttons-group-label" name="radio-buttons-group">
+                        {question?.usedAnswers?.map((option) => {
+                          return (
+                            <>
+                              {option.isCorrect === true ? (
+                                <FormControlLabel
+                                  {...register(`${question.id}`)}
+                                  value={option.id}
+                                  control={<Radio className="mb-3" checked />}
+                                  label={
+                                    <div
+                                      className="cus-option"
+                                      dangerouslySetInnerHTML={{ __html: option.content || '' }}
+                                    />
+                                  }
+                                />
+                              ) : (
+                                <FormControlLabel
+                                  {...register(`${question.id}`)}
+                                  value={option.id}
+                                  control={<Radio className="mb-3" disabled />}
+                                  label={
+                                    <div
+                                      className="cus-option"
+                                      dangerouslySetInnerHTML={{ __html: option.content || '' }}
+                                    />
+                                  }
+                                />
+                              )}
+                            </>
+                          );
+                        })}
+                      </RadioGroup>
+                    </div>
+                  </div>
+                </>
+              );
+            })}
           </div>
-        </form>
-      </Container>
+        </div>
+      </div>
     </>
   );
 }

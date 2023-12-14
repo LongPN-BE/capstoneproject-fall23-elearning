@@ -25,11 +25,11 @@ function PreviewCourse() {
     },
     {
       url: '/subjects',
-      label: 'Danh sách môn học',
+      label: 'Danh sách chủ đề',
     },
     {
       url: `/subject/${subjectId}/course/`,
-      label: `Môn ${subjectData?.name}`,
+      label: `Chủ đề: ${subjectData?.name}`,
     },
     {
       url: `/subject/${subjectId}/course/${courseId}/syllabus/`,
@@ -68,35 +68,53 @@ function PreviewCourse() {
   }, [courseId]);
 
   return (
-    <>
-      <CustomBreadcrumbs items={breadcrumbItems} />
-      <Container className="mt-4 vh-100" style={{ maxHeight: 800 }}>
-        <div className="mt-4 d-flex justify-content-center">
-          <Typography variant="h4" style={{ color: '#616161' }}>
-            <strong>TỔNG QUAN KHOÁ HỌC</strong>
-          </Typography>
+    <div className="px-5 py-3">
+      <div className="row">
+        <div className="col-9">
+          <h4 style={{ fontWeight: 'bold' }}>Tổng quan khoá học</h4>
+          <CustomBreadcrumbs items={breadcrumbItems} />
         </div>
-        <Divider className="my-4" />
+        <div className="col-3">
+          <div className="d-flex justify-content-end">
+            <button className="btn m-1" style={{ backgroundColor: '#dbf6e5', color: '#2a9a68', fontWeight: 700 }}>
+              Xét duyệt
+            </button>
+            <button className="btn m-1" style={{ backgroundColor: '#ffe4de', color: '#c64843', fontWeight: 700 }}>
+              Từ chối
+            </button>
+          </div>
+        </div>
+      </div>
+      <Container className="mt-4 vh-100" style={{ maxHeight: 800, padding: '10px' }}>
         {lessons?.length === 0 ? (
           <div className="row" style={{ height: 700, overflow: 'auto' }}>
-            <h3>HIỆN KHÔNG CÓ BÀI HỌC TRONG KHUNG CHƯƠNG TRÌNH</h3>
+            <h3 className="text-center" style={{ fontWeight: 700, color: '#cdd2d6' }}>
+              HIỆN KHÔNG CÓ BÀI HỌC TRONG KHUNG CHƯƠNG TRÌNH
+            </h3>
           </div>
         ) : (
-          <div className="row" style={{ height: 700, overflow: 'auto' }}>
-            <div className="col-3 p-1 " style={{ backgroundColor: '#b9b9b9' }}>
-              <div className="d-flex flex-column gap-3">
-                <div>
-                  <NavBarLesson courseId={courseId} />
+          <div
+            className="row"
+            style={{ height: 700, overflow: 'auto', borderRadius: '20px', padding: '20px', backgroundColor: '#f4f6f8' }}
+          >
+            <div className="col-4 p-2">
+              <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '20px', height: '100%' }}>
+                <div className="d-flex flex-column gap-3">
+                  <div>
+                    <NavBarLesson courseId={courseId} />
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="col-9 p-2" style={{ backgroundColor: '#f0f0f078' }}>
-              <Outlet />
+            <div className="col-8 p-2">
+              <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '20px', height: '100%' }}>
+                <Outlet />
+              </div>
             </div>
           </div>
         )}
       </Container>
-    </>
+    </div>
   );
 }
 

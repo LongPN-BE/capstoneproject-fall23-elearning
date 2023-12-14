@@ -264,73 +264,90 @@ const ListFeedback = () => {
                     <TableCell style={{ color: '#808d99', fontWeight: 700 }}></TableCell>
                   </TableRow>
                 </TableHead>
+
                 <TableBody>
-                  {filteredEvaluate &&
-                    filteredEvaluate.length > 0 &&
-                    filteredEvaluate.map((s, index) => {
-                      return (
-                        <TableRow key={index}>
-                          <TableCell style={{ fontWeight: 600, color: '#686f77' }}>{index + 1}</TableCell>
-                          <TableCell width={'30%'} style={{ fontWeight: 600, color: '#686f77' }}>
-                            {s.enroll.student.account.username}
-                          </TableCell>
-                          <TableCell width={'20%'} style={{ fontWeight: 600, color: '#686f77' }}>
-                            {calculateSingleAverageRating(s?.feedbackDetails) > 3.5 ? (
-                              <div
-                                className="p-2 text-center"
-                                style={{
-                                  width: '50%',
-                                  backgroundColor: '#dbf6e5',
-                                  color: '#2a9a68',
-                                  borderRadius: 10,
-                                  fontWeight: 700,
-                                }}
-                              >
-                                {calculateSingleAverageRating(s?.feedbackDetails)}/5
-                              </div>
-                            ) : calculateSingleAverageRating(s?.feedbackDetails) < 2.5 ? (
-                              <div
-                                className="p-2 text-center"
-                                style={{
-                                  width: '50%',
-                                  backgroundColor: '#ffe4de',
-                                  color: '#c64843',
-                                  borderRadius: 10,
-                                  fontWeight: 700,
-                                }}
-                              >
-                                {calculateSingleAverageRating(s?.feedbackDetails)}/5
-                              </div>
-                            ) : (
-                              <div
-                                className="p-2 text-center"
-                                style={{
-                                  width: '50%',
-                                  backgroundColor: '#f9f782',
-                                  color: '#a99533',
-                                  borderRadius: 10,
-                                  fontWeight: 700,
-                                }}
-                              >
-                                {calculateSingleAverageRating(s?.feedbackDetails)}/5
-                              </div>
-                            )}
-                          </TableCell>
-                          <TableCell style={{ fontWeight: 600, color: '#686f77' }}>
-                            {moment(s.createDate).format('DD-MM-YYYY')}
-                          </TableCell>
-                          <TableCell>
-                            <button
-                              style={{ border: 0, color: '#637381', borderRadius: 50 }}
-                              className="btn"
-                              onClick={() => handleOpenModal(s)}
-                            >
-                              <VisibilityRoundedIcon />
-                            </button>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
+                  {filteredEvaluate.length > 0 ? (
+                    <>
+                      {filteredEvaluate &&
+                        filteredEvaluate.length > 0 &&
+                        filteredEvaluate.map((s, index) => {
+                          return (
+                            <TableRow key={index}>
+                              <TableCell style={{ fontWeight: 600, color: '#686f77' }}>{index + 1}</TableCell>
+                              <TableCell width={'30%'} style={{ fontWeight: 600, color: '#686f77' }}>
+                                {s.enroll.student.account.username}
+                              </TableCell>
+                              <TableCell width={'20%'} style={{ fontWeight: 600, color: '#686f77' }}>
+                                {calculateSingleAverageRating(s?.feedbackDetails) > 3.5 ? (
+                                  <div
+                                    className="p-2 text-center"
+                                    style={{
+                                      width: '50%',
+                                      backgroundColor: '#dbf6e5',
+                                      color: '#2a9a68',
+                                      borderRadius: 10,
+                                      fontWeight: 700,
+                                    }}
+                                  >
+                                    {calculateSingleAverageRating(s?.feedbackDetails)}/5
+                                  </div>
+                                ) : calculateSingleAverageRating(s?.feedbackDetails) < 2.5 ? (
+                                  <div
+                                    className="p-2 text-center"
+                                    style={{
+                                      width: '50%',
+                                      backgroundColor: '#ffe4de',
+                                      color: '#c64843',
+                                      borderRadius: 10,
+                                      fontWeight: 700,
+                                    }}
+                                  >
+                                    {calculateSingleAverageRating(s?.feedbackDetails)}/5
+                                  </div>
+                                ) : (
+                                  <div
+                                    className="p-2 text-center"
+                                    style={{
+                                      width: '50%',
+                                      backgroundColor: '#f9f782',
+                                      color: '#a99533',
+                                      borderRadius: 10,
+                                      fontWeight: 700,
+                                    }}
+                                  >
+                                    {calculateSingleAverageRating(s?.feedbackDetails)}/5
+                                  </div>
+                                )}
+                              </TableCell>
+                              <TableCell style={{ fontWeight: 600, color: '#686f77' }}>
+                                {moment(s.createDate).format('DD-MM-YYYY')}
+                              </TableCell>
+                              <TableCell>
+                                <button
+                                  style={{ border: 0, color: '#637381', borderRadius: 50 }}
+                                  className="btn"
+                                  onClick={() => handleOpenModal(s)}
+                                >
+                                  <VisibilityRoundedIcon />
+                                </button>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                    </>
+                  ) : (
+                    <>
+                      <TableRow style={{ height: 53 }}>
+                        <TableCell colSpan={6}>
+                          <div className="text-center">
+                            <Typography style={{ fontWeight: 700, color: '#cdd2d6' }} variant="h6">
+                              Hiện chưa có đánh giá nào
+                            </Typography>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    </>
+                  )}
                 </TableBody>
               </Table>
             </Paper>

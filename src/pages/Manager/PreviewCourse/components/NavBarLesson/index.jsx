@@ -21,17 +21,26 @@ import {
 } from '../../../../../api/generated/generate-api';
 
 const Accordion = styled((props) => <MuiAccordion disableGutters elevation={0} square {...props} />)(({ theme }) => ({
-  border: `1px solid ${theme.palette.divider}`,
+  backgroundColor: 'white',
+  borderRadius: '20px',
+  margin: '5px',
+  padding: ' 0',
   '&:not(:last-child)': {
     borderBottom: 0,
   },
   '&:before': {
     display: 'none',
   },
+  '&:hover': {
+    backgroundColor: 'hsla(0, 0%, 99%, 0.8)',
+  },
 }));
 
 const AccordionSummary = styled((props) => <MuiAccordionSummary {...props} />)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, .05)' : 'rgba(0, 0, 0, .03)',
+  backgroundColor: 'rgba(145, 158, 171, 0.08);',
+  borderRadius: '20px',
+
+  padding: '10px',
   flexDirection: 'row-reverse',
   '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
     transform: 'rotate(90deg)',
@@ -39,11 +48,20 @@ const AccordionSummary = styled((props) => <MuiAccordionSummary {...props} />)((
   '& .MuiAccordionSummary-content': {
     marginLeft: theme.spacing(1),
   },
+  '&:focus': {
+    backgroundColor: 'rgba(82, 84, 86, 0.16)',
+  },
+  '&:hover': {
+    backgroundColor: 'rgba(123, 134, 146, 0.16)',
+  },
 }));
 
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+  margin: '5px',
+  padding: '10px',
+  borderRadius: '20px',
+  backgroundColor: 'rgba(183, 187, 190, 0.08);',
   padding: theme.spacing(2),
-  borderTop: '1px solid rgba(0, 0, 0, .125)',
 }));
 
 const lessonApi = new LessonControllerApi(ApiClientSingleton.getInstance());
@@ -87,6 +105,8 @@ function NavBarLesson(props) {
     }
   }, [lessonId]);
 
+  //Custom accordion
+
   return (
     <>
       <div>
@@ -94,7 +114,7 @@ function NavBarLesson(props) {
           return (
             <>
               <Accordion key={data.id} expanded={expanded === data.id} onChange={handleChange(data.id)}>
-                <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
+                <AccordionSummary className aria-controls="panel1d-content" id="panel1d-header">
                   <Typography>{data.name}</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
