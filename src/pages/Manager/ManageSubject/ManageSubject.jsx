@@ -28,10 +28,12 @@ import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import DoDisturbOnRoundedIcon from '@mui/icons-material/DoDisturbOnRounded';
+import { Select } from '@material-ui/core';
 
 export default function ListSubject() {
   const [data, setData] = useState([]);
   const [searchValue, setSearchValue] = useState('');
+  const [dataSubmit, setDataSubmit] = useState([]);
   const [isSubjectModalOpen, setIsSubjectModalOpen] = useState(false);
   const [subjectToEdit, setSubjectToEdit] = useState(null);
   const [user, setUser] = useState(null);
@@ -60,6 +62,7 @@ export default function ListSubject() {
         fetchData('/subject/subjects', token).then((resp) => {
           if (resp) {
             setData(resp);
+            setDataSubmit(resp);
           }
         });
       } catch (error) {
@@ -167,7 +170,9 @@ export default function ListSubject() {
     setSearchValue(event.target.value);
   };
 
-  const filterData = data.filter((subject) => subject.name.toLowerCase().includes(searchValue.toLowerCase()));
+  const filterData = dataSubmit.filter((subject) =>
+    subject.name.toLowerCase().includes(searchValue.toLowerCase())
+    || subject.description.toLowerCase().includes(searchValue.toLowerCase()));
 
   // State to keep track of the current page and the number of rows per page
   const [page, setPage] = useState(0);
@@ -214,13 +219,38 @@ export default function ListSubject() {
           }}
         >
           <div className="d-flex" style={{ marginTop: '20px' }}>
-            <div className=" rounded p-1" style={{ backgroundColor: '#f4f6f8' }}>
+            <div className="rounded p-2" style={{ backgroundColor: '#f4f6f8' }}>
               <InputBase
                 placeholder="Tìm kiếm"
                 style={{ marginInline: '10px' }}
                 startAdornment={<Search />}
                 onChange={handleSearchChange}
               />
+            </div>
+            <div className="rounded p-2" style={{ marginLeft: '0.5rem', backgroundColor: '#f4f6f8' }}>
+              <Select
+                labelId="subject-status-select-label"
+                label="Status"
+                defaultValue={"none"}
+                onChange={(e, value) => {
+                  setPage(0)
+                  switch (value.props.value) {
+                    case "none":
+                      setDataSubmit(data)
+                      break;
+                    case "true":
+                      setDataSubmit(data.filter((subject) => subject.status === true))
+                      break;
+                    case "false":
+                      setDataSubmit(data.filter((subject) => subject.status === false))
+                      break;
+                  }
+                }
+                }>
+                <MenuItem value="none">Tất cả</MenuItem>
+                <MenuItem value="true">Đang hoạt động</MenuItem>
+                <MenuItem value="false">Chưa hoạt động</MenuItem>
+              </Select>
             </div>
           </div>
           <Table style={{ marginTop: '20px' }}>
@@ -352,8 +382,8 @@ export default function ListSubject() {
                                           Swal.fire(
                                             'Không đủ điều kiện vô hiệu hóa!',
                                             'Hiện tại đang có ' +
-                                              resp.length +
-                                              ' khóa học thuộc môn này đang hoạt động.',
+                                            resp.length +
+                                            ' khóa học thuộc môn này đang hoạt động.',
                                             'warning',
                                           );
                                         } else {
