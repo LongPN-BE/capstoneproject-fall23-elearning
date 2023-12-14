@@ -15,6 +15,7 @@ import Register from './pages/Register/Register';
 import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
 import AboutUs from './pages/Landing/ContactUs';
 import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
+import TermOfUse from './pages/TermsofUse/TermOfUse';
 import NavBar from './components/Navigation/NavBar';
 import { useState } from 'react';
 // import LandingPage from './pages/Landing/LandingPage';
@@ -117,7 +118,8 @@ const App = () => {
     if (!userTmp && location.pathname !== '/'
       && location.pathname !== '/login' && location.pathname !== '/register'
       && location.pathname !== '/all-courses' && location.pathname !== '/about-us'
-      && location.pathname !== '/forgot-password' && location.pathname !== '/privacy-policy') {
+      && location.pathname !== '/forgot-password' && location.pathname !== '/privacy-policy'
+      && location.pathname !== '/term-of-use') {
       return (window.location.href = '/');
     }
   }
@@ -227,6 +229,7 @@ const App = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/all-courses" element={<CoursesPage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/term-of-use" element={<TermOfUse />} />
         </Routes>
       )}
     </>

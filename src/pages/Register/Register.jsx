@@ -170,39 +170,30 @@ const Register = () => {
 
                   <input type="checkbox" id="checkbox" name="checkbox" value="OK" onClick={handleChange} />
                   <label style={{ marginLeft: 5 }}> Tiếp tục nghĩa là bạn đồng ý với </label> {' '}
-                  <Link to="##" style={{ color: 'blue' }}>
+                  <Link to="/term-of-use" style={{ color: 'black', textDecoration: 'underline' }}>
                     Điều khoản sử dụng
                   </Link> {' '}
                   và  {' '}
-                  <Link to="/privacy-policy" style={{ color: 'blue' }}>
+                  <Link to="/privacy-policy" style={{ color: 'black', textDecoration: 'underline' }}>
                     Chính sách bảo mật
                   </Link>{' '} của chúng tôi.
 
-
-                  {formData.checkbox === 'OK' ? (
-                    <div className="d-grid mt-3">
-                      <button className={classNames(Styles.btn_custom, 'btn text-uppercase fw-bold')} type="submit">
-                        Đăng ký
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="d-grid mt-3">
-                      <button
-                        className={classNames(Styles.btn_custom, 'btn text-uppercase fw-bold')}
-                        type="submit"
-                        disabled
-                      >
-                        Đăng ký
-                      </button>
-                    </div>
-                  )}
+                  <div className="d-grid mt-3">
+                    <button
+                      className={classNames(Styles.btn_custom, 'btn text-uppercase fw-bold')}
+                      type="submit"
+                      disabled={formData.checkbox != 'OK'}
+                    >
+                      Đăng ký
+                    </button>
+                  </div>
 
                   <hr className="my-4" />
 
                   <div className="d-flex justify-content-center">
                     <div className="form-check-label">
                       Bạn đã có tài khoản?{' '}
-                      <Link to="/login" style={{ color: 'blue' }}>
+                      <Link to="/login" style={{ color: 'black' }}>
                         Đăng nhập
                       </Link>{' '}
                       ngay.
