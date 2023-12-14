@@ -12,7 +12,8 @@ import {
   TablePagination,
   Select,
   MenuItem,
-} from '@material-ui/core';
+  TextField,
+} from '@mui/material';
 import Cookies from 'js-cookie';
 import { fetchData } from '../../../services/AppService';
 import moment from 'moment/moment';
@@ -125,70 +126,100 @@ export default function ListTransactionHistory() {
 
   return (
     data && (
-      <div className="m-5">
-        <Paper style={{ padding: '20px' }}>
+      <div className="px-5 py-3" style={{ overflow: 'auto', height: 850 }}>
+        <div className="mb-3">
+          <h4 style={{ fontWeight: 'bold' }}>Lịch sử giao dịch</h4>
           <CustomBreadcrumbs items={breadcrumbItems} />
-
+        </div>
+        <Paper
+          style={{
+            padding: '20px',
+            borderRadius: '20px',
+            maxHeight: 'max-content',
+            boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px;',
+          }}
+        >
           <div className="d-flex align-items-center" style={{ marginTop: '20px' }}>
-            <Typography variant="h5">Danh sách Lịch sử giao dịch</Typography>
-          </div>
-          <div className="d-flex align-items-center" style={{ marginTop: '20px' }}>
-            Ngày :
-            <Select
-              style={{ marginLeft: '10px', marginRight: '20px', width: '10%' }}
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={dayS}
-              onChange={(e) => setDayS(e.target.value)}
-            >
-              <MenuItem value={''}>--</MenuItem>
-              {monthS &&
-                monthS.map((s, index) => {
-                  return (
-                    <MenuItem key={index} value={s.date}>
-                      {s.date + ', ' + s.day}
-                    </MenuItem>
-                  );
-                })}
-            </Select>
-            Tháng :
-            <InputBase
-              type="month"
-              min="2023-01"
-              max={new Date()}
-              onChange={(e) => handleChangeMonth(e)}
-              style={{
-                borderRadius: '15px',
-                marginLeft: '10px',
-              }}
-            />
-            <Button
-              style={{
-                marginLeft: '10px',
-                borderRadius: '10px',
-                backgroundColor: '#DDDDDD',
-              }}
-              onClick={() => handleFilterPayment()}
-            >
-              Tìm kiếm
-            </Button>
+            <div className=" py-1 px-3" style={{ backgroundColor: '#f4f6f8', borderRadius: '20px' }}>
+              Ngày :
+              <Select
+                sx={{
+                  marginLeft: '10px',
+                  marginRight: '20px',
+                  width: '10%',
+                  boxShadow: 'none',
+                  '.MuiOutlinedInput-notchedOutline': { border: 0 },
+                  '.MuiOutlinedInput-input': { paddingInline: 5 },
+                  '&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                    border: 0,
+                  },
+                  '&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                    border: 0,
+                  },
+                }}
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={dayS}
+                onChange={(e) => setDayS(e.target.value)}
+              >
+                <MenuItem value={''}>--</MenuItem>
+                {monthS &&
+                  monthS.map((s, index) => {
+                    return (
+                      <MenuItem key={index} value={s.date}>
+                        {s.date}
+                      </MenuItem>
+                    );
+                  })}
+              </Select>
+              Tháng :
+              <InputBase
+                type="month"
+                min="2023-01"
+                max={new Date()}
+                onChange={(e) => handleChangeMonth(e)}
+                style={{
+                  borderRadius: '15px',
+                  marginLeft: '10px',
+                }}
+              />
+              <button
+                className="btn"
+                style={{
+                  border: 0,
+                  marginLeft: '10px',
+                  borderRadius: '10px',
+                  backgroundColor: '#212b36',
+                  fontWeight: 700,
+                  color: 'white',
+                }}
+                onClick={() => handleFilterPayment()}
+              >
+                Tìm kiếm
+              </button>
+            </div>
           </div>
 
           <Table style={{ marginTop: '20px' }}>
-            <TableHead>
+            <TableHead style={{ backgroundColor: '#f4f6f8' }}>
               <TableRow>
-                <TableCell>STT</TableCell>
-                <TableCell>
-                  Thời gian <br />
-                  (Ngày/Tháng/Năm)
+                <TableCell style={{ color: '#808d99', fontWeight: 700 }}>#</TableCell>
+                <TableCell width={'10%'}>
+                  <Typography style={{ color: '#808d99', fontWeight: 700 }}>Thời gian</Typography>
+                  <Typography variant="caption">NGÀY THÁNG NĂM</Typography>
                 </TableCell>
                 <TableCell></TableCell>
-                <TableCell>Lý do</TableCell>
+                <TableCell style={{ color: '#808d99', fontWeight: 700 }}>Nội dung</TableCell>
                 <TableCell>
-                  Số tiền <br /> (vnd)
+                  <Typography style={{ color: '#808d99', fontWeight: 700 }}>Số tiền</Typography>
+                  <Typography variant="caption">VNĐ</Typography>
                 </TableCell>
-                <TableCell>Tài khoản thực hiện</TableCell>
-                <TableCell>Trạng thái</TableCell>
+                <TableCell width={'18%'} style={{ color: '#808d99', fontWeight: 700 }}>
+                  Tài khoản thực hiện
+                </TableCell>
+                <TableCell width={'18%'} style={{ color: '#808d99', fontWeight: 700 }}>
+                  Trạng thái
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -200,33 +231,53 @@ export default function ListTransactionHistory() {
                 .map((s, index) => {
                   return (
                     <TableRow hover={true} key={index}>
-                      <TableCell>{index + (page * rowsPerPage, page * rowsPerPage) + 1}</TableCell>
+                      <TableCell style={{ fontWeight: 600, color: '#686f77' }}>
+                        {index + (page * rowsPerPage, page * rowsPerPage) + 1}
+                      </TableCell>
                       <TableCell>
-                        <Typography variant="body1" color="primary">
+                        <Typography variant="body1" style={{ fontWeight: 600, color: '#686f77' }}>
                           {moment(s.dateProcess).format('DD/MM/YYYY')}
                         </Typography>
                       </TableCell>
-                      <TableCell>
-                        <Typography variant="body1" color="primary">
-                          {moment(s.dateProcess).format('hh:mm:ss')}
+                      <TableCell width={'10%'}>
+                        <Typography variant="body1" style={{ fontWeight: 600, color: '#686f77' }}>
+                          {moment(s.dateProcess).format('hh:mm A')}
                         </Typography>
                       </TableCell>
-                      <TableCell>{s.description}</TableCell>
+                      <TableCell style={{ fontWeight: 600, color: '#686f77' }}>{s.description}</TableCell>
                       <TableCell>
-                        <Typography variant="subtitle2" color="primary">
+                        <Typography variant="subtitle1" style={{ fontWeight: 'bold', color: '#2a9a68' }}>
                           {s.amount.toLocaleString(undefined, { maximumFractionDigits: 2 })}
                         </Typography>
                       </TableCell>
-                      <TableCell>{s.accountName}</TableCell>
+                      <TableCell style={{ fontWeight: 600, color: '#686f77' }}>{s.accountName}</TableCell>
                       <TableCell width={'15%'}>
                         {s.transactionStatus === 'COMPLETED' ? (
-                          <Typography variant="body2" style={{ color: 'green', fontWeight: 'bold' }}>
-                            ĐÃ THANH TOÁN
-                          </Typography>
+                          <div
+                            className="p-2 text-center"
+                            style={{
+                              backgroundColor: '#dbf6e5',
+
+                              borderRadius: 20,
+                              fontWeight: 700,
+                              width: '80%',
+                            }}
+                          >
+                            <Typography style={{ fontWeight: 'bold', color: '#2a9a68' }}>Đã thanh toán</Typography>
+                          </div>
                         ) : s.transactionStatus === 'CANCEL' ? (
-                          <Typography variant="body2" style={{ color: 'red', fontWeight: 'bold' }}>
-                            ĐÃ HUỶ
-                          </Typography>
+                          <div
+                            className="p-2 text-center"
+                            style={{
+                              backgroundColor: '#ffe4de',
+
+                              borderRadius: 20,
+                              fontWeight: 700,
+                              width: '80%',
+                            }}
+                          >
+                            <Typography style={{ fontWeight: 'bold', color: '#c64843' }}>Đã huỷ</Typography>
+                          </div>
                         ) : (
                           <></>
                         )}
