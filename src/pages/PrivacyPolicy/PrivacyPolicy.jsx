@@ -3,19 +3,26 @@ import Header from "../../components/Landing/Header/Header";
 import Footer from "../../components/Landing/Footer/Footer";
 import { Alert } from "@mui/material";
 import { Link } from "react-router-dom";
+import { Typography } from "@material-ui/core";
 
 const LandingPage = () => {
     return (
         <Fragment>
             <Header />
-            <div className="container">
-                <h1>CHÍNH SÁCH BẢO MẬT</h1>
-                <hr />
+            <div
+                className="mt-2 mr-3 ml-3 p-5 d-flex justify-content-between align-items-center "
+                style={{ backgroundColor: '#edf0f2', height: 200, borderRadius: '2rem' }}
+            >
+                <div className="w-100">
+                    <Typography className="text-center" style={{ color: 'black', fontFamily: 'revert' }} variant="h4">
+                        <strong>CHÍNH SÁCH BẢO MẬT</strong>
+                    </Typography>
+                </div>
+            </div>
+            <div className="container mt-3">
                 <p>
-                    Chính sách bảo mật này được cập nhật lần cuối vào ngày 6 tháng 12 năm 2023. Xem các phiên bản trước của
-                    chính sách bảo mật trong
-                    {" "}
-                    <Link to="##" style={{ color: 'blue', textDecoration: 'underline' }}>kho lưu trữ chính sách</Link>{" "} của chúng tôi.
+                    Chính sách bảo mật này được cập nhật lần cuối vào ngày 6 tháng 12 năm 2023.
+                    Xem các phiên bản trước của chính sách bảo mật trong kho lưu trữ chính sách của chúng tôi.
                 </p>
                 <p>
                     Văn bản được đánh dấu nhằm mục đích cung cấp bản tóm tắt bằng tiếng Việt đơn giản về chính sách bảo mật của chúng tôi.
@@ -28,7 +35,7 @@ const LandingPage = () => {
                     và bảo vệ thông tin áp dụng cho nền tảng giao tiếp trực quan( dịch vụ) của chúng tôi cũng như
                     các lựa chọn của bạn về việc thu thập và sử dung thông tin của mình. Các thuật ngữ viết hoa không được
                     xác định trong chính sách bảo mật này sẽ có ý nghĩa như được nêu trong{" "}
-                    <Link to="##" style={{ color: 'blue', textDecoration: 'underline' }}>Điều khoản sử dụng</Link>{" "}
+                    <Link to="##" style={{ color: 'black', textDecoration: 'underline' }}>Điều khoản sử dụng</Link>{" "}
                     của chúng tôi. Nếu bạn không muốn thông tin của mình được xử lý theo Chính sách quyền riêng
                     tư này nói chung hoặc bất kỳ phần nào trong đó, bạn không nên sử dụng dịch vụ của chúng tôi.
                     Chính sách này áp dụng cho tất cả người dùng dịch vụ.
@@ -66,28 +73,6 @@ const LandingPage = () => {
                             sử dụng dịch vụ hoặc tương tác với chúng tôi.
                         </Alert>
                     </li>
-                    {/* <li><h6>Thông tin chúng tôi nhận được từ các ứng dụng của bên thứ ba.</h6>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                            ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                            velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                            cupidatat non proident, sunt in culpa qui
-                            officia deserunt mollit anim id est laborum.
-                        </p>
-                    </li>
-                    <li><h6>Thông tin chúng tôi nhận được từ các bên thứ ba khác.</h6>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                            ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                            velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                            cupidatat non proident, sunt in culpa qui
-                            officia deserunt mollit anim id est laborum.
-                        </p>
-                    </li> */}
                     <li><h6>Thông tin chúng tôi thu thập từ bạn một cách tự động.</h6>
                         <p>
                             Chúng tôi sẽ trực tiếp thu thập hoặc tạo một số thông tin nhất định về việc bạn sử dụng dịch vụ
@@ -118,7 +103,7 @@ const LandingPage = () => {
                             Tuy nhiên, một số tính năng của dịch vụ có thể không hoạt động bình thường nếu khả năng chấp nhận cookie bị tắt.
                             Để biết thêm thông tin về cách chúng tôi sử dụng cookie và các công nghệ khác cũng như cách bạn có thể kiểm soát chúng,
                             vui lòng đọc{" "}
-                            <Link to="##" style={{ color: 'blue', textDecoration: 'underline' }}> Chính sách cookie</Link>{" "} của chúng tôi.
+                            <Link to="##" style={{ color: 'black', textDecoration: 'underline' }}> Chính sách cookie</Link>{" "} của chúng tôi.
                         </p>
                         <Alert className="mb-3" severity="info">
                             Tóm tắt: Chúng tôi sử dụng cookie để giúp bạn sử dụng Onlearn và cho các mục đích kinh doanh khác.
@@ -206,7 +191,7 @@ const LandingPage = () => {
                         </p>
                         <ul>
                             <li>
-                                Phát hiện nội dung bị cấm theo <Link to="##" style={{ color: 'blue', textDecoration: 'underline' }}>Điều khoản sử dụng</Link>{" "} được chấp nhận của chúng tôi nhằm mục đích kiểm duyệt và bảo mật
+                                Phát hiện nội dung bị cấm theo <Link to="##" style={{ color: 'black', textDecoration: 'underline' }}>Điều khoản sử dụng</Link>{" "} được chấp nhận của chúng tôi nhằm mục đích kiểm duyệt và bảo mật
                                 (ví dụ: tài liệu khiêu dâm hoặc được bảo vệ bản quyền);
                             </li>
                             <li>
@@ -258,8 +243,8 @@ const LandingPage = () => {
                     <li><h6>Đối với các biện pháp an ninh.</h6>
                         <p>
                             Chúng tôi sử dụng thông tin về bạn và từ trong tài khoản của bạn để giám sát hoạt động mà chúng tôi cho
-                            là đáng ngờ hoặc có khả năng lừa đảo và để xác định các hành vi vi phạm{" "} <Link to="##" style={{ color: 'blue', textDecoration: 'underline' }}>  Chính sách bảo mật</Link>{" "} này
-                            hoặc{" "} <Link to="##" style={{ color: 'blue', textDecoration: 'underline' }}>Điều khoản sử dụng</Link>{" "}  của chúng tôi.
+                            là đáng ngờ hoặc có khả năng lừa đảo và để xác định các hành vi vi phạm{" "} <Link to="##" style={{ color: 'black', textDecoration: 'underline' }}>  Chính sách bảo mật</Link>{" "} này
+                            hoặc{" "} <Link to="##" style={{ color: 'black', textDecoration: 'underline' }}>Điều khoản sử dụng</Link>{" "}  của chúng tôi.
                         </p>
                     </li>
                     <li><h6>Đối với các vấn đề mà bạn đã đồng ý cụ thể.</h6>
@@ -280,8 +265,8 @@ const LandingPage = () => {
                             Onlearn sẽ sử dụng hoặc tiết lộ thông tin của bạn khi chúng tôi có lý do hợp lý để tin rằng hành động đó là cần thiết để:
                             <ol type='a'>
                                 <li>Tuân thủ luật pháp và các yêu cầu hợp lý của cơ quan thực thi pháp luật;</li>
-                                <li>Để thực thi {" "} <Link to="##" style={{ color: 'blue', textDecoration: 'underline' }}>  Chính sách bảo mật</Link>{" "} này
-                                    hoặc{" "} <Link to="##" style={{ color: 'blue', textDecoration: 'underline' }}>Điều khoản sử dụng</Link>{" "}
+                                <li>Để thực thi {" "} <Link to="##" style={{ color: 'black', textDecoration: 'underline' }}>  Chính sách bảo mật</Link>{" "} này
+                                    hoặc{" "} <Link to="##" style={{ color: 'black', textDecoration: 'underline' }}>Điều khoản sử dụng</Link>{" "}
                                     được chấp nhận của chúng tôi hoặc để bảo vệ tính bảo mật hoặc tính toàn vẹn của dịch vụ của chúng tôi;</li>
                                 <li>Thực hiện hoặc bảo vệ các quyền, tài sản hoặc sự an toàn cá nhân của Onlearn, người dùng của chúng tôi hoặc những người khác.</li>
                             </ol>
@@ -322,15 +307,18 @@ const LandingPage = () => {
                             bên thứ ba của chúng tôi để cung cấp dịch vụ cho bạn hoặc để đáp ứng lợi ích kinh doanh hợp pháp của Onlearn.
                         </Alert>
                     </li>
-                    <li><h6>Cách bạn có thể chia sẻ Nội dung người dùng của mình.</h6>
+                    <li><h6>Cách bạn có thể chia sẻ nội dung người dùng của mình.</h6>
                         <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                            ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                            velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                            cupidatat non proident, sunt in culpa qui
-                            officia deserunt mollit anim id est laborum.
+                            Bất kỳ thông tin hoặc nội dung nào mà bạn tự nguyện tiết lộ để đăng lên dịch vụ,
+                            chẳng hạn như nội dung người dùng công khai, sẽ có sẵn để công chúng đọc, thu thập và sử dụng.
+                            Khi bạn đặt hồ sơ của mình ở chế độ công khai hoặc đặt nội dung người dùng ở chế độ công khai,
+                            thông tin của bạn sẽ được công khai trên toàn cầu, những người dùng khác có thể tìm kiếm được
+                            và có thể được các công cụ tìm kiếm lập chỉ mục. Nếu bạn hoặc Onlearn xóa thông tin mà bạn đã đăng
+                            lên dịch vụ, các bản sao vẫn có thể xem được trong các trang được lưu trong bộ nhớ đệm và lưu trữ của
+                            dịch vụ hoặc nếu người dùng khác đã sao chép hoặc lưu thông tin đó.
+                            <Alert className="mb-3" severity="info">
+                                Tóm tắt: Khóa học của chúng tôi theo mặc định là riêng tư. Khi chia sẻ thiết kế, hãy đảm bảo chắc rằng nội dung được cân nhắc kĩ càng.
+                            </Alert>
                         </p>
                     </li>
                     <li><h6>Chia sẻ liên quan đến việc sáp nhập, mua lại hoặc tổ chức lại.</h6>
@@ -347,17 +335,6 @@ const LandingPage = () => {
                             Tóm tắt: Nếu chúng tôi bán doanh nghiệp của mình, bất kỳ thông tin nào chúng tôi có được về bạn đều có thể là một phần của giao dịch mua bán đó.
                         </Alert>
                     </li>
-                    <li><h6>Chia sẻ với các bên thứ ba khác.</h6>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                            ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                            velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                            cupidatat non proident, sunt in culpa qui
-                            officia deserunt mollit anim id est laborum.
-                        </p>
-                    </li>
                     <li><h6>Chia sẻ dữ liệu tổng hợp.</h6>
                         <p>
                             Chúng tôi cũng có thể tổng hợp hoặc loại bỏ dữ liệu về tất cả các đặc điểm nhận dạng
@@ -372,8 +349,8 @@ const LandingPage = () => {
                             Chúng tôi truy cập, lưu giữ và chia sẻ thông tin của bạn với các cơ quan quản lý, cơ quan thực thi pháp luật,
                             cảnh sát, các dịch vụ chia sẻ thông tin và gỡ bỏ cũng như các dịch vụ khác theo Chính sách yêu cầu cấp phép của
                             chúng tôi hoặc khi chúng tôi tin tưởng rằng cần phải phát hiện, ngăn chặn hoặc giải quyết gian lận, vi phạm
-                            {" "} <Link to="##" style={{ color: 'blue', textDecoration: 'underline' }}>  Chính sách bảo mật</Link>{" "} này
-                            hoặc{" "} <Link to="##" style={{ color: 'blue', textDecoration: 'underline' }}>Điều khoản sử dụng</Link>{" "}
+                            {" "} <Link to="##" style={{ color: 'black', textDecoration: 'underline' }}>  Chính sách bảo mật</Link>{" "} này
+                            hoặc{" "} <Link to="##" style={{ color: 'black', textDecoration: 'underline' }}>Điều khoản sử dụng</Link>{" "}
                             được chấp nhận của chúng tôi, hoạt động có hại hoặc bất hợp pháp,
                             để bảo vệ Onlearn (quyền, tài sản hoặc tài sản trí tuệ của chúng tôi), bạn hoặc những người khác, bao gồm như một
                             phần của cuộc điều tra hoặc yêu cầu pháp lý hoặc để ngăn chặn cái chết hoặc tổn hại về thể chất sắp xảy ra làm hại.
@@ -383,47 +360,23 @@ const LandingPage = () => {
                         </Alert>
                     </li>
                 </ol>
-                {/* <h5>4. Quảng cáo.</h5>
+                <h5>4. Giữ thông tin của bạn an toàn.</h5>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                    ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                    cupidatat non proident, sunt in culpa qui
-                    officia deserunt mollit anim id est laborum.
-                </p> */}
-                <h5>4. Cách chúng tôi chuyển, lưu trữ và bảo vệ dữ liệu của bạn.</h5>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                    ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                    cupidatat non proident, sunt in culpa qui
-                    officia deserunt mollit anim id est laborum.
+                    Onlearn quan tâm đến tính bảo mật thông tin của bạn và sử dụng các biện pháp bảo vệ thích hợp để duy trì tính toàn
+                    vẹn và bảo mật của tất cả thông tin được thu thập thông qua dịch vụ. Để bảo vệ quyền riêng tư và bảo mật của bạn,
+                    chúng tôi thực hiện các bước hợp lý (chẳng hạn như yêu cầu mật khẩu) để xác minh danh tính của bạn trước
+                    khi cấp cho bạn quyền truy cập vào tài khoản của mình. Bạn có trách nhiệm duy trì tính bảo mật của mật khẩu và thông
+                    tin tài khoản duy nhất của mình cũng như kiểm soát quyền truy cập vào thông tin liên lạc qua email của bạn từ Onlearn mọi lúc.
+                    Tuy nhiên, Onlearn không thể đảm bảo hoặc đảm bảo tính bảo mật của bất kỳ thông tin nào bạn truyền đến Onlearn hoặc đảm bảo rằng
+                    thông tin trên dịch vụ không thể bị truy cập, tiết lộ, thay đổi hoặc phá hủy. Quyền riêng tư của bạn cũng có thể bị
+                    ảnh hưởng bởi những thay đổi về chức năng của trang web và dịch vụ bên thứ ba mà bạn thêm vào dịch vụ Onlearn, chẳng hạn như mạng xã hội.
+                    Onlearn không chịu trách nhiệm về chức năng hoặc biện pháp bảo mật của bất kỳ bên thứ ba nào.
                 </p>
-                <h5>5. Giữ thông tin của bạn an toàn.</h5>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                    ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                    cupidatat non proident, sunt in culpa qui
-                    officia deserunt mollit anim id est laborum.
-                </p>
-                <h5>6. Lựa chọn của bạn về thông tin của bạn.</h5>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                    ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                    cupidatat non proident, sunt in culpa qui
-                    officia deserunt mollit anim id est laborum.
-                </p>
-                <h5>7. Chúng tôi lưu giữ thông tin của bạn trong bao lâu.</h5>
+                <Alert className="mb-3" severity="info">
+                    Tóm tắt: Chúng tôi quan tâm đến sự an toàn cho dữ liệu của bạn và đã triển khai các biện pháp được ngành công nhận để bảo vệ dữ liệu đó,
+                    nhưng rất tiếc, chúng tôi không thể đảm bảo rằng sẽ không có điều gì xấu xảy ra với dữ liệu đó.
+                </Alert>
+                <h5>5. Chúng tôi lưu giữ thông tin của bạn trong bao lâu.</h5>
                 <p>
                     Sau khi chấm dứt hoặc vô hiệu hóa tài khoản người dùng của bạn, Onlearn sẽ lưu giữ thông tin hồ sơ và
                     nội dung người dùng của bạn trong khoảng thời gian hợp lý về mặt thương mại và miễn là chúng tôi có mục đích hợp lệ để làm như vậy.
@@ -433,7 +386,7 @@ const LandingPage = () => {
                     Tóm tắt: Chúng tôi lưu giữ thông tin hồ sơ và nội dung người dùng của bạn nhằm mục đích cung cấp
                     dịch vụ của chúng tôi cho bạn và tuân thủ các nghĩa vụ pháp lý và quy định của chúng tôi.
                 </Alert>
-                <h5>8. Những thay đổi đối với Chính sách này.</h5>
+                <h5>6. Những thay đổi đối với Chính sách này.</h5>
                 <p>
                     Đôi khi, chúng tôi có thể cập nhật chính sách này để phản ánh các thông tin hiện có của chúng tôi và đảm bảo tuân thủ luật pháp hành động.
                     Khi chúng tôi đăng các thay đổi đối với chính sách này, chúng tôi sẽ sửa lại ngày “Cập nhật lần cuối” ở đầu danh sách này.
@@ -445,7 +398,7 @@ const LandingPage = () => {
                     Tóm tắt: Chúng tôi sẽ không thực hiện bất kỳ thay đổi lớn nào đối với Chính sách bảo mật của mình mà không đưa ra thông báo –
                     nhưng thỉnh thoảng bạn vẫn nên truy cập trang này.
                 </Alert>
-                <h5>9.Liên lạc với chúng tôi bằng cách nào.</h5>
+                <h5>7.Liên lạc với chúng tôi bằng cách nào.</h5>
                 <p>
                     Nếu bạn có bất kỳ câu hỏi nào về Chính sách bảo mật hoặc dịch vụ này hoặc muốn khiếu nại, vui lòng liên hệ với chúng tôi theo địa chỉ:
                 </p>

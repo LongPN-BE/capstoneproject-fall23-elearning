@@ -75,7 +75,7 @@ const Login = () => {
             <div className="card border-0 shadow-lg rounded-3 my-5">
               <div className="card-body p-4 p-sm-5 ">
                 <h2 className="card-title text-center text-uppercase mb-5 fw-bold fs-5">Đăng nhập</h2>
-                {erro == '' ? (<></>) : (<Alert className="mb-3" severity="info">{erro}</Alert>)}
+                {erro == '' ? (<></>) : (<Alert className="mb-3" severity="error">{erro}</Alert>)}
 
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">
@@ -117,13 +117,13 @@ const Login = () => {
                   </button>
                 </div> */}
                 <hr className="my-3" />
-                <Link to="/forgot-password" className="mb-2 d-flex justify-content-center" style={{ color: 'blue' }}>
+                <Link to="/forgot-password" className="mb-2 d-flex justify-content-center" style={{ color: 'black' }}>
                   Bạn quên mật khẩu?
                 </Link>
                 <div className="mb-2 d-flex justify-content-center">
                   <p className="form-check-label">
                     Bạn chưa có tài khoản đăng nhập?{' '}
-                    <Link to="/register" style={{ color: 'blue' }}>
+                    <Link to="/register" style={{ color: 'black' }}>
                       Đăng ký
                     </Link>{' '}
                     ngay.
