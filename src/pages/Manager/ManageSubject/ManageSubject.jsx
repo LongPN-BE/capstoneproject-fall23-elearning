@@ -170,9 +170,11 @@ export default function ListSubject() {
     setSearchValue(event.target.value);
   };
 
-  const filterData = dataSubmit.filter((subject) =>
-    subject.name.toLowerCase().includes(searchValue.toLowerCase())
-    || subject.description.toLowerCase().includes(searchValue.toLowerCase()));
+  const filterData = dataSubmit.filter(
+    (subject) =>
+      subject.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+      subject.description.toLowerCase().includes(searchValue.toLowerCase()),
+  );
 
   // State to keep track of the current page and the number of rows per page
   const [page, setPage] = useState(0);
@@ -215,7 +217,7 @@ export default function ListSubject() {
             padding: '20px',
             borderRadius: '20px',
             maxHeight: 'max-content',
-            boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px;',
+            boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
           }}
         >
           <div className="d-flex" style={{ marginTop: '20px' }}>
@@ -231,22 +233,22 @@ export default function ListSubject() {
               <Select
                 labelId="subject-status-select-label"
                 label="Status"
-                defaultValue={"none"}
+                defaultValue={'none'}
                 onChange={(e, value) => {
-                  setPage(0)
+                  setPage(0);
                   switch (value.props.value) {
-                    case "none":
-                      setDataSubmit(data)
+                    case 'none':
+                      setDataSubmit(data);
                       break;
-                    case "true":
-                      setDataSubmit(data.filter((subject) => subject.status === true))
+                    case 'true':
+                      setDataSubmit(data.filter((subject) => subject.status === true));
                       break;
-                    case "false":
-                      setDataSubmit(data.filter((subject) => subject.status === false))
+                    case 'false':
+                      setDataSubmit(data.filter((subject) => subject.status === false));
                       break;
                   }
-                }
-                }>
+                }}
+              >
                 <MenuItem value="none">Tất cả</MenuItem>
                 <MenuItem value="true">Đang hoạt động</MenuItem>
                 <MenuItem value="false">Chưa hoạt động</MenuItem>
@@ -382,8 +384,8 @@ export default function ListSubject() {
                                           Swal.fire(
                                             'Không đủ điều kiện vô hiệu hóa!',
                                             'Hiện tại đang có ' +
-                                            resp.length +
-                                            ' khóa học thuộc môn này đang hoạt động.',
+                                              resp.length +
+                                              ' khóa học thuộc môn này đang hoạt động.',
                                             'warning',
                                           );
                                         } else {

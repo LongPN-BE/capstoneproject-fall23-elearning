@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import {
-  Button,
   Typography,
   InputBase,
   Paper,
@@ -12,7 +11,6 @@ import {
   TablePagination,
   Select,
   MenuItem,
-  TextField,
 } from '@mui/material';
 import Cookies from 'js-cookie';
 import { fetchData } from '../../../services/AppService';
@@ -132,7 +130,7 @@ export default function ListTransactionHistory() {
           <CustomBreadcrumbs items={breadcrumbItems} />
         </div>
         <Paper
-          style={{
+          sx={{
             padding: '20px',
             borderRadius: '20px',
             maxHeight: 'max-content',

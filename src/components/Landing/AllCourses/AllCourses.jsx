@@ -31,15 +31,18 @@ const AllCourses = () => {
     });
 
     fetchData('/subject/subjects').then((resp) => {
-      setSubjectData(resp)
+      setSubjectData(resp);
     });
   }, []);
 
-  // Search  
-  const filterData = dataSubmit.filter((course) =>
-    course.name.toLowerCase().includes(searchValue.toLowerCase())
-    || course.subject.name.toLowerCase().includes(searchValue.toLowerCase())
-    || (course.teacher.account.profile.firstName + " " + course.teacher.account.profile.lastName).toLowerCase().includes(searchValue.toLowerCase())
+  // Search
+  const filterData = dataSubmit.filter(
+    (course) =>
+      course.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+      course.subject.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+      (course.teacher.account.profile.firstName + ' ' + course.teacher.account.profile.lastName)
+        .toLowerCase()
+        .includes(searchValue.toLowerCase()),
   );
 
   // State to keep track of the current page and the number of rows per page
@@ -90,14 +93,14 @@ const AllCourses = () => {
                         <Select
                           labelId="subject-select-label"
                           onChange={(e, value) => {
-                            setSubject(value.props.value)
+                            setSubject(value.props.value);
                           }}
-                          label="Môn học">
+                          label="Môn học"
+                        >
                           <MenuItem value="None">--</MenuItem>
                           {subjectData?.map((subject) =>
-                            subject.status === true ? (<MenuItem value={subject.name}>{subject.name}</MenuItem>) : (<></>)
-                          )
-                          }
+                            subject.status === true ? <MenuItem value={subject.name}>{subject.name}</MenuItem> : <></>,
+                          )}
                         </Select>
                       </FormControl>
                     </Box>
@@ -107,9 +110,10 @@ const AllCourses = () => {
                         <Select
                           labelId="subject-select-label"
                           onChange={(e, value) => {
-                            setMoney(value.props.value)
+                            setMoney(value.props.value);
                           }}
-                          label="Giá tiền">
+                          label="Giá tiền"
+                        >
                           <MenuItem value="0">--</MenuItem>
                           <MenuItem value="1">0 - 1,500,000 VNĐ</MenuItem>
                           <MenuItem value="2">1,500,000 VNĐ - 5,000,000 VNĐ</MenuItem>
@@ -123,62 +127,81 @@ const AllCourses = () => {
               </div>
 
               <div className={classNames('w-50 text-end')}>
-                <button className={classNames('btn', Styles.course__btn)} onClick={() => {
-                  if (money !== "0" && money !== "" && subject !== "None" && subject !== "") {
-                    //chọn đủ các field
-                    switch (money) {
-                      case "0":
-                        setDataSubmit(data)
-                        break;
-                      case "1":
-                        setDataSubmit(data.filter((course) => course.price <= 1500000 && course.subject.name === subject))
-                        break;
-                      case "2":
-                        setDataSubmit(data.filter((course) => course.price >= 1500000 && course.price <= 5000000 && course.subject.name === subject))
-                        break;
-                      case "3":
-                        setDataSubmit(data.filter((course) => course.price >= 5000000 && course.price <= 1000000 && course.subject.name === subject))
-                        break;
-                      case "4":
-                        setDataSubmit(data.filter((course) => course.price >= 1000000 && course.subject.name === subject))
-                        break;
-                    }
-                  } else {
-                    if (money !== "0" && money !== "") {
-                      //chỉ chọn tiền
+                <button
+                  className={classNames('btn', Styles.course__btn)}
+                  onClick={() => {
+                    if (money !== '0' && money !== '' && subject !== 'None' && subject !== '') {
+                      //chọn đủ các field
                       switch (money) {
-                        case "0":
-                          setDataSubmit(data)
+                        case '0':
+                          setDataSubmit(data);
                           break;
-                        case "1":
-                          setDataSubmit(data.filter((course) => course.price <= 1500000))
+                        case '1':
+                          setDataSubmit(
+                            data.filter((course) => course.price <= 1500000 && course.subject.name === subject),
+                          );
                           break;
-                        case "2":
-                          setDataSubmit(data.filter((course) => course.price >= 1500000 && course.price <= 5000000))
+                        case '2':
+                          setDataSubmit(
+                            data.filter(
+                              (course) =>
+                                course.price >= 1500000 && course.price <= 5000000 && course.subject.name === subject,
+                            ),
+                          );
                           break;
-                        case "3":
-                          setDataSubmit(data.filter((course) => course.price >= 5000000 && course.price <= 10000000))
+                        case '3':
+                          setDataSubmit(
+                            data.filter(
+                              (course) =>
+                                course.price >= 5000000 && course.price <= 1000000 && course.subject.name === subject,
+                            ),
+                          );
                           break;
-                        case "4":
-                          setDataSubmit(data.filter((course) => course.price >= 10000000))
+                        case '4':
+                          setDataSubmit(
+                            data.filter((course) => course.price >= 1000000 && course.subject.name === subject),
+                          );
                           break;
                       }
                     } else {
-                      if (subject !== "None" && subject !== "") {
-                        //chỉ chọn môn học
-                        setDataSubmit(data.filter((course) => course.subject.name === subject))
+                      if (money !== '0' && money !== '') {
+                        //chỉ chọn tiền
+                        switch (money) {
+                          case '0':
+                            setDataSubmit(data);
+                            break;
+                          case '1':
+                            setDataSubmit(data.filter((course) => course.price <= 1500000));
+                            break;
+                          case '2':
+                            setDataSubmit(data.filter((course) => course.price >= 1500000 && course.price <= 5000000));
+                            break;
+                          case '3':
+                            setDataSubmit(data.filter((course) => course.price >= 5000000 && course.price <= 10000000));
+                            break;
+                          case '4':
+                            setDataSubmit(data.filter((course) => course.price >= 10000000));
+                            break;
+                        }
                       } else {
-                        //không chọn gì
-                        setDataSubmit(data)
+                        if (subject !== 'None' && subject !== '') {
+                          //chỉ chọn môn học
+                          setDataSubmit(data.filter((course) => course.subject.name === subject));
+                        } else {
+                          //không chọn gì
+                          setDataSubmit(data);
+                        }
                       }
                     }
-                  }
-                }}>Tìm kiếm</button>
+                  }}
+                >
+                  Tìm kiếm
+                </button>
               </div>
             </div>
           </Col>
           <Divider style={{ color: 'black', height: 2 }} />
-          {filterData?.slice(page * rowsPerPage, ((page * rowsPerPage) + rowsPerPage)).map((item, index) => (
+          {filterData?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => (
             <>
               <Col key={item.id} lg="4" md="6" sm="6">
                 <CourseCard item={item} />
@@ -194,7 +217,8 @@ const AllCourses = () => {
                 onChange={(e, value) => setPage(value - 1)}
                 count={Math.ceil(filterData.length / rowsPerPage)}
                 page={page + 1}
-                size="large" />
+                size="large"
+              />
             </Stack>
             <Box className="border rounded mx-2" style={{ width: 60 }}>
               <FormControl fullWidth>
@@ -213,7 +237,7 @@ const AllCourses = () => {
           </div>
         </div>
       </Container>
-    </section >
+    </section>
   );
 };
 

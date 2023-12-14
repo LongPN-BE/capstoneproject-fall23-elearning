@@ -26,7 +26,7 @@ const CourseCard = (props) => {
     teacher: {
       name: '',
       email: '',
-      avatar: ''
+      avatar: '',
     },
     subject: {
       name: '',
@@ -44,7 +44,7 @@ const CourseCard = (props) => {
         teacher: {
           name: props.item.teacher.account.profile.lastName + ' ' + props.item.teacher.account.profile.firstName,
           email: '',
-          avatar: props.item.teacher.account.profile.avatar
+          avatar: props.item.teacher.account.profile.avatar,
         },
         subject: {
           name: props.item.subject.name,
@@ -54,14 +54,14 @@ const CourseCard = (props) => {
     }
   }, [props]);
 
-  const handleOnclickCourse = () => {
+  const handleOnclickCourse = (id) => {
     navigate('##');
   };
 
   return (
     <>
-      <Card className="mt-5" sx={{ maxWidth: 345, maxHeight: 200 }}>
-        <CardActionArea onClick={() => handleOnclickCourse()}>
+      <Card className="mt-5" sx={{ maxWidth: 345, maxHeight: 200 }} key={data.id}>
+        <CardActionArea onClick={() => handleOnclickCourse(data.id)}>
           <CardMedia component="img" height="200" image={data.image} alt="green iguana" />
           <CardContent style={{ height: 200 }}>
             <div style={{ height: 60 }}>
@@ -74,11 +74,11 @@ const CourseCard = (props) => {
               <strong>{data.subject.name}</strong>
             </Typography>
             <div style={{ height: 50 }}>
-              <Typography className={classNames(Styles.description_style)} variant="body2" color="text.secondary">
+              <Typography className={classNames(Styles.description_style)} variant="body2">
                 {data.description}
               </Typography>
             </div>
-            <Typography className={classNames(Styles.description_style)} variant="body2" color="text.secondary">
+            <Typography className={classNames(Styles.description_style)} variant="body2">
               {data.price?.toLocaleString()} VNĐ
             </Typography>
           </CardContent>

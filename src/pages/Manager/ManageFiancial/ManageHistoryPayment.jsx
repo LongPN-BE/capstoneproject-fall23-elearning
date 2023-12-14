@@ -17,7 +17,6 @@ import Cookies from 'js-cookie';
 import { fetchData } from '../../../services/AppService';
 import moment from 'moment/moment';
 import CustomBreadcrumbs from '../../../components/Breadcrumbs';
-import vi from 'date-fns/locale/vi';
 
 export default function ListPaymenHistory() {
   const [data, setData] = useState([]);
@@ -131,7 +130,7 @@ export default function ListPaymenHistory() {
         </div>
 
         <Paper
-          style={{
+          sx={{
             padding: '20px',
             borderRadius: '20px',
             maxHeight: 'max-content',
@@ -181,7 +180,6 @@ export default function ListPaymenHistory() {
                   borderRadius: '15px',
                   marginLeft: '10px',
                 }}
-                lang={vi}
               />
               <button
                 className="btn"
