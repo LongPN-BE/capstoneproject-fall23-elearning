@@ -12,7 +12,11 @@ import {
   TablePagination,
   Select,
   MenuItem,
-} from '@material-ui/core';
+  InputLabel,
+  FormControl,
+  Popover,
+} from '@mui/material';
+import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
 import { Search } from '@material-ui/icons';
 import Cookies from 'js-cookie';
 import { fetchData, postData } from '../../../services/AppService';
@@ -25,6 +29,7 @@ import CustomBreadcrumbs from '../../../components/Breadcrumbs';
 import Swal from 'sweetalert2';
 import emailjs from 'emailjs-com';
 import { YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, YOUR_USER_ID } from '../../../util/Constants';
+import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 
 export default function ListAccount() {
   const [data, setData] = useState([]);
@@ -35,6 +40,8 @@ export default function ListAccount() {
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
   const [isAccountDetailModalOpen, setIsAccountDetailModalOpen] = useState(false);
   const [accountToEdit, setAccountToEdit] = useState(null);
+  const [openPop, setOpenPop] = useState(null);
+  const [accountTmp, setAccountTmp] = useState([]);
   const breadcrumbItems = [
     {
       url: '/',
@@ -61,6 +68,15 @@ export default function ListAccount() {
       }
     }
   }, []);
+
+  const handleOpenPop = (account, event) => {
+    setOpenPop(event.currentTarget);
+    setAccountTmp(account);
+  };
+
+  const handleClosePop = () => {
+    setOpenPop(null);
+  };
 
   const handleAddAccount = () => {
     setAccountToEdit(null); // Clear any previous account data (for editing)
@@ -125,25 +141,34 @@ export default function ListAccount() {
         .then((resp) => {
           if (resp) {
             const templateParams = {
-              from_email: "onlearn@gmail.com",
+              from_email: 'onlearn@gmail.com',
               to_name: accountData.firstName,
               to_email: accountData.email,
-              user_name: "Onlearn",
-              message: "Đây là thông tin tài khoản giáo viên của bạn: \n Tài khoản: " + accountData.username +
-                " \n Mật khẩu: " + accountData.password +
-                " ."
+              user_name: 'Onlearn',
+              message:
+                'Đây là thông tin tài khoản giáo viên của bạn: \n Tài khoản: ' +
+                accountData.username +
+                ' \n Mật khẩu: ' +
+                accountData.password +
+                ' .',
             };
 
-            emailjs.send(YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, templateParams, YOUR_USER_ID)
-              .then((result) => {
+            emailjs.send(YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, templateParams, YOUR_USER_ID).then(
+              (result) => {
                 Swal.fire({
-                  title: "Chúc mừng",
-                  text: "Thực hiện thành công tạo tài khoản " + accountData.username + "\n Thông tin đã được gửi về địa chỉ email " + accountData.email,
-                  icon: "success"
-                }).then(window.location.reload())
-              }, (error) => {
+                  title: 'Chúc mừng',
+                  text:
+                    'Thực hiện thành công tạo tài khoản ' +
+                    accountData.username +
+                    '\n Thông tin đã được gửi về địa chỉ email ' +
+                    accountData.email,
+                  icon: 'success',
+                }).then(window.location.reload());
+              },
+              (error) => {
                 console.log('Gửi mail thất bại.', error.text);
-              });
+              },
+            );
           }
         })
         .catch((err) => {
@@ -155,110 +180,106 @@ export default function ListAccount() {
 
   // Enable/Disable Account
   const handleEnable = (account) => {
+    handleClosePop();
     const token = Cookies.get('token');
     if (token) {
       Swal.fire({
-        title: "Bạn có chắc muốn kích hoạt tài khoản " + account.username + "?",
-        icon: "question",
-        showDenyButton: true,
+        title: 'Bạn có chắc muốn kích hoạt tài khoản ' + account.username + '?',
+        icon: 'question',
         showCancelButton: true,
-        confirmButtonText: "Xác nhận",
-        denyButtonText: `Không đồng ý`,
+        confirmButtonText: 'Xác nhận',
         cancelButtonText: `Hủy`,
-        footer: '<a href="#">Tại sao tôi gặp vấn đề này?</a>'
       }).then(async (result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
           let res = await fetchData('/account/enable?account_id=' + account.id, token);
           if (res) {
             const templateParams = {
-              from_email: "onlearn@gmail.com",
+              from_email: 'onlearn@gmail.com',
               to_name: account.profile.firstName,
               to_email: account.profile.email,
-              user_name: "Onlearn",
-              message: "Tài khoản của bạn đã được kích hoạt lại.\n Chúng tôi rất vui vì có sự tham gia của bạn."
+              user_name: 'Onlearn',
+              message: 'Tài khoản của bạn đã được kích hoạt lại.\n Chúng tôi rất vui vì có sự tham gia của bạn.',
             };
 
-            emailjs.send(YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, templateParams, YOUR_USER_ID)
-              .then((result) => {
+            emailjs.send(YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, templateParams, YOUR_USER_ID).then(
+              (result) => {
                 Swal.fire({
-                  title: "Chúc mừng",
-                  text: "Thông tin khóa tài khoản đã được gửi email",
-                  icon: "success"
-                }).then((result) => { window.location.reload() })
-              }, (error) => {
+                  title: 'Chúc mừng',
+                  text: 'Thông tin khóa tài khoản đã được gửi email',
+                  icon: 'success',
+                }).then((result) => {
+                  window.location.reload();
+                });
+              },
+              (error) => {
                 console.log('Gửi mail thất bại.', error.text);
-              });
+              },
+            );
           }
           // Swal.fire("Saved!", "", "success");
-        } else if (result.isDenied) {
-          Swal.fire("Không có gì thay đổi", "", "info");
         }
       });
-
-
     }
   };
 
   const handleDisable = (account) => {
+    handleClosePop();
     const token = Cookies.get('token');
     if (token) {
-
       Swal.fire({
-        title: "Bạn có chắc muốn vô hiệu hóa tài khoản " + account.username + "?",
-        icon: "question",
-        showDenyButton: true,
+        title: 'Bạn có chắc muốn vô hiệu hóa tài khoản ' + account.username + '?',
+        icon: 'question',
         showCancelButton: true,
-        confirmButtonText: "Xác nhận",
-        denyButtonText: `Không đồng ý`,
+        confirmButtonText: 'Xác nhận',
         cancelButtonText: `Hủy`,
-        footer: '<a href="#">Tại sao tôi gặp vấn đề này?</a>'
       }).then(async (result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
           let res = await fetchData('/account/disable?account_id=' + account.id, token);
           if (res) {
             Swal.fire({
-              title: "Vô hiệu thành công!",
+              title: 'Vô hiệu thành công!',
               text: res.message,
-              icon: "success",
-              footer: '<a href="#">Tại sao tôi gặp vấn đề này?</a>'
+              icon: 'success',
+              footer: '<a href="#">Tại sao tôi gặp vấn đề này?</a>',
             }).then((result) => {
               const templateParams = {
-                from_email: "onlearn@gmail.com",
+                from_email: 'onlearn@gmail.com',
                 to_name: account.profile.firstName,
                 to_email: account.profile.email,
-                user_name: "Onlearn",
-                message: "Tài khoản của bạn hiện đã bị khóa vì một số lý do. "
+                user_name: 'Onlearn',
+                message: 'Tài khoản của bạn hiện đã bị khóa vì một số lý do. ',
               };
 
-              emailjs.send(YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, templateParams, YOUR_USER_ID)
-                .then((result) => {
+              emailjs.send(YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, templateParams, YOUR_USER_ID).then(
+                (result) => {
                   Swal.fire({
-                    title: "Chúc mừng",
-                    text: "Thông tin khóa tài khoản đã được gửi email",
-                    icon: "success"
-                  }).then((result) => { window.location.reload() })
-                }, (error) => {
+                    title: 'Chúc mừng',
+                    text: 'Thông tin khóa tài khoản đã được gửi email',
+                    icon: 'success',
+                  }).then((result) => {
+                    window.location.reload();
+                  });
+                },
+                (error) => {
                   console.log('Gửi mail thất bại.', error.text);
-                });
-            })
-
+                },
+              );
+            });
           }
-        } else if (result.isDenied) {
-          Swal.fire("Không có gì thay đổi", "", "info");
         }
       });
-
     }
   };
 
   // Search
-  const filterData = dataSubmit.filter((account) =>
-    account.profile.lastName.toLowerCase().includes(searchValue.toLowerCase())
-    || account.profile.firstName.toLowerCase().includes(searchValue.toLowerCase())
-    || account.username.toLowerCase().includes(searchValue.toLowerCase())
-    || account.profile.email.toLowerCase().includes(searchValue.toLowerCase())
+  const filterData = dataSubmit.filter(
+    (account) =>
+      account.profile.lastName.toLowerCase().includes(searchValue.toLowerCase()) ||
+      account.profile.firstName.toLowerCase().includes(searchValue.toLowerCase()) ||
+      account.username.toLowerCase().includes(searchValue.toLowerCase()) ||
+      account.profile.email.toLowerCase().includes(searchValue.toLowerCase()),
   );
 
   // State to keep track of the current page and the number of rows per page
@@ -279,155 +300,207 @@ export default function ListAccount() {
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dataSubmit.length) : 0;
   return (
     data && (
-      <div className="m-5">
-        {/* <div style={{ margin: '20px' }}> */}
-        <Paper style={{ padding: '20px' }}>
-          <CustomBreadcrumbs items={breadcrumbItems} />
-
-          <div className="d-flex align-items-center" style={{ marginTop: '20px' }}>
-            <Typography variant="h5">Danh sách tài khoản</Typography>
-
-
-            <div className="text-end col-9">
-              <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={handleAddAccount}>
-                Tạo mới tài khoản giáo viên
-              </Button>
-            </div>
+      <div className="px-5 py-3" style={{ overflow: 'auto', height: 850 }}>
+        <div className="row mb-3">
+          <div className="col-8">
+            <h4 style={{ fontWeight: 'bold' }}>Danh sách tài khoản</h4>
+            <CustomBreadcrumbs items={breadcrumbItems} />
           </div>
-          <div className="d-flex" style={{ marginTop: '20px' }}>
-            <InputBase
-              placeholder="Tìm kiếm"
-              style={{ marginLeft: '20px' }}
-              startAdornment={<Search />}
-              onChange={(e) => {
-                setSearchValue(e.target.value)
-                setPage(0)
-              }}
-            />
-            Trạng thái:
-            <Select
-              style={{ marginLeft: 3, marginRight: 6 }}
-              labelId="account-status-select-label"
-              label="Status"
-              defaultValue={statusSelect}
-              onChange={(e, value) => {
-                setStatusSelect(value.props.value)
-                setPage(0)
-                switch (value.props.value) {
-                  case "none": if (roleSelect === "none") { setDataSubmit(data) }
-                  else { setDataSubmit(data.filter((account) => account.role === roleSelect)) }
-                    break;
-                  case "true": if (roleSelect === "none") { setDataSubmit(data.filter((account) => account.active === true)) }
-                  else { setDataSubmit(data.filter((account) => account.active === true && account.role === roleSelect)) }
-                    break;
-                  case "false": if (roleSelect === "none") { setDataSubmit(data.filter((account) => account.active === false)) }
-                  else { setDataSubmit(data.filter((account) => account.active === false && account.role === roleSelect)) }
-                    break;
-                }
-              }
-              }>
-              <MenuItem value="none">Tất cả</MenuItem>
-              <MenuItem value="true">Đang hoạt động</MenuItem>
-              <MenuItem value="false">Chưa hoạt động</MenuItem>
-            </Select>
-
-            Vai trò:
-            <Select
-              style={{ marginLeft: 3, marginRight: 6 }}
-              labelId="account-role-select-label"
-              label="Role"
-              defaultValue={roleSelect}
-              onChange={(e, value) => {
-                setRoleSelect(value.props.value)
-                setPage(0)
-                switch (value.props.value) {
-                  case "none":
-                    if (statusSelect === "none") { setDataSubmit(data) }
-                    else {
-                      switch (statusSelect) {
-                        case "true":
-                          setDataSubmit(data.filter((account) => account.active === true))
-                          break;
-                        case "false":
-                          setDataSubmit(data.filter((account) => account.active === false))
-                          break;
-                      }
-                    }
-                    break;
-                  case "ADMIN":
-                    if (statusSelect === "none") { setDataSubmit(data.filter((account) => account.role === "ADMIN")) }
-                    else {
-                      switch (statusSelect) {
-                        case "true":
-                          setDataSubmit(data.filter((account) => account.active === true && account.role === "ADMIN"))
-                          break;
-                        case "false":
-                          setDataSubmit(data.filter((account) => account.active === false && account.role === "ADMIN"))
-                          break;
-                      }
-                    }
-                    break;
-                  case "STAFF":
-                    if (statusSelect === "none") { setDataSubmit(data.filter((account) => account.role === "STAFF")) }
-                    else {
-                      switch (statusSelect) {
-                        case "true":
-                          setDataSubmit(data.filter((account) => account.active === true && account.role === "STAFF"))
-                          break;
-                        case "false":
-                          setDataSubmit(data.filter((account) => account.active === false && account.role === "STAFF"))
-                          break;
-                      }
-                    }
-                    break;
-                  case "TEACHER":
-                    if (statusSelect === "none") { setDataSubmit(data.filter((account) => account.role === "TEACHER")) }
-                    else {
-                      switch (statusSelect) {
-                        case "true":
-                          setDataSubmit(data.filter((account) => account.active === true && account.role === "TEACHER"))
-                          break;
-                        case "false":
-                          setDataSubmit(data.filter((account) => account.active === false && account.role === "TEACHER"))
-                          break;
-                      }
-                    }
-                    break;
-                  case "STUDENT":
-                    if (statusSelect === "none") { setDataSubmit(data.filter((account) => account.role === "STUDENT")) }
-                    else {
-                      switch (statusSelect) {
-                        case "true":
-                          setDataSubmit(data.filter((account) => account.active === true && account.role === "STUDENT"))
-                          break;
-                        case "false":
-                          setDataSubmit(data.filter((account) => account.active === false && account.role === "STUDENT"))
-                          break;
-                      }
-                    }
-                    break;
-                }
-              }}
+          <div className="text-end col-4">
+            <Button
+              variant="outlined"
+              style={{ border: 0, backgroundColor: '#212b36', color: 'white', fontWeight: 700 }}
+              onClick={handleAddAccount}
             >
-              <MenuItem value="none">Tất cả</MenuItem>
-              <MenuItem value="ADMIN">Quản trị viên</MenuItem>
-              <MenuItem value="STAFF">Nhân viên</MenuItem>
-              <MenuItem value="TEACHER">Giáo viên</MenuItem>
-              <MenuItem value="STUDENT">Học sinh</MenuItem>
-            </Select>
+              Thêm giáo viên
+            </Button>
+          </div>
+        </div>
+
+        <Paper
+          sx={{
+            padding: '20px',
+            borderRadius: '20px',
+            maxHeight: 'max-content',
+            boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
+          }}
+        >
+          <div className="d-flex" style={{ marginTop: '20px' }}>
+            <div className="rounded p-2" style={{ marginInline: 1, backgroundColor: '#f4f6f8' }}>
+              <InputBase
+                placeholder="Tìm kiếm"
+                sx={{ marginInline: '10px' }}
+                startAdornment={<Search />}
+                onChange={(e) => {
+                  setSearchValue(e.target.value);
+                  setPage(0);
+                }}
+              />
+            </div>
+
+            <FormControl variant="filled" sx={{ ml: 1, minWidth: 120, padding: 0 }}>
+              <InputLabel id="account-status-select-label">Trạng thái</InputLabel>
+              <Select
+                style={{ marginLeft: 3, marginRight: 6 }}
+                labelId="account-status-select-label"
+                label="Status"
+                defaultValue={statusSelect}
+                onChange={(e, value) => {
+                  setStatusSelect(value.props.value);
+                  setPage(0);
+                  switch (value.props.value) {
+                    case 'none':
+                      if (roleSelect === 'none') {
+                        setDataSubmit(data);
+                      } else {
+                        setDataSubmit(data.filter((account) => account.role === roleSelect));
+                      }
+                      break;
+                    case 'true':
+                      if (roleSelect === 'none') {
+                        setDataSubmit(data.filter((account) => account.active === true));
+                      } else {
+                        setDataSubmit(data.filter((account) => account.active === true && account.role === roleSelect));
+                      }
+                      break;
+                    case 'false':
+                      if (roleSelect === 'none') {
+                        setDataSubmit(data.filter((account) => account.active === false));
+                      } else {
+                        setDataSubmit(
+                          data.filter((account) => account.active === false && account.role === roleSelect),
+                        );
+                      }
+                      break;
+                  }
+                }}
+              >
+                <MenuItem value="none">Tất cả</MenuItem>
+                <MenuItem value="true">Đang hoạt động</MenuItem>
+                <MenuItem value="false">Chưa hoạt động</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl variant="filled" sx={{ ml: 1, minWidth: 120, padding: 0 }}>
+              <InputLabel id="account-role-select-label">Vai trò</InputLabel>
+              <Select
+                style={{ marginLeft: 3, marginRight: 6 }}
+                labelId="account-role-select-label"
+                defaultValue={roleSelect}
+                onChange={(e, value) => {
+                  setRoleSelect(value.props.value);
+                  setPage(0);
+                  switch (value.props.value) {
+                    case 'none':
+                      if (statusSelect === 'none') {
+                        setDataSubmit(data);
+                      } else {
+                        switch (statusSelect) {
+                          case 'true':
+                            setDataSubmit(data.filter((account) => account.active === true));
+                            break;
+                          case 'false':
+                            setDataSubmit(data.filter((account) => account.active === false));
+                            break;
+                        }
+                      }
+                      break;
+                    case 'ADMIN':
+                      if (statusSelect === 'none') {
+                        setDataSubmit(data.filter((account) => account.role === 'ADMIN'));
+                      } else {
+                        switch (statusSelect) {
+                          case 'true':
+                            setDataSubmit(
+                              data.filter((account) => account.active === true && account.role === 'ADMIN'),
+                            );
+                            break;
+                          case 'false':
+                            setDataSubmit(
+                              data.filter((account) => account.active === false && account.role === 'ADMIN'),
+                            );
+                            break;
+                        }
+                      }
+                      break;
+                    case 'STAFF':
+                      if (statusSelect === 'none') {
+                        setDataSubmit(data.filter((account) => account.role === 'STAFF'));
+                      } else {
+                        switch (statusSelect) {
+                          case 'true':
+                            setDataSubmit(
+                              data.filter((account) => account.active === true && account.role === 'STAFF'),
+                            );
+                            break;
+                          case 'false':
+                            setDataSubmit(
+                              data.filter((account) => account.active === false && account.role === 'STAFF'),
+                            );
+                            break;
+                        }
+                      }
+                      break;
+                    case 'TEACHER':
+                      if (statusSelect === 'none') {
+                        setDataSubmit(data.filter((account) => account.role === 'TEACHER'));
+                      } else {
+                        switch (statusSelect) {
+                          case 'true':
+                            setDataSubmit(
+                              data.filter((account) => account.active === true && account.role === 'TEACHER'),
+                            );
+                            break;
+                          case 'false':
+                            setDataSubmit(
+                              data.filter((account) => account.active === false && account.role === 'TEACHER'),
+                            );
+                            break;
+                        }
+                      }
+                      break;
+                    case 'STUDENT':
+                      if (statusSelect === 'none') {
+                        setDataSubmit(data.filter((account) => account.role === 'STUDENT'));
+                      } else {
+                        switch (statusSelect) {
+                          case 'true':
+                            setDataSubmit(
+                              data.filter((account) => account.active === true && account.role === 'STUDENT'),
+                            );
+                            break;
+                          case 'false':
+                            setDataSubmit(
+                              data.filter((account) => account.active === false && account.role === 'STUDENT'),
+                            );
+                            break;
+                        }
+                      }
+                      break;
+                  }
+                }}
+              >
+                <MenuItem value="none">Tất cả</MenuItem>
+                <MenuItem value="ADMIN">Quản trị viên</MenuItem>
+                <MenuItem value="STAFF">Nhân viên</MenuItem>
+                <MenuItem value="TEACHER">Giáo viên</MenuItem>
+                <MenuItem value="STUDENT">Học sinh</MenuItem>
+              </Select>
+            </FormControl>
           </div>
 
           <Table style={{ marginTop: '20px' }}>
-            <TableHead>
+            <TableHead style={{ backgroundColor: '#f4f6f8' }}>
               <TableRow>
-                <TableCell>STT</TableCell>
-                <TableCell width={'120px'}>Tên tài khoản</TableCell>
-                <TableCell>Họ và Tên</TableCell>
-                <TableCell>Vai trò</TableCell>
-                <TableCell>Ngày tạo</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Trạng thái</TableCell>
-                <TableCell></TableCell>
+                <TableCell style={{ color: '#808d99', fontWeight: 700 }}>#</TableCell>
+                <TableCell style={{ color: '#808d99', fontWeight: 700 }} width={'10%'}>
+                  Tên tài khoản
+                </TableCell>
+                <TableCell style={{ color: '#808d99', fontWeight: 700 }}>Họ và Tên</TableCell>
+                <TableCell style={{ color: '#808d99', fontWeight: 700 }}>Vai trò</TableCell>
+                <TableCell style={{ color: '#808d99', fontWeight: 700 }}>Ngày tạo</TableCell>
+                <TableCell style={{ color: '#808d99', fontWeight: 700 }}>Email</TableCell>
+                <TableCell style={{ color: '#808d99', fontWeight: 700 }}>Trạng thái</TableCell>
+                <TableCell style={{ color: '#808d99', fontWeight: 700 }}></TableCell>
                 {/* <TableCell>Hành động</TableCell> */}
               </TableRow>
             </TableHead>
@@ -435,46 +508,139 @@ export default function ListAccount() {
               {filterData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((a, index) => {
                 return (
                   <TableRow hover={true} key={index}>
-                    <TableCell>{index + (page * rowsPerPage, page * rowsPerPage) + 1}</TableCell>
-                    <TableCell>{a.username}</TableCell>
-                    <TableCell>
+                    <TableCell style={{ fontWeight: 600, color: '#686f77' }}>
+                      {index + (page * rowsPerPage, page * rowsPerPage) + 1}
+                    </TableCell>
+                    <TableCell style={{ fontWeight: 600, color: '#686f77' }}>{a.username}</TableCell>
+                    <TableCell style={{ fontWeight: 600, color: '#686f77' }}>
                       {a.profile.lastName} {a.profile.firstName}
                     </TableCell>
-                    <TableCell>{a.role}</TableCell>
-                    <TableCell>{moment(a.createdAt).format('DD/MM/YYYY')}</TableCell>
-                    <TableCell>{a.profile.email}</TableCell>
-                    <TableCell>{a.active ? 'Đang hoạt động' : 'Chưa kích hoạt'} </TableCell>
-                    <TableCell>
-                      {a.role !== "ADMIN" ? (!a.active ? <>
-                        <button
-                          type="submit"
-                          title="Kích hoạt"
-                          className="btn btn-success m-1"
-                          onClick={() => handleEnable(a)}
+                    <TableCell width={'11%'} style={{ fontWeight: 600, color: '#686f77' }}>
+                      {a.role === 'STUDENT' ? (
+                        <div
+                          className="p-2 text-center"
+                          style={{ backgroundColor: '#b5d8f4', color: '#1e7cc9', borderRadius: 10, fontWeight: 700 }}
                         >
-                          <CheckCircleOutlineIcon />
-                        </button>
-                      </> : <>
-                        <button
-                          type="submit"
-                          title="Vô hiệu hóa"
-                          className="btn btn-danger m-1"
-                          onClick={() => handleDisable(a)}
+                          HỌC VIÊN
+                        </div>
+                      ) : a.role === 'TEACHER' ? (
+                        <div
+                          className="p-2 text-center"
+                          style={{ backgroundColor: '#ffebce', color: '#ff9800', borderRadius: 10, fontWeight: 700 }}
                         >
-                          <DoNotDisturbAltIcon />
-                        </button>
-                      </>) : (<></>)}
+                          GIẢNG VIÊN
+                        </div>
+                      ) : a.role === 'ADMIN' ? (
+                        <div
+                          className="p-2 text-center"
+                          style={{ backgroundColor: '#deb3e5', color: '#9c27b0', borderRadius: 10, fontWeight: 700 }}
+                        >
+                          QUẢN TRỊ VIÊN
+                        </div>
+                      ) : (
+                        <div
+                          className="p-2 text-center"
+                          style={{ backgroundColor: '#dbf6e5', color: '#2a9a68', borderRadius: 10, fontWeight: 700 }}
+                        >
+                          NHÂN VIÊN
+                        </div>
+                      )}
                     </TableCell>
-                    <TableCell>
-                      {/* <Link className="btn btn-outline-secondary" to={`##`}>
-                          Xem
-                        </Link> */}
-                      {/* <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={() => handleEditAccount(a)} disabled>
-                        <Typography variant='body2'>Cập nhật</Typography>
-                      </Button> */}
-                      <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={() => handleViewDetail(a)}>
-                        <Typography variant='body2'>Xem</Typography>
-                      </Button>
+                    <TableCell style={{ fontWeight: 600, color: '#686f77' }}>
+                      {moment(a.createdAt).format('DD/MM/YYYY')}
+                    </TableCell>
+                    <TableCell style={{ fontWeight: 600, color: '#686f77' }}>{a.profile.email}</TableCell>
+                    <TableCell width="11%">
+                      {a.active ? (
+                        <div
+                          className="p-2 text-center"
+                          style={{ backgroundColor: '#dbf6e5', color: '#2a9a68', borderRadius: 10, fontWeight: 700 }}
+                        >
+                          Đang hoạt động
+                        </div>
+                      ) : (
+                        <div
+                          className="p-2 text-center"
+                          style={{ backgroundColor: '#ffe4de', color: '#c64843', borderRadius: 10, fontWeight: 700 }}
+                        >
+                          Chưa kích hoạt
+                        </div>
+                      )}
+                    </TableCell>
+                    <TableCell style={{ fontWeight: 600, color: '#686f77' }}>
+                      <div>
+                        <button
+                          className="btn"
+                          style={{ marginLeft: '10px', color: '#637381', border: 0 }}
+                          onClick={() => handleViewDetail(a)}
+                        >
+                          <VisibilityRoundedIcon />
+                        </button>
+
+                        <button
+                          className="btn p-2"
+                          style={{ padding: 0, border: 0, borderRadius: '50%', minWidth: '50', color: '#637381' }}
+                          onClick={(e) => handleOpenPop(a, e)}
+                        >
+                          <MoreVertRoundedIcon />
+                        </button>
+
+                        <Popover
+                          className="p-1"
+                          open={!!openPop}
+                          anchorEl={openPop}
+                          onClose={handleClosePop}
+                          anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                          PaperProps={{
+                            sx: {
+                              border: 0,
+                              width: 180,
+                              borderRadius: '15px',
+                              boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px',
+                            },
+                          }}
+                        >
+                          <div className="p-2">
+                            {accountTmp.role !== 'ADMIN' ? (
+                              !accountTmp.active ? (
+                                <>
+                                  <MenuItem onClick={() => handleEnable(accountTmp)} style={{ borderRadius: '10px' }}>
+                                    <div style={{ color: '#58af86' }} className="d-flex p-1">
+                                      <CheckCircleOutlineIcon />
+                                      <Typography className="mx-2" style={{ fontWeight: 600 }}>
+                                        Kích hoạt
+                                      </Typography>
+                                    </div>
+                                  </MenuItem>
+                                </>
+                              ) : (
+                                <>
+                                  <MenuItem onClick={() => handleDisable(accountTmp)} style={{ borderRadius: '10px' }}>
+                                    <div style={{ color: '#c25d5a' }} className="d-flex p-1">
+                                      <DoNotDisturbAltIcon />
+                                      <Typography className="mx-2" style={{ fontWeight: 600 }}>
+                                        Vô hiệu hoá
+                                      </Typography>
+                                    </div>
+                                  </MenuItem>
+                                </>
+                              )
+                            ) : (
+                              <>
+                                <MenuItem disabled style={{ borderRadius: '10px' }}>
+                                  <div style={{ color: '#c25d5a' }} className="d-flex p-1">
+                                    <DoNotDisturbAltIcon />
+                                    <Typography className="mx-2" style={{ fontWeight: 600 }}>
+                                      Vô hiệu hoá
+                                    </Typography>
+                                  </div>
+                                </MenuItem>
+                              </>
+                            )}
+                          </div>
+                        </Popover>
+                      </div>
                     </TableCell>
                   </TableRow>
                 );
@@ -496,22 +662,21 @@ export default function ListAccount() {
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
-        </Paper >
+        </Paper>
         {/* </div> */}
-        < AccountModal
+        <AccountModal
           isOpen={isAccountModalOpen}
           onSave={saveOrUpdateAccount}
           onUpdate={saveOrUpdateAccount}
           onClose={handleAccountModalClose}
-          account={accountToEdit !== null ? accountToEdit : null
-          }
+          account={accountToEdit !== null ? accountToEdit : null}
         />
-        < AccountDetailModal
+        <AccountDetailModal
           isOpen={isAccountDetailModalOpen}
           onClose={handleAccountDetailModalClose}
           account={accountToEdit !== null ? accountToEdit : null}
         />
-      </div >
+      </div>
     )
   );
 }

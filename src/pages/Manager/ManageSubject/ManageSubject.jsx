@@ -15,8 +15,6 @@ import {
   Popover,
   MenuItem,
 } from '@mui/material';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
 import { Search } from '@material-ui/icons';
 import Cookies from 'js-cookie';
 import { fetchData, postData } from '../../../services/AppService';
@@ -213,7 +211,7 @@ export default function ListSubject() {
         </div>
 
         <Paper
-          style={{
+          sx={{
             padding: '20px',
             borderRadius: '20px',
             maxHeight: 'max-content',
@@ -231,9 +229,11 @@ export default function ListSubject() {
             </div>
             <div className="rounded p-2" style={{ marginLeft: '0.5rem', backgroundColor: '#f4f6f8' }}>
               <Select
+                disableUnderline
                 labelId="subject-status-select-label"
                 label="Status"
                 defaultValue={'none'}
+                style={{ fontWeight: 700, color: '#808d99' }}
                 onChange={(e, value) => {
                   setPage(0);
                   switch (value.props.value) {
@@ -249,9 +249,15 @@ export default function ListSubject() {
                   }
                 }}
               >
-                <MenuItem value="none">Tất cả</MenuItem>
-                <MenuItem value="true">Đang hoạt động</MenuItem>
-                <MenuItem value="false">Chưa hoạt động</MenuItem>
+                <MenuItem sx={{ fontWeight: 700, color: '#808d99' }} value="none">
+                  Tất cả
+                </MenuItem>
+                <MenuItem sx={{ fontWeight: 700, color: '#808d99' }} value="true">
+                  Đang hoạt động
+                </MenuItem>
+                <MenuItem sx={{ fontWeight: 700, color: '#808d99' }} value="false">
+                  Chưa hoạt động
+                </MenuItem>
               </Select>
             </div>
           </div>

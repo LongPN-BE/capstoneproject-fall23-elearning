@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from '@material-ui/core';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from '@mui/material';
 import moment from 'moment';
 const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
   const [editedConfig, setEditedConfig] = useState({
@@ -7,9 +7,24 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
     projectName: '',
     dateCreate: '',
     studyingTime: '',
-    retryTestTime: '',
-    defaultImage: '',
     defaultQuizTime: '',
+    waitingQuizTime: '',
+    description: '',
+    commissionFee: '',
+    teacherCommissionFee: '',
+    refundedTime: '',
+  });
+  const [lastestConfig, setLastestConfig] = useState({
+    version: '',
+    projectName: '',
+    dateCreate: '',
+    studyingTime: '',
+    defaultQuizTime: '',
+    waitingQuizTime: '',
+    description: '',
+    commissionFee: '',
+    teacherCommissionFee: '',
+    refundedTime: '',
   });
 
   useEffect(() => {
@@ -18,22 +33,14 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
       setEditedConfig({
         version: config.version,
         projectName: config.projectName,
-        dateCreate: config.dateCreate,
-        studyingTime: config.studyingTime,
-        retryTestTime: config.retryTestTime,
-        defaultImage: config.defaultImage,
-        defaultQuizTime: config.defaultQuizTime,
-      });
-    } else {
-      // Clear the form fields if adding a new config
-      setEditedConfig({
-        version: '',
-        projectName: '',
         dateCreate: moment().format('DD-MM-YYYY'),
-        studyingTime: '',
-        retryTestTime: '',
-        defaultImage: '',
-        defaultQuizTime: '',
+        studyingTime: config.studyingTime,
+        description: config.description,
+        waitingQuizTime: config.waitingQuizTime,
+        defaultQuizTime: config.defaultQuizTime,
+        commissionFee: config.commissionFee,
+        teacherCommissionFee: config.teacherCommissionFee,
+        refundedTime: config.refundedTime,
       });
     }
   }, [config]);
@@ -43,14 +50,43 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
     setEditedConfig({ ...editedConfig, [fieldName]: value });
   };
 
+  const isNotValidInput = () => {
+    return (
+      !editedConfig.version ||
+      !editedConfig.description ||
+      !editedConfig.dateCreate ||
+      !editedConfig.studyingTime ||
+      !editedConfig.waitingQuizTime ||
+      !editedConfig.defaultQuizTime ||
+      !editedConfig.commissionFee ||
+      !editedConfig.teacherCommissionFee ||
+      !editedConfig.refundedTime
+    );
+  };
+
+  const notThingChange = () => {
+    return (
+      editedConfig.version === config.version &&
+      editedConfig.studyingTime === config.studyingTime &&
+      editedConfig.waitingQuizTime === config.waitingQuizTime &&
+      editedConfig.defaultQuizTime === config.defaultQuizTime &&
+      editedConfig.commissionFee === config.commissionFee &&
+      editedConfig.teacherCommissionFee === config.teacherCommissionFee &&
+      editedConfig.refundedTime === config.refundedTime
+    );
+  };
+
   const handleSave = () => {
     if (
       !editedConfig.version ||
-      !editedConfig.projectName ||
+      !editedConfig.description ||
       !editedConfig.dateCreate ||
       !editedConfig.studyingTime ||
-      !editedConfig.retryTestTime ||
-      !editedConfig.defaultQuizTime
+      !editedConfig.waitingQuizTime ||
+      !editedConfig.commissionFee ||
+      !editedConfig.defaultQuizTime ||
+      !editedConfig.teacherCommissionFee ||
+      !editedConfig.refundedTime
     ) {
       // Show an error message or handle the validation as needed
       alert('Please fill in all required fields.');
@@ -59,9 +95,9 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
 
     if (config) {
       // If editing an existing config, call the onUpdate function
-      onUpdate({ ...config, ...editedConfig });
+      onUpdate(editedConfig);
       // add function api here
-      alert(editedConfig.name);
+      alert(editedConfig.version);
 
       //-- end function update
     } else {
@@ -90,87 +126,133 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
 
   const clearModal = () => {
     setEditedConfig({
-      version: '',
-      projectName: '',
-      dateCreate: '',
-      studyingTime: '',
-      retryTestTime: '',
-      defaultImage: '',
-      defaultQuizTime: '',
+      version: config.version,
+      projectName: config.projectName,
+      dateCreate: moment(new Date()),
+      studyingTime: config.studyingTime,
+      description: config.description,
+      waitingQuizTime: config.waitingQuizTime,
+      defaultQuizTime: config.defaultQuizTime,
+      commissionFee: config.commissionFee,
+      teacherCommissionFee: config.teacherCommissionFee,
+      refundedTime: config.refundedTime,
     });
 
     onClose();
   };
 
   return (
-    <Dialog open={isOpen} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Cập nhật chính sách</DialogTitle>
+    <Dialog open={isOpen} onClose={onClose} fullWidth>
+      <DialogTitle>Cập nhật cấu hình</DialogTitle>
       <DialogContent>
         <TextField
           fullWidth
-          label="Version"
-          autoFocus
+          className="p-1"
+          label="Phiên bản"
           margin="dense"
           name="name"
           value={editedConfig.version}
           onChange={(e) => handleInputChange(e, 'version')}
           required
+          variant="filled"
         />
+        <div className="d-flex">
+          <TextField
+            className="p-1 w-50"
+            label="Thời gian học mặc định"
+            margin="dense"
+            name="staff_id"
+            value={editedConfig.studyingTime}
+            onChange={(e) => handleInputChange(e, 'studyingTime')}
+            variant="filled"
+            helperText="Thời gian học mặc định của mỗi khoá học (tháng)"
+          />
+          <TextField
+            className="p-1 w-50"
+            label="Thời gian hoàn tiền"
+            margin="dense"
+            name="created_date"
+            value={editedConfig.refundedTime}
+            onChange={(e) => handleInputChange(e, 'refundedTime')}
+            helperText="Thời gian cho phép hoàn tiền khoá học (ngày)"
+            variant="filled"
+          />
+        </div>
+
+        <div className="d-flex">
+          <TextField
+            fullWidth
+            label="Thời gian kiểm tra"
+            className="p-1 w-50"
+            margin="dense"
+            name="staff_id"
+            value={editedConfig.defaultQuizTime}
+            onChange={(e) => handleInputChange(e, 'defaultQuizTime')}
+            variant="filled"
+            helperText="Thời gian kiểm tra mặc định (phút)"
+          />
+          <TextField
+            fullWidth
+            className="p-1 w-50"
+            label="Thời gian khoá kiểm tra"
+            margin="dense"
+            name="staff_id"
+            value={editedConfig.waitingQuizTime}
+            onChange={(e) => handleInputChange(e, 'waitingQuizTime')}
+            variant="filled"
+            helperText="Thời gian khoá bài kiểm tra sau khi fail (giờ)"
+          />
+        </div>
+        <div className="d-flex">
+          <TextField
+            className="p-1 w-50"
+            fullWidth
+            margin="dense"
+            label="Phí hoa hồng"
+            name="asset"
+            value={editedConfig.commissionFee}
+            onChange={(e) => handleInputChange(e, 'commissionFee')}
+            variant="filled"
+            helperText="Phí hoa hồng trên mỗi khoá học được bán (%)"
+          />
+          <TextField
+            fullWidth
+            className="p-1 w-50"
+            label="Phí xét duyệt"
+            margin="dense"
+            name="created_date"
+            value={editedConfig.teacherCommissionFee}
+            onChange={(e) => handleInputChange(e, 'teacherCommissionFee')}
+            variant="filled"
+            helperText="Phí xét duyệt khoá học (%)"
+          />
+        </div>
         <TextField
+          className="p-1"
           fullWidth
           multiline
-          rows={4}
+          minRows={4}
           label="Mô tả"
-          autoFocus
           margin="dense"
           name="description"
-          value={editedConfig.projectName}
-          onChange={(e) => handleInputChange(e, 'projectName')}
+          variant="filled"
+          value={editedConfig.description}
+          onChange={(e) => handleInputChange(e, 'description')}
+          helperText="Ghi rõ nội dung cập nhật cho mỗi phiên bản"
           required
-        />
-        <TextField
-          fullWidth
-          label="Ngày tạo"
-          autoFocus
-          margin="dense"
-          name="min_price"
-          value={editedConfig.dateCreate}
-          disabled
-        />
-        <TextField
-          fullWidth
-          label="Thời gian học mặc định"
-          autoFocus
-          margin="dense"
-          name="staff_id"
-          value={editedConfig.studyingTime}
-          onChange={(e) => handleInputChange(e, 'studyingTime')}
-        />
-        <TextField
-          fullWidth
-          autoFocus
-          margin="dense"
-          label="Thời gian làm quiz mặc định"
-          name="asset"
-          value={editedConfig.defaultQuizTime}
-          onChange={(e) => handleInputChange(e, 'defaultQuizTime')}
-        />
-        <TextField
-          fullWidth
-          label="Số lần làm lại Quiz"
-          autoFocus
-          margin="dense"
-          name="created_date"
-          value={editedConfig.retryTestTime}
-          onChange={(e) => handleInputChange(e, 'retryTestTime')}
         />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
-          Cancel
+          Huỷ
         </Button>
-        <Button onClick={handleSave} color="primary" variant="contained">
-          Save
+        <Button
+          disabled={isNotValidInput() || notThingChange()}
+          onClick={handleSave}
+          color="primary"
+          variant="contained"
+        >
+          Lưu
         </Button>
       </DialogActions>
     </Dialog>
