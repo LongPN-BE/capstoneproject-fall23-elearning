@@ -10,11 +10,8 @@ import {
   TableHead,
   TableRow,
   TablePagination,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
   Popover,
+  MenuItem,
 } from '@mui/material';
 import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
 import { Search } from '@material-ui/icons';
@@ -30,6 +27,7 @@ import Swal from 'sweetalert2';
 import emailjs from 'emailjs-com';
 import { YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, YOUR_USER_ID } from '../../../util/Constants';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
+import { InputLabel, Select } from '@material-ui/core';
 
 export default function ListAccount() {
   const [data, setData] = useState([]);
@@ -326,10 +324,10 @@ export default function ListAccount() {
           }}
         >
           <div className="d-flex" style={{ marginTop: '20px' }}>
-            <div className="rounded p-2" style={{ marginInline: 1, backgroundColor: '#f4f6f8' }}>
+            <div className="rounded pt-3 p-2" style={{ backgroundColor: '#f4f6f8' }}>
               <InputBase
                 placeholder="Tìm kiếm"
-                sx={{ marginInline: '10px' }}
+                style={{ marginInline: '10px' }}
                 startAdornment={<Search />}
                 onChange={(e) => {
                   setSearchValue(e.target.value);
@@ -338,10 +336,10 @@ export default function ListAccount() {
               />
             </div>
 
-            <FormControl variant="filled" sx={{ ml: 1, minWidth: 120, padding: 0 }}>
-              <InputLabel id="account-status-select-label">Trạng thái</InputLabel>
+            <div className="rounded p-2" style={{ marginLeft: '0.5rem', backgroundColor: '#f4f6f8' }}>
+              <InputLabel style={{ fontWeight: 700, backgroundColor: '#f4f6f8', fontSize: '0.7rem' }} id="account-status-select-label">Trạng thái</InputLabel>
               <Select
-                style={{ marginLeft: 3, marginRight: 6 }}
+                style={{ fontWeight: 700, color: '#808d99' }}
                 labelId="account-status-select-label"
                 label="Status"
                 defaultValue={statusSelect}
@@ -375,15 +373,15 @@ export default function ListAccount() {
                   }
                 }}
               >
-                <MenuItem value="none">Tất cả</MenuItem>
-                <MenuItem value="true">Đang hoạt động</MenuItem>
-                <MenuItem value="false">Chưa hoạt động</MenuItem>
+                <MenuItem sx={{ fontWeight: 700, color: '#808d99' }} value="none">Tất cả</MenuItem>
+                <MenuItem sx={{ fontWeight: 700, color: '#808d99' }} value="true">Đang hoạt động</MenuItem>
+                <MenuItem sx={{ fontWeight: 700, color: '#808d99' }} value="false">Chưa hoạt động</MenuItem>
               </Select>
-            </FormControl>
-            <FormControl variant="filled" sx={{ ml: 1, minWidth: 120, padding: 0 }}>
-              <InputLabel id="account-role-select-label">Vai trò</InputLabel>
+            </div>
+            <div className="rounded p-2" style={{ marginLeft: '0.5rem', backgroundColor: '#f4f6f8' }}>
+              <InputLabel style={{ fontWeight: 700, backgroundColor: '#f4f6f8', fontSize: '0.7rem' }} id="account-role-select-label">Vai trò</InputLabel>
               <Select
-                style={{ marginLeft: 3, marginRight: 6 }}
+                style={{ fontWeight: 700, color: '#808d99' }}
                 labelId="account-role-select-label"
                 defaultValue={roleSelect}
                 onChange={(e, value) => {
@@ -479,13 +477,13 @@ export default function ListAccount() {
                   }
                 }}
               >
-                <MenuItem value="none">Tất cả</MenuItem>
-                <MenuItem value="ADMIN">Quản trị viên</MenuItem>
-                <MenuItem value="STAFF">Nhân viên</MenuItem>
-                <MenuItem value="TEACHER">Giáo viên</MenuItem>
-                <MenuItem value="STUDENT">Học sinh</MenuItem>
+                <MenuItem sx={{ fontWeight: 700, color: '#808d99' }} value="none">Tất cả</MenuItem>
+                <MenuItem sx={{ fontWeight: 700, color: '#808d99' }} value="ADMIN">Quản trị viên</MenuItem>
+                <MenuItem sx={{ fontWeight: 700, color: '#808d99' }} value="STAFF">Nhân viên</MenuItem>
+                <MenuItem sx={{ fontWeight: 700, color: '#808d99' }} value="TEACHER">Giáo viên</MenuItem>
+                <MenuItem sx={{ fontWeight: 700, color: '#808d99' }} value="STUDENT">Học sinh</MenuItem>
               </Select>
-            </FormControl>
+            </div>
           </div>
 
           <Table style={{ marginTop: '20px' }}>
@@ -653,7 +651,7 @@ export default function ListAccount() {
             </TableBody>
           </Table>
           <TablePagination
-            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+            rowsPerPageOptions={[5, 10, 25, { label: 'Tất cả', value: -1 }]}
             component="div"
             count={filterData.length}
             rowsPerPage={rowsPerPage}
@@ -662,21 +660,22 @@ export default function ListAccount() {
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
-        </Paper>
+        </Paper >
         {/* </div> */}
-        <AccountModal
+        < AccountModal
           isOpen={isAccountModalOpen}
           onSave={saveOrUpdateAccount}
           onUpdate={saveOrUpdateAccount}
           onClose={handleAccountModalClose}
-          account={accountToEdit !== null ? accountToEdit : null}
+          account={accountToEdit !== null ? accountToEdit : null
+          }
         />
-        <AccountDetailModal
+        < AccountDetailModal
           isOpen={isAccountDetailModalOpen}
           onClose={handleAccountDetailModalClose}
           account={accountToEdit !== null ? accountToEdit : null}
         />
-      </div>
+      </div >
     )
   );
 }

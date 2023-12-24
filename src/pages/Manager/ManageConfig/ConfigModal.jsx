@@ -14,18 +14,18 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
     teacherCommissionFee: '',
     refundedTime: '',
   });
-  const [lastestConfig, setLastestConfig] = useState({
-    version: '',
-    projectName: '',
-    dateCreate: '',
-    studyingTime: '',
-    defaultQuizTime: '',
-    waitingQuizTime: '',
-    description: '',
-    commissionFee: '',
-    teacherCommissionFee: '',
-    refundedTime: '',
-  });
+  // const [lastestConfig, setLastestConfig] = useState({
+  //   version: '',
+  //   projectName: '',
+  //   dateCreate: '',
+  //   studyingTime: '',
+  //   defaultQuizTime: '',
+  //   waitingQuizTime: '',
+  //   description: '',
+  //   commissionFee: '',
+  //   teacherCommissionFee: '',
+  //   refundedTime: '',
+  // });
 
   useEffect(() => {
     if (config) {
@@ -33,7 +33,7 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
       setEditedConfig({
         version: config.version,
         projectName: config.projectName,
-        dateCreate: moment().format('DD-MM-YYYY'),
+        dateCreate: moment(new Date()),
         studyingTime: config.studyingTime,
         description: config.description,
         waitingQuizTime: config.waitingQuizTime,
@@ -52,27 +52,28 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
 
   const isNotValidInput = () => {
     return (
-      !editedConfig.version ||
-      !editedConfig.description ||
-      !editedConfig.dateCreate ||
-      !editedConfig.studyingTime ||
-      !editedConfig.waitingQuizTime ||
-      !editedConfig.defaultQuizTime ||
-      !editedConfig.commissionFee ||
-      !editedConfig.teacherCommissionFee ||
+      !editedConfig.version &&
+      !editedConfig.description &&
+      !editedConfig.dateCreate &&
+      !editedConfig.studyingTime &&
+      !editedConfig.waitingQuizTime &&
+      !editedConfig.defaultQuizTime &&
+      !editedConfig.commissionFee &&
+      !editedConfig.teacherCommissionFee &&
       !editedConfig.refundedTime
     );
   };
 
   const notThingChange = () => {
     return (
-      editedConfig.version === config.version &&
-      editedConfig.studyingTime === config.studyingTime &&
-      editedConfig.waitingQuizTime === config.waitingQuizTime &&
-      editedConfig.defaultQuizTime === config.defaultQuizTime &&
-      editedConfig.commissionFee === config.commissionFee &&
-      editedConfig.teacherCommissionFee === config.teacherCommissionFee &&
-      editedConfig.refundedTime === config.refundedTime
+      editedConfig.version === config.version || (
+        (editedConfig.studyingTime === config.studyingTime) &&
+        (editedConfig.waitingQuizTime === config.waitingQuizTime) &&
+        (editedConfig.defaultQuizTime === config.defaultQuizTime) &&
+        (editedConfig.commissionFee === config.commissionFee) &&
+        (editedConfig.teacherCommissionFee === config.teacherCommissionFee) &&
+        (editedConfig.refundedTime === config.refundedTime)
+      )
     );
   };
 
@@ -97,7 +98,7 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
       // If editing an existing config, call the onUpdate function
       onUpdate(editedConfig);
       // add function api here
-      alert(editedConfig.version);
+      // alert(editedConfig.version);
 
       //-- end function update
     } else {
@@ -106,18 +107,18 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
       // add function api here
       alert(
         editedConfig.version +
-          ' ' +
-          editedConfig.projectName +
-          ' ' +
-          !editedConfig.dateCreate +
-          ' ' +
-          editedConfig.studyingTime +
-          ' ' +
-          editedConfig.retryTestTime +
-          ' ' +
-          editedConfig.defaultImage +
-          ' ' +
-          editedConfig.defaultQuizTime,
+        ' ' +
+        editedConfig.projectName +
+        ' ' +
+        !editedConfig.dateCreate +
+        ' ' +
+        editedConfig.studyingTime +
+        ' ' +
+        editedConfig.retryTestTime +
+        ' ' +
+        editedConfig.defaultImage +
+        ' ' +
+        editedConfig.defaultQuizTime,
       );
       //-- end function add new
       clearModal();
@@ -161,7 +162,8 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
             className="p-1 w-50"
             label="Thời gian học mặc định"
             margin="dense"
-            name="staff_id"
+            name="studyingTime"
+            type='number'
             value={editedConfig.studyingTime}
             onChange={(e) => handleInputChange(e, 'studyingTime')}
             variant="filled"
@@ -171,7 +173,8 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
             className="p-1 w-50"
             label="Thời gian hoàn tiền"
             margin="dense"
-            name="created_date"
+            name="refundedTime"
+            type='number'
             value={editedConfig.refundedTime}
             onChange={(e) => handleInputChange(e, 'refundedTime')}
             helperText="Thời gian cho phép hoàn tiền khoá học (ngày)"
@@ -185,7 +188,8 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
             label="Thời gian kiểm tra"
             className="p-1 w-50"
             margin="dense"
-            name="staff_id"
+            name="defaultQuizTime"
+            type='number'
             value={editedConfig.defaultQuizTime}
             onChange={(e) => handleInputChange(e, 'defaultQuizTime')}
             variant="filled"
@@ -196,7 +200,8 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
             className="p-1 w-50"
             label="Thời gian khoá kiểm tra"
             margin="dense"
-            name="staff_id"
+            name="waitingQuizTime"
+            type='number'
             value={editedConfig.waitingQuizTime}
             onChange={(e) => handleInputChange(e, 'waitingQuizTime')}
             variant="filled"
@@ -209,7 +214,8 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
             fullWidth
             margin="dense"
             label="Phí hoa hồng"
-            name="asset"
+            name="commissionFee"
+            type='number'
             value={editedConfig.commissionFee}
             onChange={(e) => handleInputChange(e, 'commissionFee')}
             variant="filled"
@@ -220,7 +226,8 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
             className="p-1 w-50"
             label="Phí xét duyệt"
             margin="dense"
-            name="created_date"
+            name="teacherCommissionFee"
+            type='number'
             value={editedConfig.teacherCommissionFee}
             onChange={(e) => handleInputChange(e, 'teacherCommissionFee')}
             variant="filled"
@@ -243,11 +250,11 @@ const ConfigModal = ({ isOpen, onClose, onSave, onUpdate, config }) => {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button onClick={clearModal} color="primary">
           Huỷ
         </Button>
         <Button
-          disabled={isNotValidInput() || notThingChange()}
+          disabled={isNotValidInput && notThingChange()}
           onClick={handleSave}
           color="primary"
           variant="contained"

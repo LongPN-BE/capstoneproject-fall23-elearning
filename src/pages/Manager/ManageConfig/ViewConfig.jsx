@@ -18,11 +18,14 @@ const ViewConfig = ({ isOpen, onClose, onSave, onUpdate, config }) => {
       setEditedConfig({
         version: config.version,
         projectName: config.projectName,
-        dateCreate: config.dateCreate,
+        dateCreate: moment(config.dateCreate).format("DD-MM-YYYY"),
         studyingTime: config.studyingTime,
-        retryTestTime: config.retryTestTime,
-        defaultImage: config.defaultImage,
+        description: config.description,
+        waitingQuizTime: config.waitingQuizTime,
         defaultQuizTime: config.defaultQuizTime,
+        commissionFee: config.commissionFee,
+        teacherCommissionFee: config.teacherCommissionFee,
+        refundedTime: config.refundedTime,
       });
     } else {
       // Clear the form fields if adding a new config
@@ -82,54 +85,101 @@ const ViewConfig = ({ isOpen, onClose, onSave, onUpdate, config }) => {
         VERSION {editedConfig.version}
       </Typography>
       <div className="d-flex justify-content-center">
-        <DialogTitle>Chi tiết cấu hình</DialogTitle>
+        <DialogTitle>Chi tiết cấu hình - {editedConfig.projectName}</DialogTitle>
       </div>
 
       <DialogContent>
-        <Typography>Mô tả cập nhật: </Typography>
         <TextField
-          helperText=" "
-          value={editedConfig.projectName}
+          disabled={true}
+          className="p-1 w-100"
+          label="Mô tả cập nhật"
+          value={editedConfig.description}
           id="demo-helper-text-aligned-no-helper"
           variant="filled"
           multiline
           minRows={4}
           fullWidth
         />
-        <div className="d-flex row">
-          <div className="col-6">
-            <Typography>Thời gian học mặc định: </Typography>
-            <TextField
-              helperText=" "
-              value={editedConfig.studyingTime}
-              id="demo-helper-text-aligned-no-helper"
-              variant="filled"
-              fullWidth
-            />
-          </div>
-          <div className="col-6">
-            <Typography>Số lần làm quiz mặc định: </Typography>
-            <TextField
-              helperText=" "
-              value={editedConfig.defaultQuizTime}
-              id="demo-helper-text-aligned-no-helper"
-              variant="filled"
-              fullWidth
-            />
-          </div>
+        <div className="d-flex">
+          <TextField
+            disabled={true}
+            className="p-1 w-50"
+            label="Thời gian học mặc định"
+            margin="dense"
+            name="studyingTime"
+            value={editedConfig.studyingTime + ' tháng'}
+            variant="filled"
+          />
+          <TextField
+            disabled={true}
+            className="p-1 w-50"
+            label="Thời gian hoàn tiền"
+            margin="dense"
+            name="refundedTime"
+            value={editedConfig.refundedTime + ' ngày'}
+            variant="filled"
+          />
         </div>
-        <Typography>Ngày tạo: </Typography>
-        <TextField
-          helperText=" "
-          value={moment(editedConfig.dateCreate).format('DD/MM/YYYY, h:mm A')}
-          id="demo-helper-text-aligned-no-helper"
-          variant="filled"
-          fullWidth
-        />
+
+        <div className="d-flex">
+          <TextField
+            disabled={true}
+            fullWidth
+            label="Thời gian kiểm tra"
+            className="p-1 w-50"
+            margin="dense"
+            name="defaultQuizTime"
+            value={editedConfig.defaultQuizTime + ' phút'}
+            variant="filled"
+          />
+          <TextField
+            fullWidth
+            disabled={true}
+            className="p-1 w-50"
+            label="Thời gian khoá kiểm tra"
+            margin="dense"
+            name="waitingQuizTime"
+            value={editedConfig.waitingQuizTime + ' giờ'}
+            variant="filled"
+          />
+        </div>
+        <div className="d-flex">
+          <TextField
+            disabled={true}
+            className="p-1 w-50"
+            fullWidth
+            margin="dense"
+            label="Phí hoa hồng"
+            name="commissionFee"
+            value={editedConfig.commissionFee + ' %'}
+            variant="filled"
+          />
+          <TextField
+            fullWidth
+            disabled={true}
+            className="p-1 w-50"
+            label="Phí xét duyệt"
+            margin="dense"
+            name="teacherCommissionFee"
+            value={editedConfig.teacherCommissionFee + ' %'}
+            variant="filled"
+          />
+        </div>
+        <div className="d-flex">
+          <TextField
+            disabled={true}
+            className="p-1 w-100"
+            label="Ngày tạo"
+            value={editedConfig.dateCreate}
+            id="demo-helper-text-aligned-no-helper"
+            variant="filled"
+            fullWidth
+          />
+        </div>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
-          Close
+        <Button onClick={clearModal} color="primary" variant="contained">
+          Huỷ
         </Button>
       </DialogActions>
     </Dialog>

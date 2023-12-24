@@ -22,9 +22,11 @@ import Cookies from 'js-cookie';
 import { fetchData, postData } from '../../../services/AppService';
 import moment from 'moment/moment';
 import ConfigModal from './ConfigModal';
+import { TablePagination } from '@material-ui/core';
 
 export default function ListConfig() {
   const [data, setData] = useState([]);
+  const [dataSubmit, setDataSubmit] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
   const [configToEdit, setConfigToEdit] = useState(null);
@@ -48,6 +50,7 @@ export default function ListConfig() {
         fetchData('/system-config/configs', token).then((resp) => {
           if (resp) {
             setData(resp);
+            setDataSubmit(resp);
           }
         });
       } catch (error) {
@@ -107,23 +110,29 @@ export default function ListConfig() {
     setIsConfigModalOpen(false); // Close the ConfigModal
   };
 
-  const handleSearchChange = (event) => {
-    const searchInput = event.target.value;
-    setSearchValue(searchInput);
-    // Refilter the data when search input changes
-    filterData(searchInput);
+
+  //search
+  const filterData = dataSubmit.filter(
+    (cconfig) =>
+      cconfig.description.toLowerCase().includes(searchValue.toLowerCase()) ||
+      cconfig.version.toLowerCase().includes(searchValue.toLowerCase())
+  );
+  // State to keep track of the current page and the number of rows per page
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  // Change page
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
 
-  const filterData = (searchInput) => {
-    // Filter data based on both status and search input
-    const filteredData = data.filter((item) => {
-      const searchMatch = searchInput === '' || item.name.toLowerCase().includes(searchInput.toLowerCase());
-      return searchMatch;
-    });
-
-    setData(filteredData);
+  // Change the number of rows per page
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dataSubmit.length) : 0;
   return (
     data && (
       <div className="px-5 py-3" style={{ overflow: 'auto', height: 850 }}>
@@ -288,7 +297,9 @@ export default function ListConfig() {
                 placeholder="Tìm kiếm"
                 style={{ marginLeft: '10px' }}
                 startAdornment={<Search />}
-                onChange={handleSearchChange}
+                onChange={(e) => {
+                  setSearchValue(e.target.value);
+                }}
               />
             </div>
           </div>
@@ -304,7 +315,7 @@ export default function ListConfig() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.map((c, index) => {
+              {filterData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((c, index) => {
                 return (
                   <TableRow hover={true} key={index}>
                     <TableCell style={{ fontWeight: 600, color: '#686f77' }}>{index + 1}</TableCell>
@@ -329,8 +340,23 @@ export default function ListConfig() {
                   </TableRow>
                 );
               })}
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 53 * emptyRows }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
             </TableBody>
           </Table>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25, { label: 'Tất cả', value: -1 }]}
+            component="div"
+            count={filterData.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            labelRowsPerPage="Số hàng trên trang :"
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
         </Paper>
         <ConfigModal
           isOpen={isConfigModalOpen}
