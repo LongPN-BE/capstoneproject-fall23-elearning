@@ -82,7 +82,7 @@ const Navbar = () => {
                 </div>
                 <Divider />
                 <ul>
-                  <Link to="/subjects">
+                  <Link to="/courses">
                     <li>{pendingCourses.length} course(s) waiting for approval.</li>
                   </Link>
                 </ul>

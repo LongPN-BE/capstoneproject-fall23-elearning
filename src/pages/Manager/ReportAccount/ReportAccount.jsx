@@ -96,6 +96,8 @@ const ListFeedback = () => {
                   #
                 </TableCell>
                 <TableCell style={{ color: '#808d99', fontWeight: 700 }}>Ngày gửi</TableCell>
+                <TableCell style={{ color: '#808d99', fontWeight: 700 }}>Người báo cáo</TableCell>
+                <TableCell style={{ color: '#808d99', fontWeight: 700 }}>Người bị báo cáo</TableCell>
                 <TableCell style={{ color: '#808d99', fontWeight: 700 }}>Nội dung</TableCell>
                 <TableCell></TableCell>
               </TableRow>
@@ -109,21 +111,54 @@ const ListFeedback = () => {
                       <TableCell width={'20%'} style={{ fontWeight: 600, color: '#686f77' }}>
                         {moment(r.createTime).format('DD-MM-YYYY')}
                       </TableCell>
+                      {r.reportType === 'STUDENT' ? (
+                        <>
+                          <TableCell style={{ fontWeight: 600, color: '#686f77' }}>
+                            {r.student?.account.profile.lastName} {r.student?.account.profile.firstName} <br />
+                            <Typography variant="caption" color={'#328cb8'}>
+                              (Học viên)
+                            </Typography>
+                          </TableCell>
+
+                          <TableCell style={{ fontWeight: 600, color: '#686f77' }}>
+                            {r.teacher?.account.profile.lastName} {r.teacher?.account.profile.firstName} <br />
+                            <Typography variant="caption" color={'#ffaf00'}>
+                              (Giảng viên)
+                            </Typography>
+                          </TableCell>
+                        </>
+                      ) : (
+                        <>
+                          <TableCell style={{ fontWeight: 600, color: '#686f77' }}>
+                            {r.teacher?.account.profile.lastName} {r.teacher?.account.profile.firstName} <br />
+                            <Typography variant="caption" color={'#ffaf00'}>
+                              (Giảng viên)
+                            </Typography>
+                          </TableCell>
+                          <TableCell style={{ fontWeight: 600, color: '#686f77' }}>
+                            {r.student?.account.profile.lastName} {r.student?.account.profile.firstName} <br />
+                            <Typography variant="caption" color={'#328cb8'}>
+                              (Học viên)
+                            </Typography>
+                          </TableCell>
+                        </>
+                      )}
+
                       <TableCell style={{ fontWeight: 600, color: '#686f77' }}>
                         <div dangerouslySetInnerHTML={{ __html: r.content || '' }} />
                       </TableCell>
 
-                      <TableCell width={'10%'} className="text-center">
+                      {/* <TableCell width={'10%'} className="text-center">
                         <button className="btn " style={{ color: '#686f77', border: 0 }}>
                           <VisibilityRoundedIcon />
                         </button>
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   );
                 })}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6}>Không có dữ liệu</TableCell>
+                  <TableCell colSpan={6}></TableCell>
                 </TableRow>
               )}
             </TableBody>

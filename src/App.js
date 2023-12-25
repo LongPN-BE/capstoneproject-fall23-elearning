@@ -71,6 +71,7 @@ import StaffHeader from './components/StaffLanding/StaffHeader/StaffHeader';
 import StaffNavbar from './components/Dashboard/Navbar/StaffHeader';
 import AccountCard from './components/Account/AccountCard';
 import AccountTabComponent from './components/Account/AccountTabComponent';
+import ManageAllCourse from './pages/Manager/ManageAllCourses/ManageAllCourse';
 
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -169,6 +170,7 @@ const App = () => {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/test" element={<AccountTabComponent isBilling={true} isSecurity={true} />} />
             <Route path="/subjects" element={<ManageSubject />} />
+            <Route path="/courses" element={<ManageAllCourse />} />
             <Route path="/subject/:subjectId/course" element={<CourseBySubject />} />
             <Route path="/subject/:subjectId/course/:courseId/evaluate" element={<ListFeedback />} />
             <Route path="/subject/:subjectId/course/:courseId/syllabus" element={<SyllabusByCourse />} />
