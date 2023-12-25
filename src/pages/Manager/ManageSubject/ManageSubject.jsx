@@ -390,8 +390,8 @@ export default function ListSubject() {
                                           Swal.fire(
                                             'Không đủ điều kiện vô hiệu hóa!',
                                             'Hiện tại đang có ' +
-                                              resp.length +
-                                              ' khóa học thuộc môn này đang hoạt động.',
+                                            resp.length +
+                                            ' khóa học thuộc môn này đang hoạt động.',
                                             'warning',
                                           );
                                         } else {
@@ -513,7 +513,7 @@ export default function ListSubject() {
               onPageChange={handleChangePage}
               labelRowsPerPage="Số hàng trên trang :"
               onRowsPerPageChange={handleChangeRowsPerPage}
-              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+              rowsPerPageOptions={[5, 10, 25, { label: 'Tất cả', value: -1 }]}
             />
           </div>
         </Paper>
