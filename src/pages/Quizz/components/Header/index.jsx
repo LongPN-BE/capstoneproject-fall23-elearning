@@ -8,13 +8,17 @@ import { Link, useParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 function HeaderQuiz({ name, timeMinute, point, due, onAutoSubmit, lesson }) {
-  const { courseId, lessonId, id } = useParams();
+  const { courseId, lessonId, id, syllabusId } = useParams();
   const user = JSON.parse(Cookies.get('user'));
   return (
     <>
       <div className={`d-flex ${classNames(Styles.header__quiz)} align-items-center`}>
         <div style={{ marginLeft: '4rem' }}>
-          <Link to={`/courses/${courseId}/learn/${lessonId}/Quiz/${id}`} style={{ height: '100%' }} className="d-block">
+          <Link
+            to={`/courses/${courseId}/learn/${syllabusId}/${lessonId}/Quiz/${id}`}
+            style={{ height: '100%' }}
+            className="d-block"
+          >
             <Button variant="outlined" startIcon={<ArrowBackIcon />} style={{ border: 'none' }}>
               <Typography variant="subtitle1" style={{ fontWeight: 700 }}>
                 Trở lại
@@ -31,7 +35,7 @@ function HeaderQuiz({ name, timeMinute, point, due, onAutoSubmit, lesson }) {
               {lesson?.name} - {name}
             </Typography>
             <Typography variant="subtitle2">
-              Graded Quiz.• {timeMinute}m • Pass Score {point}/10 total point
+              Thời gian: {timeMinute} phút • Điểm hoàn thành {point}/10
             </Typography>
           </div>
           <div>
@@ -41,7 +45,7 @@ function HeaderQuiz({ name, timeMinute, point, due, onAutoSubmit, lesson }) {
           </div>
           <div>
             <Typography variant="subtitle1">
-              <strong>Due</strong> {due}
+              <strong>Thời gian đến hạn</strong> {due}
             </Typography>
             <Timer timeMinute={timeMinute} onAutoSubmit={onAutoSubmit} />
           </div>

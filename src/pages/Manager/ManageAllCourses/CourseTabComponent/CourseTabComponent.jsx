@@ -38,7 +38,7 @@ function CourseTabComponent({ activeCourses, pendingCourses, deActiveCourses }) 
 
   return (
     <Paper
-      style={{
+      sx={{
         padding: '20px',
         borderRadius: '20px',
         maxHeight: 'max-content',

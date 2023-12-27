@@ -47,6 +47,9 @@ class TeacherReportView {
         if (data) {
             obj = obj || new TeacherReportView();
 
+            if (data.hasOwnProperty('id')) {
+                obj['id'] = ApiClient.convertToType(data['id'], 'Number');
+            }
             if (data.hasOwnProperty('teacherNumber')) {
                 obj['teacherNumber'] = ApiClient.convertToType(data['teacherNumber'], 'String');
             }
@@ -75,6 +78,11 @@ class TeacherReportView {
 }
 
 
+
+/**
+ * @member {Number} id
+ */
+TeacherReportView.prototype['id'] = undefined;
 
 /**
  * @member {String} teacherNumber

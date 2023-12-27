@@ -12,6 +12,12 @@ import Paper from '@mui/material/Paper';
 import moment from 'moment/moment';
 import SearchIcon from '@mui/icons-material/Search';
 import { IconButton, InputBase, TextField, Typography } from '@mui/material';
+import { PATTERN_DATE, PAYMENT_STATUS, PAYMENT_TYPE, formatDate } from '../../../../constant';
+import DateRangePicker from '../../../../components/DateRangePicker';
+import { useContext } from 'react';
+import { FilterContext as StudentFilerContext } from '../../../StudentProfile';
+import Cookies from 'js-cookie';
+import { FilterContext } from '../../../Teacher/TeacherPage';
 
 function createData(transactionId, courseName, price, transactionDate) {
   return {
@@ -107,8 +113,10 @@ EnhancedTableHead.propTypes = {
 };
 
 export default function TableTransactions({ transactions }) {
+  const user = JSON.parse(Cookies.get('user'));
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const { filterPaymentHis, setFilterPaymentHis } = useContext(user?.studentId ? StudentFilerContext : FilterContext);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -127,21 +135,21 @@ export default function TableTransactions({ transactions }) {
       <Paper sx={{ width: '100%', mb: 2 }}>
         <div className="d-flex  justify-content-between align-items-center mx-4 py-3">
           <Typography variant="h6">Lịch sử nạp/rút</Typography>
-          <div>
-            <Paper
-              component="form"
-              sx={{
-                p: '2px 4px',
-                display: 'flex',
-                alignItems: 'center',
-                width: 200,
+          <div style={{ minWidth: '400px' }}>
+            <DateRangePicker
+              onChangeEndDate={(date) => {
+                setFilterPaymentHis({
+                  ...filterPaymentHis,
+                  endDate: date,
+                });
               }}
-            >
-              <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search" inputProps={{ 'aria-label': 'search' }} />
-              <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-                <SearchIcon />
-              </IconButton>
-            </Paper>
+              onChangeStartDate={(date) => {
+                setFilterPaymentHis({
+                  ...filterPaymentHis,
+                  startDate: date,
+                });
+              }}
+            />
           </div>
         </div>
         <hr className="mt-0" />
@@ -157,16 +165,18 @@ export default function TableTransactions({ transactions }) {
                       <TableCell align="center">{row?.cardDetails}</TableCell>
                       <TableCell align="center">{row?.amount.toLocaleString()} VNĐ</TableCell>
                       <TableCell align="center">{row?.paymentMethod}</TableCell>
-                      <TableCell align="center">{row?.paymentHistoryStatus}</TableCell>
-                      <TableCell align="center">{row?.paymentHistoryType}</TableCell>
-                      <TableCell align="center">{moment(row?.transactionDate).format('HH:MM:SS DD/MM/YYYY')}</TableCell>
+                      <TableCell align="center">{PAYMENT_STATUS[row?.paymentHistoryStatus]}</TableCell>
+                      <TableCell align="center">{PAYMENT_TYPE[row?.paymentHistoryType]}</TableCell>
+                      <TableCell align="center">
+                        {formatDate(row?.transactionDate, PATTERN_DATE.HH_MM_SS_DD_MM_YYYY)}
+                      </TableCell>
                     </TableRow>
                   );
                 })}
               </TableBody>
             ) : (
               <tr>
-                <td colspan="4">
+                <td colspan="7">
                   <div
                     className="d-flex  justify-content-center align-items-center"
                     style={{
@@ -176,26 +186,13 @@ export default function TableTransactions({ transactions }) {
                       color: '#384256',
                     }}
                   >
-                    TRANSACTIONS TABLE
+                    Bảng giao dịch
                   </div>
                 </td>
               </tr>
             )}
           </Table>
         </TableContainer>
-        {/* {rows && rows.length > 0 ? (
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={transactions.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        ) : (
-          <></>
-        )} */}
       </Paper>
     </Box>
   );

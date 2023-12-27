@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
@@ -49,38 +49,39 @@ const resourceApi = new ResourceControllerApi(ApiClientSingleton.getInstance());
 const syllabusApi = new SyllabusControllerApi(ApiClientSingleton.getInstance());
 const quizApi = new QuizControllerApi(ApiClientSingleton.getInstance());
 
-function NavBarLesson({ courseId }) {
+function NavBarLesson({ courseId, syllabusId }) {
+  const { lessonId } = useParams();
   const [lessons, setLessons] = useState([]);
   const localtion = useLocation();
-  const [expanded, setExpanded] = useState();
-  const [lessonId, setLessonId] = useState();
+  const [expanded, setExpanded] = useState(lessonId);
+  const [lessonIdSelect, setLessonIdSelect] = useState(lessonId);
   const [resources, setResources] = useState([]);
   const [quiz, setQuiz] = useState([]);
 
   const handleChange = (panel) => (event, newExpanded) => {
-    setLessonId(panel);
+    setLessonIdSelect(panel);
     setExpanded(newExpanded ? panel : false);
   };
 
   useEffect(() => {
-    lessonApi.findLessonByCourseId(courseId, (err, res) => {
+    lessonApi.findLessonBySyllabusId(syllabusId, (err, res) => {
       if (res) {
         setLessons(res);
       }
     });
   }, []);
   useEffect(() => {
-    if (lessonId) {
-      resourceApi.getResourceByLesson(lessonId, (err, res) => {
+    if (lessonIdSelect) {
+      resourceApi.getResourceByLesson(lessonIdSelect, (err, res) => {
         if (res) {
           setResources(res);
         }
       });
-      quizApi.findAllQuizByLessonId(lessonId, (err, res) => {
+      quizApi.findAllQuizByLessonId(lessonIdSelect, { status: 'Active' }, (err, res) => {
         setQuiz(res);
       });
     }
-  }, [lessonId]);
+  }, [lessonId, lessonIdSelect]);
   return (
     <>
       <div>
@@ -101,7 +102,7 @@ function NavBarLesson({ courseId }) {
                       ) : (
                         ''
                       )}
-                      <Link to={`/courses/${courseId}/learn/${data?.id}/${data?.type}`}>
+                      <Link to={`/courses/${courseId}/learn/${syllabusId}/${data?.id}/${data?.type}`}>
                         <strong>{data?.type}</strong>: {data.name}
                       </Link>
                     </div>
@@ -112,7 +113,7 @@ function NavBarLesson({ courseId }) {
                       return (
                         <div className="d-flex align-items-start gap-2">
                           <QuizIcon />
-                          <Link to={`/courses/2/learn/${data.id}/Quiz/${item.id}`}>
+                          <Link to={`/courses/${courseId}/learn/${syllabusId}/${data.id}/Quiz/${item.id}`}>
                             <strong>Quiz</strong>: {item.title}
                           </Link>
                         </div>

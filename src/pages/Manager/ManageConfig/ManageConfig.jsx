@@ -22,7 +22,7 @@ import Cookies from 'js-cookie';
 import { fetchData, postData } from '../../../services/AppService';
 import moment from 'moment/moment';
 import ConfigModal from './ConfigModal';
-import { TablePagination } from '@material-ui/core';
+import { TablePagination } from '@mui/material';
 
 export default function ListConfig() {
   const [data, setData] = useState([]);
@@ -110,12 +110,11 @@ export default function ListConfig() {
     setIsConfigModalOpen(false); // Close the ConfigModal
   };
 
-
   //search
   const filterData = dataSubmit.filter(
     (cconfig) =>
       cconfig.description.toLowerCase().includes(searchValue.toLowerCase()) ||
-      cconfig.version.toLowerCase().includes(searchValue.toLowerCase())
+      cconfig.version.toLowerCase().includes(searchValue.toLowerCase()),
   );
   // State to keep track of the current page and the number of rows per page
   const [page, setPage] = useState(0);

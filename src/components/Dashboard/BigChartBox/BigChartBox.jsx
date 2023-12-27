@@ -8,56 +8,39 @@ import {
 } from "recharts";
 import Styles from "./BigChartBox.module.scss";
 import classNames from "classnames";
+import { formatVND } from "../../../util/Utilities";
 
-const data = [
-  {
-    name: "Sun",
-    books: 4000,
-    clothes: 2400,
-    electronic: 2400,
-  },
-  {
-    name: "Mon",
-    books: 3000,
-    clothes: 1398,
-    electronic: 2210,
-  },
-  {
-    name: "Tue",
-    books: 2000,
-    clothes: 9800,
-    electronic: 2290,
-  },
-  {
-    name: "Wed",
-    books: 2780,
-    clothes: 3908,
-    electronic: 2000,
-  },
-  {
-    name: "Thu",
-    books: 1890,
-    clothes: 4800,
-    electronic: 2181,
-  },
-  {
-    name: "Fri",
-    books: 2390,
-    clothes: 3800,
-    electronic: 2500,
-  },
-  {
-    name: "Sat",
-    books: 3490,
-    clothes: 4300,
-    electronic: 2100,
-  },
-];
+const customLabels = {
+  success: 'Nạp tiền thành công',
+  fail: 'Nạp tiền thất bại',
+  withdraw: 'Rút tiền thành công',
+};
 
-const BigChartBox = () => {
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    const formattedPayload = payload.map(entry => ({
+      ...entry,
+      name: customLabels[entry.dataKey] || entry.dataKey,
+    }));
+
+    return (
+      <div className={Styles.custom__tooltip}>
+        <p className={Styles.label}>{`${label} :`}</p>
+        {formattedPayload.map(entry => (
+          <p key={entry.name} className={Styles.intro}>
+            {`${entry.name} : ${formatVND(entry.value)}`}
+          </p>
+        ))}
+      </div>
+    );
+  }
+
+  return null;
+};
+const BigChartBox = ({ data }) => {
   return (
     <div className={classNames(Styles.bigChartBox)}>
-      <h1>Revenue Analytics</h1>
+      <h2>Biểu đồ biến động số dư trong tháng</h2>
       <div className={classNames(Styles.chart)}>
         <ResponsiveContainer width="99%" height="100%">
           <AreaChart
@@ -65,30 +48,31 @@ const BigChartBox = () => {
             margin={{
               top: 10,
               right: 30,
-              left: 0,
+              left: 20,
               bottom: 0,
             }}
           >
             <XAxis dataKey="name" />
             <YAxis />
-            <Tooltip />
+            <Tooltip content={<CustomTooltip />} />
             <Area
               type="monotone"
-              dataKey="electronic"
+              dataKey="success"
+              stackId="1"
+              stroke="#82ca9d"
+              fill="#82ca9d"
+
+            />
+            <Area
+              type="monotone"
+              dataKey="fail"
               stackId="1"
               stroke="#8884d8"
               fill="#8884d8"
             />
             <Area
               type="monotone"
-              dataKey="clothes"
-              stackId="1"
-              stroke="#82ca9d"
-              fill="#82ca9d"
-            />
-            <Area
-              type="monotone"
-              dataKey="books"
+              dataKey="withdraw"
               stackId="1"
               stroke="#ffc658"
               fill="#ffc658"

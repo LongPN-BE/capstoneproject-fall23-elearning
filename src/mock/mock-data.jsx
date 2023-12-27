@@ -410,6 +410,7 @@ export const chartBoxRevenue = {
         { name: "Sat", revenue: 450 },
     ],
 };
+
 export const chartBoxConversion = {
     color: "gold",
     icon: "/conversionIcon.svg",

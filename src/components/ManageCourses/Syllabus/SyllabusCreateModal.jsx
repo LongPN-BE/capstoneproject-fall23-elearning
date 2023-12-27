@@ -20,10 +20,9 @@ export default function SyllabusCreateModal({ open, onClose, onCreate, isCopied,
             onClose();
         }
         else {
-            onClose();
             Swal.fire({
-                title: "Warning",
-                text: invalidInput,
+                title: "Cảnh báo",
+                text: 'Vui lòng điền đầy đủ thông tin',
                 icon: "warning"
             });
         }
@@ -31,13 +30,23 @@ export default function SyllabusCreateModal({ open, onClose, onCreate, isCopied,
     };
 
     const handleCopy = () => {
-        onCopy(syllabusName)
-        onClose()
+        if (validateInputString(syllabusName)) {
+            onCopy(syllabusName)
+            onClose();
+        }
+        else {
+            Swal.fire({
+                title: "Cảnh báo",
+                text: 'Vui lòng điền đầy đủ thông tin',
+                icon: "warning"
+            });
+        }
+
     }
 
     return (
         <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">{isCopied ? 'Tên khung chương trình copy' : 'Tạo mới khung chương trình'}</DialogTitle>
+            <DialogTitle id="form-dialog-title">{isCopied ? 'Tên khung chương trình sao chép' : 'Tạo mới khung chương trình'}</DialogTitle>
             <DialogContent>
                 <TextField
                     autoFocus
@@ -49,12 +58,12 @@ export default function SyllabusCreateModal({ open, onClose, onCreate, isCopied,
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose} color="primary">
+                <button onClick={onClose} className='btn btn-outline-secondary'>
                     Hủy bỏ
-                </Button>
-                <Button onClick={isCopied ? handleCopy : handleCreate} color="primary">
-                    Tạo mới
-                </Button>
+                </button>
+                <button onClick={isCopied ? handleCopy : handleCreate} className='btn btn-success'>
+                    Tạo
+                </button>
             </DialogActions>
         </Dialog>
     );

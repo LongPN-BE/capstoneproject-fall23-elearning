@@ -5,17 +5,9 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
-  Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Typography,
 } from '@mui/material';
 import moment from 'moment';
-import Cookies from 'js-cookie';
-
-// const userTmp = JSON.parse(Cookies.get('user'));
 
 const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
   useEffect(() => {
@@ -26,7 +18,6 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
         description: subject.description,
         minPrice: subject.minPrice,
         createDate: subject.createDate,
-        // staffId: userTmp.id,
         status: subject.status,
       });
     } else {
@@ -35,7 +26,6 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
         name: '',
         description: '',
         minPrice: '',
-        // staffId: userTmp.id,
         status: false,
       });
     }
@@ -45,11 +35,10 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
     name: '',
     description: '',
     minPrice: '',
-    // staffId: userTmp.id,
     status: false,
   });
 
-  const [editedSubjectError, setEditedSubjectError] = useState({
+  const [editedSubjectError] = useState({
     name: 'Không được để trống hoặc quá dài quá ' + 50 + ' ký tự!',
     description: 'Không được để trống hoặc quá dài quá ' + 150 + ' ký tự!',
     minPrice: 'Không được để trống hoặc giá dưới ' + 100000 + ' VNĐ!',
@@ -62,25 +51,12 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
   };
 
   const handleSave = () => {
-    // if (!editedSubject.name || !editedSubject.description) {
-    //   // Show an error message or handle the validation as needed
-    //   alert('Please fill in all required fields.');
-    //   return;
-    // }
-
     if (subject) {
       // If editing an existing subject, call the onUpdate function
       onUpdate({ ...subject, ...editedSubject });
-      // add function api here
-      // alert(editedSubject.name);
-
-      //-- end function update
     } else {
       // If adding a new subject, call the onSave function
       onSave(editedSubject);
-      // add function api here
-      // alert(editedSubject.name);
-      //-- end function add new
       clearModal();
     }
   };
@@ -91,7 +67,6 @@ const SubjectModal = ({ isOpen, onClose, onSave, onUpdate, subject }) => {
       description: '',
       minPrice: '',
       createDate: new Date(),
-      // staffId: userTmp.id,
       status: false,
     });
 

@@ -9,31 +9,44 @@ import {
     InputLabel,
     MenuItem,
     Select,
+    TextField,
 } from '@material-ui/core';
 import { useEffect } from 'react';
 
-export default function SyllabusUpdateModal({ open, onClose, onUpdate, syllabus }) {
+export default function SyllabusUpdateModal({ open, onClose, onUpdate, syllabus, course }) {
     const [syllabusStatus, setSyllabusStatus] = useState('');
+    const [syllabusName, setSyllabusName] = useState('');
     const [syllabusId, setSyllabusId] = useState(0);
-    // console.log(syllabusStatus);
 
     useEffect(() => {
+        setSyllabusName(syllabus.name)
         setSyllabusStatus(syllabus.status);
         setSyllabusId(syllabus.id);
     }, [syllabus.id]);
 
     const handleUpdate = () => {
-        onUpdate(syllabusId, syllabusStatus);
+        onUpdate(syllabusId, syllabusStatus, syllabusName);
         onClose();
     };
 
     return (
         <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">Tạo mới khung chương trình</DialogTitle>
+            <DialogTitle id="form-dialog-title">Cập nhật khung chương trình</DialogTitle>
             <DialogContent>
                 <FormControl fullWidth>
-                    <InputLabel id="syllabus-status-label">Trạng thái</InputLabel>
+                    {(course?.status !== 'ACTIVE' && course?.status !== 'PENDING') && <TextField
+                        fullWidth
+                        label="Tên khung chương trình"
+                        autoFocus
+                        margin="dense"
+                        name="name"
+                        value={syllabusName}
+                        onChange={(e) => setSyllabusName(e.target.value)}
+                        required
+                    />}
+                    {/* <InputLabel id="syllabus-status-label">Trạng thái</InputLabel> */}
                     <Select
+                        label='Trạng thái'
                         labelId="syllabus-status-label"
                         id="syllabus-status"
                         value={syllabusStatus}
@@ -41,17 +54,17 @@ export default function SyllabusUpdateModal({ open, onClose, onUpdate, syllabus 
                     >
                         {/* <MenuItem value="New">Mới</MenuItem> */}
                         <MenuItem value="Active">Hoạt động</MenuItem>
-                        <MenuItem value="Deactive">Ngưng hoạt động</MenuItem>
+                        <MenuItem value="Deactive">Không hoạt động</MenuItem>
                     </Select>
                 </FormControl>
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose} color="primary">
+                <button onClick={onClose} className='btn btn-outline-secondary'>
                     Hủy bỏ
-                </Button>
-                <Button onClick={handleUpdate} color="primary">
-                    Cập nhật
-                </Button>
+                </button>
+                <button onClick={handleUpdate} className='btn btn-success'>
+                    Tạo mới
+                </button>
             </DialogActions>
         </Dialog>
     );

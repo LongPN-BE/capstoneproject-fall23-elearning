@@ -49,9 +49,6 @@ class SyllabusViewUsedQuestion {
         if (data) {
             obj = obj || new SyllabusViewUsedQuestion();
 
-            if (data.hasOwnProperty('name')) {
-                obj['name'] = ApiClient.convertToType(data['name'], 'String');
-            }
             if (data.hasOwnProperty('status')) {
                 obj['status'] = ApiClient.convertToType(data['status'], 'String');
             }
@@ -74,10 +71,6 @@ class SyllabusViewUsedQuestion {
      * @return {boolean} to indicate whether the JSON data is valid with respect to <code>SyllabusViewUsedQuestion</code>.
      */
     static validateJSON(data) {
-        // ensure the json data is a string
-        if (data['name'] && !(typeof data['name'] === 'string' || data['name'] instanceof String)) {
-            throw new Error("Expected the field `name` to be a primitive type in the JSON string but got " + data['name']);
-        }
         // ensure the json data is a string
         if (data['status'] && !(typeof data['status'] === 'string' || data['status'] instanceof String)) {
             throw new Error("Expected the field `status` to be a primitive type in the JSON string but got " + data['status']);
@@ -104,11 +97,6 @@ class SyllabusViewUsedQuestion {
 }
 
 
-
-/**
- * @member {String} name
- */
-SyllabusViewUsedQuestion.prototype['name'] = undefined;
 
 /**
  * @member {String} status

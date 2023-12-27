@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { vapidKey } from "./Constants";
 import Cookies from "js-cookie";
-import { getStorage } from "firebase/storage";
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBdNnOg_OjNkKsxd3QEAvqDjvgeYWtQUIg",
@@ -66,26 +66,31 @@ export const onMessageListener = () =>
         });
     });
 
-// export const handleImageUpload = (file) => {
-//     const storageRef = app.storage().ref();
-//     const imageRef = storageRef.child(`elearning/video/${Date.now()}`);
-//     const uploadTask = imageRef.put(file);
+export const handleImageUpload = (file) => {
+    // const storageRef = app.storage().ref();
+    // const imageRef = storageRef.child(`elearning/video/${Date.now()}`);
+    const storageRef = ref(storage, `/elearning/text/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
 
-//     return new Promise((resolve, reject) => {
-//         uploadTask.on(
-//             'state_changed',
-//             () => { },
-//             (error) => {
-//                 reject(error);
-//             },
-//             () => {
-//                 uploadTask.snapshot.ref.getDownloadURL().then((url) => {
-//                     resolve(url);
-//                 });
-//             }
-//         );
-//     });
-// };
+    return new Promise((resolve, reject) => {
+        uploadTask.on(
+            'state_changed',
+            () => { },
+            (error) => {
+                reject(error);
+            },
+            () => {
+                // uploadTask.snapshot.ref.getDownloadURL().then((url) => {
+                //     resolve(url);
+                // });
+                getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                    // console.log(url);
+                    resolve(url)
+                });
+            }
+        );
+    });
+};
 
 const storage = getStorage(app);
 export default storage;

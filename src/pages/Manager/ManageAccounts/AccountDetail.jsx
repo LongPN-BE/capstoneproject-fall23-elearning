@@ -45,6 +45,7 @@ const AccountModal = ({ isOpen, onClose, account }) => {
       });
     }
   }, [account]);
+
   return (
     <Dialog open={isOpen} onClose={onClose} maxWidth="sm" fullWidth>
       <div className="d-flex justify-content-sm-between">
@@ -97,38 +98,35 @@ const AccountModal = ({ isOpen, onClose, account }) => {
         </Grid>
       </DialogContent>
       <DialogContent dividers>
-        <Typography variant="inherit">Mô tả: </Typography>
-        <Typography variant="inherit">{editedAccount.description}</Typography> <br />
-        <Divider style={{ height: '3px', color: 'silver' }} />
-        <Typography variant="inherit">Họ và tên: </Typography>
-        <Typography variant="inherit">
-          {' '}
-          {editedAccount.lastName} {editedAccount.firstName}
-        </Typography>{' '}
-        <br />
-        <Divider />
-        <Typography variant="inherit">Email: </Typography>
-        <Typography variant="inherit">{editedAccount.email}</Typography>
-        <br />
-        <Divider />
-        <Typography variant="inherit">Ngày sinh: </Typography>
-        <Typography variant="inherit">{moment(editedAccount.dateOfBirth).format('DD - MM -YYYY')}</Typography>
-        <br />
-        <Divider />
-        <Typography variant="inherit">Điện thoại: </Typography>
-        <Typography variant="inherit">{editedAccount.phone}</Typography>
-        <br />
-        <Divider />
-        <Typography variant="inherit">Địa chỉ: </Typography>
-        <Typography variant="inherit">{editedAccount.address}</Typography>
-        <br />
+        <div style={{ fontSize: '1.2rem' }}>
+          <Typography variant="inherit">Họ và tên: </Typography>
+          <Typography variant="inherit">
+            {' '}
+            {editedAccount.lastName} {editedAccount.firstName}
+          </Typography>{' '}
+          <br />
+          <Typography variant="inherit">Email: </Typography>
+          <Typography variant="inherit">{editedAccount.email}</Typography>   <br />
+          <Typography variant="inherit">Ngày sinh: </Typography>
+          <Typography variant="inherit">{moment(editedAccount.dateOfBirth).format('DD - MM -YYYY')}</Typography>   <br />
+          <Typography variant="inherit">Điện thoại: </Typography>
+          <Typography variant="inherit">{editedAccount.phone}</Typography>   <br />
+          <Typography variant="inherit">Địa chỉ: </Typography>
+          <Typography variant="inherit">{editedAccount.address}</Typography>
+        </div>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
-          Thoát
-        </Button>
+        <div style={{ padding: '1rem' }}>
+          <button onClick={onClose} className="btn px-3"
+            style={{
+              backgroundColor: '#3366FF', color: 'white', width: '7rem',
+              borderRadius: 8, fontWeight: 700
+            }}>
+            Thoát
+          </button>
+        </div>
       </DialogActions>
-    </Dialog>
+    </Dialog >
   );
 };
 

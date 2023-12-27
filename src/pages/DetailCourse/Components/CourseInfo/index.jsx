@@ -36,8 +36,7 @@ function CourseInfo() {
     courseApi.getCourseById(courseId, (error, res) => {
       setCourse(res);
     });
-    syllabusApi.findSyllabusByCourseId(courseId, (err, res) => {
-      console.log(res);
+    syllabusApi.findSyllabusByCourseEnrolled(courseId, (err, res) => {
       setSyllabus(res);
     });
   }, [courseId]);
@@ -85,26 +84,20 @@ function CourseInfo() {
         <Typography variant="h6">Syllabus</Typography>
         <Divider />
         <div>
-          {syllabus?.map((data) => {
-            if (data?.status === 'Active') {
-              return (
-                <>
-                  <Accordion>
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                    >
-                      <Typography>{data?.name}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <LessonInfo lessonsBySyllabus={data?.lessons} />
-                    </AccordionDetails>
-                  </Accordion>
-                </>
-              );
-            }
-          })}
+          {syllabus ? (
+            <>
+              <Accordion>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
+                  <Typography>{syllabus?.name}</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <LessonInfo lessonsBySyllabus={syllabus?.lessons} />
+                </AccordionDetails>
+              </Accordion>
+            </>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </>

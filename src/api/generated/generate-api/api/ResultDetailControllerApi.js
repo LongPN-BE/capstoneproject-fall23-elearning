@@ -13,7 +13,7 @@
 
 
 import ApiClient from "../ApiClient";
-import ResultDetailResultDetailView from '../model/ResultDetailResultDetailView';
+import ResultDetailResponseResultDetailView from '../model/ResultDetailResponseResultDetailView';
 
 /**
 * ResultDetailController service.
@@ -38,14 +38,14 @@ export default class ResultDetailControllerApi {
      * Callback function to receive the result of the findAllByResultQuiz operation.
      * @callback module:api/ResultDetailControllerApi~findAllByResultQuizCallback
      * @param {String} error Error message, if any.
-     * @param {Array.<module:model/ResultDetailResultDetailView>} data The data returned by the service call.
+     * @param {Array.<module:model/ResultDetailResponseResultDetailView>} data The data returned by the service call.
      * @param {String} response The complete HTTP response.
      */
 
     /**
      * @param {Number} resultQuizId 
      * @param {module:api/ResultDetailControllerApi~findAllByResultQuizCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link Array.<module:model/ResultDetailResultDetailView>}
+     * data is of type: {@link Array.<module:model/ResultDetailResponseResultDetailView>}
      */
     findAllByResultQuiz(resultQuizId, callback) {
       let postBody = null;
@@ -67,7 +67,7 @@ export default class ResultDetailControllerApi {
       let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
-      let returnType = [ResultDetailResultDetailView];
+      let returnType = [ResultDetailResponseResultDetailView];
       return this.apiClient.callApi(
         '/api/v1/result-detail/by-result-quiz', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,

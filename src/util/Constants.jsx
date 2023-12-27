@@ -15,10 +15,8 @@ import PaidIcon from '@mui/icons-material/Paid';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ReportIcon from '@mui/icons-material/Report';
-import SubjectRoundedIcon from '@mui/icons-material/SubjectRounded';
-import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalanceRounded';
-import ReceiptLongRoundedIcon from '@mui/icons-material/ReceiptLongRounded';
-import BarChartRoundedIcon from '@mui/icons-material/BarChartRounded';
+import ListRoundedIcon from '@mui/icons-material/ListRounded';
+import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 
 export const DISPLAY_LOADING = 'DISPLAY_LOADING';
 export const HIDE_LOADING = 'HIDE_LOADING';
@@ -41,15 +39,10 @@ export const navData = {
   ],
   teacher: [
     {
-      label: 'Dashboard',
+      label: 'Thống kê',
       icon: <GridViewRoundedIcon />,
       path: '/',
     },
-    // {
-    //     label: 'Quản lý khóa học',
-    //     icon: <ListCourseIcon />,
-    //     path: '/subjects',
-    // },
     {
       label: 'Quản lý khóa học',
       icon: <ListCourseIcon />,
@@ -90,80 +83,13 @@ export const navData = {
   ],
   staff: [
     {
-      label: 'Biểu đồ',
-      icon: <BarChartRoundedIcon />,
-      path: '/dashboard',
-    },
-    // {
-    //   label: 'Quản lý tài khoản',
-    //   icon: <GridViewRoundedIcon />,
-    //   subItems: [
-    //     {
-    //       label: 'Tài khoản',
-    //       icon: <PeopleAltIcon />,
-    //       path: '/accounts',
-    //     },
-    //     {
-    //       label: 'Báo cáo',
-    //       icon: <ReportIcon />,
-    //       path: '/report-accounts',
-    //     },
-    //   ],
-    // },
-    {
-      label: 'Quản lý môn học',
-      icon: <SubjectRoundedIcon />,
-      subItems: [
-        {
-          label: 'Môn học',
-          icon: <BookRoundedIcon />,
-          path: '/subjects',
-        },
-        // {
-        //   label: 'Báo cáo',
-        //   icon: <ReportIcon />,
-        //   path: '/report-accounts',
-        // },
-      ],
-    },
-    {
-      label: 'Quản lý tài chính',
-      icon: <AccountBalanceRoundedIcon />,
-      subItems: [
-        {
-          label: 'Lịch sử giao dịch',
-          icon: <ReceiptLongRoundedIcon />,
-          path: '/transactions',
-        },
-        {
-          label: 'Lịch sử thanh toán',
-          icon: <PaidIcon />,
-          path: '/payments',
-        },
-        // {
-        //   label: 'Duyệt tiền',
-        //   icon: <PaidIcon />,
-        //   path: '/transaction-aprroved',
-        // },
-      ],
-    },
-    // {
-    //   label: 'Cấu hình hệ thống',
-    //   icon: <SettingsIcon />,
-    //   path: '/configs',
-    // },
-    // Add more manager-specific items
-  ],
-
-  admin: [
-    {
       label: 'Dashboard',
       icon: <GridViewRoundedIcon />,
       path: '/dashboard',
     },
     {
       label: 'Quản lý tài khoản',
-      icon: <GridViewRoundedIcon />,
+      icon: <AccountCircleRoundedIcon />,
       subItems: [
         {
           label: 'Tài khoản',
@@ -178,10 +104,78 @@ export const navData = {
       ],
     },
     {
+      label: 'Quản lý khoá học',
+      icon: <ListCourseIcon />,
+      subItems: [
+        {
+          label: 'Theo chủ đề',
+          icon: <BookRoundedIcon />,
+          path: '/subjects',
+        },
+        {
+          label: 'Tất cả khoá học',
+          icon: <ListRoundedIcon />,
+          path: '/courses',
+        },
+      ],
+    },
+    {
+      label: 'Quản lý tài chính',
+      icon: <AccountBalanceIcon />,
+      subItems: [
+        {
+          label: 'Lịch sử giao dịch',
+          icon: <ReceiptIcon />,
+          path: '/transactions',
+        },
+        {
+          label: 'Lịch sử thanh toán',
+          icon: <PaidIcon />,
+          path: '/payments',
+        },
+        // {
+        //   label: 'Duyệt tiền',
+        //   icon: <PaidIcon />,
+        //   path: '/transaction-aprroved',
+        // },
+      ],
+    },
+    {
       label: 'Cấu hình hệ thống',
       icon: <SettingsIcon />,
       path: '/configs',
     },
+    // Add more manager-specific items
+  ],
+
+  admin: [
+    // {
+    //   label: 'Dashboard',
+    //   icon: <GridViewRoundedIcon />,
+    //   path: '/dashboard',
+    // },
+    {
+      label: 'Quản lý tài khoản',
+      icon: <GridViewRoundedIcon />,
+      subItems: [
+        {
+          label: 'Tài khoản',
+          icon: <PeopleAltIcon />,
+          path: '/accounts',
+        },
+        // {
+        //   label: 'Báo cáo',
+        //   icon: <ReportIcon />,
+        //   path: '/report-accounts',
+        // },
+      ],
+    },
+
+    // {
+    //   label: 'Cấu hình hệ thống',
+    //   icon: <SettingsIcon />,
+    //   path: '/configs',
+    // },
     // Add more manager-specific items
   ],
 };
@@ -216,8 +210,7 @@ export const rating = [
 
 export const vapidKey = 'BNuvvPsZSm3fWGQXoH5-jar9X-tfA1a6ux3usC1ESFl5bsvc2FaZP4vLsk9lvCXDvlOpO-w1jBphfUy7_uszC9k';
 
-export const invalidInput = 'number should positive and string should not be empty';
+export const invalidInput = 'Vui lòng điền đầy đủ thông tin và số phải lớn hơn 0';
 export const YOUR_SERVICE_ID = 'service_dv0ty7g';
 export const YOUR_TEMPLATE_ID = 'template_c59dohj';
-export const YOUR_TEMPLATE_CONTACT_US_ID = 'template_njkn4aq';
 export const YOUR_USER_ID = 'tClgm4YE7q5l8m6Vz';

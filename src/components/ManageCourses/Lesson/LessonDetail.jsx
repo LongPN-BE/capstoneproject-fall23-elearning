@@ -13,9 +13,10 @@ import {
     MenuItem,
     TextField,
     TablePagination,
+    Tooltip,
 } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import QuizModal from '../Quiz/QuizModal';
 import Cookies from 'js-cookie';
 import { fetchData, postData } from '../../../services/AppService';
@@ -23,6 +24,14 @@ import CreateQuizModal from '../Quiz/CreateQuizModal';
 import { sortByID, validateInputDigits, validateInputString } from '../../../util/Utilities';
 import Swal from 'sweetalert2';
 import { invalidInput } from '../../../util/Constants';
+import QuizDetailModal from '../Quiz/QuizDetailModal';
+import CustomBreadcrumbs from '../../Breadcrumbs';
+import ColorLabel, { dangerColor, primaryColor } from '../../../util/ColorLabel/ColorLabel';
+import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
+import StickyNote2Icon from '@mui/icons-material/StickyNote2';
+import { StickyNote2Outlined } from '@mui/icons-material';
 
 export default function LessonDetail() {
     const { courseId, syllabusId, lessonId } = useParams();
@@ -32,10 +41,25 @@ export default function LessonDetail() {
     const [filteredData, setFilteredData] = useState([]);
     const [totalQuiz, setTotalQuiz] = useState(0)
     const [openQuiz, setOpenQuiz] = useState(false);
+    const [openQuizDetail, setOpenQuizDetail] = useState(false);
+    const [quizId, setQuizId] = useState();
+    const [course, setCourse] = useState()
+    const [syllabus, setSyllabus] = useState()
+    const [quiz, setQuiz] = useState();
 
     useEffect(() => {
         const token = Cookies.get('token');
         if (token) {
+            fetchData(`/course/byId?id=${courseId}`, token).then(resp => {
+                if (resp) {
+                    setCourse(resp)
+                }
+            })
+            fetchData(`/syllabus/byId?id=${syllabusId}`, token).then(resp => {
+                if (resp) {
+                    setSyllabus(resp)
+                }
+            })
             fetchData(`/quiz/byLesson?lesson_id=${lessonId}`, token).then(resp => {
                 if (resp) {
                     const quizList = sortByID(resp)
@@ -80,6 +104,11 @@ export default function LessonDetail() {
         setOpenQuiz(false);
     };
 
+    const handleUpdateQuiz = (quiz) => {
+        setOpenQuiz(true);
+        setQuiz(quiz)
+    }
+
     const handleSaveQuiz = async (formData) => {
         const token = Cookies.get('token')
         if (token) {
@@ -87,11 +116,12 @@ export default function LessonDetail() {
             const validDigit = validateInputDigits(formData.passScore, formData.duration, formData.allowAttempt, formData.proportion)
             if (validDigit && validString) {
                 const body = {
+                    ...formData,
                     title: formData.title,
                     passScore: parseInt(formData.passScore),
                     status: formData.status,
                     duration: parseInt(formData.duration),
-                    dateRange: 0,
+                    dateRange: parseInt(formData.dateRange),
                     allowAttempt: parseInt(formData.allowAttempt),
                     proportion: parseInt(formData.proportion),
                     lessonId: parseInt(lessonId)
@@ -104,7 +134,7 @@ export default function LessonDetail() {
             } else {
                 handleCloseQuiz()
                 Swal.fire({
-                    title: "Warning",
+                    title: "Cảnh báo",
                     text: invalidInput,
                     icon: "warning"
                 });
@@ -129,16 +159,41 @@ export default function LessonDetail() {
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filterData.length) : 0
 
+    const breadcrumbItems = [
+        {
+            url: '/',
+            label: 'Trang chủ',
+        },
+        {
+            url: `/manage-course`,
+            label: `Quản lý khóa học`,
+        },
+        {
+            url: `/courses/` + courseId,
+            label: course?.name,
+        },
+        {
+            url: `/courses/` + courseId + `/syllabus/` + syllabusId,
+            label: syllabus?.name,
+        },
+        {
+            url: `/courses/` + courseId + `/syllabus/` + syllabusId + `/lessons/` + lessonId,
+            label: 'Danh sách bài kiểm tra',
+        },
+    ];
+
+    const navigate = useNavigate()
 
     return (
         data && (
             <div className="m-5">
                 <div style={{ margin: '20px' }}>
                     <Paper style={{ padding: '20px' }}>
-                        <Typography variant="body1" style={{ color: 'darkblue' }}>
+                        {/* <Typography variant="body1" style={{ color: 'darkblue' }}>
                             <Link to={'/'}>Trang chủ </Link>{'>'} <Link to={'/manage-course'}>Quản lý khóa học </Link>{'>'} <Link to={`/courses/${courseId}`}>Khóa học {courseId} </Link>
                             {'>'} <Link to={`/courses/${courseId}/syllabus/${syllabusId}`}>Khung chương trình {syllabusId} </Link>{'>'} Bài học {lessonId} {'>'} Danh sách bài kiểm tra
-                        </Typography>
+                        </Typography> */}
+                        <CustomBreadcrumbs items={breadcrumbItems} />
                         <div style={{ marginTop: '20px' }} className='d-flex align-items-center'>
                             <TextField
                                 label="Tổng số bài kiểm tra"
@@ -149,14 +204,14 @@ export default function LessonDetail() {
 
                         </div>
 
-                        <div style={{ marginTop: '20px' }}>
-                            <Button variant="outlined" onClick={() => setOpenQuiz(true)}>
+                        {(course?.status !== 'ACTIVE' && course?.status !== 'PENDING') && <div style={{ marginTop: '20px' }}>
+                            <button className='btn btn-success' onClick={() => {
+                                setOpenQuiz(true)
+                                setQuiz(null)
+                            }}>
                                 Tạo bài kiểm tra
-                            </Button>
-                            {/* <Button variant="outlined" className='mx-3' onClick={openBankModal}>
-                                Thêm từ ngân hàng câu hỏi
-                            </Button> */}
-                        </div>
+                            </button>
+                        </div>}
 
 
                         <div
@@ -165,7 +220,7 @@ export default function LessonDetail() {
                         >
                             <Typography variant="h6">Danh sách bài kiểm tra</Typography>
                             <InputBase
-                                placeholder="Search"
+                                placeholder="Tìm kiếm bằng tên"
                                 style={{ marginLeft: '20px' }}
                                 startAdornment={<Search />}
                                 onChange={handleSearchChange}
@@ -207,28 +262,46 @@ export default function LessonDetail() {
                                                 <TableCell>{s.duration}</TableCell>
                                                 {/* <TableCell>{s.dateRange}</TableCell> */}
                                                 <TableCell>{s.allowAttempt}</TableCell>
-                                                <TableCell>{s.status}</TableCell>
+                                                <TableCell>{s.status === 'Active' ? <ColorLabel text={'Hoạt động'} color={primaryColor} /> : <ColorLabel text={'Không hoạt động'} color={dangerColor} />}</TableCell>
                                                 <TableCell>
-                                                    <Link className="btn btn-outline-secondary" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${lessonId}/quiz/${s.id}`}>
-                                                        Chi tiết
-                                                    </Link>
-                                                    {'Deactive' === s.status && <Link className="btn btn-outline-secondary mx-2" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${lessonId}/quiz/${s.id}/questions`}>
-                                                        Thêm câu hỏi
-                                                    </Link>}
+                                                    <Tooltip title="Chi tiết">
+                                                        <button className='mx-2'
+                                                            style={{ border: 'none', background: 'none' }}
+                                                            onClick={() => {
+                                                                setOpenQuizDetail(true)
+                                                                setQuizId(s.id)
+                                                            }}>
+                                                            <VisibilityIcon color='disabled' />
+                                                        </button>
+                                                    </Tooltip>
+                                                    <Tooltip title=" Kết quả làm bài của sinh viên">
+                                                        <button className='mx-2' style={{ border: 'none', background: 'none' }} onClick={() => navigate(`/courses/${courseId}/syllabus/${syllabusId}/lessons/${lessonId}/quiz/${s.id}`)}>
+                                                            <QuestionAnswerIcon color='primary' />
+                                                        </button>
+                                                    </Tooltip>
+                                                    {'Deactive' === s.status &&
+                                                        <>
+                                                            <Tooltip title=" Thêm câu hỏi">
+                                                                <button style={{ border: 'none', background: 'none' }} className='mx-2' onClick={() => navigate(`/courses/${courseId}/syllabus/${syllabusId}/lessons/${lessonId}/quiz/${s.id}/questions`)}>
+                                                                    <StickyNote2Icon color='success' />
+                                                                </button>
+                                                            </Tooltip>
+                                                            <Tooltip title="Chỉnh sửa">
+                                                                <button style={{ border: 'none', background: 'none' }} className='mx-2' onClick={() => handleUpdateQuiz(s)}>
+                                                                    <EditIcon color='disabled' />
+                                                                </button>
+                                                            </Tooltip>
+                                                        </>}
                                                 </TableCell>
                                             </TableRow>
-                                            {/* {emptyRows > 0 && (
-                                                <TableRow style={{ height: 53 * emptyRows }}>
-                                                    <TableCell colSpan={6} />
-                                                </TableRow>
-                                            )} */}
                                         </>
                                     );
                                 })}
                             </TableBody>
                         </Table>
                         <TablePagination
-                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                            labelRowsPerPage="Số hàng trên trang :"
+                            rowsPerPageOptions={[5, 10, 25]}
                             component="div"
                             count={filteredData?.length}
                             rowsPerPage={rowsPerPage}
@@ -239,7 +312,8 @@ export default function LessonDetail() {
                     </Paper>
                 </div>
                 <QuizModal isOpen={open} onClose={handleClose} />
-                <CreateQuizModal open={openQuiz} onClose={handleCloseQuiz} onSave={handleSaveQuiz} />
+                <CreateQuizModal open={openQuiz} onClose={handleCloseQuiz} onSave={handleSaveQuiz} data={quiz} />
+                <QuizDetailModal isOpen={openQuizDetail} onClose={() => setOpenQuizDetail(false)} quizId={quizId} />
             </div>
         )
     );

@@ -15,7 +15,6 @@
 import ApiClient from "../ApiClient";
 import ReportReportView from '../model/ReportReportView';
 import ReportRequestReportView from '../model/ReportRequestReportView';
-import ResponseDTOListReport from '../model/ResponseDTOListReport';
 import ResponseDTOListReportReportView from '../model/ResponseDTOListReportReportView';
 
 /**
@@ -41,13 +40,13 @@ export default class ReportControllerApi {
      * Callback function to receive the result of the getAllReport operation.
      * @callback module:api/ReportControllerApi~getAllReportCallback
      * @param {String} error Error message, if any.
-     * @param {module:model/ResponseDTOListReport} data The data returned by the service call.
+     * @param {module:model/ResponseDTOListReportReportView} data The data returned by the service call.
      * @param {String} response The complete HTTP response.
      */
 
     /**
      * @param {module:api/ReportControllerApi~getAllReportCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/ResponseDTOListReport}
+     * data is of type: {@link module:model/ResponseDTOListReportReportView}
      */
     getAllReport(callback) {
       let postBody = null;
@@ -64,7 +63,7 @@ export default class ReportControllerApi {
       let authNames = ['Bearer'];
       let contentTypes = [];
       let accepts = ['*/*'];
-      let returnType = ResponseDTOListReport;
+      let returnType = ResponseDTOListReportReportView;
       return this.apiClient.callApi(
         '/api/v1/report/reports', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,

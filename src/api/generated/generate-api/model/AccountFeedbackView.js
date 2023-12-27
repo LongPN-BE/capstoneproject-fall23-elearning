@@ -69,9 +69,6 @@ class AccountFeedbackView {
             if (data.hasOwnProperty('active')) {
                 obj['active'] = ApiClient.convertToType(data['active'], 'Boolean');
             }
-            if (data.hasOwnProperty('authorities')) {
-                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthorityFeedbackView]);
-            }
             if (data.hasOwnProperty('accountNonExpired')) {
                 obj['accountNonExpired'] = ApiClient.convertToType(data['accountNonExpired'], 'Boolean');
             }
@@ -80,6 +77,9 @@ class AccountFeedbackView {
             }
             if (data.hasOwnProperty('accountNonLocked')) {
                 obj['accountNonLocked'] = ApiClient.convertToType(data['accountNonLocked'], 'Boolean');
+            }
+            if (data.hasOwnProperty('authorities')) {
+                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthorityFeedbackView]);
             }
             if (data.hasOwnProperty('enabled')) {
                 obj['enabled'] = ApiClient.convertToType(data['enabled'], 'Boolean');
@@ -161,11 +161,6 @@ AccountFeedbackView.prototype['role'] = undefined;
 AccountFeedbackView.prototype['active'] = undefined;
 
 /**
- * @member {Array.<module:model/GrantedAuthorityFeedbackView>} authorities
- */
-AccountFeedbackView.prototype['authorities'] = undefined;
-
-/**
  * @member {Boolean} accountNonExpired
  */
 AccountFeedbackView.prototype['accountNonExpired'] = undefined;
@@ -179,6 +174,11 @@ AccountFeedbackView.prototype['credentialsNonExpired'] = undefined;
  * @member {Boolean} accountNonLocked
  */
 AccountFeedbackView.prototype['accountNonLocked'] = undefined;
+
+/**
+ * @member {Array.<module:model/GrantedAuthorityFeedbackView>} authorities
+ */
+AccountFeedbackView.prototype['authorities'] = undefined;
 
 /**
  * @member {Boolean} enabled

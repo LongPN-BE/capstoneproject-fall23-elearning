@@ -12,183 +12,151 @@ import Cookies from 'js-cookie';
 import { Calendar, DateRangePicker } from 'react-date-range';
 import moment from 'moment';
 import { useEffect } from 'react';
-import { isInRange, isInteger, validateInputDigits, validateInputString } from '../../../util/Utilities';
+import { isInRange, isInRangePercent, isInteger, validateInputDigits, validateInputString } from '../../../util/Utilities';
 import Swal from 'sweetalert2';
 
 function CreateQuizModal({ open, onClose, data, onSave }) {
-    const [formData, setFormData] = useState({ ...data });
+  const [formData, setFormData] = useState({ ...data });
 
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
-
-    useEffect(() => {
-        if (!data) {
-            setFormData({
-                title: "",
-                passScore: 0,
-                status: 'Deactive',
-                duration: 0,
-                dateRange: "",
-                allowAttempt: 0,
-                proportion: 0
-            })
-        }
-    }, [])
-
-
-    var currentDate = new Date();
-
-    // Set the date to tomorrow
-    currentDate.setDate(currentDate.getDate() + 1);
-    var tomorrowDay = currentDate.getDate();
-    const handleClose = () => {
-        // Get the current date
-
-        setSelectionRange({
-            startDate: new Date(),
-            endDate: new Date(),
-            key: 'selection',
-        })
-        onClose();
-    };
-
-    const [selectionRange, setSelectionRange] = useState({
-        startDate: new Date(),
-        endDate: new Date(),
-        key: 'selection',
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
     });
+  };
 
-    const handleDateRangeChange = (ranges) => {
-        setSelectionRange(ranges.selection);
-    };
+  useEffect(() => {
+    if (!data) {
+      setFormData({
+        title: "",
+        passScore: 0,
+        status: 'Deactive',
+        duration: 0,
+        dateRange: 0,
+        allowAttempt: 0,
+        proportion: 0
+      })
+    } else {
+      setFormData(data)
+    }
+  }, [data])
 
-    const handleSave = () => {
-        const validString = validateInputString(formData.title, formData.dateRange)
-        const validDigit = validateInputDigits(formData.passScore, formData.duration, formData.allowAttempt, formData.proportion)
+  const handleClose = () => {
+    onClose();
+  };
 
 
-        if (!validString && !validDigit) {
-            onClose();
-            Swal.fire({
-                title: "Warning",
-                text: "All field is required",
-                icon: "warning"
-            });
-            return
-        }
-
-        if (!isInteger(formData.duration, formData.allowAttempt, formData.proportion)) {
-            onClose();
-            Swal.fire({
-                title: "Warning",
-                text: "Thời gian học, số lần thi lại, tỉ trọng phải là số nguyên",
-                icon: "warning"
-            });
-            return;
-        }
-
-        if (!isInRange(formData.passScore)) {
-            onClose();
-            Swal.fire({
-                title: "Warning",
-                text: "Chọn điểm trong thang điểm 10",
-                icon: "warning"
-            });
-            return;
-        }
-
-        const formattedStartDate = moment(selectionRange.startDate);
-        const formattedEndDate = moment(selectionRange.endDate);
-        const body = {
-            ...formData,
-            dateRange: formattedEndDate.diff(formattedStartDate, 'days') === 0 ? 1 : formattedEndDate.diff(formattedStartDate, 'days')
-        }
-        onSave(body)
+  const handleSave = () => {
+    const validString = validateInputString(formData.title)
+    const validDigit = validateInputDigits(formData.passScore, formData.duration, formData.allowAttempt, formData.proportion, formData.dateRange)
+    let message = []
+    if (!validString || !validDigit) {
+      message.push("Điền tất cả các trường và số phải lớn hơn 0")
     }
 
-    return (
-        <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Bài kiểm tra</DialogTitle>
-            <DialogContent>
-                <DialogContentText>Điền đày đủ thông tin phía dưới</DialogContentText>
-                <TextField
-                    margin="dense"
-                    label="Tên bài kiểm tra"
-                    type="text"
-                    fullWidth
-                    name="title"
-                    value={formData.title}
-                    onChange={handleChange}
-                />
-                <TextField
-                    margin="dense"
-                    label="Điểm qua môn ( 0 - 10 )"
-                    type="number"
-                    fullWidth
-                    name="passScore"
-                    value={formData.passScore}
-                    InputProps={{ inputProps: { min: 0, max: 10 } }}
-                    onChange={handleChange}
-                />
-                <Select
-                    label="Trạng thái"
-                    fullWidth
-                    name="status"
-                    value={formData.status}
-                    onChange={handleChange}
-                >
-                    {/* <MenuItem value="Active">Active</MenuItem> */}
-                    <MenuItem value="Deactive">Deactive</MenuItem>
-                </Select>
-                <label className='my-2'>Ngày bắt đầu và kết thúc bài học</label><br />
+    if (!isInRangePercent(formData.proportion)) {
+      message.push("Tỷ trọng trong khoảng 1...100")
+    }
+    if (message.length > 0) {
+      // onClose();
+      Swal.fire({
+        title: "Cảnh báo",
+        html: message.join('<br>'),
+        icon: "warning"
+      });
+      return;
+    }
+
+    onSave(formData)
+  }
+  return (
+    formData && <Dialog open={open} onClose={handleClose}>
+      <DialogTitle>Bài kiểm tra</DialogTitle>
+      <DialogContent>
+        <DialogContentText>Điền đầy đủ thông tin phía dưới</DialogContentText>
+        <TextField
+          margin="dense"
+          label="Tên bài kiểm tra"
+          type="text"
+          fullWidth
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+        />
+        <TextField
+          margin="dense"
+          label="Điểm qua bài kiểm tra ( 0 - 10 )"
+          type="number"
+          fullWidth
+          name="passScore"
+          value={formData.passScore}
+          InputProps={{ inputProps: { min: 0, max: 10 } }}
+          onChange={handleChange}
+        />
+        <Select
+          label="Trạng thái"
+          fullWidth
+          name="status"
+          value={formData.status}
+          onChange={handleChange}
+        >
+          {/* <MenuItem value="Active">Active</MenuItem> */}
+          <MenuItem value="Deactive">Deactive</MenuItem>
+        </Select>
+        <TextField
+          margin="dense"
+          label="Thời hạn hoàn thành bài kiểm tra (tuần)"
+          type="number"
+          fullWidth
+          name="dateRange"
+          value={formData.dateRange}
+          onChange={handleChange}
+        />
+        {/* <label className='my-2'>Thời hạn hoàn thành bài kiểm tra (tuần)</label><br />
                 <DateRangePicker
                     ranges={[selectionRange]}
                     onChange={handleDateRangeChange}
-                />
-                <TextField
-                    margin="dense"
-                    label="Thời gian làm bài ( phút ) "
-                    type="number"
-                    fullWidth
-                    name="duration"
-                    value={formData.duration}
-                    onChange={handleChange}
-                />
+                /> */}
+        <TextField
+          margin="dense"
+          label="Thời gian làm bài ( phút ) "
+          type="number"
+          fullWidth
+          name="duration"
+          value={formData.duration}
+          onChange={handleChange}
+        />
 
-                <TextField
-                    margin="dense"
-                    label="Số lần làm bài"
-                    type="number"
-                    fullWidth
-                    name="allowAttempt"
-                    value={formData.allowAttempt}
-                    onChange={handleChange}
-                />
-                <TextField
-                    margin="dense"
-                    label="Tỉ trọng %"
-                    type="number"
-                    fullWidth
-                    name="proportion"
-                    value={formData.proportion}
-                    onChange={handleChange}
-                />
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleSave} color="primary">
-                    Save
-                </Button>
-                <Button onClick={onClose} color="primary">
-                    Cancel
-                </Button>
-            </DialogActions>
-        </Dialog>
-    );
+        <TextField
+          margin="dense"
+          label="Số lần làm bài"
+          type="number"
+          fullWidth
+          name="allowAttempt"
+          value={formData.allowAttempt}
+          onChange={handleChange}
+        />
+        <TextField
+          margin="dense"
+          label="Tỉ trọng %"
+          type="number"
+          fullWidth
+          name="proportion"
+          value={formData.proportion}
+          onChange={handleChange}
+        />
+      </DialogContent>
+      <DialogActions>
+        <button onClick={onClose} className='btn btn-outline-secondary'>
+          Hủy
+        </button>
+        <button onClick={handleSave} className='btn btn-success'>
+          Lưu
+        </button>
+      </DialogActions>
+    </Dialog>
+  );
 }
 
 export default CreateQuizModal;

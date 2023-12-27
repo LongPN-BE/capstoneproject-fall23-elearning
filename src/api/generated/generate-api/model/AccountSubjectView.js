@@ -66,9 +66,6 @@ class AccountSubjectView {
             if (data.hasOwnProperty('active')) {
                 obj['active'] = ApiClient.convertToType(data['active'], 'Boolean');
             }
-            if (data.hasOwnProperty('authorities')) {
-                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthoritySubjectView]);
-            }
             if (data.hasOwnProperty('accountNonExpired')) {
                 obj['accountNonExpired'] = ApiClient.convertToType(data['accountNonExpired'], 'Boolean');
             }
@@ -77,6 +74,9 @@ class AccountSubjectView {
             }
             if (data.hasOwnProperty('accountNonLocked')) {
                 obj['accountNonLocked'] = ApiClient.convertToType(data['accountNonLocked'], 'Boolean');
+            }
+            if (data.hasOwnProperty('authorities')) {
+                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthoritySubjectView]);
             }
             if (data.hasOwnProperty('enabled')) {
                 obj['enabled'] = ApiClient.convertToType(data['enabled'], 'Boolean');
@@ -149,11 +149,6 @@ AccountSubjectView.prototype['role'] = undefined;
 AccountSubjectView.prototype['active'] = undefined;
 
 /**
- * @member {Array.<module:model/GrantedAuthoritySubjectView>} authorities
- */
-AccountSubjectView.prototype['authorities'] = undefined;
-
-/**
  * @member {Boolean} accountNonExpired
  */
 AccountSubjectView.prototype['accountNonExpired'] = undefined;
@@ -167,6 +162,11 @@ AccountSubjectView.prototype['credentialsNonExpired'] = undefined;
  * @member {Boolean} accountNonLocked
  */
 AccountSubjectView.prototype['accountNonLocked'] = undefined;
+
+/**
+ * @member {Array.<module:model/GrantedAuthoritySubjectView>} authorities
+ */
+AccountSubjectView.prototype['authorities'] = undefined;
 
 /**
  * @member {Boolean} enabled

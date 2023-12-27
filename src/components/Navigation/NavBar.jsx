@@ -16,11 +16,11 @@ const NavBar = ({ children }) => {
   const navItems = navData[userRole] || [];
 
   useEffect(() => {
-    const user = JSON.parse(Cookies.get('user'))
+    const user = JSON.parse(Cookies.get('user'));
     if (user) {
-      setUserRole(String(user?.role).toLowerCase())
+      setUserRole(String(user?.role).toLowerCase());
     }
-  }, [])
+  }, []);
 
   const handleLogout = () => {
     Cookies.remove('user');
@@ -30,11 +30,33 @@ const NavBar = ({ children }) => {
 
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
-      <Sidebar className="app">
+      <Sidebar backgroundColor="white" className="app">
         <Menu>
-          <Menu>
+          <Menu
+            menuItemStyles={{
+              button: ({ level, active, disabled }) => {
+                if (level === 0 || level === 1) {
+                  return {
+                    color: disabled ? '#eee' : '#637381',
+                    backgroundColor: active ? '#fff' : undefined,
+                    '&:hover': {
+                      backgroundColor: '#e5e5e5 !important',
+                      color: '#3C454E !important',
+                      borderRadius: '8px !important',
+                    },
+                    '&:focus': {
+                      backgroundColor: '#d3d8ff !important',
+                      color: '#5263ff !important',
+                      borderRadius: '8px !important',
+                    },
+                  };
+                }
+              },
+            }}
+          >
             <MenuItem
-              className="menu1"
+              className="menu1 p-2"
+              style={{ borderRadius: '10px' }}
               icon={
                 <MenuRoundedIcon
                   onClick={() => {
@@ -48,9 +70,17 @@ const NavBar = ({ children }) => {
             {navItems.map((item, index) =>
               // Check if the item has subItems to render submenu
               item.subItems ? (
-                <SubMenu key={index} label={item.label} icon={item.icon}>
+                <SubMenu
+                  className="p-2"
+                  style={{ borderRadius: '10px', fontWeight: 500 }}
+                  key={index}
+                  label={item.label}
+                  icon={item.icon}
+                >
                   {item.subItems.map((subItem, subIndex) => (
                     <MenuItem
+                      className="p-1"
+                      style={{ borderRadius: '10px', fontWeight: 500 }}
                       key={subIndex}
                       icon={subItem.icon}
                       component={<Link to={subItem.path} className="link" />}
@@ -60,14 +90,25 @@ const NavBar = ({ children }) => {
                   ))}
                 </SubMenu>
               ) : (
-                <MenuItem key={index} icon={item.icon} component={<Link to={item.path} className="link" />}>
+                <MenuItem
+                  className="p-2"
+                  style={{ borderRadius: '10px', fontWeight: 500 }}
+                  key={index}
+                  icon={item.icon}
+                  component={<Link to={item.path} className="link" />}
+                >
                   {item.label}
                 </MenuItem>
               ),
             )}
-            <MenuItem icon={<LogoutRoundedIcon />} onClick={handleLogout}>
+            <MenuItem
+              className="p-2"
+              style={{ borderRadius: '10px', fontWeight: 500 }}
+              icon={<LogoutRoundedIcon />}
+              onClick={handleLogout}
+            >
               {' '}
-              Logout{' '}
+              Đăng xuất{' '}
             </MenuItem>
           </Menu>
         </Menu>

@@ -11,9 +11,23 @@ import {
     TableRow,
     TextField,
     TablePagination,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Grid,
+    FormControl,
+    InputLabel,
+    Select,
+    TableContainer,
+    FormLabel,
+    RadioGroup,
+    Radio,
+    FormControlLabel,
+    Tooltip,
 } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import SyllabusUpdateModal from '../SysllabusModal/SyllabusUpdateModal';
 // import LessonModal from '../../Lesson/LessonModal'; // Import the LessonModal component
 import { lessonSyllabus, lessonsData, syllabusData } from '../../../../mock/mock-data';
@@ -26,6 +40,12 @@ import moment from 'moment/moment';
 import ListLessonModal from '../../Lesson/ListLessonModal';
 import { sortByID } from '../../../../util/Utilities';
 import Swal from 'sweetalert2';
+import CustomBreadcrumbs from '../../../Breadcrumbs/index.jsx';
+import QuizIcon from '@mui/icons-material/Quiz';
+import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
+import ColorLabel, { dangerColor, primaryColor } from '../../../../util/ColorLabel/ColorLabel.jsx';
 
 export default function SyllabusDetail() {
     const { courseId, syllabusId } = useParams();
@@ -37,33 +57,54 @@ export default function SyllabusDetail() {
     const [lessonToEdit, setLessonToEdit] = useState(null);
     const [loading, setLoading] = useState(false)
     const [searchData, setSearchData] = useState(null);
+    const [openSyllabusActiveModal, setOpenSyllabusActiveModal] = useState(false);
+    const [listSyllabus, setListSyllabus] = useState()
+    const [syllabusDeletedId, setSyllabusDeletedId] = useState();
 
-    const handleUpdateSyllabus = async (id, status) => {
+    const handleUpdateSyllabus = async (id, status, name) => {
         const token = Cookies.get('token')
         if (token) {
+
             await fetchData(`/syllabus/byCourseId?course_id=${courseId}`, token).then(resp => {
+                console.log(status);
                 if (resp) {
-                    const isExist = resp.find(r => r.status === 'Active')
-                    if (isExist === undefined && status == 'Active' || status == 'Deactive') {
-                        // Close the syllabus edit modal
-                        const lessons = syllabus?.lessons.map(s => s.id)
-                        const body = {
-                            ...syllabus,
-                            status: status,
-                            courseId: courseId,
-                            lessonIds: lessons
+                    if (status == 'Deactive') {
+                        const isExist = resp.filter(r => r.status !== 'Active')
+                        if (isExist && isExist.length > 0) {
+                            setSyllabusDeletedId(id)
+                            setOpenSyllabusActiveModal(true)
+                            setListSyllabus(isExist)
+                        } else {
+                            Swal.fire({
+                                title: "Cảnh báo",
+                                text: "Không thể đổi trạng thái vì không có khung chương trình thay thế ( bắt buộc có một khung chương trình hoạt động )",
+                                icon: "warning"
+                            });
                         }
-                        postData('/syllabus/save', body, token).then(resp => {
-                            if (resp) {
-                                window.location.reload()
-                            }
-                        })
                     } else {
-                        Swal.fire({
-                            title: "Warning",
-                            text: "There is only one syllabus active at the moment",
-                            icon: "warning"
-                        });
+                        const isExist = resp.filter(r => r.status === 'Active')
+                        if (isExist && isExist.length < 1) {
+                            // setSyllabusDeletedId(id)
+                            // setOpenSyllabusActiveModal(true)
+                            // setListSyllabus(isExist)
+                            fetchData(`/syllabus/byId?id=${id}`, token).then(resp => {
+                                if (resp) {
+                                    const lessonIds = resp.lessons.map(l => { return l.id })
+                                    const body = { ...resp, status: status, name: name, lessonIds: lessonIds, courseId: resp.course.id }
+                                    postData(`/syllabus/save`, body, token).then(resp => {
+                                        if (resp) {
+                                            window.location.reload()
+                                        }
+                                    })
+                                }
+                            })
+                        } else {
+                            Swal.fire({
+                                title: "Cảnh báo",
+                                text: "Đã có một khung chương trình đang hoạt động ( tại một thời điểm chỉ có 1 khung chương trình hoạt động )",
+                                icon: "warning"
+                            });
+                        }
                     }
                 }
             })
@@ -107,21 +148,29 @@ export default function SyllabusDetail() {
                 if (lessonData.id !== null && lessonData.id !== undefined) {
                     // Implement your update logic here.
                     console.log('Lesson data to update:', lessonData);
-                    const body = {
-                        ...lessonData,
-                        dateTime: moment(new Date()),
-                        courseId: parseInt(courseId) // Assuming courseId is defined
-                    };
+                    await fetchData(`/lesson/byId?id=${lessonData.id}`, token).then(resp => {
+                        if (resp) {
+                            const syllabusIds = resp.syllabuses.map(s => { return s.id.toString() })
+                            const body = {
+                                ...lessonData,
+                                dateTime: moment(new Date()),
+                                type: lessonData?.url.trim() !== '' ? 'video' : 'reading',
+                                courseId: parseInt(courseId), // Assuming courseId is defined
+                                syllabusIds: syllabusIds
+                            };
 
-                    await postData('/lesson/save', body, token)
-                        .then(resp => {
-                            if (resp) {
-                                window.location.reload();
-                            }
-                        })
-                        .catch(err => {
-                            console.log(err);
-                        });
+                            postData('/lesson/save', body, token)
+                                .then(resp => {
+                                    if (resp) {
+                                        window.location.reload();
+                                    }
+                                })
+                                .catch(err => {
+                                    console.log(err);
+                                });
+                        }
+                    })
+
                 } else {
                     // Implement your create logic here for new lessons.
                     // console.log('Lesson data to save', lessonData);
@@ -130,11 +179,11 @@ export default function SyllabusDetail() {
                         ...lessonData,
                         id: 0,
                         dateTime: moment(new Date()),
-                        type: lessonData?.url ? 'video' : 'reading',
+                        type: lessonData?.url.trim() !== '' ? 'video' : 'reading',
                         courseId: parseInt(courseId), // Assuming courseId is defined
                         syllabusIds: arrSyllabus
                     };
-
+                    // console.log(body);
                     await postData('/lesson/save', body, token)
                         .then(resp => {
                             if (resp) {
@@ -164,11 +213,17 @@ export default function SyllabusDetail() {
         }
     };
 
+    const [course, setCourse] = useState();
 
     useEffect(() => {
         const token = Cookies.get('token')
         setLoading(true)
         if (token) {
+            fetchData(`/course/byId?id=${courseId}`, token).then(resp => {
+                if (resp) {
+                    setCourse(resp)
+                }
+            })
             fetchData(`/syllabus/byId?id=${syllabusId}`, token).then(resp => {
                 if (resp) {
                     setSyllabus(resp);
@@ -247,6 +302,59 @@ export default function SyllabusDetail() {
 
     const emptyRows = searchData ? page > 0 ? Math.max(0, (1 + page) * rowsPerPage - searchData.length) : 0 : page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
+    const handleChangeSyllabus = async () => {
+        const token = Cookies.get('token');
+        if (token) {
+            await fetchData(`/syllabus/byId?id=${syllabusDeletedId}`, token).then(resp => {
+                if (resp) {
+                    const lessonIds = resp.lessons.map(l => { return l.id })
+                    const body = { ...resp, status: 'Deactive', courseId: resp.course.id, lessonIds: lessonIds }
+                    postData('/syllabus/save', body, token).then(resp => {
+                        if (resp) {
+                            fetchData(`/syllabus/byId?id=${selectedValue}`, token).then(resp => {
+                                if (resp) {
+                                    const lessonIds = resp.lessons.map(l => { return l.id })
+                                    const body = { ...resp, status: 'Active', courseId: resp.course.id, lessonIds: lessonIds }
+                                    postData('/syllabus/save', body, token).then(resp => {
+                                        if (resp) {
+                                            window.location.reload()
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    }
+
+    const [selectedValue, setSelectedValue] = useState('');
+
+    const handleRadioChange = (event) => {
+        setSelectedValue(event.target.value);
+    };
+
+    const breadcrumbItems = [
+        {
+            url: '/',
+            label: 'Trang chủ',
+        },
+        {
+            url: `/manage-course`,
+            label: `Quản lý khóa học`,
+        },
+        {
+            url: `/courses/` + courseId,
+            label: course?.name,
+        },
+        {
+            url: `/syllabus/` + courseId,
+            label: syllabus?.name,
+        },
+    ];
+
+    const navigate = useNavigate()
 
     return (
         loading ? <Loading /> :
@@ -254,17 +362,14 @@ export default function SyllabusDetail() {
                 <div className="m-1">
                     <div style={{ margin: '20px' }}>
                         <Paper style={{ padding: '20px' }}>
-                            <Typography variant="body1" style={{ color: 'darkblue' }}>
-                                <Link to={'/'}>Trang chủ </Link>{'>'} <Link to={'/manage-course'}>Quản lý khóa học </Link>{'>'} <Link to={`/courses/${courseId}`}>Khóa học {courseId} </Link> {'>'} Khung chương trình {syllabusId}
-                            </Typography>
-
+                            <CustomBreadcrumbs items={breadcrumbItems} />
                             <div style={{ marginTop: '20px' }}>
                                 <TextField label="Ngày tạo:" value={moment(syllabus.createDate).format('HH:MM:SS DD/MM/YYYY')} />
                                 <TextField label="Trạng thái:" style={{ marginLeft: '20px' }} value={syllabus.status === 'Deactive' ? 'Không hoạt động' : 'Hoạt động'} />
 
-                                <Button variant="outlined" style={{ marginLeft: '20px' }} onClick={handleEditSyllabusClick}>
+                                <button className='btn btn-outline-success' style={{ marginLeft: '20px' }} onClick={handleEditSyllabusClick}>
                                     Chỉnh sửa
-                                </Button>
+                                </button>
                             </div>
 
                             <div
@@ -273,19 +378,19 @@ export default function SyllabusDetail() {
                             >
                                 <Typography variant="h6">Danh sách bài học</Typography>
                                 <InputBase
-                                    placeholder="Search name"
+                                    placeholder="Tìm kiếm bằng tên"
                                     style={{ marginLeft: '20px' }}
                                     startAdornment={<Search />}
                                     onChange={handleSearchChange}
                                 />
-                                <div className="text-end col-8">
-                                    <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={handleOpenLessonList}>
+                                {(course?.status !== 'ACTIVE' && course?.status !== 'PENDING') && <div className="text-end col-8">
+                                    <button className='btn btn-outline-success' style={{ marginLeft: '10px' }} onClick={handleOpenLessonList}>
                                         Thêm bài học từ khóa học
-                                    </Button>
-                                    <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={handleAddLesson}>
+                                    </button>
+                                    <button className='btn btn-success' style={{ marginLeft: '10px' }} onClick={handleAddLesson}>
                                         Tạo mới
-                                    </Button>
-                                </div>
+                                    </button>
+                                </div>}
                             </div>
 
                             <Table style={{ marginTop: '20px' }}>
@@ -295,11 +400,10 @@ export default function SyllabusDetail() {
                                         <TableCell style={{ width: '15%' }}>Tên</TableCell>
                                         {/* <TableCell style={{ width: '15%' }}>URL</TableCell> */}
                                         <TableCell style={{ width: '10%' }}>Ngày tạo</TableCell>
-                                        <TableCell style={{ width: '8%' }}>Trạng thái</TableCell>
+                                        <TableCell style={{ width: '10%' }}>Trạng thái</TableCell>
                                         <TableCell style={{ width: '15%' }}>Mô tả</TableCell>
                                         <TableCell style={{ width: '7%' }}>Thời lượng (phút)</TableCell>
-                                        <TableCell style={{ width: '15%' }}>Bài Kiểm tra</TableCell>
-                                        <TableCell style={{ width: '15%' }}></TableCell>
+                                        <TableCell style={{ width: '17%' }}></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -309,42 +413,36 @@ export default function SyllabusDetail() {
                                                 <TableRow key={index}>
                                                     <TableCell>{index + 1}</TableCell>
                                                     <TableCell><TextTruncate text={l.name} /></TableCell>
-                                                    {/* <TableCell>
-                                                    <a href={l.url} target="_blank" rel="noopener noreferrer">
-                                                        <TextTruncate text={l.url} />
-                                                    </a>
-                                                </TableCell> */}
-
                                                     <TableCell><TextTruncate text={moment(l.createDate).format('HH:MM:SS DD/MM/YYYY')} /></TableCell>
-                                                    <TableCell><TextTruncate text={l.status === 'true' ? 'Hoạt động' : 'Không hoạt động'} /></TableCell>
+                                                    <TableCell>{l.status === 'Active' ? <ColorLabel text={'Hoạt động'} color={primaryColor} /> : <ColorLabel text={'Không hoạt động'} color={dangerColor} />}</TableCell>
                                                     <TableCell><TextTruncate text={l.description} /></TableCell>
                                                     <TableCell><TextTruncate text={l.estimateTime} /></TableCell>
                                                     <TableCell>
-                                                        <Link className="btn btn-outline-secondary" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}`}>
-                                                            D.sách bài kiểm tra
-                                                        </Link>
-                                                        {/* <Link className="btn btn-outline-secondary mx-1" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}/create-quiz`}>
-                                                        Tạo
-                                                    </Link> */}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {/* <Button
-                                                        variant="outlined"
-                                                        style={{ marginLeft: '10px' }}
-                                                        onClick={() => handleEditLesson(l)}
-                                                    >
-                                                        Chỉnh sửa
-                                                    </Button> */}
-                                                        <Link className="btn btn-outline-secondary" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}/resources`}>
-                                                            Tài nguyên
-                                                        </Link>
+                                                        <Tooltip title="Danh sách bài kiểm tra">
+                                                            <Button style={{ border: 'none', background: 'none' }}
+                                                                className='mx-2' onClick={() => navigate(`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}`)}>
+                                                                <QuizIcon color='info' />
+                                                            </Button>
+                                                        </Tooltip>
+                                                        <Tooltip title={(course?.status !== 'ACTIVE' && course?.status !== 'PENDING') ? `Sửa` : 'Chi tiết'}>
+                                                            <Button
+                                                                style={{ border: 'none', background: 'none' }}
+                                                                className='mx-2'
+                                                                onClick={() => handleEditLesson(l)}
+                                                            >
+                                                                {(course?.status !== 'ACTIVE' && course?.status !== 'PENDING') ? <EditIcon color='success' /> : <VisibilityIcon color='secondary' />}
+                                                            </Button>
+                                                        </Tooltip>
+
+                                                        <Tooltip title="Danh sách tài nguyên">
+                                                            <Button style={{ border: 'none', background: 'none' }}
+                                                                className='mx-2' onClick={() => navigate(`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}/resources`)}>
+                                                                <AutoStoriesIcon color='secondary' />
+                                                            </Button>
+                                                        </Tooltip>
+
                                                     </TableCell>
                                                 </TableRow>
-                                                {emptyRows > 0 && (
-                                                    <TableRow style={{ height: 53 * emptyRows }}>
-                                                        <TableCell colSpan={6} />
-                                                    </TableRow>
-                                                )}
                                             </>
                                         );
                                     }) :
@@ -356,42 +454,94 @@ export default function SyllabusDetail() {
                                                         <TableCell><TextTruncate text={l.name} /></TableCell>
                                                         {/* <TableCell><Link to={l.url}><TextTruncate text={l.url} /></Link></TableCell> */}
                                                         <TableCell><TextTruncate text={moment(l.createDate).format('HH:MM:SS DD/MM/YYYY')} /></TableCell>
-                                                        <TableCell><TextTruncate text={l.status === 'true' ? 'Hoạt động' : 'Không hoạt động'} /></TableCell>
+                                                        <TableCell>{l.status ? <ColorLabel text={'Hoạt động'} color={primaryColor} /> : <ColorLabel text={'Không hoạt động'} color={dangerColor} />}</TableCell>
                                                         <TableCell><TextTruncate text={l.description} /></TableCell>
                                                         <TableCell><TextTruncate text={l.estimateTime} /></TableCell>
                                                         <TableCell>
-                                                            <Link className="btn btn-outline-secondary" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}`}>
-                                                                D.sách bài kiểm tra
-                                                            </Link>
-                                                            {/* <Link className="btn btn-outline-secondary mx-1" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}/create-quiz`}>
-                                                            Tạo
-                                                        </Link> */}
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {/* <Button
-                                                            variant="outlined"
-                                                            style={{ marginLeft: '10px' }}
-                                                            onClick={() => handleEditLesson(l)}
-                                                        >
-                                                            Chỉnh sửa
-                                                        </Button> */}
-                                                            <Link className="btn btn-outline-secondary" to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}/resources`}>
-                                                                Tài nguyên
-                                                            </Link>
+                                                            <Tooltip title="Danh sách bài kiểm tra">
+                                                                <Button style={{ border: 'none', background: 'none' }}
+                                                                    className='mx-2' onClick={() => navigate(`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}`)}>
+                                                                    <QuizIcon color='info' />
+                                                                </Button>
+                                                            </Tooltip>
+                                                            <Tooltip title={(course?.status !== 'ACTIVE' && course?.status !== 'PENDING') ? `Sửa` : 'Chi tiết'}>
+                                                                <Button
+                                                                    style={{ border: 'none', background: 'none' }}
+                                                                    className='mx-2'
+                                                                    onClick={() => handleEditLesson(l)}
+                                                                >
+                                                                    {(course?.status !== 'ACTIVE' && course?.status !== 'PENDING') ? <EditIcon color='success' /> : <VisibilityIcon color='disabled' />}
+                                                                </Button>
+                                                            </Tooltip>
+
+                                                            <Tooltip title="Danh sách tài nguyên">
+                                                                <Button style={{ border: 'none', background: 'none' }}
+                                                                    className='mx-2' onClick={() => navigate(`/courses/${courseId}/syllabus/${syllabusId}/lessons/${l.id}/resources`)}>
+                                                                    <AutoStoriesIcon color='secondary' />
+                                                                </Button>
+                                                            </Tooltip>
+
                                                         </TableCell>
                                                     </TableRow>
-                                                    {emptyRows > 0 && (
+                                                    {/* {emptyRows > 0 && (
                                                         <TableRow style={{ height: 53 * emptyRows }}>
                                                             <TableCell colSpan={6} />
                                                         </TableRow>
-                                                    )}
+                                                    )} */}
                                                 </>
                                             )
                                         })}
                                 </TableBody>
+
+                                <Dialog open={openSyllabusActiveModal} onClose={() => setOpenSyllabusActiveModal(false)} fullWidth maxWidth="md">
+                                    <DialogTitle>Thông tin</DialogTitle>
+                                    <DialogContent>
+                                        <Grid container spacing={3}>
+                                            <TableContainer>
+                                                <Table>
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            {/* <TableCell>STT</TableCell> */}
+                                                            <TableCell>Tên khung chương trình</TableCell>
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        <FormControl>
+                                                            <RadioGroup
+                                                                aria-labelledby="demo-radio-buttons-group-label"
+                                                                name="radio-buttons-group"
+                                                                value={selectedValue}
+                                                                onChange={handleRadioChange}
+                                                            >
+                                                                {listSyllabus && listSyllabus.map((item, index) => (
+                                                                    <TableRow key={index}>
+                                                                        {/* <TableCell>{++index}</TableCell> */}
+                                                                        <TableCell>
+                                                                            <FormControlLabel value={item.id.toString()} control={<Radio />} label={item.name} />
+                                                                        </TableCell>
+                                                                    </TableRow>
+                                                                ))}
+                                                            </RadioGroup>
+                                                        </FormControl>
+                                                    </TableBody>
+                                                </Table>
+                                            </TableContainer>
+                                        </Grid>
+                                    </DialogContent>
+
+                                    <DialogActions>
+                                        <Button onClick={() => setOpenSyllabusActiveModal(false)} color="secondary">
+                                            Hủy
+                                        </Button>
+                                        <Button onClick={handleChangeSyllabus} color="primary">
+                                            Hoàn thành
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>
                             </Table>
                             <TablePagination
-                                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                labelRowsPerPage="Số hàng trên trang :"
+                                rowsPerPageOptions={[5, 10, 25]}
                                 component="div"
                                 count={searchData ? searchData.length : data.length}
                                 rowsPerPage={rowsPerPage}
@@ -406,6 +556,7 @@ export default function SyllabusDetail() {
                         onUpdate={handleUpdateSyllabus}
                         onClose={handleSyllabusEditModalClose}
                         syllabus={syllabus}
+                        course={course}
                     />
                     <LessonModal
                         isOpen={isLessonModalOpen}
@@ -413,6 +564,7 @@ export default function SyllabusDetail() {
                         onUpdate={saveOrUpdateLesson}
                         onClose={handleLessonModalClose}
                         lesson={lessonToEdit !== null ? lessonToEdit : null}
+                        course={course}
                     />
                     <ListLessonModal isOpen={lessonListModal} onClose={() => setLessonListModal(false)} courseId={courseId} onSave={handleAddLessonFromCourse} />
                 </div>

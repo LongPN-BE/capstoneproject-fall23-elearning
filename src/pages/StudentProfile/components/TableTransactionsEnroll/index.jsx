@@ -14,6 +14,12 @@ import SearchIcon from '@mui/icons-material/Search';
 import { IconButton, InputBase, TextField, Typography } from '@mui/material';
 import { TransactionControllerApi } from '../../../../api/generated/generate-api';
 import ApiClientSingleton from '../../../../api/apiClientImpl';
+import { PATTERN_DATE, TRANSACTION_STATUS, TRANSACTION_TYPE, formatDate } from '../../../../constant';
+import DateRangePicker from '../../../../components/DateRangePicker';
+import { useContext } from 'react';
+import { FilterContext as StudentFilerContext } from '../../../StudentProfile';
+import Cookies from 'js-cookie';
+import { FilterContext } from '../../../Teacher/TeacherPage';
 
 const headCells = [
   {
@@ -83,9 +89,11 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-export default function TableTransactionsEnroll({ transactions }) {
+export default function TableTransactionsEnroll({ transactions, current, pageSize }) {
+  const user = JSON.parse(Cookies.get('user'));
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const { filterHis, setFilterHis } = useContext(user?.studentId ? StudentFilerContext : FilterContext);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -103,21 +111,21 @@ export default function TableTransactionsEnroll({ transactions }) {
       <Paper sx={{ width: '100%', mb: 2 }}>
         <div className="d-flex  justify-content-between align-items-center mx-4 py-3">
           <Typography variant="h6">Lịch sử giao dịch</Typography>
-          <div>
-            <Paper
-              component="form"
-              sx={{
-                p: '2px 4px',
-                display: 'flex',
-                alignItems: 'center',
-                width: 200,
+          <div style={{ minWidth: '400px' }}>
+            <DateRangePicker
+              onChangeEndDate={(date) => {
+                setFilterHis({
+                  ...filterHis,
+                  endDate: date,
+                });
               }}
-            >
-              <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search" inputProps={{ 'aria-label': 'search' }} />
-              <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-                <SearchIcon />
-              </IconButton>
-            </Paper>
+              onChangeStartDate={(date) => {
+                setFilterHis({
+                  ...filterHis,
+                  startDate: date,
+                });
+              }}
+            />
           </div>
         </div>
         <hr className="mt-0" />
@@ -129,20 +137,22 @@ export default function TableTransactionsEnroll({ transactions }) {
                 {transactions?.map((row, index) => {
                   return (
                     <TableRow hover tabIndex={-1} key={row.name} sx={{ cursor: 'pointer' }}>
-                      <TableCell align="center">{index + 1}</TableCell>
+                      <TableCell align="center">{index + 1 + current * pageSize}</TableCell>
                       <TableCell align="center">{row?.accountName}</TableCell>
                       <TableCell align="center">{row?.amount.toLocaleString()} VNĐ</TableCell>
-                      <TableCell align="center">{row?.transactionType}</TableCell>
+                      <TableCell align="center">{TRANSACTION_TYPE[row?.transactionType]}</TableCell>
                       <TableCell align="center">{row?.description}</TableCell>
-                      <TableCell align="center">{row?.transactionStatus}</TableCell>
-                      <TableCell align="center">{moment(row?.dateProcess).format('HH:MM:SS DD/MM/YYYY')}</TableCell>
+                      <TableCell align="center">{TRANSACTION_STATUS[row?.transactionStatus]}</TableCell>
+                      <TableCell align="center">
+                        {formatDate(row?.dateProcess, PATTERN_DATE.HH_MM_SS_DD_MM_YYYY)}
+                      </TableCell>
                     </TableRow>
                   );
                 })}
               </TableBody>
             ) : (
               <tr>
-                <td colspan="4">
+                <td colspan="7">
                   <div
                     className="d-flex  justify-content-center align-items-center"
                     style={{
@@ -152,7 +162,7 @@ export default function TableTransactionsEnroll({ transactions }) {
                       color: '#384256',
                     }}
                   >
-                    TRANSACTIONS TABLE
+                    Bảng giao dịch
                   </div>
                 </td>
               </tr>

@@ -145,7 +145,6 @@ docs/RefundRequestTransactionView.md
 docs/RejectCourseControllerApi.md
 docs/RejectCourseRejectCourseView.md
 docs/RejectCourseRequestCourseView.md
-docs/Report.md
 docs/ReportControllerApi.md
 docs/ReportReportView.md
 docs/ReportRequestReportView.md
@@ -169,7 +168,6 @@ docs/ResponseDTOCourse.md
 docs/ResponseDTOCourseCourseView.md
 docs/ResponseDTOFeedbackFeedbackView.md
 docs/ResponseDTOInteger.md
-docs/ResponseDTOListReport.md
 docs/ResponseDTOListReportReportView.md
 docs/ResponseDTOLong.md
 docs/ResponseDTOOrderResponse.md
@@ -184,6 +182,7 @@ docs/ResponseDTOTransactionTransactionView.md
 docs/ResponseDTOUsedQuestion.md
 docs/ResponseDTOWithdrawalRequestWithdrawRequestView.md
 docs/ResultDetailControllerApi.md
+docs/ResultDetailResponseResultDetailView.md
 docs/ResultDetailResultDetailView.md
 docs/ResultDetailResultQuizView.md
 docs/ResultQuizControllerApi.md
@@ -210,6 +209,7 @@ docs/StudentControllerApi.md
 docs/StudentEnrollView.md
 docs/StudentFeedbackView.md
 docs/StudentPaymentHistoryView.md
+docs/StudentReportView.md
 docs/StudentResultQuizView.md
 docs/StudentTransactionView.md
 docs/Subject.md
@@ -269,7 +269,9 @@ docs/UpdateSubjectStatusSubjectView.md
 docs/UsedAnswer.md
 docs/UsedAnswerControllerApi.md
 docs/UsedAnswerRequest.md
+docs/UsedAnswerResponseResultDetailView.md
 docs/UsedAnswerResultDetailView.md
+docs/UsedAnswerResultQuizView.md
 docs/UsedAnswerViewUsedQuestion.md
 docs/UsedAnswerViewUsedQuestionDoQuiz.md
 docs/UsedQuestion.md
@@ -451,7 +453,6 @@ generate-api/model/QuizViewUsedQuestionDoQuiz.js
 generate-api/model/RefundRequestTransactionView.js
 generate-api/model/RejectCourseRejectCourseView.js
 generate-api/model/RejectCourseRequestCourseView.js
-generate-api/model/Report.js
 generate-api/model/ReportReportView.js
 generate-api/model/ReportRequestReportView.js
 generate-api/model/Resource.js
@@ -473,7 +474,6 @@ generate-api/model/ResponseDTOCourse.js
 generate-api/model/ResponseDTOCourseCourseView.js
 generate-api/model/ResponseDTOFeedbackFeedbackView.js
 generate-api/model/ResponseDTOInteger.js
-generate-api/model/ResponseDTOListReport.js
 generate-api/model/ResponseDTOListReportReportView.js
 generate-api/model/ResponseDTOLong.js
 generate-api/model/ResponseDTOOrderResponse.js
@@ -487,6 +487,7 @@ generate-api/model/ResponseDTOTransaction.js
 generate-api/model/ResponseDTOTransactionTransactionView.js
 generate-api/model/ResponseDTOUsedQuestion.js
 generate-api/model/ResponseDTOWithdrawalRequestWithdrawRequestView.js
+generate-api/model/ResultDetailResponseResultDetailView.js
 generate-api/model/ResultDetailResultDetailView.js
 generate-api/model/ResultDetailResultQuizView.js
 generate-api/model/ResultQuizResultDetailView.js
@@ -510,6 +511,7 @@ generate-api/model/Student.js
 generate-api/model/StudentEnrollView.js
 generate-api/model/StudentFeedbackView.js
 generate-api/model/StudentPaymentHistoryView.js
+generate-api/model/StudentReportView.js
 generate-api/model/StudentResultQuizView.js
 generate-api/model/StudentTransactionView.js
 generate-api/model/Subject.js
@@ -563,7 +565,9 @@ generate-api/model/TransactionWithdrawRequestView.js
 generate-api/model/UpdateSubjectStatusSubjectView.js
 generate-api/model/UsedAnswer.js
 generate-api/model/UsedAnswerRequest.js
+generate-api/model/UsedAnswerResponseResultDetailView.js
 generate-api/model/UsedAnswerResultDetailView.js
+generate-api/model/UsedAnswerResultQuizView.js
 generate-api/model/UsedAnswerViewUsedQuestion.js
 generate-api/model/UsedAnswerViewUsedQuestionDoQuiz.js
 generate-api/model/UsedQuestion.js
@@ -585,3 +589,7 @@ generate-api/model/WithdrawalRequestWithdrawRequestView.js
 git_push.sh
 mocha.opts
 package.json
+test/model/ResultDetailResponseResultDetailView.spec.js
+test/model/StudentReportView.spec.js
+test/model/UsedAnswerResponseResultDetailView.spec.js
+test/model/UsedAnswerResultQuizView.spec.js

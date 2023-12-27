@@ -1,33 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import Logo from "../../assets/images/logo.png";
 import Styles from "./ForgotPassword.module.scss";
 import classNames from "classnames";
 import "bootstrap/dist/css/bootstrap.css";
-import { useNavigate } from "react-router";
 
 const ForgotPassword = () => {
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: ''
-  });
-
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    //Implement code here
-    alert("Chưa có API! \n Email : " + formData.email);
-  };
-
-
   return (
     <div className="vh-100">
       <nav className="navbar navbar-light px-5 mb-5 pt-4">
@@ -43,21 +20,17 @@ const ForgotPassword = () => {
             <div className="card border-0 shadow-lg rounded-3 my-5">
               <div className="card-body p-4 p-sm-5 ">
                 <h2 className="card-title text-center text-uppercase mb-2 fw-bold fs-5">
-                  Đặt lại mật khẩu của bạn
+                  Reset your password
                 </h2>
-
                 <p className="fw-italic text-muted">
-                  Vui lòng nhập địa chỉ email của bạn bên dưới, chúng tôi sẽ gửi ngay
-                  bạn các thông tin cần thiết.
+                  Please enter your email address below, we will promptly send
+                  you a passcode to reset your password
                 </p>
-                <form onSubmit={handleSubmit}>
+                <form>
                   <div className={classNames(Styles.ipt_custom, "mb-3")}>
                     <input
                       type="email"
                       className="form-control"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
                       placeholder="Email"
                     />
                   </div>
@@ -70,7 +43,7 @@ const ForgotPassword = () => {
                       )}
                       type="submit"
                     >
-                      Xác nhận
+                      Confirm
                     </button>
                   </div>
                 </form>

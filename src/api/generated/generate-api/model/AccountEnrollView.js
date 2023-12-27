@@ -73,9 +73,6 @@ class AccountEnrollView {
             if (data.hasOwnProperty('profile')) {
                 obj['profile'] = ProfileEnrollView.constructFromObject(data['profile']);
             }
-            if (data.hasOwnProperty('authorities')) {
-                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthorityEnrollView]);
-            }
             if (data.hasOwnProperty('accountNonExpired')) {
                 obj['accountNonExpired'] = ApiClient.convertToType(data['accountNonExpired'], 'Boolean');
             }
@@ -84,6 +81,9 @@ class AccountEnrollView {
             }
             if (data.hasOwnProperty('accountNonLocked')) {
                 obj['accountNonLocked'] = ApiClient.convertToType(data['accountNonLocked'], 'Boolean');
+            }
+            if (data.hasOwnProperty('authorities')) {
+                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthorityEnrollView]);
             }
             if (data.hasOwnProperty('enabled')) {
                 obj['enabled'] = ApiClient.convertToType(data['enabled'], 'Boolean');
@@ -174,11 +174,6 @@ AccountEnrollView.prototype['active'] = undefined;
 AccountEnrollView.prototype['profile'] = undefined;
 
 /**
- * @member {Array.<module:model/GrantedAuthorityEnrollView>} authorities
- */
-AccountEnrollView.prototype['authorities'] = undefined;
-
-/**
  * @member {Boolean} accountNonExpired
  */
 AccountEnrollView.prototype['accountNonExpired'] = undefined;
@@ -192,6 +187,11 @@ AccountEnrollView.prototype['credentialsNonExpired'] = undefined;
  * @member {Boolean} accountNonLocked
  */
 AccountEnrollView.prototype['accountNonLocked'] = undefined;
+
+/**
+ * @member {Array.<module:model/GrantedAuthorityEnrollView>} authorities
+ */
+AccountEnrollView.prototype['authorities'] = undefined;
 
 /**
  * @member {Boolean} enabled

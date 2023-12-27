@@ -12,6 +12,7 @@
  */
 
 import ApiClient from '../ApiClient';
+import StudentReportView from './StudentReportView';
 import TeacherReportView from './TeacherReportView';
 
 /**
@@ -64,7 +65,7 @@ class ReportReportView {
                 obj['teacher'] = TeacherReportView.constructFromObject(data['teacher']);
             }
             if (data.hasOwnProperty('student')) {
-                obj['student'] = ApiClient.convertToType(data['student'], Object);
+                obj['student'] = StudentReportView.constructFromObject(data['student']);
             }
             if (data.hasOwnProperty('reportType')) {
                 obj['reportType'] = ApiClient.convertToType(data['reportType'], 'String');
@@ -86,6 +87,10 @@ class ReportReportView {
         // validate the optional field `teacher`
         if (data['teacher']) { // data not null
           TeacherReportView.validateJSON(data['teacher']);
+        }
+        // validate the optional field `student`
+        if (data['student']) { // data not null
+          StudentReportView.validateJSON(data['student']);
         }
         // ensure the json data is a string
         if (data['reportType'] && !(typeof data['reportType'] === 'string' || data['reportType'] instanceof String)) {
@@ -126,7 +131,7 @@ ReportReportView.prototype['status'] = undefined;
 ReportReportView.prototype['teacher'] = undefined;
 
 /**
- * @member {Object} student
+ * @member {module:model/StudentReportView} student
  */
 ReportReportView.prototype['student'] = undefined;
 

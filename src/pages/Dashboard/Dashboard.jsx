@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Styles from './Dashboard.module.scss';
 import classNames from 'classnames';
 
+import Navbar from '../../components/Dashboard/Navbar/Navbar';
 import TopBox from '../../components/Dashboard/TopBox/TopBox';
 import ChartBox from '../../components/Dashboard/ChartBox/ChartBox';
 import BigChartBox from '../../components/Dashboard/BigChartBox/BigChartBox';
@@ -18,11 +19,20 @@ import {
   barChartBoxVisit,
 } from '../../mock/mock-data';
 import PieChartBox from '../../components/Dashboard/PieChartBox/PieChartBox';
+import Cookies from 'js-cookie';
 
 const Dashboard = () => {
+  // useEffect(() => {
+  //   const token = Cookies.get('token');
+  //   if (token) {
+
+  //   }
+  // }, [])
+
   return (
     <>
       <div className={classNames(Styles.main)}>
+        <Navbar />
         <div className={classNames(Styles.container)}>
           <div className={classNames(Styles.contentContainer)}>
             <div className={classNames(Styles.home)}>

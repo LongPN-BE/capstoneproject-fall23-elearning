@@ -19,6 +19,9 @@ import { Link, useParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { fetchData } from '../../services/AppService';
 import QuizModal from '../ManageCourses/Quiz/QuizModal';
+import CustomBreadcrumbs from '../Breadcrumbs';
+import { PATTERN_DATE, formatDate } from '../../constant';
+import ColorLabel, { dangerColor, primaryColor } from '../../util/ColorLabel/ColorLabel';
 
 export default function QuizDetail() {
     const { courseId, syllabusId, lessonId, quizId } = useParams();
@@ -30,10 +33,28 @@ export default function QuizDetail() {
     const [averagePoint, setTotalAveragePoint] = useState(0)
     const [proportion, setProportion] = useState(0)
     const [selectedQuiz, setSelectedQuiz] = useState(null)
+    const [course, setCourse] = useState()
+    const [syllabus, setSyllabus] = useState()
+    const [lesson, setLesson] = useState();
 
     useEffect(() => {
         const token = Cookies.get('token');
         if (token) {
+            fetchData(`/course/byId?id=${courseId}`, token).then(resp => {
+                if (resp) {
+                    setCourse(resp)
+                }
+            })
+            fetchData(`/syllabus/byId?id=${syllabusId}`, token).then(resp => {
+                if (resp) {
+                    setSyllabus(resp)
+                }
+            })
+            fetchData(`/lesson/byId?id=${lessonId}`, token).then(resp => {
+                if (resp) {
+                    setLesson(resp)
+                }
+            })
             fetchData(`/result-quiz/by-quiz?quiz_id=${quizId}`, token).then(resp => {
                 if (resp) {
                     setData(resp)
@@ -111,17 +132,44 @@ export default function QuizDetail() {
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredData?.length) : 0;
 
 
+    const breadcrumbItems = [
+        {
+            url: '/',
+            label: 'Trang chủ',
+        },
+        {
+            url: `/manage-course`,
+            label: `Quản lý khóa học`,
+        },
+        {
+            url: `/courses/` + courseId,
+            label: course?.name,
+        },
+        {
+            url: `/courses/` + courseId + `/syllabus/` + syllabusId,
+            label: syllabus?.name,
+        },
+        {
+            url: `/courses/` + courseId + `/syllabus/` + syllabusId + `/lessons/` + lessonId,
+            label: lesson?.name,
+        },
+        {
+            url: `/courses/` + courseId + `/syllabus/` + syllabusId + `/lessons/` + lessonId + `/quiz/` + quizId,
+            label: 'Kết quả bài kiểm tra của sinh viên',
+        }
+    ];
+
     return (
         data && (
             <div className="m-5">
                 <div style={{ margin: '20px' }}>
                     <Paper style={{ padding: '20px' }}>
-                        <Typography variant="body1">
+                        {/* <Typography variant="body1">
                             <Link to={'/'}>Trang chủ </Link>{'>'} <Link to={'/manage-course'}>Quản lý khóa học </Link>{'>'} <Link to={`/courses/${courseId}`}>Khóa học {courseId} </Link>
                             {'>'} <Link to={`/courses/${courseId}/syllabus/${syllabusId}`}>Khung chương trình {syllabusId} </Link>{'>'} <Link to={`/courses/${courseId}/syllabus/${syllabusId}/lessons/${lessonId}`}> Bài học {lessonId} </Link>{'>'}
                             Bài kiểm tra {quizId}
-                        </Typography>
-
+                        </Typography> */}
+                        <CustomBreadcrumbs items={breadcrumbItems} />
                         <div style={{ marginTop: '20px' }} className='d-flex align-items-center'>
                             <TextField
                                 label="Số sinh viên đã làm"
@@ -134,13 +182,13 @@ export default function QuizDetail() {
                                 autoFocus
                                 value={averagePoint}
                                 margin="dense" />
-                            <TextField
+                            {/* <TextField
                                 label="Tỷ trọng:"
                                 style={{ marginLeft: '20px' }}
                                 autoFocus
                                 value={proportion + "%"}
                                 margin="dense"
-                            />
+                            /> */}
 
                         </div>
 
@@ -150,7 +198,7 @@ export default function QuizDetail() {
                         >
                             <Typography variant="h6">Danh sách sinh viên đã làm bài kiểm tra</Typography>
                             <InputBase
-                                placeholder="Search"
+                                placeholder="Tìm kiếm bằng tên"
                                 style={{ marginLeft: '20px' }}
                                 startAdornment={<Search />}
                                 onChange={handleSearchChange}
@@ -161,8 +209,8 @@ export default function QuizDetail() {
                                 style={{ marginLeft: '20px' }}
                             >
                                 <MenuItem value="all">Tất cả</MenuItem>
-                                <MenuItem value="failed">Rớt</MenuItem>
-                                <MenuItem value="pass">Qua môn</MenuItem>
+                                <MenuItem value="fail">Không đạt</MenuItem>
+                                <MenuItem value="pass">Đạt</MenuItem>
                                 {/* Add other statuses as menu items */}
                             </Select>
 
@@ -187,17 +235,18 @@ export default function QuizDetail() {
                                                 <TableCell>{index + 1}</TableCell>
                                                 <TableCell>{s?.student?.account?.username}</TableCell>
                                                 <TableCell>{s?.lastPoint}</TableCell>
-                                                <TableCell>{s?.resultStatus}</TableCell>
-                                                <TableCell>{s?.startTime}</TableCell>
+                                                <TableCell>{s?.resultStatus === 'FAIL' ? <ColorLabel text={'Không đạt'} color={dangerColor} /> : <ColorLabel text={'Đạt'} color={primaryColor} />}</TableCell>
+                                                {/* <TableCell>{  ? '' : ''}</TableCell> */}
+                                                <TableCell>{formatDate(s?.startTime, PATTERN_DATE.HH_MM_SS_DD_MM_YYYY)}</TableCell>
                                                 <TableCell>
                                                     <button className='btn btn-outline-secondary' onClick={() => handleOpen(s)}>Chi tiết</button>
                                                 </TableCell>
                                             </TableRow>
-                                            {emptyRows > 0 && (
+                                            {/* {emptyRows > 0 && (
                                                 <TableRow style={{ height: 53 * emptyRows }}>
                                                     <TableCell colSpan={6} />
                                                 </TableRow>
-                                            )}
+                                            )} */}
                                         </>
                                     );
                                 })}
@@ -205,7 +254,8 @@ export default function QuizDetail() {
                         </Table>
                         {
                             filteredData && <TablePagination
-                                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                labelRowsPerPage="Số hàng trên trang :"
+                                rowsPerPageOptions={[5, 10, 25]}
                                 component="div"
                                 count={filteredData.length}
                                 rowsPerPage={rowsPerPage}

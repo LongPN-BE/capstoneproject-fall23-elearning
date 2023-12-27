@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import profile_image from './../../../assets/images/mask-group.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { IconButton, InputBase, Paper } from '@mui/material';
 
 import SearchIcon from '@mui/icons-material/Search';
@@ -24,13 +24,14 @@ const navLinks = [
   },
   {
     display: 'Chúng tôi',
-    url: '/about-us',
+    url: '##',
   },
 ];
 
 const Header = ({ setSearchValue, getCourses }) => {
   const menuRef = useRef();
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const user = Cookies.get('user');
@@ -50,6 +51,12 @@ const Header = ({ setSearchValue, getCourses }) => {
     Cookies.remove('user');
     Cookies.remove('token');
     window.location.href = '/';
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
   };
 
   return (
@@ -81,9 +88,9 @@ const Header = ({ setSearchValue, getCourses }) => {
                       onChange={(e) => {
                         if (setSearchValue) {
                           setSearchValue(e.target.value);
-                          console.log(e.target.value);
                         }
                       }}
+                      onKeyDown={handleKeyDown}
                     />
                     <IconButton
                       type="button"

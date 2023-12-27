@@ -11,10 +11,10 @@ const ChartBox = (props) => {
           <img src={props.icon} alt="" />
           <span>{props.title}</span>
         </div>
-        <h1>{props.number}</h1>
-        <Link to="/" style={{ color: props.color }}>
-          View all
-        </Link>
+        <h3>{props.number}</h3>
+        <label style={{ color: props.color }}>
+          Thống kê
+        </label>
       </div>
       <div className={classNames(Styles.chartInfo)}>
         <div className={classNames(Styles.chart)}>
@@ -42,7 +42,7 @@ const ChartBox = (props) => {
           >
             {props.percentage}%
           </span>
-          <span className={classNames(Styles.duration)}>this month</span>
+          <span className={classNames(Styles.duration)}>Trong tháng</span>
         </div>
       </div>
     </div>

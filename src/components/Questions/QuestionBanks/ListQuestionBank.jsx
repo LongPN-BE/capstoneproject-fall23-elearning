@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useEffect, useState } from 'react';
 import {
     Button,
@@ -23,8 +24,11 @@ import QuestionBankModal from '../../ManageCourses/Quiz/ListCourseQuestion/Quest
 import Cookies from 'js-cookie';
 import { fetchData, postData } from '../../../services/AppService';
 import { useCallback } from 'react';
+import QuestionAlternativeModal from '../../ManageCourses/Quiz/ListCourseQuestion/QuestionAlternativeModal';
+import './ListQuestionBank.css'
 
 export default function ListQuestionBank() {
+    const urlParams = new URLSearchParams(window.location.search);
     const [questions, setQuestions] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isBankModalOpen, setIsBankModalOpen] = useState(false);
@@ -40,11 +44,19 @@ export default function ListQuestionBank() {
     function sortAnswersById(questions) {
         for (const question of questions) {
             question.answers.sort((a, b) => a.id - b.id);
+            if (question.content.indexOf("https://") == 0) {
+                question.type = 'image'
+            }
         }
     }
 
     useEffect(() => {
         // Replace this with your actual data fetching logic for questions
+        // Function to get the value of a specific query parameter from the URL
+        const getQueryParamValue = (param) => {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        };
 
         const token = Cookies.get('token');
         if (token) {
@@ -52,16 +64,20 @@ export default function ListQuestionBank() {
                 fetchData('/subject/subjects', token).then(resp => {
                     if (resp) {
                         setSubject(resp);
-                        setSubjectItem(resp[0]?.id);
-                        fetchData(`/course/bySubjectId?subject-id=${resp[0]?.id}`, token).then(resp => {
+                        // Get the value of the 'yourQueryParam' after the page reloads
+                        const subjectId = getQueryParamValue('subjectId');
+                        const courseId = getQueryParamValue('courseId');
+                        const lessonId = getQueryParamValue('lessonId');
+                        setSubjectItem(subjectId ? subjectId : resp[0]?.id);
+                        fetchData(`/course/bySubjectId?subject-id=${subjectId ? subjectId : resp[0]?.id}`, token).then(resp => {
                             if (resp) {
                                 setCourse(resp)
-                                setCourseItem(resp[0]?.id)
-                                fetchData(`/lesson/byCourseId?course_id=${resp[0]?.id}`, token).then(resp => {
+                                setCourseItem(courseId ? courseId : resp[0]?.id)
+                                fetchData(`/lesson/byCourseId?course_id=${courseId ? courseId : resp[0]?.id}`, token).then(resp => {
                                     if (resp) {
                                         setLesson(resp)
-                                        setLessonItem(resp[0]?.id)
-                                        fetchData(`/question/byLessonId?lesson_id=${resp[0]?.id}`, token).then(resp => {
+                                        setLessonItem(lessonId ? lessonId : resp[0]?.id)
+                                        fetchData(`/question/byLessonId?lesson_id=${lessonId ? lessonId : resp[0]?.id}`, token).then(resp => {
                                             if (resp) {
                                                 sortAnswersById(resp)
                                                 setQuestions(resp);
@@ -90,20 +106,13 @@ export default function ListQuestionBank() {
         setIsModalOpen(true);
     };
 
-    const openBankModal = () => {
-        setIsBankModalOpen(true);
-    }
-
-    const closeBankModal = () => {
-        setIsBankModalOpen(false);
-    }
-
     const closeModal = () => {
         setSelectedQuestion(null); // Clear the selected question
         setIsModalOpen(false);
     };
 
     const handleSave = (newQuestion) => {
+
         const token = Cookies.get('token')
         if (selectedQuestion) {
             // Editing an existing question
@@ -133,12 +142,21 @@ export default function ListQuestionBank() {
             const body = {
                 id: newQuestion.id,
                 content: newQuestion.content,
-                courseId: newQuestion.course.id,
-                lessonId: newQuestion.lesson.id,
+                courseId: courseItem,
+                lessonId: lessonItem,
                 answers: newQuestion.answers
             }
+            // console.log(body);
             postData('/question/save', body, token).then((resp) => {
                 if (resp) {
+                    // Set or update the desired query parameter
+                    urlParams.set('subjectId', subjectItem);
+                    urlParams.set('courseId', courseItem);
+                    urlParams.set('lessonId', lessonItem);
+
+                    // Replace the current URL with the updated URL containing the new query parameter
+                    const newUrl = `${window.location.origin}${window.location.pathname}?${urlParams.toString()}`;
+                    window.history.replaceState({}, '', newUrl);
                     window.location.reload()
                 }
             }).catch(err => console.log(err))
@@ -154,8 +172,17 @@ export default function ListQuestionBank() {
                 lessonId: lessonItem,
                 answers: updatedItems
             }
+            // console.log(body);
             postData('/question/save', body, token).then((resp) => {
                 if (resp) {
+                    // Set or update the desired query parameter
+                    urlParams.set('subjectId', subjectItem);
+                    urlParams.set('courseId', courseItem);
+                    urlParams.set('lessonId', lessonItem);
+
+                    // Replace the current URL with the updated URL containing the new query parameter
+                    const newUrl = `${window.location.origin}${window.location.pathname}?${urlParams.toString()}`;
+                    window.history.replaceState({}, '', newUrl);
                     window.location.reload()
                 }
             }).catch(err => console.log(err))
@@ -171,6 +198,22 @@ export default function ListQuestionBank() {
                 if (resp && resp.length > 0) {
                     setCourse(resp)
                     setCourseItem(resp[0]?.id)
+                    fetchData(`/lesson/byCourseId?course_id=${resp[0]?.id}`, token).then(resp => {
+                        if (resp) {
+                            setLesson(resp)
+                            setLessonItem(resp[0]?.id)
+                            fetchData(`/question/byLessonId?lesson_id=${resp[0]?.id}`, token).then(resp => {
+                                if (resp) {
+                                    sortAnswersById(resp)
+                                    setQuestions(resp);
+                                }
+                            }).catch(err => {
+                                console.log(err)
+                            })
+                        }
+                    }).catch(err => {
+                        console.log(err)
+                    })
                 } else {
                     setCourse(resp)
                 }
@@ -205,6 +248,7 @@ export default function ListQuestionBank() {
                         setLessonItem(resp[0]?.id)
                         fetchData(`/question/byLessonId?lesson_id=${resp[0]?.id}`, token).then(resp => {
                             if (resp) {
+                                sortAnswersById(resp)
                                 setQuestions(resp);
                             }
                         }).catch(err => {
@@ -306,9 +350,9 @@ export default function ListQuestionBank() {
                                     </div>
                                 </div>
                                 <div style={{ marginTop: '20px' }}>
-                                    <Button variant="outlined" onClick={() => openModal(null)}>
+                                    <button className='btn btn-success' onClick={() => openModal(null)}>
                                         Tạo mới
-                                    </Button>
+                                    </button>
                                 </div>
                             </>
                         ) : <div className=' mt-3'><h5>Không có bài học cho khóa học này</h5></div>}
@@ -325,9 +369,10 @@ export default function ListQuestionBank() {
                             <TableBody>
                                 {questions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((question, index) => (
                                     <>
-                                        <TableRow key={question.id}>
+                                        <TableRow key={question.id} className='list-question-bank'>
                                             <TableCell>{++index}</TableCell>
-                                            <TableCell>{question.content}</TableCell>
+                                            {question?.type ? <TableCell><img src={question.content} alt="img" width={200} height={200} /></TableCell>
+                                                : <TableCell><div dangerouslySetInnerHTML={{ __html: question?.content }}></div></TableCell>}
                                             <TableCell>
                                                 <Button variant="outlined" onClick={() => openModal(question)}>
                                                     Chỉnh sửa
@@ -344,7 +389,8 @@ export default function ListQuestionBank() {
                             </TableBody>
                         </Table> : <div className='text-center mt-5'><h3>Không có bài kiểm tra cho bài học này</h3></div>}
                         {questions && questions.length > 0 && <TablePagination
-                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                            labelRowsPerPage="Số hàng trên trang :"
+                            rowsPerPageOptions={[5, 10, 25]}
                             component="div"
                             count={questions.length}
                             rowsPerPage={rowsPerPage}
@@ -356,7 +402,17 @@ export default function ListQuestionBank() {
                 </div>
 
                 {/* Question Model */}
-                <QuestionModel
+                {/* <QuestionModel
+                    isOpen={isModalOpen}
+                    onClose={closeModal}
+                    onSave={handleSave}
+                    onUpdate={handleSave}
+                    question={selectedQuestion} // Pass the selected question for editing
+                    subject={subjectItem}
+                    course={courseItem}
+                    lesson={lessonItem}
+                /> */}
+                <QuestionAlternativeModal
                     isOpen={isModalOpen}
                     onClose={closeModal}
                     onSave={handleSave}

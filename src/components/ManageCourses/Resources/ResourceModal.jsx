@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
 import storage from "../../../util/firebase"
 import Loading from '../../Loading/Loading'
+import { isValidSize } from '../../../util/Utilities'
+import Swal from 'sweetalert2'
 
 const ResourceModal = ({ isOpen, onClose, onSave }) => {
     const [percent, setPercent] = useState(0);
@@ -21,6 +23,18 @@ const ResourceModal = ({ isOpen, onClose, onSave }) => {
         if (!file) {
             alert("Please choose a file first!");
             setLoading(false);
+            return;
+        }
+
+        const isValidFileSize = isValidSize(25, file);
+        if (!isValidFileSize) {
+            onClose()
+            setLoading(false);
+            Swal.fire({
+                title: "Cảnh báo",
+                text: "Tài nguyên không được quá 25MB",
+                icon: "warning"
+            });
             return;
         }
 
@@ -67,9 +81,9 @@ const ResourceModal = ({ isOpen, onClose, onSave }) => {
                 </DialogContent>
 
                 <DialogActions>
-                    <Button onClick={handleOnSave} color="primary">
+                    <button className='btn btn-success' onClick={handleOnSave}>
                         Hoàn thành
-                    </Button>
+                    </button>
                 </DialogActions>
             </Dialog>
         </div>

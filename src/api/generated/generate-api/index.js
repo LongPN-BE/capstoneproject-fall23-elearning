@@ -139,7 +139,6 @@ import QuizViewUsedQuestionDoQuiz from './model/QuizViewUsedQuestionDoQuiz';
 import RefundRequestTransactionView from './model/RefundRequestTransactionView';
 import RejectCourseRejectCourseView from './model/RejectCourseRejectCourseView';
 import RejectCourseRequestCourseView from './model/RejectCourseRequestCourseView';
-import Report from './model/Report';
 import ReportReportView from './model/ReportReportView';
 import ReportRequestReportView from './model/ReportRequestReportView';
 import Resource from './model/Resource';
@@ -161,7 +160,6 @@ import ResponseDTOCourse from './model/ResponseDTOCourse';
 import ResponseDTOCourseCourseView from './model/ResponseDTOCourseCourseView';
 import ResponseDTOFeedbackFeedbackView from './model/ResponseDTOFeedbackFeedbackView';
 import ResponseDTOInteger from './model/ResponseDTOInteger';
-import ResponseDTOListReport from './model/ResponseDTOListReport';
 import ResponseDTOListReportReportView from './model/ResponseDTOListReportReportView';
 import ResponseDTOLong from './model/ResponseDTOLong';
 import ResponseDTOOrderResponse from './model/ResponseDTOOrderResponse';
@@ -175,6 +173,7 @@ import ResponseDTOTransaction from './model/ResponseDTOTransaction';
 import ResponseDTOTransactionTransactionView from './model/ResponseDTOTransactionTransactionView';
 import ResponseDTOUsedQuestion from './model/ResponseDTOUsedQuestion';
 import ResponseDTOWithdrawalRequestWithdrawRequestView from './model/ResponseDTOWithdrawalRequestWithdrawRequestView';
+import ResultDetailResponseResultDetailView from './model/ResultDetailResponseResultDetailView';
 import ResultDetailResultDetailView from './model/ResultDetailResultDetailView';
 import ResultDetailResultQuizView from './model/ResultDetailResultQuizView';
 import ResultQuizResultDetailView from './model/ResultQuizResultDetailView';
@@ -198,6 +197,7 @@ import Student from './model/Student';
 import StudentEnrollView from './model/StudentEnrollView';
 import StudentFeedbackView from './model/StudentFeedbackView';
 import StudentPaymentHistoryView from './model/StudentPaymentHistoryView';
+import StudentReportView from './model/StudentReportView';
 import StudentResultQuizView from './model/StudentResultQuizView';
 import StudentTransactionView from './model/StudentTransactionView';
 import Subject from './model/Subject';
@@ -251,7 +251,9 @@ import TransactionWithdrawRequestView from './model/TransactionWithdrawRequestVi
 import UpdateSubjectStatusSubjectView from './model/UpdateSubjectStatusSubjectView';
 import UsedAnswer from './model/UsedAnswer';
 import UsedAnswerRequest from './model/UsedAnswerRequest';
+import UsedAnswerResponseResultDetailView from './model/UsedAnswerResponseResultDetailView';
 import UsedAnswerResultDetailView from './model/UsedAnswerResultDetailView';
+import UsedAnswerResultQuizView from './model/UsedAnswerResultQuizView';
 import UsedAnswerViewUsedQuestion from './model/UsedAnswerViewUsedQuestion';
 import UsedAnswerViewUsedQuestionDoQuiz from './model/UsedAnswerViewUsedQuestionDoQuiz';
 import UsedQuestion from './model/UsedQuestion';
@@ -1099,12 +1101,6 @@ export {
     RejectCourseRequestCourseView,
 
     /**
-     * The Report model constructor.
-     * @property {module:model/Report}
-     */
-    Report,
-
-    /**
      * The ReportReportView model constructor.
      * @property {module:model/ReportReportView}
      */
@@ -1231,12 +1227,6 @@ export {
     ResponseDTOInteger,
 
     /**
-     * The ResponseDTOListReport model constructor.
-     * @property {module:model/ResponseDTOListReport}
-     */
-    ResponseDTOListReport,
-
-    /**
      * The ResponseDTOListReportReportView model constructor.
      * @property {module:model/ResponseDTOListReportReportView}
      */
@@ -1313,6 +1303,12 @@ export {
      * @property {module:model/ResponseDTOWithdrawalRequestWithdrawRequestView}
      */
     ResponseDTOWithdrawalRequestWithdrawRequestView,
+
+    /**
+     * The ResultDetailResponseResultDetailView model constructor.
+     * @property {module:model/ResultDetailResponseResultDetailView}
+     */
+    ResultDetailResponseResultDetailView,
 
     /**
      * The ResultDetailResultDetailView model constructor.
@@ -1451,6 +1447,12 @@ export {
      * @property {module:model/StudentPaymentHistoryView}
      */
     StudentPaymentHistoryView,
+
+    /**
+     * The StudentReportView model constructor.
+     * @property {module:model/StudentReportView}
+     */
+    StudentReportView,
 
     /**
      * The StudentResultQuizView model constructor.
@@ -1771,10 +1773,22 @@ export {
     UsedAnswerRequest,
 
     /**
+     * The UsedAnswerResponseResultDetailView model constructor.
+     * @property {module:model/UsedAnswerResponseResultDetailView}
+     */
+    UsedAnswerResponseResultDetailView,
+
+    /**
      * The UsedAnswerResultDetailView model constructor.
      * @property {module:model/UsedAnswerResultDetailView}
      */
     UsedAnswerResultDetailView,
+
+    /**
+     * The UsedAnswerResultQuizView model constructor.
+     * @property {module:model/UsedAnswerResultQuizView}
+     */
+    UsedAnswerResultQuizView,
 
     /**
      * The UsedAnswerViewUsedQuestion model constructor.

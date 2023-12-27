@@ -78,7 +78,7 @@ const ListLessonModal = ({ isOpen, onSave, onClose, courseId }) => {
                             <TableHead>
                                 <TableRow>
                                     <TableCell>STT</TableCell>
-                                    <TableCell>Nội dung câu hỏi</TableCell>
+                                    <TableCell>Tên bài học</TableCell>
                                     <TableCell></TableCell>
                                 </TableRow>
                             </TableHead>
@@ -106,12 +106,12 @@ const ListLessonModal = ({ isOpen, onSave, onClose, courseId }) => {
             </DialogContent>
 
             <DialogActions>
-                <Button onClick={handleClose} color="secondary">
+                <button onClick={onClose} className='btn btn-outline-secondary'>
                     Hủy
-                </Button>
-                <Button onClick={handleSave} color="primary">
-                    Hoàn thành
-                </Button>
+                </button>
+                <button onClick={handleSave} color="primary" className='btn btn-success'>
+                    Hoàn tất
+                </button>
             </DialogActions>
         </Dialog>
 

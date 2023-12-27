@@ -34,12 +34,12 @@ export default function ReportFeedbackModal({ open, onClose, onComplete }) {
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose} variant="outlined">
+                <button onClick={onClose} className='btn btn-outline-secondary'>
                     Hủy
-                </Button>
-                <Button onClick={handleComplete} variant="outlined" style={{ marginLeft: '10px' }}>
+                </button>
+                <button onClick={handleComplete} className='btn btn-success' style={{ marginLeft: '10px' }}>
                     Hoàn thành
-                </Button>
+                </button>
             </DialogActions>
         </Dialog>
     );

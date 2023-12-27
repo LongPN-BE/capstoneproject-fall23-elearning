@@ -3,6 +3,8 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, R
 import { useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { fetchData } from '../../../services/AppService';
+import moment from 'moment';
+import '../../Questions/QuestionBanks/ListQuestionBank.css'
 
 function QuizModal({ isOpen, onClose, onSave, quizDetail }) {
     const [resultDetail, setResultDetail] = useState(null)
@@ -74,29 +76,33 @@ function QuizModal({ isOpen, onClose, onSave, quizDetail }) {
                             className='col-5 mx-2'
                             label="Tình trạng"
                             autoFocus
-                            value={quizDetail?.resultStatus}
+                            value={quizDetail?.resultStatus === 'FAIL' ? 'Không đạt' : 'Đạt'}
                             margin="dense"
                         />
                         <TextField
                             className='col-5 mx-2'
                             label="Ngày làm"
                             autoFocus
-                            value={quizDetail?.startTime}
+                            value={moment(quizDetail?.startTime).format('DD-MM-YYYY HH:mm:ss')}
                             margin="dense"
                         />
 
                     </div>
                     {resultDetail && Object.keys(resultDetail).map((resultId, index) => {
                         const question = resultDetail[resultId];
-                        console.log(question);
+
                         return (
                             <FormControl component="fieldset" margin="normal" className='col-12' key={index}>
-                                <TextField fullWidth label={`Câu hỏi ${++index}`} autoFocus margin="dense" value={question?.content} />
-                                <RadioGroup>
+                                <label>{`Câu hỏi ${++index}: `}</label>
+                                <span dangerouslySetInnerHTML={{ __html: question?.content }} style={{ width: 'fit-content' }}></span>
+                                <RadioGroup className='list-question-bank'>
                                     {
                                         question.answers.map((answer, answerIndex) => {
                                             return (
-                                                <FormControlLabel value={answer?.id} control={<Radio />} label={answer?.content} key={answerIndex} checked={answer?.isCorrect} />
+                                                <FormControlLabel value={answer?.id} control={<Radio />}
+                                                    label={<div dangerouslySetInnerHTML={{ __html: answer?.content }} />}
+                                                    key={answerIndex}
+                                                    checked={answer?.isCorrect} />
                                             )
                                         })
                                     }

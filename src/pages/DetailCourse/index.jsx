@@ -9,12 +9,26 @@ import { Avatar, Divider, Typography } from '@mui/material';
 import LeftNavBar from './Components/LeftNavBar';
 import { CourseControllerApi } from '../../api/generated/generate-api';
 import ApiClientSingleton from '../../api/apiClientImpl';
+import CustomBreadcrumbs from '../../components/Breadcrumbs';
 
 const courseApi = new CourseControllerApi(ApiClientSingleton.getInstance());
 const CourseDetail = () => {
   const [course, setCourse] = useState();
   const { courseId } = useParams();
-
+  const breadcrumbItems = [
+    {
+      url: '/student-home',
+      label: 'Trang chủ',
+    },
+    {
+      url: '/my-course',
+      label: 'Khóa học của tôi',
+    },
+    {
+      url: `/courses/${courseId}`,
+      label: `Thông tin khóa học`,
+    },
+  ];
   useEffect(() => {
     courseApi.getCourseById(courseId, (error, res) => {
       setCourse(res);
@@ -24,6 +38,7 @@ const CourseDetail = () => {
   return (
     <>
       <Header />
+      <CustomBreadcrumbs items={breadcrumbItems} />
       <Container className="mt-4">
         <Divider className="my-4" />
         <div className="row">

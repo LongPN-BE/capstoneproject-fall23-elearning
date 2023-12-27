@@ -62,6 +62,9 @@ class ProfileCourseView {
             if (data.hasOwnProperty('lastName')) {
                 obj['lastName'] = ApiClient.convertToType(data['lastName'], 'String');
             }
+            if (data.hasOwnProperty('email')) {
+                obj['email'] = ApiClient.convertToType(data['email'], 'String');
+            }
             if (data.hasOwnProperty('description')) {
                 obj['description'] = ApiClient.convertToType(data['description'], 'String');
             }
@@ -99,6 +102,10 @@ class ProfileCourseView {
         // ensure the json data is a string
         if (data['lastName'] && !(typeof data['lastName'] === 'string' || data['lastName'] instanceof String)) {
             throw new Error("Expected the field `lastName` to be a primitive type in the JSON string but got " + data['lastName']);
+        }
+        // ensure the json data is a string
+        if (data['email'] && !(typeof data['email'] === 'string' || data['email'] instanceof String)) {
+            throw new Error("Expected the field `email` to be a primitive type in the JSON string but got " + data['email']);
         }
         // ensure the json data is a string
         if (data['description'] && !(typeof data['description'] === 'string' || data['description'] instanceof String)) {
@@ -141,6 +148,11 @@ ProfileCourseView.prototype['firstName'] = undefined;
  * @member {String} lastName
  */
 ProfileCourseView.prototype['lastName'] = undefined;
+
+/**
+ * @member {String} email
+ */
+ProfileCourseView.prototype['email'] = undefined;
 
 /**
  * @member {String} description

@@ -47,11 +47,11 @@ class UsedAnswerResultQuizView {
         if (data) {
             obj = obj || new UsedAnswerResultQuizView();
 
+            if (data.hasOwnProperty('id')) {
+                obj['id'] = ApiClient.convertToType(data['id'], 'Number');
+            }
             if (data.hasOwnProperty('content')) {
                 obj['content'] = ApiClient.convertToType(data['content'], 'String');
-            }
-            if (data.hasOwnProperty('isCorrect')) {
-                obj['isCorrect'] = ApiClient.convertToType(data['isCorrect'], 'Boolean');
             }
         }
         return obj;
@@ -77,14 +77,14 @@ class UsedAnswerResultQuizView {
 
 
 /**
+ * @member {Number} id
+ */
+UsedAnswerResultQuizView.prototype['id'] = undefined;
+
+/**
  * @member {String} content
  */
 UsedAnswerResultQuizView.prototype['content'] = undefined;
-
-/**
- * @member {Boolean} isCorrect
- */
-UsedAnswerResultQuizView.prototype['isCorrect'] = undefined;
 
 
 

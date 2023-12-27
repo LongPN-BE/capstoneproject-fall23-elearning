@@ -11,72 +11,111 @@ import { postData } from '../../../../services/AppService';
 import { PaypalV2ControllerApi } from '../../../../api/generated/generate-api';
 import ApiClientSingleton from '../../../../api/apiClientImpl';
 import Swal from 'sweetalert2';
+import Loading from '../../../../components/Loading/Loading';
+import { toast, ToastContainer } from 'react-toastify';
 
 const paypalApi = new PaypalV2ControllerApi(ApiClientSingleton.getInstance());
-function BalanceInfo({ wallet, user }) {
+function BalanceInfo({ wallet, user, setIsReload, isReload }) {
+  const [loading, setLoading] = useState(false);
   const [isDepositModal, setDepositModal] = useState(false);
   const [price, setPrice] = useState(0);
-  const [isWithDraw, setIsWithDraw] = useState(false)
+  const [isWithDraw, setIsWithDraw] = useState(false);
 
+  const notifySuccess = (msg) => {
+    toast.success(msg, {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
+  const notifyError = (msg) => {
+    toast.error(msg, {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
   const handleOpenDeposit = () => {
+    setIsWithDraw(false);
     setDepositModal(true);
   };
 
   const handleCloseDeposit = () => {
     setDepositModal(false);
+    setPrice(0);
   };
 
   const handleDeposit = async () => {
+    setLoading(true);
     const body = {
       accountId: user.id,
       value: price.toString(),
     };
     paypalApi.createOrders(body, (err, res) => {
       if (res) {
-        res?.links?.forEach((element) => {
+        res?.responseObject?.links?.forEach((element) => {
           if (element?.rel === 'approve') {
-            window.open(element.href, 'blank');
+            if (setIsReload !== undefined) {
+              window.open(element?.href, 'blank');
+            }
           }
         });
       }
+      setLoading(false);
     });
   };
 
-
   const handleWithDraw = async () => {
-    const token = Cookies.get('token')
-    if (price <= wallet.amount) {
+    const token = Cookies.get('token');
+    if (parseFloat(price) <= wallet.amount && parseFloat(price) > 0) {
       if (token) {
+        setLoading(true);
         const body = {
           accountId: user.id,
           amountValue: price.toString(),
         };
-        await postData('/paypal/payout', body, token).then(resp => {
-          if (resp) {
-            window.location.reload()
-          }
-        })
+        await postData('/paypal/payout', body, token)
+          .then((resp) => {
+            if (resp?.code === 200) {
+              if (setIsReload !== undefined) {
+                setIsReload(!isReload);
+              }
+              setIsWithDraw(false);
+              setDepositModal(false)
+              setPrice(0);
+            } else {
+              notifyError(resp?.message);
+            }
+          })
+          .finally(() => setLoading(false));
       }
     } else {
-      setIsWithDraw(false)
+      setIsWithDraw(false);
       setDepositModal(false);
       Swal.fire({
-        title: "Warning",
-        text: 'amount should be small than amount in your wallet',
-        icon: "warning"
+        title: 'Warning',
+        text: 'Số tiền phải lớn hơn 0 và nhỏ hơn số tiền trong ví',
+        icon: 'warning',
       });
     }
   };
 
   const handleWithdrawOpenModal = () => {
-    setIsWithDraw(true)
+    setIsWithDraw(true);
     setDepositModal(true);
-
   };
 
-  return (
-    wallet &&
-    wallet.id && (
+  const isValidNumber = (str) => {
+    if (!str) {
+      return true;
+    }
+    return /^\d+(\.\d+)?$/.test(str);
+  };
+  const validateAmount = (amount) => {
+    const number = Number(amount);
+    return number >= 250_000 && number <= 10_000_000;
+  };
+
+  return loading ? (
+    <Loading />
+  ) : (
+    wallet && wallet.id && (
       <Card
         variant="outlined"
         style={{
@@ -85,28 +124,32 @@ function BalanceInfo({ wallet, user }) {
           borderRadius: '16px',
         }}
       >
-        <CardContent className="p-4 d-flex flex-column gap-2" style={{ minHeight: 160 }}>
+        <ToastContainer />
+        <CardContent className="p-4 d-flex flex-column gap-2" style={{ minHeight: 160, height: '100%' }}>
           <div className="row justify-content-between">
             <div className="col-6">Số dư</div>
-            <div className="col-6">ID: {wallet.id}</div>
+            {/* <div className="col-6">ID: {wallet.id}</div> */}
           </div>
-          <div className="row flex-grow-1 justify-content-center align-items-center">
+          <div
+            className="row flex-grow-1 justify-content-center align-items-center"
+            style={{ fontWeight: '500', fontSize: '20px' }}
+          >
             {wallet?.amount ? wallet.amount.toLocaleString() : 0} VNĐ
           </div>
           <div className="row  ">
             <div className="col-6  justify-content-center align-items-center d-flex">
-              <Button variant="contained" onClick={handleOpenDeposit}>
+              <button className="btn btn-success" onClick={handleOpenDeposit}>
                 Nạp tiền
-              </Button>
+              </button>
             </div>
             <div className="col-6 justify-content-center align-items-center d-flex ">
-              <Button
-                style={{ backgroundColor: '#cecece', color: '#000' }}
-                variant="contained"
+              <button
+                // style={{ backgroundColor: '#cecece', color: '#000' }}
+                className="btn btn-success"
                 onClick={handleWithdrawOpenModal}
               >
                 Rút tiền
-              </Button>
+              </button>
             </div>
           </div>
         </CardContent>
@@ -136,13 +179,33 @@ function BalanceInfo({ wallet, user }) {
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               required
+              error={!isValidNumber(price) || !validateAmount(price)}
+              helperText={
+                !isValidNumber(price)
+                  ? 'Số tiền không hợp lệ'
+                  : !validateAmount(price)
+                    ? 'Số tiền phải từ 250.000VND đến 10.000.000VND'
+                    : ''
+              }
             />
             <div className="text-end">
-              {isWithDraw ? <button className="btn btn-outline-primary mt-3" onClick={handleWithDraw}>
-                Rút tiền
-              </button> : <button className="btn btn-outline-primary mt-3" onClick={handleDeposit}>
-                Nạp tiền
-              </button>}
+              {isWithDraw ? (
+                <button
+                  className="btn btn-outline-primary mt-3"
+                  onClick={handleWithDraw}
+                  disabled={!isValidNumber(price) || !validateAmount(price)}
+                >
+                  Rút tiền
+                </button>
+              ) : (
+                <button
+                  className="btn btn-outline-primary mt-3"
+                  onClick={handleDeposit}
+                  disabled={!isValidNumber(price) || !validateAmount(price)}
+                >
+                  Nạp tiền
+                </button>
+              )}
             </div>
           </Box>
         </Modal>

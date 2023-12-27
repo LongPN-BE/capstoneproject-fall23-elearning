@@ -21,6 +21,11 @@ function LeftNavBar(props) {
       url: `/courses/${courseId}/grades`,
       label: 'Điểm bài kiểm tra',
     },
+    {
+      id: 'report',
+      url: `/courses/${courseId}/report`,
+      label: 'Báo cáo giáo viên',
+    },
   ];
   const localtion = useLocation();
 

@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { fetchData, postData } from '../../../services/AppService';
 import ResourceModal from './ResourceModal';
+import CustomBreadcrumbs from '../../Breadcrumbs';
 
 const ListResources = () => {
     const { courseId, syllabusId, lessonId } = useParams();
@@ -15,7 +16,9 @@ const ListResources = () => {
     const [data, setData] = useState(null);
     const [searchValue, setSearchValue] = useState('');
     const [searchData, setSearchData] = useState(null);
-
+    const [course, setCourse] = useState()
+    const [syllabus, setSyllabus] = useState()
+    const [lesson, setLesson] = useState()
 
     const handleSearchChange = (event) => {
         const searchInput = event.target.value;
@@ -39,6 +42,16 @@ const ListResources = () => {
     useEffect(() => {
         const token = Cookies.get('token')
         if (token) {
+            fetchData(`/course/byId?id=${courseId}`, token).then(resp => {
+                if (resp) {
+                    setCourse(resp)
+                }
+            })
+            fetchData(`/syllabus/byId?id=${syllabusId}`, token).then(resp => {
+                if (resp) {
+                    setSyllabus(resp)
+                }
+            })
             fetchData(`/resource/by-lesson?lesson_id=${lessonId}`, token).then(resp => {
                 if (resp) {
                     setData(resp)
@@ -76,15 +89,38 @@ const ListResources = () => {
 
     const emptyRows = searchData ? page > 0 ? Math.max(0, (1 + page) * rowsPerPage - searchData.length) : 0 : page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
+    const breadcrumbItems = [
+        {
+            url: '/',
+            label: 'Trang chủ',
+        },
+        {
+            url: `/manage-course`,
+            label: `Quản lý khóa học`,
+        },
+        {
+            url: `/courses/` + courseId,
+            label: course?.name,
+        },
+        {
+            url: `/courses/` + courseId + `/syllabus/` + syllabusId,
+            label: syllabus?.name,
+        },
+        {
+            url: `/courses/` + courseId + `/syllabus/` + syllabusId + `/lessons/` + lessonId,
+            label: 'Tài nguyên',
+        },
+    ];
+
     return (
         <div className="m-1">
             <div style={{ margin: '20px' }}>
                 <Paper style={{ padding: '20px' }}>
-                    <Typography variant="body1" style={{ color: 'darkblue' }}>
+                    {/* <Typography variant="body1" style={{ color: 'darkblue' }}>
                         <Link to={'/'}>Trang chủ </Link>{'>'} <Link to={'/manage-course'}>Quản lý khóa học </Link>{'>'} <Link to={`/courses/${courseId}`}>Khóa học {courseId} </Link> {'>'}
                         <Link to={`/courses/${courseId}/syllabus/${syllabusId}`}> Khung chương trình {syllabusId}</Link> {'>'} Bài học {lessonId} {'>'} tài nguyên
-                    </Typography>
-
+                    </Typography> */}
+                    <CustomBreadcrumbs items={breadcrumbItems} />
                     {/* <div style={{ marginTop: '20px' }}>
                         <TextField label="Ngày tạo:" value={syllabus.createDate} />
                         <TextField label="Trạng thái:" style={{ marginLeft: '20px' }} value={syllabus.status} />
@@ -105,12 +141,11 @@ const ListResources = () => {
                             startAdornment={<Search />}
                             onChange={handleSearchChange}
                         />
-                        <div className="text-end col-8">
-
-                            <Button variant="outlined" style={{ marginLeft: '10px' }} onClick={() => setIsResourceModalOpen(true)}>
+                        {(course?.status !== 'ACTIVE' && course?.status !== 'PENDING') && <div className="text-end col-8">
+                            <button className='btn btn-success' style={{ marginLeft: '10px' }} onClick={() => setIsResourceModalOpen(true)}>
                                 Tạo mới
-                            </Button>
-                        </div>
+                            </button>
+                        </div>}
                     </div>
 
                     <Table style={{ marginTop: '20px' }}>
@@ -171,7 +206,8 @@ const ListResources = () => {
                         </TableBody>
                     </Table>
                     {data && searchData && <TablePagination
-                        rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                        labelRowsPerPage="Số hàng trên trang :"
+                        rowsPerPageOptions={[5, 10, 25]}
                         component="div"
                         count={searchData ? searchData.length : data.length}
                         rowsPerPage={rowsPerPage}

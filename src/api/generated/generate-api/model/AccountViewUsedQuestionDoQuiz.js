@@ -66,9 +66,6 @@ class AccountViewUsedQuestionDoQuiz {
             if (data.hasOwnProperty('active')) {
                 obj['active'] = ApiClient.convertToType(data['active'], 'Boolean');
             }
-            if (data.hasOwnProperty('authorities')) {
-                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthorityViewUsedQuestionDoQuiz]);
-            }
             if (data.hasOwnProperty('accountNonExpired')) {
                 obj['accountNonExpired'] = ApiClient.convertToType(data['accountNonExpired'], 'Boolean');
             }
@@ -77,6 +74,9 @@ class AccountViewUsedQuestionDoQuiz {
             }
             if (data.hasOwnProperty('accountNonLocked')) {
                 obj['accountNonLocked'] = ApiClient.convertToType(data['accountNonLocked'], 'Boolean');
+            }
+            if (data.hasOwnProperty('authorities')) {
+                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthorityViewUsedQuestionDoQuiz]);
             }
             if (data.hasOwnProperty('enabled')) {
                 obj['enabled'] = ApiClient.convertToType(data['enabled'], 'Boolean');
@@ -149,11 +149,6 @@ AccountViewUsedQuestionDoQuiz.prototype['role'] = undefined;
 AccountViewUsedQuestionDoQuiz.prototype['active'] = undefined;
 
 /**
- * @member {Array.<module:model/GrantedAuthorityViewUsedQuestionDoQuiz>} authorities
- */
-AccountViewUsedQuestionDoQuiz.prototype['authorities'] = undefined;
-
-/**
  * @member {Boolean} accountNonExpired
  */
 AccountViewUsedQuestionDoQuiz.prototype['accountNonExpired'] = undefined;
@@ -167,6 +162,11 @@ AccountViewUsedQuestionDoQuiz.prototype['credentialsNonExpired'] = undefined;
  * @member {Boolean} accountNonLocked
  */
 AccountViewUsedQuestionDoQuiz.prototype['accountNonLocked'] = undefined;
+
+/**
+ * @member {Array.<module:model/GrantedAuthorityViewUsedQuestionDoQuiz>} authorities
+ */
+AccountViewUsedQuestionDoQuiz.prototype['authorities'] = undefined;
 
 /**
  * @member {Boolean} enabled

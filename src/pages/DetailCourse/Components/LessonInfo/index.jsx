@@ -6,7 +6,7 @@ import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { LessonControllerApi } from '../../../../api/generated/generate-api';
+import { LessonControllerApi, SyllabusControllerApi } from '../../../../api/generated/generate-api';
 import ApiClientSingleton from '../../../../api/apiClientImpl';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -39,35 +39,53 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 }));
 
 const lessonApi = new LessonControllerApi(ApiClientSingleton.getInstance());
-
+const syllabusApi = new SyllabusControllerApi(ApiClientSingleton.getInstance());
 function LessonInfo({ lessonsBySyllabus }) {
   const navigate = useNavigate();
-  const [lessons, setLessons] = useState(lessonsBySyllabus);
+  const [lessons, setLessons] = useState([lessonsBySyllabus]);
+  const [syllabus, setSyllabus] = useState([]);
 
   const { courseId } = useParams();
   useEffect(() => {
-    if (!lessonsBySyllabus) {
-      lessonApi.findLessonByCourseId(courseId, (error, res) => {
-        setLessons(res);
-      });
-    }
+    // if (!lessonsBySyllabus) {
+    //   lessonApi.findLessonByCourseId(courseId, (error, res) => {
+    //     setLessons(res);
+    //   });
+    // }
+    syllabusApi.findSyllabusByCourseEnrolled(courseId, (err, res) => {
+      if (res) {
+        setSyllabus(res);
+      }
+    });
   }, [courseId]);
 
   return (
     <>
       <div>
-        {lessons?.map((data) => {
-          return (
-            <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
-                <Typography>{data?.name}</Typography>
-              </AccordionSummary>
-              <AccordionDetails style={{ cursor: 'pointer' }} onClick={() => navigate(`/courses/${courseId}/learn`)}>
-                <Typography>{data?.description}</Typography>
-              </AccordionDetails>
-            </Accordion>
-          );
-        })}
+        {syllabus ? (
+          <>
+            <Typography marginBottom={'12px'} variant={'h5'}>
+              {syllabus?.name}
+            </Typography>
+            {syllabus?.lessons?.map((data) => {
+              return (
+                <Accordion>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
+                    <Typography>{data?.name}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => navigate(`/courses/${courseId}/learn/${syllabus?.id}/${data?.id}/${data?.type}`)}
+                  >
+                    <Typography>{data?.description}</Typography>
+                  </AccordionDetails>
+                </Accordion>
+              );
+            })}
+          </>
+        ) : (
+          <></>
+        )}
       </div>
     </>
   );

@@ -69,9 +69,6 @@ class AccountPaymentMethodsView {
             if (data.hasOwnProperty('active')) {
                 obj['active'] = ApiClient.convertToType(data['active'], 'Boolean');
             }
-            if (data.hasOwnProperty('authorities')) {
-                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthorityPaymentMethodsView]);
-            }
             if (data.hasOwnProperty('accountNonExpired')) {
                 obj['accountNonExpired'] = ApiClient.convertToType(data['accountNonExpired'], 'Boolean');
             }
@@ -80,6 +77,9 @@ class AccountPaymentMethodsView {
             }
             if (data.hasOwnProperty('accountNonLocked')) {
                 obj['accountNonLocked'] = ApiClient.convertToType(data['accountNonLocked'], 'Boolean');
+            }
+            if (data.hasOwnProperty('authorities')) {
+                obj['authorities'] = ApiClient.convertToType(data['authorities'], [GrantedAuthorityPaymentMethodsView]);
             }
             if (data.hasOwnProperty('enabled')) {
                 obj['enabled'] = ApiClient.convertToType(data['enabled'], 'Boolean');
@@ -157,11 +157,6 @@ AccountPaymentMethodsView.prototype['role'] = undefined;
 AccountPaymentMethodsView.prototype['active'] = undefined;
 
 /**
- * @member {Array.<module:model/GrantedAuthorityPaymentMethodsView>} authorities
- */
-AccountPaymentMethodsView.prototype['authorities'] = undefined;
-
-/**
  * @member {Boolean} accountNonExpired
  */
 AccountPaymentMethodsView.prototype['accountNonExpired'] = undefined;
@@ -175,6 +170,11 @@ AccountPaymentMethodsView.prototype['credentialsNonExpired'] = undefined;
  * @member {Boolean} accountNonLocked
  */
 AccountPaymentMethodsView.prototype['accountNonLocked'] = undefined;
+
+/**
+ * @member {Array.<module:model/GrantedAuthorityPaymentMethodsView>} authorities
+ */
+AccountPaymentMethodsView.prototype['authorities'] = undefined;
 
 /**
  * @member {Boolean} enabled

@@ -35,10 +35,10 @@ const QuestionBankModal = ({ isOpen, onSave, onClose, data }) => {
         const token = Cookies.get('token');
         if (token) {
             if (data) {
-                fetchData(`/question/byLessonId?lesson_id=${data[0].id}`, token).then(resp => {
+                fetchData(`/question/byLessonId?lesson_id=${data[0]?.id}`, token).then(resp => {
                     if (resp) {
                         setQuestions(resp)
-                        setLessonItem(data[0].id)
+                        setLessonItem(data[0]?.id)
                     }
                 })
             }
@@ -64,7 +64,7 @@ const QuestionBankModal = ({ isOpen, onSave, onClose, data }) => {
 
         // Call the onSave function and pass the selectedItems if needed
         onSave(selectedItems);
-        console.log(selectedItems);
+        // console.log(selectedItems);
         setSelectedItems([])
         // Close the dialog
         onClose();
@@ -88,7 +88,7 @@ const QuestionBankModal = ({ isOpen, onSave, onClose, data }) => {
             })
         }
     }
-    console.log(questions);
+
     return (
         questions &&
         <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="md">
@@ -123,11 +123,11 @@ const QuestionBankModal = ({ isOpen, onSave, onClose, data }) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {questions && questions.map((item, index) => (
+                                {questions && questions.length > 0 && questions?.map((item, index) => (
                                     <TableRow key={index}>
                                         <TableCell>{++index}</TableCell>
                                         <TableCell>
-                                            {item.content}
+                                            <div dangerouslySetInnerHTML={{ __html: item?.content }}></div>
                                         </TableCell>
                                         <TableCell>
                                             <Checkbox

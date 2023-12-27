@@ -13,15 +13,23 @@ import ApiClientSingleton from '../../api/apiClientImpl';
 const courseApi = new CourseControllerApi(ApiClientSingleton.getInstance());
 function LearnCourse() {
   const [course, setCourse] = useState();
-  const { courseId } = useParams();
+  const { courseId, syllabusId } = useParams();
   const breadcrumbItems = [
     {
       url: '/student-home',
-      label: 'Home',
+      label: 'Trang chủ',
     },
     {
-      url: `/course/${courseId}`,
-      label: `Learn Course: ${course?.name}`,
+      url: '/my-course',
+      label: 'Khóa học của tôi',
+    },
+    {
+      url: `/courses/${courseId}`,
+      label: `Thông tin khóa học`,
+    },
+    {
+      url: ``,
+      label: `Khóa học: ${course?.name}`,
     },
   ];
 
@@ -46,7 +54,7 @@ function LearnCourse() {
           <div className="col-3">
             <div className="d-flex flex-column gap-3">
               <div>
-                <NavBarLesson courseId={courseId} />
+                <NavBarLesson courseId={courseId} syllabusId={syllabusId} />
               </div>
             </div>
           </div>

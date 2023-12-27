@@ -24,7 +24,7 @@ const StudentTabComponent = ({ tabId }) => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   return (
     <div>
@@ -44,22 +44,19 @@ const StudentTabComponent = ({ tabId }) => {
             },
           }}
         >
-          <Tab label="Home" />
-          <Tab label="In Process" />
-          <Tab label="Completed" />
+          <Tab style={{ padding: '12px 16px' }} label="Trang chủ" />
+          <Tab style={{ padding: '12px 16px' }} label="Đang học" />
+          <Tab style={{ padding: '12px 16px' }} label="Hoàn Thành" />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <Typography variant="h4" gutterBottom>
-          Home
-        </Typography>
         {/* Add your home content here */}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <TabCourse courseAccount={courseAccount} courseData={courseData} type={'in-process'} />
+        <TabCourse courseAccount={courseAccount} courseData={courseData} type={'đang học'} />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <TabCourse courseAccount={courseAccount} courseData={courseData} type={'completed'} />
+        <TabCourse courseAccount={courseAccount} courseData={courseData} type={'đã hoàn thành'} />
       </TabPanel>
     </div>
   );

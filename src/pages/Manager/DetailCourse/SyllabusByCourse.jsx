@@ -135,7 +135,7 @@ export default function SyllabusByCourse() {
             </div>
 
             <Paper
-              style={{
+              sx={{
                 padding: '20px',
                 borderRadius: '20px',
                 maxHeight: 'max-content',
@@ -156,7 +156,7 @@ export default function SyllabusByCourse() {
             </Paper>
 
             <Paper
-              style={{
+              sx={{
                 borderRadius: '20px',
                 padding: '10px',
                 maxHeight: 'max-content',
@@ -178,7 +178,7 @@ export default function SyllabusByCourse() {
             </Paper>
 
             <Paper
-              style={{
+              sx={{
                 padding: '20px',
                 borderRadius: '20px',
                 maxHeight: 'max-content',
@@ -197,7 +197,7 @@ export default function SyllabusByCourse() {
             </Paper>
 
             <Paper
-              style={{
+              sx={{
                 padding: '20px',
                 borderRadius: '20px',
                 maxHeight: 'max-content',
@@ -216,7 +216,7 @@ export default function SyllabusByCourse() {
           </Box>
           <div className="mt-3 col-8">
             <Paper
-              style={{
+              sx={{
                 padding: '20px',
                 borderRadius: '20px',
                 maxHeight: 'max-content',

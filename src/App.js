@@ -12,14 +12,9 @@ import 'boxicons/css/boxicons.min.css';
 import CreateQuiz from './components/ManageCourses/Quiz/CreateQuiz';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
-import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
-import AboutUs from './pages/Landing/ContactUs';
-import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
-import TermOfUse from './pages/TermsofUse/TermOfUse';
 import NavBar from './components/Navigation/NavBar';
 import { useState } from 'react';
-// import LandingPage from './pages/Landing/LandingPage';
-import LandingPage from './pages/Landing/Landing';
+import LandingPage from './pages/Landing/LandingPage';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Profile from './components/Profile/Profile';
 import ManageCourse from './components/ManageCourses/ManageCourse';
@@ -54,23 +49,24 @@ import Notification from './util/Notification';
 import ListResources from './components/ManageCourses/Resources/ListResources';
 import PayPalCapture from './pages/PayPalCapture';
 import StaffLanding from './pages/Landing/StaffLanding';
-import Accounts from "./pages/Manager/ManageAccounts/ManageAccounts";
+import Accounts from './pages/Manager/ManageAccounts/ManageAccounts';
 import ListConfig from './pages/Manager/ManageConfig/ManageConfig';
+import ReportTeacher from './pages/ReportTeacher';
 import SyllabusByCourse from './pages/Manager/DetailCourse/SyllabusByCourse';
 import PreviewCourse from './pages/Manager/PreviewCourse';
-import Report from './pages/Manager/ReportAccount/ReportAccount';
 import PreviewLesson from './pages/Manager/DetailCourse/DetailLesson';
 import PreviewQuizz from './pages/Manager/DetailCourse/DetailLesson/Quizz';
 import ListPaymenHistory from './pages/Manager/ManageFiancial/ManageHistoryPayment';
 import ListTransactionHistory from './pages/Manager/ManageFiancial/ManageHistoryTransaction';
-import ListTransactionAproved from './pages/Manager/ManageFiancial/ManageApproved';
 import AllCourses from './components/Landing/AllCourses/AllCourses';
 import CoursesPage from './pages/Landing/CoursesPage';
 import ListFeedback from './pages/Manager/CoursesBySubject/Evaluate/ListFeedback';
-import StaffHeader from './components/StaffLanding/StaffHeader/StaffHeader';
+import EnrollStudentView from './components/ManageCourses/Enroll/EnrollStudentView';
+import ListTransactionAproved from './pages/Manager/ManageFiancial/ManageApproved';
+import Report from './pages/Manager/ReportAccount/ReportAccount';
+import TeacherDashboard from './pages/Teacher/TeacherPage';
+import Navbar from './components/Dashboard/Navbar/Navbar';
 import StaffNavbar from './components/Dashboard/Navbar/StaffHeader';
-import AccountCard from './components/Account/AccountCard';
-import AccountTabComponent from './components/Account/AccountTabComponent';
 import ManageAllCourse from './pages/Manager/ManageAllCourses/ManageAllCourse';
 
 const App = () => {
@@ -95,7 +91,12 @@ const App = () => {
               };
               await postData(`/device/save`, body, token);
             }
-            Cookies.set('user', JSON.stringify(userData), { expires: 1 });
+            // Assuming response.token contains the token value
+            const expirationTimeInMinutes = 30;
+            const expirationInMilliseconds = expirationTimeInMinutes * 60 * 1000;
+
+            Cookies.set("user", JSON.stringify(userData), { expires: new Date(Date.now() + expirationInMilliseconds) });
+
             setUser(userData);
           }
         } catch (error) {
@@ -111,16 +112,20 @@ const App = () => {
     } else if (userTmp) {
       userTmp = JSON.parse(userTmp);
       setUser(userTmp);
+    } else {
+      setUser(null);
     }
   }, [location.pathname]);
 
   if (!user) {
     let userTmp = Cookies.get('user');
-    if (!userTmp && location.pathname !== '/'
-      && location.pathname !== '/login' && location.pathname !== '/register'
-      && location.pathname !== '/all-courses' && location.pathname !== '/about-us'
-      && location.pathname !== '/forgot-password' && location.pathname !== '/privacy-policy'
-      && location.pathname !== '/term-of-use') {
+    if (
+      !userTmp &&
+      location.pathname !== '/' &&
+      location.pathname !== '/login' &&
+      location.pathname !== '/register' &&
+      location.pathname !== '/all-courses'
+    ) {
       return (window.location.href = '/');
     }
   }
@@ -131,12 +136,14 @@ const App = () => {
     <>
       {user && user.role === 'TEACHER' ? (
         <NavBar>
+          <Navbar />
           <Routes>
             <Route element={<PrivateRoute />}>
-              <Route path="/" element={<TeacherPage />} />
+              <Route path="/" element={<TeacherDashboard />} />
               <Route path="/my-profile" element={<Profile />} />
               <Route path="/manage-course" element={<ManageCourse />} />
               <Route path="/courses/:courseId" element={<CourseDetail />} />
+              <Route path="/courses/:courseId/enroll-student" element={<EnrollStudentView />} />
               <Route path="/courses/:courseId/syllabus/:syllabusId" element={<SyllabusDetail />} />
               <Route path="/courses/:courseId/syllabus/:syllabusId/lessons/:lessonId" element={<LessonDetail />} />
               <Route
@@ -163,12 +170,10 @@ const App = () => {
         </NavBar>
       ) : user?.role === 'STAFF' ? (
         <NavBar>
-          {/* <StaffHeader/> */}
           <StaffNavbar />
           <Routes>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/" element={<Navigate to="/subjects" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/test" element={<AccountTabComponent isBilling={true} isSecurity={true} />} />
             <Route path="/subjects" element={<ManageSubject />} />
             <Route path="/courses" element={<ManageAllCourse />} />
             <Route path="/subject/:subjectId/course" element={<CourseBySubject />} />
@@ -191,7 +196,6 @@ const App = () => {
         </NavBar>
       ) : user?.role === 'ADMIN' ? (
         <NavBar>
-          <StaffNavbar />
           <Routes>
             <Route path="/" element={<Navigate to="/accounts" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
@@ -205,33 +209,31 @@ const App = () => {
           <Route path="/" element={<Navigate to="/student-home" replace />} />
           <Route path="/student-home" element={<StudentLanding />} />
           <Route path="/my-profile" element={<StudentProfile />} />
-          <Route path="/my-course" element={<StudentMyCourse />} />
+          <Route path="/my-course" element={<StudentLanding activeTabId={1} />} />
+          <Route path="/all-courses" element={<CoursesPage />} />
           <Route path="/overview-course/:courseId" element={<OverviewCourse />} />
           <Route path="/paypal/capture" element={<PayPalCapture />} />
           <Route path="/courses/:courseId/learn">
-            <Route path="" element={<LearnCourse />}>
+            <Route path=":syllabusId" element={<LearnCourse />}>
               <Route path=":lessonId/:type/:id" element={<DetailLesson />} />
               <Route path=":lessonId/:type" element={<DetailLesson />} />
             </Route>
-            <Route path=":lessonId/quiz/:id/start" element={<Quizz />} />
+            <Route path=":syllabusId/:lessonId/quiz/:id/start" element={<Quizz />} />
           </Route>
           <Route path="/courses" element={<UserCourseDetail />}>
             <Route path=":courseId" element={<LessonInfo />} />
             <Route path=":courseId/grades" element={<Grades />} />
             <Route path=":courseId/resources" element={<Resources />} />
             <Route path=":courseId/info" element={<CourseInfo />} />
+            <Route path=":courseId/report" element={<ReportTeacher />} />
           </Route>
         </Routes>
       ) : (
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/about-us" element={<AboutUs />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/" element={<LandingPage />} />
           <Route path="/all-courses" element={<CoursesPage />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/term-of-use" element={<TermOfUse />} />
         </Routes>
       )}
     </>

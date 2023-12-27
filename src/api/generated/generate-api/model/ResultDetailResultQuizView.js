@@ -13,6 +13,7 @@
 
 import ApiClient from '../ApiClient';
 import ResultQuizResultQuizView from './ResultQuizResultQuizView';
+import UsedAnswerResultQuizView from './UsedAnswerResultQuizView';
 import UsedQuestionResultQuizView from './UsedQuestionResultQuizView';
 
 /**
@@ -59,7 +60,7 @@ class ResultDetailResultQuizView {
                 obj['usedQuestion'] = UsedQuestionResultQuizView.constructFromObject(data['usedQuestion']);
             }
             if (data.hasOwnProperty('usedAnswer')) {
-                obj['usedAnswer'] = ApiClient.convertToType(data['usedAnswer'], Object);
+                obj['usedAnswer'] = UsedAnswerResultQuizView.constructFromObject(data['usedAnswer']);
             }
             if (data.hasOwnProperty('isCorrect')) {
                 obj['isCorrect'] = ApiClient.convertToType(data['isCorrect'], 'Boolean');
@@ -81,6 +82,10 @@ class ResultDetailResultQuizView {
         // validate the optional field `usedQuestion`
         if (data['usedQuestion']) { // data not null
           UsedQuestionResultQuizView.validateJSON(data['usedQuestion']);
+        }
+        // validate the optional field `usedAnswer`
+        if (data['usedAnswer']) { // data not null
+          UsedAnswerResultQuizView.validateJSON(data['usedAnswer']);
         }
 
         return true;
@@ -107,7 +112,7 @@ ResultDetailResultQuizView.prototype['resultQuiz'] = undefined;
 ResultDetailResultQuizView.prototype['usedQuestion'] = undefined;
 
 /**
- * @member {Object} usedAnswer
+ * @member {module:model/UsedAnswerResultQuizView} usedAnswer
  */
 ResultDetailResultQuizView.prototype['usedAnswer'] = undefined;
 

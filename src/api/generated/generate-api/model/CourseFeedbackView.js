@@ -49,6 +49,9 @@ class CourseFeedbackView {
         if (data) {
             obj = obj || new CourseFeedbackView();
 
+            if (data.hasOwnProperty('id')) {
+                obj['id'] = ApiClient.convertToType(data['id'], 'Number');
+            }
             if (data.hasOwnProperty('name')) {
                 obj['name'] = ApiClient.convertToType(data['name'], 'String');
             }
@@ -121,6 +124,11 @@ class CourseFeedbackView {
 }
 
 
+
+/**
+ * @member {Number} id
+ */
+CourseFeedbackView.prototype['id'] = undefined;
 
 /**
  * @member {String} name

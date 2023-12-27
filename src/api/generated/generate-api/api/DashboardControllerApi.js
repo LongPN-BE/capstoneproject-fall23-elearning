@@ -34,6 +34,48 @@ export default class DashboardControllerApi {
 
 
     /**
+     * Callback function to receive the result of the getTotalCommisionfee operation.
+     * @callback module:api/DashboardControllerApi~getTotalCommisionfeeCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<{String: Number}>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * Lay tong hoa hong cua hoc sinh dang ky
+     * @param {Number} year 
+     * @param {module:api/DashboardControllerApi~getTotalCommisionfeeCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<{String: Number}>}
+     */
+    getTotalCommisionfee(year, callback) {
+      let postBody = null;
+      // verify the required parameter 'year' is set
+      if (year === undefined || year === null) {
+        throw new Error("Missing the required parameter 'year' when calling getTotalCommisionfee");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'year': year
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = [{'String': 'Number'}];
+      return this.apiClient.callApi(
+        '/api/v1/dashboard/total-commision-fee', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
      * Callback function to receive the result of the getTotalEnrolledByMont operation.
      * @callback module:api/DashboardControllerApi~getTotalEnrolledByMontCallback
      * @param {String} error Error message, if any.
@@ -69,6 +111,90 @@ export default class DashboardControllerApi {
       let returnType = 'Number';
       return this.apiClient.callApi(
         '/api/v1/dashboard/total-enroll-by-month', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the getTotalEnrolledDone operation.
+     * @callback module:api/DashboardControllerApi~getTotalEnrolledDoneCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<{String: Number}>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * Lay tong khong tru hoa hong
+     * @param {Number} year 
+     * @param {module:api/DashboardControllerApi~getTotalEnrolledDoneCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<{String: Number}>}
+     */
+    getTotalEnrolledDone(year, callback) {
+      let postBody = null;
+      // verify the required parameter 'year' is set
+      if (year === undefined || year === null) {
+        throw new Error("Missing the required parameter 'year' when calling getTotalEnrolledDone");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'year': year
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = [{'String': 'Number'}];
+      return this.apiClient.callApi(
+        '/api/v1/dashboard/total-enroll-done', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the getTotalServiceCharge operation.
+     * @callback module:api/DashboardControllerApi~getTotalServiceChargeCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<{String: Number}>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * Lay tong tien phi thu tu request cua teacher
+     * @param {Number} year 
+     * @param {module:api/DashboardControllerApi~getTotalServiceChargeCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<{String: Number}>}
+     */
+    getTotalServiceCharge(year, callback) {
+      let postBody = null;
+      // verify the required parameter 'year' is set
+      if (year === undefined || year === null) {
+        throw new Error("Missing the required parameter 'year' when calling getTotalServiceCharge");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'year': year
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = [{'String': 'Number'}];
+      return this.apiClient.callApi(
+        '/api/v1/dashboard/total-request-service-charge', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );

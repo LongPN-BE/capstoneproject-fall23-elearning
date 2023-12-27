@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import {
     Dialog,
     DialogActions,
@@ -7,7 +7,8 @@ import {
     TextField,
     Button,
     Select,
-    MenuItem
+    MenuItem,
+    Backdrop
 } from '@material-ui/core';
 import { useRef } from 'react';
 import ReactQuill from 'react-quill';
@@ -20,9 +21,9 @@ import storage from '../../../util/firebase';
 import Loading from '../../Loading/Loading';
 
 
-const LessonModal = ({ isOpen, onClose, onSave, onUpdate, lesson }) => {
+const LessonModal = ({ isOpen, onClose, onSave, onUpdate, lesson, course }) => {
     const [loading, setLoading] = useState(false);
-    const reactQuillRef = useRef();
+    const reactQuillRef = useRef(null);
     const [editedLesson, setEditedLesson] = useState({
         name: '',
         description: '',
@@ -32,10 +33,11 @@ const LessonModal = ({ isOpen, onClose, onSave, onUpdate, lesson }) => {
         content: ''
     });
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (lesson) {
             // Populate the form fields if a lesson is provided for editing
             setEditedLesson({
+                id: lesson.id,
                 name: lesson.name,
                 description: lesson.description,
                 url: lesson.url,
@@ -62,35 +64,30 @@ const LessonModal = ({ isOpen, onClose, onSave, onUpdate, lesson }) => {
     };
 
     const handleSave = () => {
+        let message = []
         const validString = validateInputString(editedLesson.name, editedLesson.description, editedLesson.content);
         const validDigits = validateInputDigits(editedLesson.estimateTime)
         if (!validString || !validDigits) {
             // Show an error message or handle the validation as needed
-            clearModal();
-            Swal.fire({
-                title: "Warning",
-                text: invalidInput,
-                icon: "warning"
-            });
-            return;
+            message.push(invalidInput)
         }
 
         if (!isInteger(editedLesson?.estimateTime)) {
-            clearModal();
-            Swal.fire({
-                title: "Warning",
-                text: "Thời gian học phải là số nguyên",
-                icon: "warning"
-            });
-            return;
+            message.push("Thời gian học phải là số nguyên")
         }
 
-        const isValidFileSize = isValidSize(25, editedLesson.url);
-        if (!isValidFileSize) {
-            clearModal();
+        if (typeof editedLesson.url == 'object') {
+            const isValidFileSize = isValidSize(25, editedLesson.url);
+            if (!isValidFileSize) {
+                message.push("Video không được quá 25MB")
+            }
+        }
+
+        if (message.length > 0) {
+            // clearModal();
             Swal.fire({
-                title: "Warning",
-                text: "Video không được quá 25MB",
+                title: "Cảnh báo",
+                html: message.join('<br>'),
                 icon: "warning"
             });
             return;
@@ -98,43 +95,91 @@ const LessonModal = ({ isOpen, onClose, onSave, onUpdate, lesson }) => {
 
         if (lesson) {
             // If editing an existing lesson, call the onUpdate function
-            onUpdate({ ...lesson, ...editedLesson });
+            setLoading(true);
+            if (typeof editedLesson.url == 'object') {
+                // Creating a reference to the file in Firebase Storage
+                const storageRef = ref(storage, `/elearning/text/${editedLesson.url.name}`);
+
+                // Starting the upload task
+                const uploadTask = uploadBytesResumable(storageRef, editedLesson.url);
+
+                uploadTask.on(
+                    "state_changed",
+                    (snapshot) => {
+                        // Calculating and updating the progress
+                        // const percent = Math.round(
+                        //     (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                        // );
+                        // setPercent(percent);
+                    },
+                    (err) => {
+                        console.log(err);
+                        setLoading(false);
+                    },
+                    () => {
+                        // Getting the download URL after successful upload
+                        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                            // handleInputChange(url, 'url');
+                            const lessonSave = { ...editedLesson, url: url }
+                            // console.log('hehe', lessonSave);
+                            onSave(lessonSave);
+                            setLoading(false);
+                        });
+                    }
+                );
+            } else {
+                onSave(editedLesson);
+                setLoading(false);
+            }
+
         } else {
             setLoading(true);
-            // Creating a reference to the file in Firebase Storage
-            const storageRef = ref(storage, `/elearning/text/${editedLesson.url.name}`);
+            if (typeof editedLesson.url == 'object') {
+                // Creating a reference to the file in Firebase Storage
+                const storageRef = ref(storage, `/elearning/text/${editedLesson.url.name}`);
 
-            // Starting the upload task
-            const uploadTask = uploadBytesResumable(storageRef, editedLesson.url);
+                // Starting the upload task
+                const uploadTask = uploadBytesResumable(storageRef, editedLesson.url);
 
-            uploadTask.on(
-                "state_changed",
-                (snapshot) => {
-                    // Calculating and updating the progress
-                    // const percent = Math.round(
-                    //     (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                    // );
-                    // setPercent(percent);
-                },
-                (err) => {
-                    console.log(err);
-                    setLoading(false);
-                },
-                () => {
-                    // Getting the download URL after successful upload
-                    getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                        // handleInputChange(url, 'url');
-                        const lessonSave = { ...editedLesson, url: url }
-                        onSave(lessonSave);
+                uploadTask.on(
+                    "state_changed",
+                    (snapshot) => {
+                        // Calculating and updating the progress
+                        // const percent = Math.round(
+                        //     (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                        // );
+                        // setPercent(percent);
+                    },
+                    (err) => {
+                        console.log(err);
                         setLoading(false);
-                    });
-                }
-            );
-
+                    },
+                    () => {
+                        // Getting the download URL after successful upload
+                        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                            // handleInputChange(url, 'url');
+                            const lessonSave = { ...editedLesson, url: url }
+                            onSave(lessonSave);
+                            setLoading(false);
+                        });
+                    }
+                );
+            } else {
+                onSave(editedLesson);
+                setLoading(false);
+            }
         }
 
         clearModal();
     };
+
+    // const handleClose = (e, reason) => {
+    //     if (reason === 'backdropClick') {
+    //         clearModal()
+    //     } else {
+    //         clearModal()
+    //     }
+    // }
 
     const clearModal = () => {
         setEditedLesson({
@@ -170,10 +215,11 @@ const LessonModal = ({ isOpen, onClose, onSave, onUpdate, lesson }) => {
         },
     }
 
+
     return (
-        loading ? <Loading /> : <Dialog open={isOpen} onClose={onClose} maxWidth="sm" fullWidth>
+        loading ? <Loading /> : <Dialog open={isOpen} onClose={onClose} maxWidth="sm" fullWidth BackdropComponent={Backdrop}>
             <DialogTitle>
-                {lesson ? 'Edit Lesson' : 'Thêm bài học'}
+                {lesson ? 'Chỉnh sửa bài học' : 'Thêm bài học'}
             </DialogTitle>
             <DialogContent>
                 <TextField
@@ -185,6 +231,9 @@ const LessonModal = ({ isOpen, onClose, onSave, onUpdate, lesson }) => {
                     value={editedLesson.name}
                     onChange={(e) => handleInputChange(e, 'name')}
                     required
+                    InputProps={{
+                        readOnly: course?.status === 'ACTIVE' || course?.status === 'PENDING'
+                    }}
                 />
 
                 <TextField
@@ -198,6 +247,9 @@ const LessonModal = ({ isOpen, onClose, onSave, onUpdate, lesson }) => {
                     value={editedLesson.description}
                     onChange={(e) => handleInputChange(e, 'description')}
                     required
+                    InputProps={{
+                        readOnly: course?.status === 'ACTIVE' || course?.status === 'PENDING'
+                    }}
                 />
                 <label className='my-2'>Nội dung bài học</label><br />
                 <ReactQuill
@@ -214,6 +266,7 @@ const LessonModal = ({ isOpen, onClose, onSave, onUpdate, lesson }) => {
                         }
                     }}
                     modules={modules}
+                    readOnly={course?.status === 'ACTIVE' || course?.status === 'PENDING'}
                 />
                 <Select
                     className='my-4'
@@ -223,9 +276,10 @@ const LessonModal = ({ isOpen, onClose, onSave, onUpdate, lesson }) => {
                     margin="dense"
                     value={editedLesson.status}
                     onChange={(e) => handleInputChange(e, 'status')}
+                    disabled={course?.status === 'ACTIVE' || course?.status === 'PENDING'}
                 >
                     <MenuItem value="true">Hoạt động</MenuItem>
-                    {/* <MenuItem value="false">Ngưng hoạt động</MenuItem> */}
+                    <MenuItem value="false">Ngưng hoạt động</MenuItem>
                 </Select>
                 <TextField
                     type='number'
@@ -236,27 +290,35 @@ const LessonModal = ({ isOpen, onClose, onSave, onUpdate, lesson }) => {
                     name="estimateTime"
                     value={editedLesson.estimateTime}
                     onChange={(e) => handleInputChange(e, 'estimateTime')}
+                    InputProps={{
+                        readOnly: course?.status === 'ACTIVE' || course?.status === 'PENDING'
+                    }}
                 />
-                <label className='my-3'>Video file {'( 25MB )'}</label>
-                <input
-                    type='file'
-                    className='mx-2'
-                    autoFocus
-                    margin="dense"
-                    name="url"
-                    accept=".mov, .gif, .mp4, .mpeg, .mkv"
-                    // value={editedLesson.url}
-                    onChange={(e) => handleInputChange(e, 'url')}
-                    required
-                />
+                {(course?.status !== 'ACTIVE' && course?.status !== 'PENDING') && <>
+                    <label className='my-3'>Video file {'( 25MB )'}</label>
+                    <input
+                        type='file'
+                        className='mx-2'
+                        autoFocus
+                        margin="dense"
+                        name="url"
+                        accept=".mov, .gif, .mp4, .mpeg, .mkv"
+                        // value={editedLesson.url}
+                        onChange={(e) => handleInputChange(e, 'url')}
+                        required
+                    /></>}
+
+                {lesson?.url && <iframe src={lesson?.url} title="Video" width={500} height={300}></iframe>}
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose} color="primary">
-                    Cancel
-                </Button>
-                <Button onClick={handleSave} color="primary" variant="contained">
-                    Save
-                </Button>
+                <button onClick={onClose} className='btn btn-outline-secondary'>
+                    Hủy
+                </button>
+                {(course?.status !== 'ACTIVE' && course?.status !== 'PENDING') ? <button onClick={handleSave} color="primary" className='btn btn-success'>
+                    Hoàn tất
+                </button> : <button onClick={onClose} color="primary" className='btn btn-success'>
+                    Hoàn tất
+                </button>}
             </DialogActions>
         </Dialog>
     );

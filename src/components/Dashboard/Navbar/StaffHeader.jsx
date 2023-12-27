@@ -78,12 +78,12 @@ const Navbar = () => {
 
               <div className={Styles.dropdown} id="myDropdownNoti">
                 <div style={{ color: 'black', backgroundColor: '#f6f6f6' }} className="p-3">
-                  <Typography> Notification </Typography>
+                  <Typography> Thông báo </Typography>
                 </div>
                 <Divider />
                 <ul>
                   <Link to="/courses">
-                    <li>{pendingCourses.length} course(s) waiting for approval.</li>
+                    <li>{pendingCourses.length} khoá học đang chờ được duyệt.</li>
                   </Link>
                 </ul>
               </div>
@@ -92,48 +92,24 @@ const Navbar = () => {
             <>
               <div className={Styles.dropdown} id="myDropdownNoti">
                 <div style={{ color: 'black' }} className="p-3">
-                  <Typography> Notification </Typography>
+                  <Typography> Thông báo </Typography>
                 </div>
                 <Divider />
                 <ul>
-                  <li>There's no new notification</li>
+                  <li>Không có kiến nghị mới</li>
                 </ul>
               </div>
             </>
           )}
         </div>
-        <div className={classNames(Styles.dropdown__container)} onClick={toggleDropdown}>
-          <div className="d-flex">
-            <Avatar
-              sx={{ width: 30, height: 30 }}
-              src="https://images.pexels.com/photos/11038549/pexels-photo-11038549.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load"
-              alt=""
-            />
-            <div className="mx-2">{user.username}</div>
-          </div>
-          <div className={Styles.dropdown} id="myDropdown">
-            <div style={{ color: 'black' }} className="p-3">
-              <Typography> {user?.name} </Typography>
-              <div style={{ opacity: '70%' }}>
-                <Typography variant="caption" style={{ fontWeight: 700 }}>
-                  {user?.role == 'STAFF' ? 'MANAGER' : 'ADMIN'}
-                </Typography>
-              </div>
-            </div>
-            <Divider />
-            <ul>
-              <Link to="/dashboard">
-                <li>Dashboard </li>
-              </Link>
-              <Link to="/my-profile">
-                <li>My Profile </li>
-              </Link>
-              {/* <Link to="/settings">
-                        {' '}
-                        <li>Settings </li>
-                      </Link> */}
-              <li onClick={handleLogout}>Log Out</li>
-            </ul>
+        <div className="d-flex">
+          <Avatar
+            sx={{ width: 30, height: 30 }}
+            src="https://images.pexels.com/photos/11038549/pexels-photo-11038549.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load"
+            alt=""
+          />
+          <div className="mx-2" style={{ fontWeight: 700 }}>
+            {user.username}
           </div>
         </div>
         {/* <box-icon name="cog" type="solid" animation="spin-hover" color="rgba(0, 0, 0, 0.611)"></box-icon> */}

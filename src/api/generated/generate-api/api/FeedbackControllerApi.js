@@ -120,6 +120,88 @@ export default class FeedbackControllerApi {
     }
 
     /**
+     * Callback function to receive the result of the getAllFeedByStudentAndCourse operation.
+     * @callback module:api/FeedbackControllerApi~getAllFeedByStudentAndCourseCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<module:model/FeedbackFeedbackView>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Number} courseId 
+     * @param {module:api/FeedbackControllerApi~getAllFeedByStudentAndCourseCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<module:model/FeedbackFeedbackView>}
+     */
+    getAllFeedByStudentAndCourse(courseId, callback) {
+      let postBody = null;
+      // verify the required parameter 'courseId' is set
+      if (courseId === undefined || courseId === null) {
+        throw new Error("Missing the required parameter 'courseId' when calling getAllFeedByStudentAndCourse");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'courseId': courseId
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = [FeedbackFeedbackView];
+      return this.apiClient.callApi(
+        '/api/v1/feedback/by-course-student', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the getAllFeedByStudentId operation.
+     * @callback module:api/FeedbackControllerApi~getAllFeedByStudentIdCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<module:model/FeedbackFeedbackView>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Number} studentId 
+     * @param {module:api/FeedbackControllerApi~getAllFeedByStudentIdCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<module:model/FeedbackFeedbackView>}
+     */
+    getAllFeedByStudentId(studentId, callback) {
+      let postBody = null;
+      // verify the required parameter 'studentId' is set
+      if (studentId === undefined || studentId === null) {
+        throw new Error("Missing the required parameter 'studentId' when calling getAllFeedByStudentId");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'studentId': studentId
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['Bearer'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = [FeedbackFeedbackView];
+      return this.apiClient.callApi(
+        '/api/v1/feedback/feedbacks-by-student', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
      * Callback function to receive the result of the getAllFeedContent operation.
      * @callback module:api/FeedbackControllerApi~getAllFeedContentCallback
      * @param {String} error Error message, if any.

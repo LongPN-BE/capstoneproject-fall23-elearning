@@ -12,12 +12,16 @@ import {
     Select,
     MenuItem,
     TextField,
+    Tooltip,
 } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
 import { useParams } from 'react-router-dom';
 import FeedbackModal from './Feedback/FeedbackModal';
 import Cookies from 'js-cookie';
 import { fetchData } from '../../../services/AppService';
+import CustomBreadcrumbs from '../../Breadcrumbs';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+
 
 const Evaluate = () => {
     const { courseId } = useParams();
@@ -28,11 +32,16 @@ const Evaluate = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedFeedback, setSelectedFeedback] = useState(null)
     const [rating, setRating] = useState(0)
-
+    const [course, setCourse] = useState()
 
     useEffect(() => {
         const token = Cookies.get('token');
         if (token) {
+            fetchData(`/course/byId?id=${courseId}`, token).then(resp => {
+                if (resp) {
+                    setCourse(resp)
+                }
+            })
             fetchData(`/feedback/ByCourse?course_id=${courseId}`, token).then((resp) => {
                 if (resp) {
                     setEvaluate(resp)
@@ -78,8 +87,8 @@ const Evaluate = () => {
 
     const handleOpenModal = (feedback) => {
         feedback?.feedbackDetails.sort((a, b) => {
-            if (a.type === "TEXT") return -1;
-            if (b.type === "TEXT") return 1;
+            if (a.type === "text") return -1;
+            if (b.type === "radio") return 1;
             return 0;
         });
         setSelectedFeedback(feedback)
@@ -100,13 +109,30 @@ const Evaluate = () => {
         s.enroll.student.account.username.toLowerCase().includes(searchValue.toLowerCase())
     );
 
+    const breadcrumbItems = [
+        {
+            url: '/',
+            label: 'Trang chủ',
+        },
+        {
+            url: `/manage-course`,
+            label: `Quản lý khóa học`,
+        },
+        {
+            url: `/courses/` + courseId,
+            label: course?.name,
+        },
+        {
+            url: `/courses/` + courseId + `/evaluate/`,
+            label: 'Đánh giá',
+        },
+    ];
+
     return (
         evaluate && <div className="m-5">
             <div style={{ margin: '20px' }}>
                 <Paper style={{ padding: '20px' }}>
-                    <Typography variant="body1">
-                        Trang chủ {'>'} Quản lý khóa học {'>'} Khóa học {courseId} {'>'} Đánh giá
-                    </Typography>
+                    <CustomBreadcrumbs items={breadcrumbItems} />
 
                     <div style={{ marginTop: '20px' }}>
                         <TextField label="Tổng đánh giá:" value={totalRate} />
@@ -149,7 +175,11 @@ const Evaluate = () => {
                                         </TableCell>
                                         <TableCell>{s.createDate}</TableCell>
                                         <TableCell>
-                                            <Button variant="outlined" onClick={() => handleOpenModal(s)}>Chi tiết</Button>
+                                            <Tooltip title="Chi tiết">
+                                                <button style={{ border: 'none', background: 'none' }} onClick={() => handleOpenModal(s)}>
+                                                    <VisibilityIcon color='disabled' enableBackground={false} />
+                                                </button>
+                                            </Tooltip>
                                         </TableCell>
                                     </TableRow>
                                 );

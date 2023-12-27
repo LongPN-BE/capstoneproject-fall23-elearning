@@ -37,20 +37,20 @@ const Login = () => {
       if (response.token) {
         // Authentication successful
         console.log('Authentication successful!');
-        // console.log(response);
-        // Save the token to localStorage
-        Cookies.set("token", response.token, { expires: 1 })
-        // const addToken = await postData('')
-        // Cookies.set('user', response)
-        // Redirect to the desired route (e.g., home)
+        // Assuming response.token contains the token value
+        const expirationTimeInMinutes = 30;
+        const expirationInMilliseconds = expirationTimeInMinutes * 60 * 1000;
+
+        Cookies.set("token", response.token, { expires: new Date(Date.now() + expirationInMilliseconds) });
+
         navigate('/');
       } else {
         // Authentication failed, handle the error (e.g., show an error message)
-        setErro('Sai tên đăng nhập hoặc tài khoản.')
+        setErro('Sai tên đăng nhập hoặc mật khẩu.')
         console.error('Authentication failed. Invalid email or password.');
       }
     } catch (error) {
-      setErro('Sai tên đăng nhập hoặc tài khoản.')
+      setErro('Sai tên đăng nhập hoặc mật khẩu.')
       console.error('Error during authentication:', error.message);
     }
     // finally {
@@ -75,7 +75,7 @@ const Login = () => {
             <div className="card border-0 shadow-lg rounded-3 my-5">
               <div className="card-body p-4 p-sm-5 ">
                 <h2 className="card-title text-center text-uppercase mb-5 fw-bold fs-5">Đăng nhập</h2>
-                {erro == '' ? (<></>) : (<Alert className="mb-3" severity="error">{erro}</Alert>)}
+                {erro == '' ? (<></>) : (<Alert className="mb-3" severity="info">{erro}</Alert>)}
 
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">
@@ -85,7 +85,7 @@ const Login = () => {
                       value={formData.username}
                       onChange={handleChange}
                       className="form-control"
-                      placeholder="Tên đăng nhập"
+                      placeholder="Tên đăng nhập (hoặc Email)"
                       required
                     />
                   </div>
@@ -106,8 +106,8 @@ const Login = () => {
                     </button>
                   </div>
                 </form>
-                {/* 
-                <hr className="my-3" />
+
+                <hr className="my-4" />
                 <div className="d-grid mb-2">
                   <button
                     className={classNames(Styles.btn_custom, Styles.btn_google, ' text-uppercase fw-bold')}
@@ -115,18 +115,10 @@ const Login = () => {
                   >
                     Tiếp tục với Google
                   </button>
-                </div> */}
-                <hr className="my-3" />
-                <Link to="/forgot-password" className="mb-2 d-flex justify-content-center" style={{ color: 'black' }}>
-                  Bạn quên mật khẩu?
-                </Link>
-                <div className="mb-2 d-flex justify-content-center">
+                </div>
+                <div className="mb-3 d-flex justify-content-center">
                   <p className="form-check-label">
-                    Bạn chưa có tài khoản đăng nhập?{' '}
-                    <Link to="/register" style={{ color: 'black' }}>
-                      Đăng ký
-                    </Link>{' '}
-                    ngay.
+                    Bạn chưa có tài khoản đăng nhập? <Link to="/register">Đăng ký ngay</Link>
                   </p>
                 </div>
               </div>

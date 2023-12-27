@@ -10,9 +10,10 @@ import Footer from '../../components/Landing/Footer/Footer';
 import { CourseControllerApi } from '../../api/generated/generate-api';
 import ApiClientSingleton from '../../api/apiClientImpl';
 import Cookies from 'js-cookie';
+import PaginateCourse from '../../components/Landing/CourseSection/PaginateCourse';
 
 const courseApi = new CourseControllerApi(ApiClientSingleton.getInstance());
-const StudentLanding = () => {
+const StudentLanding = ({ activeTabId }) => {
   const user = JSON.parse(Cookies.get('user'));
   const [courses, setCourses] = useState([]);
   const [searchValue, setSearchValue] = useState('');
@@ -24,15 +25,18 @@ const StudentLanding = () => {
       }
     });
   };
+
+
   useEffect(() => {
     getCourses();
-  }, []);
+  }, [activeTabId, searchValue]);
   return (
     <>
       <Header setSearchValue={setSearchValue} getCourses={getCourses} />
       <StudentIntroSection />
-      <StudentTabComponent />
-      <Courses courses={courses} />
+      <StudentTabComponent tabId={activeTabId} />
+      {/* <Courses courses={courses} /> */}
+      <PaginateCourse items={courses} itemsPerPage={6} />
       <Footer />
     </>
   );

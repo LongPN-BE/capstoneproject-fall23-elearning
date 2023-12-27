@@ -13,6 +13,7 @@
 
 import ApiClient from '../ApiClient';
 import QuizResultQuizView from './QuizResultQuizView';
+import UsedAnswerResultQuizView from './UsedAnswerResultQuizView';
 
 /**
  * The UsedQuestionResultQuizView model module.
@@ -48,6 +49,12 @@ class UsedQuestionResultQuizView {
         if (data) {
             obj = obj || new UsedQuestionResultQuizView();
 
+            if (data.hasOwnProperty('id')) {
+                obj['id'] = ApiClient.convertToType(data['id'], 'Number');
+            }
+            if (data.hasOwnProperty('content')) {
+                obj['content'] = ApiClient.convertToType(data['content'], 'String');
+            }
             if (data.hasOwnProperty('status')) {
                 obj['status'] = ApiClient.convertToType(data['status'], 'Boolean');
             }
@@ -55,7 +62,7 @@ class UsedQuestionResultQuizView {
                 obj['quiz'] = QuizResultQuizView.constructFromObject(data['quiz']);
             }
             if (data.hasOwnProperty('usedAnswers')) {
-                obj['usedAnswers'] = ApiClient.convertToType(data['usedAnswers'], [Object]);
+                obj['usedAnswers'] = ApiClient.convertToType(data['usedAnswers'], [UsedAnswerResultQuizView]);
             }
         }
         return obj;
@@ -67,13 +74,23 @@ class UsedQuestionResultQuizView {
      * @return {boolean} to indicate whether the JSON data is valid with respect to <code>UsedQuestionResultQuizView</code>.
      */
     static validateJSON(data) {
+        // ensure the json data is a string
+        if (data['content'] && !(typeof data['content'] === 'string' || data['content'] instanceof String)) {
+            throw new Error("Expected the field `content` to be a primitive type in the JSON string but got " + data['content']);
+        }
         // validate the optional field `quiz`
         if (data['quiz']) { // data not null
           QuizResultQuizView.validateJSON(data['quiz']);
         }
-        // ensure the json data is an array
-        if (!Array.isArray(data['usedAnswers'])) {
-            throw new Error("Expected the field `usedAnswers` to be an array in the JSON data but got " + data['usedAnswers']);
+        if (data['usedAnswers']) { // data not null
+            // ensure the json data is an array
+            if (!Array.isArray(data['usedAnswers'])) {
+                throw new Error("Expected the field `usedAnswers` to be an array in the JSON data but got " + data['usedAnswers']);
+            }
+            // validate the optional field `usedAnswers` (array)
+            for (const item of data['usedAnswers']) {
+                UsedAnswerResultQuizView.validateJsonObject(item);
+            };
         }
 
         return true;
@@ -83,6 +100,16 @@ class UsedQuestionResultQuizView {
 }
 
 
+
+/**
+ * @member {Number} id
+ */
+UsedQuestionResultQuizView.prototype['id'] = undefined;
+
+/**
+ * @member {String} content
+ */
+UsedQuestionResultQuizView.prototype['content'] = undefined;
 
 /**
  * @member {Boolean} status
@@ -95,7 +122,7 @@ UsedQuestionResultQuizView.prototype['status'] = undefined;
 UsedQuestionResultQuizView.prototype['quiz'] = undefined;
 
 /**
- * @member {Array.<Object>} usedAnswers
+ * @member {Array.<module:model/UsedAnswerResultQuizView>} usedAnswers
  */
 UsedQuestionResultQuizView.prototype['usedAnswers'] = undefined;
 

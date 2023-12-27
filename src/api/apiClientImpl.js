@@ -3,7 +3,7 @@ import ENV from '../config/env';
 import { ApiClient } from './generated/generate-api';
 const ApiClientSingleton = (function () {
   var instance;
-  const apiNoAuth = [];
+  const apiNoAuth = ['/api/v1/course/by-status-active'];
 
   function createInstance() {
     var object = new ApiClient(ENV.SERVER_URL);
